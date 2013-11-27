@@ -24,13 +24,15 @@
 #include "task.h"
 
 #include <QObject>
-#include <QSettings>
 #include <QVariant>
+
+class QSettings;
 
 class Settings : public QObject {
     Q_OBJECT
 public:
     static Settings* instance();
+
     Task::List tasks() const;
     void saveTasks(const Task::List &tasks);
 
@@ -38,8 +40,8 @@ public:
     QVariant value(const QString &key, const QVariant &defaultValue) const;
 
 private:
-    Settings();
-    QSettings m_settings;
+    explicit Settings(QObject *parent = 0);
+    QSettings *m_settings;
 };
 
 #endif

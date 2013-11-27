@@ -22,20 +22,23 @@
 
 #include <QMetaType>
 #include <QDebug>
+#include <QSettings>
+#include <QCoreApplication>
 
 static Settings *s_instance = 0;
 
-Settings::Settings()
+Settings::Settings(QObject *parent) : QObject(parent)
 {
     qRegisterMetaTypeStreamOperators<Task>("Task");
     qRegisterMetaTypeStreamOperators<Task::List>("Task::List");
+    m_settings = new QSettings(QLatin1String("KDAB"), QLatin1String("flow-pomodoro"), this);
 }
 
 
 Settings *Settings::instance()
 {
     if (!s_instance) {
-        s_instance = new Settings();
+        s_instance = new Settings(qApp);
     }
 
     return s_instance;
@@ -43,7 +46,7 @@ Settings *Settings::instance()
 
 Task::List Settings::tasks() const
 {
-    QVariant v = m_settings.value("tasks");
+    QVariant v = m_settings->value("tasks");
     Task::List tasks = v.value<Task::List>();
     return tasks;
 }
@@ -51,8 +54,8 @@ Task::List Settings::tasks() const
 void Settings::saveTasks(const Task::List &tasks)
 {
     QVariant v = QVariant::fromValue(tasks);
-    m_settings.setValue("tasks", v);
-    m_settings.sync();
+    m_settings->setValue("tasks", v);
+    m_settings->sync();
     /*
     foreach (const Task &task, tasks) {
         qDebug() << "Saving task: " << task.text;
@@ -73,11 +76,11 @@ QDataStream &operator>>(QDataStream &in, Task &task)
 
 void Settings::setValue(const QString &key, const QVariant &value)
 {
-    m_settings.setValue(key, value);
-    m_settings.sync();
+    m_settings->setValue(key, value);
+    m_settings->sync();
 }
 
 QVariant Settings::value(const QString &key, const QVariant &defaultValue) const
 {
-    return m_settings.value(key, defaultValue);
+    return m_settings->value(key, defaultValue);
 }
