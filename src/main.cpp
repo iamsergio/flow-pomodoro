@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
 #endif
 
     QGuiApplication app(argc, argv);
+    app.setOrganizationName("KDAB");
+    app.setApplicationName("flow");
 
     QuickView window(app.arguments().contains("-d"));
     window.show();
