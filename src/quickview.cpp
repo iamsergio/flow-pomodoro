@@ -69,7 +69,7 @@ QuickView::QuickView(bool developerMode, QWindow *parent)
 
     if (developerMode) {
         // So that F5 reloads QML without having to restart the application
-        setSource(QUrl::fromLocalFile("qml/Main.qml"));
+        setSource(QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/Main.qml"));
     } else {
         setSource(QUrl("qrc:/qml/Main.qml"));
     }
