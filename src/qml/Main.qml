@@ -27,8 +27,8 @@ Rectangle {
         Text {
             id: titleText
             elide: _controller.paused ? Text.ElideLeft : Text.ElideRight
-            color: _style.taskTitleColor
-            font.pointSize: _style.taskTitleSize
+            color: _style.fontColor
+            font.pointSize: _style.fontSize
             font.bold: true
             anchors.left: parent.left
             anchors.leftMargin: 10
@@ -42,8 +42,8 @@ Rectangle {
         Text {
             text: qsTr("Click here to start focusing")
             font.bold: false
-            font.pointSize: _style.clickHereTextSize
-            color: _style.clickHereColor
+            font.pointSize: _style.clickHereFontSize
+            color: _style.clickHereFontColor
             visible: _controller.stopped && !_controller.expanded
             anchors.left: titleText.left
             anchors.leftMargin: 5
@@ -53,9 +53,9 @@ Rectangle {
 
         Text {
             id: remainingText
-            color: _style.taskTitleColor
+            color: _style.fontColor
             visible: (mouseOver() || _controller.firstSecondsAfterAdding) && _controller.remainingMinutes > 0 && !_controller.stopped && !_controller.expanded
-            font.pointSize: _style.remainingTextSize
+            font.pointSize: _style.remainingFontSize
             font.bold: true
             anchors.left: parent.left
             anchors.leftMargin: 10
@@ -136,7 +136,7 @@ Rectangle {
             value: _controller.currentTaskDuration - _controller.remainingMinutes
             style: ProgressBarStyle {
                 background: Rectangle {
-                    radius: _style.progressBarborderRadius
+                    radius: _style.progressBarBorderRadius
                     color: _style.progressBarBgColor
                     border.color: _style.borderColor
                     border.width: _style.borderWidth

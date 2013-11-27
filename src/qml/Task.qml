@@ -50,14 +50,14 @@ Rectangle {
             id: textItem
             text: taskText
             elide: Text.ElideRight
-            color: root.selected ? _style.hoveredTaskFgColor : _style.queuedTasksTitleColor
+            color: root.selected ? _style.hoveredTaskFgColor : _style.taskFontColor
             font.bold: true
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.right: parent.right
             anchors.rightMargin: 16*3 + 15 // 3 icons, 3 margins
-            font.pointSize: _style.queuedTasksFontSize
+            font.pointSize: _style.taskFontSize
             visible: !textField.visible
         }
 

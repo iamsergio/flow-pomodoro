@@ -2,29 +2,31 @@ import QtQuick 2.0
 
 Item {
 
-    readonly property string backgroundColor : "black"
-    readonly property int borderRadius       : 7
-    readonly property string borderColor     : "gray"
-    readonly property int borderWidth        : 1
+    // Main Window:
+    readonly property string backgroundColor    : "black"
+    readonly property int borderRadius          : 7
+    readonly property string borderColor        : "gray"
+    readonly property int borderWidth           : 1
+    readonly property color fontColor           : Qt.rgba(0.9, 0.9, 0.5, 1)
+    readonly property int fontSize              : 20
+    readonly property int clickHereFontSize     : 10
+    readonly property string clickHereFontColor : "lightsteelblue"
+    readonly property int remainingFontSize     : 22
 
+    // progress bar:
     readonly property string progressBarBgColor       : "white"
     readonly property string progressBarFgBorderColor : "darkgray"
-    readonly property int progressBarborderRadius     : 3
+    readonly property int progressBarBorderRadius     : 3
 
-    readonly property color taskTitleColor  : Qt.rgba(0.9, 0.9, 0.5, 1)
-    readonly property string clickHereColor : "lightsteelblue"
-    readonly property int clickHereTextSize : 10
-    readonly property int taskTitleSize     : 20
-    readonly property int remainingTextSize : 22
 
     readonly property int queueRadius            : 4
     readonly property string taskBackgroundColor : "black"
     readonly property string taskBorderColor     : "gray"
     readonly property int taskBorderRadius       : 4
 
-    readonly property string queuedTasksTitleColor : "white"
-    readonly property int queuedTasksFontSize      : 15
-    readonly property color queueBackgroundColor   : Qt.rgba(0.9, 0.9, 0.5, 1)
+    readonly property string taskFontColor       : "white"
+    readonly property int taskFontSize           : 15
+    readonly property color queueBackgroundColor : Qt.rgba(0.9, 0.9, 0.5, 1)
 
     readonly property bool deleteAnimationEnabled : true
 
