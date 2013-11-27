@@ -1,0 +1,23 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+    <file>img/add.png</file>
+    <file>img/completed.png</file>
+    <file>img/delete.png</file>
+    <file>img/edit.png</file>
+    <file>img/pause.png</file>
+    <file>img/play.png</file>
+    <file>img/stop.png</file>
+    <file>img/window-close.png</file>
+
+    <file>qml/ClickableImage.qml</file>
+    <file>qml/ConfigurePage.qml</file>
+    <file>qml/DefaultStyle.js</file>
+    <file>qml/Main.qml</file>
+    <file>qml/Page.qml</file>
+    <file>qml/RegularText.qml</file>
+    <file>qml/SmallText.qml</file>
+    <file>qml/Task.qml</file>
+    <file>qml/TheQueuePage.qml</file>
+    <file>qml/TitleText.qml</file>
+</qresource>
+</RCC>

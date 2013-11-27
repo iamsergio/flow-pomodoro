@@ -1,0 +1,92 @@
+/*
+  This file is part of Flow.
+
+  Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Author: Sérgio Martins <sergio.martins@kdab.com>
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "pidgin.h"
+
+#include <QDBusConnection>
+#include <QDBusMessage>
+#include <QDBusArgument>
+#include <QDebug>
+
+PidginPlugin::PidginPlugin() : QObject(), PluginInterface()
+  , m_enabled(false)
+{
+}
+
+void PidginPlugin::setEnabled(bool enabled)
+{
+    if (enabled != m_enabled) {
+        m_enabled = enabled;
+        if (!m_enabled) {
+            update(true);
+        }
+    }
+}
+
+bool PidginPlugin::enabled() const
+{
+    return m_enabled;
+}
+
+void PidginPlugin::update(bool enable)
+{
+    QDBusMessage message = QDBusMessage::createMethodCall("im.pidgin.purple.PurpleService", "/im/pidgin/purple/PurpleObject", "", "PurpleSavedstatusesGetAll");
+    QDBusMessage reply = QDBusConnection::sessionBus().call(message);
+
+    if (reply.arguments().count() != 1) {
+        qWarning() << "Pidgin: Invalid dbus reply";
+        return;
+    }
+
+    const QDBusArgument returnValue = reply.arguments().first().value<QDBusArgument>();
+
+    if (returnValue.currentType() != QDBusArgument::ArrayType) {
+        qWarning() << "Pidgin: was expecting Array";
+        return;
+    }
+
+    qDebug() << returnValue.currentSignature();
+
+    returnValue.beginArray();
+
+    while (!returnValue.atEnd()) {
+        int a = 0;
+        returnValue >> a;
+        qDebug() << a;
+    }
+
+    returnValue.endArray();
+    Q_UNUSED(enable);
+
+    //qWarning() << "Pidgin " << returnValue.asVariant().type() <<  reply.arguments().first() << 	returnValue.currentType() << enable;
+}
+
+void PidginPlugin::setTaskStatus(TaskStatus status)
+{
+    if (m_enabled) {
+        // No e-mail for you while paused and started.
+        update(status == TaskStopped);
+    }
+}
+
+QString PidginPlugin::text() const
+{
+    return QStringLiteral("Pidgin Notifications");
+}

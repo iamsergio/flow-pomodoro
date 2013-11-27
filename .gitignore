@@ -1,0 +1,9 @@
+Makefile
+moc*
+*moc
+*.o
+flow
+*.pro.user
+qrc*cpp
+*so
+.directory
