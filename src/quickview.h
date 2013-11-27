@@ -49,6 +49,7 @@ private:
     void reloadQML();
     void notifyPlugins(TaskStatus newStatus);
     QUrl styleFileName() const;
+    void createStyleComponent();
 
     Controller *m_controller;
     PluginModel *m_pluginModel;

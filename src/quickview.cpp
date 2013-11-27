@@ -51,17 +51,7 @@ QuickView::QuickView(bool developerMode, QWindow *parent)
     rootContext()->setContextProperty("_pluginModel", m_pluginModel);
     rootContext()->setContextProperty("_window", this);
 
-    QQmlComponent *styleComponent = new QQmlComponent(engine(),
-                                                      styleFileName(),
-                                                      QQmlComponent::PreferSynchronous,
-                                                      this);
-
-    QObject *styleObject = styleComponent->create();
-    Q_ASSERT(styleObject);
-    QQuickItem *item = qobject_cast<QQuickItem*>(styleObject);
-    Q_ASSERT(item);
-
-    rootContext()->setContextProperty("_style", styleObject);
+    createStyleComponent();
 
     qmlRegisterUncreatableType<Controller>("Controller",
                                            1, 0, "Controller",
@@ -101,6 +91,7 @@ void QuickView::reloadQML()
 {
     qDebug() << "Reloading QML ...";
     engine()->clearComponentCache();
+    createStyleComponent();
     setSource(source());
 }
 
@@ -124,6 +115,24 @@ QUrl QuickView::styleFileName() const
         // Developer mode doesn't use qrc:, so we can reload with F5
         return m_developerMode ? QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/DefaultStyle.qml")
                                : QUrl("qrc:/qml/DefaultStyle.qml");
+    }
+}
+
+void QuickView::createStyleComponent()
+{
+    QQmlComponent *styleComponent = new QQmlComponent(engine(),
+                                                      styleFileName(),
+                                                      QQmlComponent::PreferSynchronous,
+                                                      this);
+    QObject *styleObject = styleComponent->create();
+
+    if (styleObject) {
+        QQuickItem *item = qobject_cast<QQuickItem*>(styleObject);
+        Q_ASSERT(item);
+        rootContext()->setContextProperty("_style", styleObject);
+    } else {
+        qWarning() << styleComponent->errorString();
+        Q_ASSERT(false);
     }
 }
 
