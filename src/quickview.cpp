@@ -62,7 +62,9 @@ QuickView::QuickView(bool developerMode, QWindow *parent)
     }
 
     setResizeMode(QQuickView::SizeViewToRootObject);
-    setFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Tool);
+
+    setFlags(flags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Tool);
+
     setColor(Qt::transparent);
 
     const int width = 400; // TODO: it's hardcoded
