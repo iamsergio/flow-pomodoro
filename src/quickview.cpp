@@ -52,7 +52,7 @@ QuickView::QuickView(bool developerMode, QWindow *parent)
     rootContext()->setContextProperty("_window", this);
 
     QQmlComponent *styleComponent = new QQmlComponent(engine(),
-                                                      QUrl("qrc:/qml/DefaultStyle.qml"),
+                                                      styleFileName(),
                                                       QQmlComponent::PreferSynchronous,
                                                       this);
 
@@ -109,6 +109,21 @@ void QuickView::notifyPlugins(TaskStatus newStatus)
     PluginInterface::List plugins = m_pluginModel->plugins();
     foreach (PluginInterface *plugin, plugins) {
         plugin->setTaskStatus(newStatus);
+    }
+}
+
+QUrl QuickView::styleFileName() const
+{
+    const QString &dataDirectory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    const QString fileName = dataDirectory + "/Style.qml";
+
+    if (QFile::exists(fileName)) {
+        // User can override the default style by creating a Style.qml file in /home/<user>/.local/share/KDAB/flow/
+        return QUrl::fromLocalFile(fileName);
+    } else {
+        // Developer mode doesn't use qrc:, so we can reload with F5
+        return m_developerMode ? QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/DefaultStyle.qml")
+                               : QUrl("qrc:/qml/DefaultStyle.qml");
     }
 }
 

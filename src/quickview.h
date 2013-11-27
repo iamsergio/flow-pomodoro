@@ -23,7 +23,9 @@
 
 #include "task.h"
 #include "plugininterface.h"
+
 #include <QQuickView>
+#include <QUrl>
 
 class Controller;
 class QKeyEvent;
@@ -46,6 +48,7 @@ private:
     void loadPlugins();
     void reloadQML();
     void notifyPlugins(TaskStatus newStatus);
+    QUrl styleFileName() const;
 
     Controller *m_controller;
     PluginModel *m_pluginModel;
