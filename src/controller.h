@@ -41,7 +41,7 @@ class Controller : public QObject {
     Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
     Q_PROPERTY(TaskStatus taskStatus READ taskStatus NOTIFY taskStatusChanged)
 
-    // Short cuts
+    // Shortcuts
     Q_PROPERTY(bool paused  READ paused  NOTIFY taskStatusChanged)
     Q_PROPERTY(bool stopped READ stopped NOTIFY taskStatusChanged)
     Q_PROPERTY(bool running READ running NOTIFY taskStatusChanged)

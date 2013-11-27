@@ -1,8 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 
-import "DefaultStyle.js" as Style
-
 Rectangle {
 
     signal deleteClicked()
@@ -16,15 +14,15 @@ Rectangle {
     property bool selected: hasMouseOver && !editMode && !otherItemBeingEdited && modelIndex !== -1
 
     id: root
-    color: selected ? Style.hoveredTaskBgColor : Style.taskBackgroundColor
+    color: selected ? _style.hoveredTaskBgColor : _style.taskBackgroundColor
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.leftMargin: 5
     anchors.rightMargin: 5
     height: 50
-    border.color: Style.taskBorderColor
-    border.width: selected ? Style.hoveredTaskBorderWidth : 1
-    radius: Style.taskBorderRadius
+    border.color: _style.taskBorderColor
+    border.width: selected ? _style.hoveredTaskBorderWidth : 1
+    radius: _style.taskBorderRadius
 
     MouseArea {
         id: mouseArea
@@ -52,14 +50,14 @@ Rectangle {
             id: textItem
             text: taskText
             elide: Text.ElideRight
-            color: root.selected ? Style.hoveredTaskFgColor : Style.queuedTasksTitleColor
+            color: root.selected ? _style.hoveredTaskFgColor : _style.queuedTasksTitleColor
             font.bold: true
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.right: parent.right
             anchors.rightMargin: 16*3 + 15 // 3 icons, 3 margins
-            font.pointSize: Style.queuedTasksFontSize
+            font.pointSize: _style.queuedTasksFontSize
             visible: !textField.visible
         }
 
@@ -103,7 +101,7 @@ Rectangle {
             source: "qrc:/img/delete.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: editImage.left
-            anchors.rightMargin: Style.buttonsSpacing
+            anchors.rightMargin: _style.buttonsSpacing
             visible: root.buttonsVisible
             onClicked: {
                 root.deleteClicked()
@@ -115,7 +113,7 @@ Rectangle {
             source: "qrc:/img/edit.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            anchors.rightMargin: Style.buttonsRightMargin
+            anchors.rightMargin: _style.buttonsRightMargin
             visible: root.buttonsVisible
             onClicked: {
                 if (modelIndex !== -1) {
@@ -136,7 +134,7 @@ Rectangle {
             anchors.rightMargin: 10
             visible: false root.buttonsVisible.
             onClicked: {
-                _controller.startPomodoro(modelIndex, Style.defaultPomodoroDuration)
+                _controller.startPomodoro(modelIndex, _style.defaultPomodoroDuration)
             }
         }*/
     }

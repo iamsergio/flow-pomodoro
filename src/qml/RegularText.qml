@@ -1,8 +1,7 @@
 import QtQuick 2.0
-import "DefaultStyle.js" as Style
 
 Text {
-    font.pointSize: Style.regularTextSize
-    color: Style.regularTextColor
+    font.pointSize: _style.regularTextSize
+    color: _style.regularTextColor
     height: 50
 }

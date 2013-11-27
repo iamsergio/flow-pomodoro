@@ -1,7 +1,6 @@
 import QtQuick 2.0
 
 import Controller 1.0
-import "DefaultStyle.js" as Style
 
 Rectangle {
     id: root
@@ -9,11 +8,11 @@ Rectangle {
 
     visible: _controller.currentPage === page && _controller.expanded
 
-    color: Style.queueBackgroundColor
-    radius: Style.queueRadius
-    height: Style.pageHeight
+    color: _style.queueBackgroundColor
+    radius: _style.queueRadius
+    height: _style.pageHeight
     anchors.left: parent.left
     anchors.right: parent.right
-    anchors.leftMargin: Style.pageMargin
-    anchors.rightMargin: Style.pageMargin
+    anchors.leftMargin: _style.pageMargin
+    anchors.rightMargin: _style.pageMargin
 }

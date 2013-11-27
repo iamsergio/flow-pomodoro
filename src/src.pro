@@ -22,7 +22,7 @@ HEADERS += controller.h      \
 
 OTHER_FILES += ClickableImage.qml \
                ConfigurePage.qml  \
-               DefaultStyle.js    \
+               DefaultStyle.qml   \
                Main.qml           \
                Task.qml           \
                TheQueuePage.qml

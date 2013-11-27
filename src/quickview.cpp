@@ -36,6 +36,7 @@
 #include <QDir>
 #include <QtQml>
 #include <QPluginLoader>
+#include <QQuickItem>
 
 QuickView::QuickView(bool developerMode, QWindow *parent)
     : QQuickView(parent)
@@ -49,6 +50,18 @@ QuickView::QuickView(bool developerMode, QWindow *parent)
     rootContext()->setContextProperty("_taskModel", taskModel);
     rootContext()->setContextProperty("_pluginModel", m_pluginModel);
     rootContext()->setContextProperty("_window", this);
+
+    QQmlComponent *styleComponent = new QQmlComponent(engine(),
+                                                      QUrl("qrc:/qml/DefaultStyle.qml"),
+                                                      QQmlComponent::PreferSynchronous,
+                                                      this);
+
+    QObject *styleObject = styleComponent->create();
+    Q_ASSERT(styleObject);
+    QQuickItem *item = qobject_cast<QQuickItem*>(styleObject);
+    Q_ASSERT(item);
+
+    rootContext()->setContextProperty("_style", styleObject);
 
     qmlRegisterUncreatableType<Controller>("Controller",
                                            1, 0, "Controller",
@@ -74,6 +87,7 @@ QuickView::QuickView(bool developerMode, QWindow *parent)
 
     connect(m_controller, SIGNAL(taskStatusChanged()), SLOT(onTaskStatusChanged()));
     connect(engine(), SIGNAL(quit()), qApp, SLOT(quit()));
+
 
     loadPlugins();
 }

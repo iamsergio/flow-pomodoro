@@ -4,14 +4,13 @@ import QtQuick.Controls.Styles 1.0
 
 import Controller 1.0
 
-import "DefaultStyle.js" as Style
 
 Rectangle {
     id: root
     radius: 4
     color: "transparent"
     width: 400
-    height: 50 + (_controller.expanded ? Style.pageHeight + 10 : 0)
+    height: 50 + (_controller.expanded ? _style.pageHeight + 10 : 0)
 
     function mouseOver()
     {
@@ -20,16 +19,16 @@ Rectangle {
 
     Rectangle {
         anchors.fill: parent
-        color: Style.backgroundColor
-        radius: Style.borderRadius
-        border.width: Style.borderWidth
-        border.color: Style.borderColor
+        color: _style.backgroundColor
+        radius: _style.borderRadius
+        border.width: _style.borderWidth
+        border.color: _style.borderColor
 
         Text {
             id: titleText
             elide: _controller.paused ? Text.ElideLeft : Text.ElideRight
-            color: Style.taskTitleColor
-            font.pointSize: Style.taskTitleSize
+            color: _style.taskTitleColor
+            font.pointSize: _style.taskTitleSize
             font.bold: true
             anchors.left: parent.left
             anchors.leftMargin: 10
@@ -43,8 +42,8 @@ Rectangle {
         Text {
             text: qsTr("Click here to start focusing")
             font.bold: false
-            font.pointSize: Style.clickHereTextSize
-            color: Style.clickHereColor
+            font.pointSize: _style.clickHereTextSize
+            color: _style.clickHereColor
             visible: _controller.stopped && !_controller.expanded
             anchors.left: titleText.left
             anchors.leftMargin: 5
@@ -54,9 +53,9 @@ Rectangle {
 
         Text {
             id: remainingText
-            color: Style.taskTitleColor
+            color: _style.taskTitleColor
             visible: (mouseOver() || _controller.firstSecondsAfterAdding) && _controller.remainingMinutes > 0 && !_controller.stopped && !_controller.expanded
-            font.pointSize: Style.remainingTextSize
+            font.pointSize: _style.remainingTextSize
             font.bold: true
             anchors.left: parent.left
             anchors.leftMargin: 10
@@ -70,7 +69,7 @@ Rectangle {
             anchors.bottomMargin: 5
             anchors.bottom: titleText.bottom
             anchors.rightMargin: progressBar.anchors.rightMargin + 2
-            spacing: Style.buttonsSpacing
+            spacing: _style.buttonsSpacing
 
             ClickableImage {
                 id: pauseIcon
@@ -137,10 +136,10 @@ Rectangle {
             value: _controller.currentTaskDuration - _controller.remainingMinutes
             style: ProgressBarStyle {
                 background: Rectangle {
-                    radius: Style.progressBarborderRadius
-                    color: Style.progressBarBgColor
-                    border.color: Style.borderColor
-                    border.width: Style.borderWidth
+                    radius: _style.progressBarborderRadius
+                    color: _style.progressBarBgColor
+                    border.color: _style.borderColor
+                    border.width: _style.borderWidth
                 }
             }
         }

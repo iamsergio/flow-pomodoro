@@ -2,14 +2,13 @@ import QtQuick 2.0
 import QtQuick.Controls 1.0
 
 import Controller 1.0
-import "DefaultStyle.js" as Style
 
 Page {
     id: root
     page: Controller.TheQueuePage
 
     Rectangle {
-        color: Style.queueBackgroundColor
+        color: _style.queueBackgroundColor
         anchors.fill: parent
         radius: parent.radius
         opacity: 1
@@ -32,7 +31,7 @@ Page {
                 onDeleteClicked: {
                     _controller.removeTask(index)
 
-                    if (Style.deleteAnimationEnabled) {
+                    if (_style.deleteAnimationEnabled) {
                         visible = false
                         animatedRectangle.y = y
                         animatedRectangle.taskText = taskText
