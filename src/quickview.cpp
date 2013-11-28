@@ -68,7 +68,17 @@ QuickView::QuickView() : QQuickView()
 
     setFlags(flags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Tool);
 
+#ifdef Q_OS_WIN
+
+# if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
+        // Qt 5.1 does not support frameless and translucent windows on Windows
+        setColor(Qt::transparent);
+# endif
+
+#else
     setColor(Qt::transparent);
+#endif
+
 
     const int width = 400; // TODO: it's hardcoded
 
