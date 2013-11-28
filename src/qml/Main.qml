@@ -174,6 +174,13 @@ Rectangle {
         } else if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
             _controller.expanded = true
             event.accepted = true;
+        } else if (event.key === Qt.Key_Space) {
+            _controller.pausePomodoro()
+        } else if (event.key === Qt.Key_S) {
+            _controller.stopPomodoro(true)
+        } else if (event.key === Qt.Key_N) {
+            _controller.expanded = true
+            _controller.addTask("New Task", /**open editor=*/true)
         }
     }
 
