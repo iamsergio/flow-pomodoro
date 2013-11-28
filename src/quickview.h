@@ -36,7 +36,7 @@ class QuickView : public QQuickView {
     Q_OBJECT
 
 public:
-    explicit QuickView(bool developerMode, QWindow *parent = 0);
+    static QuickView& instance();
     Controller *controller() const;
 
 protected:
@@ -46,6 +46,7 @@ private Q_SLOTS:
     void onTaskStatusChanged();
 
 private:
+    explicit QuickView();
     void loadPlugins();
     void reloadQML();
     void notifyPlugins(TaskStatus newStatus);

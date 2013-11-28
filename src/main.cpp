@@ -28,7 +28,7 @@
 #include <QDBusError>
 
 
-void initDBus(QuickView *view)
+void initDBus()
 {
 #ifdef FLOW_DBUS
     if (!QDBusConnection::sessionBus().isConnected()) {
@@ -43,7 +43,7 @@ void initDBus(QuickView *view)
         exit(-2);
     }
 
-    Flow *flowDBusInterface = new Flow(view->controller(), qApp);
+    Flow *flowDBusInterface = new Flow(QuickView::instance().controller(), qApp);
     QDBusConnection::sessionBus().registerObject("/", flowDBusInterface, QDBusConnection::ExportScriptableSlots);
 #endif
 }
@@ -59,10 +59,9 @@ int main(int argc, char *argv[])
     app.setOrganizationName("KDAB");
     app.setApplicationName("flow");
 
-    QuickView window(app.arguments().contains("-d"));
-    window.show();
+    QuickView::instance().show();
 
-    initDBus(&window);
+    initDBus();
 
     return app.exec();
 }

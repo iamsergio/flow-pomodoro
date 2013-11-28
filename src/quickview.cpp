@@ -37,10 +37,10 @@
 #include <QtQml>
 #include <QPluginLoader>
 #include <QQuickItem>
+#include <QGuiApplication>
 
-QuickView::QuickView(bool developerMode, QWindow *parent)
-    : QQuickView(parent)
-    , m_developerMode(developerMode)
+QuickView::QuickView() : QQuickView()
+    , m_developerMode(qApp->arguments().contains("-d"))
 {
     TaskModel *taskModel = new TaskModel(this);
     m_pluginModel = new PluginModel(this);
@@ -57,7 +57,7 @@ QuickView::QuickView(bool developerMode, QWindow *parent)
                                            1, 0, "Controller",
                                            QStringLiteral("Controller is not creatable"));
 
-    if (developerMode) {
+    if (m_developerMode) {
         // So that F5 reloads QML without having to restart the application
         setSource(QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/Main.qml"));
     } else {
@@ -80,6 +80,12 @@ QuickView::QuickView(bool developerMode, QWindow *parent)
 
 
     loadPlugins();
+}
+
+QuickView& QuickView::instance()
+{
+    static QuickView window;
+    return window;
 }
 
 Controller *QuickView::controller() const
