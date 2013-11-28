@@ -142,6 +142,9 @@ void Controller::setExpanded(bool expanded)
 {
     if (expanded != m_expanded) {
         m_expanded = expanded;
+        if (!expanded) {
+            setIndexBeingEdited(-1);
+        }
         emit expandedChanged(expanded);
     }
 }
