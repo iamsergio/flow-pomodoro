@@ -85,13 +85,6 @@ Rectangle {
                     _controller.updateTask(modelIndex, text)
                 }
             }
-
-            onAccepted: {
-                if (modelIndex !== -1) {
-                    _controller.indexBeingEdited = -1
-                    _controller.updateTask(modelIndex, text)
-                }
-            }
         }
 
         ClickableImage {

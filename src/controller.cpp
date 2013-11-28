@@ -288,7 +288,9 @@ bool Controller::eventFilter(QObject *, QEvent *event)
 
     const bool editing = m_indexBeingEdited != -1;
 
-    if (editing && keyEvent->key() != Qt::Key_Escape) {
+    if (editing && (keyEvent->key() != Qt::Key_Escape &&
+                    keyEvent->key() != Qt::Key_Enter &&
+                    keyEvent->key() != Qt::Key_Return)) {
         return false;
     }
 
@@ -304,11 +306,15 @@ bool Controller::eventFilter(QObject *, QEvent *event)
 
     case Qt::Key_Return:
     case Qt::Key_Enter:
-        if (m_selectedIndex != -1) {
-            startPomodoro(m_selectedIndex);
-            setExpanded(false);
+        if (editing) {
+            setIndexBeingEdited(-1);
         } else {
-            setExpanded(true);
+            if (m_selectedIndex != -1) {
+                startPomodoro(m_selectedIndex);
+                setExpanded(false);
+            } else {
+                setExpanded(true);
+            }
         }
 
         return true;
