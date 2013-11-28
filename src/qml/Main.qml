@@ -17,6 +17,15 @@ Rectangle {
         return globalMouseArea.containsMouse || addIcon.containsMouse || stopIcon.containsMouse || pauseIcon.containsMouse
     }
 
+    Connections {
+        target: _controller
+        onExpandedChanged: {
+            if (!_controller.expanded) {
+                root.forceActiveFocus()
+            }
+        }
+    }
+
     Rectangle {
         anchors.fill: parent
         color: _style.backgroundColor
@@ -176,13 +185,17 @@ Rectangle {
             event.accepted = true;
         } else if (event.key === Qt.Key_Space) {
             _controller.pausePomodoro()
+            event.accepted = true;
         } else if (event.key === Qt.Key_S) {
             _controller.stopPomodoro(true)
+            event.accepted = true;
         } else if (event.key === Qt.Key_N) {
             _controller.expanded = true
             _controller.addTask("New Task", /**open editor=*/true)
+            event.accepted = true;
         } else if (event.key === Qt.Key_Delete) {
             _controller.stopPomodoro(false)
+            event.accepted = true;
         }
     }
 
