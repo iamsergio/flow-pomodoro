@@ -171,33 +171,6 @@ Rectangle {
             }
         }
     }
-    Keys.onPressed: {
-        if (event.key === Qt.Key_Escape) {
-            if (_controller.indexBeingEdited !== -1) {
-                _controller.indexBeingEdited = -1
-            } else {
-                _controller.expanded = false
-            }
-
-            event.accepted = true;
-        } else if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-            _controller.expanded = true
-            event.accepted = true;
-        } else if (event.key === Qt.Key_Space) {
-            _controller.pausePomodoro()
-            event.accepted = true;
-        } else if (event.key === Qt.Key_S) {
-            _controller.stopPomodoro(true)
-            event.accepted = true;
-        } else if (event.key === Qt.Key_N) {
-            _controller.expanded = true
-            _controller.addTask("New Task", /**open editor=*/true)
-            event.accepted = true;
-        } else if (event.key === Qt.Key_Delete) {
-            _controller.stopPomodoro(false)
-            event.accepted = true;
-        }
-    }
 
     Menu {
         id: contextMenu

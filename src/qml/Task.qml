@@ -11,27 +11,26 @@ Rectangle {
     property bool buttonsVisible: true
     property bool hasMouseOver: mouseArea.containsMouse
     property int modelIndex: -1
-    property bool selected: hasMouseOver && !editMode && !otherItemBeingEdited && modelIndex !== -1
+    property bool selected: _controller.selectedIndex === modelIndex && !editMode && modelIndex !== -1
 
     id: root
-    color: selected ? _style.hoveredTaskBgColor : _style.taskBackgroundColor
+    color: selected ? _style.selectedTaskBgColor : _style.taskBackgroundColor
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.leftMargin: 5
     anchors.rightMargin: 5
     height: 50
     border.color: _style.taskBorderColor
-    border.width: selected ? _style.hoveredTaskBorderWidth : 1
+    border.width: selected ? _style.selectedTaskBorderWidth : 1
     radius: _style.taskBorderRadius
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
-        cursorShape: (!editMode && !otherItemBeingEdited) ? Qt.PointingHandCursor : Qt.ArrowCursor
         onClicked: {
             _controller.indexBeingEdited = -1
-            _controller.startPomodoro(modelIndex)
+            _controller.toggleSelectedIndex(modelIndex)
         }
 
         onPressAndHold: {
@@ -41,8 +40,7 @@ Rectangle {
 
         onDoubleClicked: {
             if (modelIndex !== -1) {
-                _controller.indexBeingEdited = modelIndex
-                textField.forceActiveFocus()
+                _controller.startPomodoro(modelIndex)
             }
         }
 
@@ -50,7 +48,7 @@ Rectangle {
             id: textItem
             text: taskText
             elide: Text.ElideRight
-            color: root.selected ? _style.hoveredTaskFgColor : _style.taskFontColor
+            color: root.selected ? _style.selectedTaskFgColor : _style.taskFontColor
             font.bold: true
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left

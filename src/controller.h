@@ -41,6 +41,8 @@ class Controller : public QObject {
     Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
     Q_PROPERTY(TaskStatus taskStatus READ taskStatus NOTIFY taskStatusChanged)
 
+    Q_PROPERTY(int selectedIndex READ selectedIndex NOTIFY selectedIndexChanged)
+
     // Shortcuts
     Q_PROPERTY(bool paused  READ paused  NOTIFY taskStatusChanged)
     Q_PROPERTY(bool stopped READ stopped NOTIFY taskStatusChanged)
@@ -78,6 +80,9 @@ public:
     void setDefaultPomodoroDuration(int duration);
     int defaultPomodoroDuration() const;
 
+    int selectedIndex() const;
+    void setSelectedIndex(int index);
+
     bool running() const;
     bool stopped() const;
     bool paused() const;
@@ -90,6 +95,10 @@ public Q_SLOTS:
     void startPomodoro(int queueIndex);
     void stopPomodoro(bool reQueueTask);
     void pausePomodoro();
+
+    void toggleSelectedIndex(int index);
+    void cycleSelectionUp();
+    void cycleSelectionDown();
 
 private Q_SLOTS:
     void onTimerTick();
@@ -105,11 +114,11 @@ Q_SIGNALS:
     void currentPageChanged(Page page);
     void defaultPomodoroDurationChanged(int);
     void taskStatusChanged();
+    void selectedIndexChanged(int);
 
 private:
-    void setSelectedIndex(int index);
+    bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
 
-private:
     int m_currentTaskDuration;
     QTimer *m_tickTimer;
     QTimer *m_afterAddingTimer;
@@ -121,6 +130,7 @@ private:
     Task m_currentTask;
     Page m_page;
     int m_defaultPomodoroDuration;
+    int m_selectedIndex;
 };
 
 #endif

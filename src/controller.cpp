@@ -25,6 +25,7 @@
 
 #include <QTimer>
 #include <QDebug>
+#include <QGuiApplication>
 
 enum {
     AfterAddingTimeout = 1000,
@@ -41,6 +42,7 @@ Controller::Controller(TaskModel *model, QObject *parent) : QObject(parent)
   , m_model(model)
   , m_taskStatus(TaskStopped)
   , m_page(TheQueuePage)
+  , m_selectedIndex(-1)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -50,6 +52,8 @@ Controller::Controller(TaskModel *model, QObject *parent) : QObject(parent)
     m_afterAddingTimer->setInterval(AfterAddingTimeout);
 
     m_defaultPomodoroDuration = Settings::instance()->value(QStringLiteral("defaultPomodoroDuration"), /*default=*/QVariant(25)).toInt();
+
+    qApp->installEventFilter(this);
 }
 
 int Controller::remainingMinutes() const
@@ -134,6 +138,39 @@ void Controller::pausePomodoro()
     }
 }
 
+void Controller::toggleSelectedIndex(int index)
+{
+    if (m_selectedIndex == index) {
+        setSelectedIndex(-1);
+    } else {
+        setSelectedIndex(index);
+    }
+}
+
+void Controller::cycleSelectionUp()
+{
+    if (m_selectedIndex == -1) {
+        const int lastIndex = m_model->count()-1;
+        setSelectedIndex(lastIndex);
+    } else if (m_selectedIndex > 0){
+        setSelectedIndex(m_selectedIndex-1);
+    }
+}
+
+void Controller::cycleSelectionDown()
+{
+    const int lastIndex = m_model->count()-1;
+    if (m_selectedIndex == -1 && lastIndex == -1) {
+        return;
+    }
+
+    if (m_selectedIndex == -1) {
+        setSelectedIndex(0);
+    } else if (m_selectedIndex < lastIndex){
+        setSelectedIndex(m_selectedIndex+1);
+    }
+}
+
 bool Controller::expanded() const
 {
     return m_expanded;
@@ -148,6 +185,7 @@ void Controller::setExpanded(bool expanded)
         } else {
             setIndexBeingEdited(-1);
         }
+        setSelectedIndex(-1);
         emit expandedChanged(expanded);
     }
 }
@@ -200,6 +238,19 @@ int Controller::defaultPomodoroDuration() const
     return m_defaultPomodoroDuration;
 }
 
+int Controller::selectedIndex() const
+{
+    return m_selectedIndex;
+}
+
+void Controller::setSelectedIndex(int index)
+{
+    if (index != m_selectedIndex) {
+        m_selectedIndex = index;
+        emit selectedIndexChanged(index);
+    }
+}
+
 bool Controller::running() const
 {
     return m_taskStatus == TaskStarted;
@@ -225,6 +276,84 @@ void Controller::onTimerTick()
         stopPomodoro(/**requeue=*/true);
         emit taskFinished();
     }
+}
+
+bool Controller::eventFilter(QObject *, QEvent *event)
+{
+    if (event->type() != QEvent::KeyRelease) {
+        return false;
+    }
+
+    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+
+    const bool editing = m_indexBeingEdited != -1;
+
+    if (editing && keyEvent->key() != Qt::Key_Escape) {
+        return false;
+    }
+
+    switch (keyEvent->key()) {
+    case Qt::Key_Escape:
+        if (editing) {
+            setIndexBeingEdited(-1);
+        } else {
+            setExpanded(false);
+        }
+        return true;
+        break;
+
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+        if (m_selectedIndex != -1) {
+            startPomodoro(m_selectedIndex);
+            setExpanded(false);
+        } else {
+            setExpanded(true);
+        }
+
+        return true;
+        break;
+    case Qt::Key_Space:
+        pausePomodoro();
+        return true;
+        break;
+    case Qt::Key_S:
+        stopPomodoro(true);
+        return true;
+        break;
+    case Qt::Key_N:
+        setExpanded(true);
+        addTask("New Task", /**open editor=*/true);
+        return true;
+        break;
+    case Qt::Key_Delete:
+        if (m_selectedIndex == -1) {
+            stopPomodoro(false);
+        } else {
+            removeTask(m_selectedIndex);
+        }
+        return true;
+        break;
+    case Qt::Key_Up:
+        cycleSelectionUp();
+        return true;
+        break;
+    case Qt::Key_Down:
+        cycleSelectionDown();
+        return true;
+        break;
+    case Qt::Key_E:
+        if (m_selectedIndex != -1) {
+            setIndexBeingEdited(m_selectedIndex);
+            return true;
+        }
+        return false;
+        break;
+    default:
+        break;
+    }
+
+    return false;
 }
 
 void Controller::addTask(const QString &text, bool startEditMode)

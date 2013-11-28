@@ -32,10 +32,10 @@ Item {
 
     readonly property int pageHeight : 500
 
-    readonly property int hoveredTaskBorderWidth    : 1
-    readonly property string hoveredTaskBorderColor : "black"
-    readonly property string hoveredTaskBgColor     : "lightgray"
-    readonly property string hoveredTaskFgColor     : "black"
+    readonly property int selectedTaskBorderWidth    : 1
+    readonly property string selectedTaskBorderColor : "black"
+    readonly property string selectedTaskBgColor     : "lightgray"
+    readonly property string selectedTaskFgColor     : "black"
 
     readonly property int buttonsRightMargin : 10
     readonly property int buttonsSpacing : 5
