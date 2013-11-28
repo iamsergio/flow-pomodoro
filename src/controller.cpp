@@ -310,7 +310,9 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     case Qt::Key_Return:
     case Qt::Key_Enter:
         if (editing) {
+            const int index = m_indexBeingEdited;
             setIndexBeingEdited(-1);
+            setSelectedIndex(index);
         } else {
             if (m_selectedIndex != -1) {
                 startPomodoro(m_selectedIndex);
