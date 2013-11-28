@@ -159,6 +159,7 @@ void QuickView::loadPlugins()
             candidatePath += QStringLiteral("/flow/");
         }
 
+        qDebug() << "Looking for plugins in " << candidatePath;
         QDir pluginsDir = QDir(candidatePath);
 
         foreach (const QString &fileName, pluginsDir.entryList(QDir::Files)) {
