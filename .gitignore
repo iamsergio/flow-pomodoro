@@ -12,4 +12,5 @@ CMakeFiles
 *.cmake
 *automoc*
 CMakeCache.txt
+install.sh
 
