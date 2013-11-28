@@ -23,9 +23,12 @@
 
 #include <QGuiApplication>
 
-#include <QDBusConnection>
 #include <QDebug>
-#include <QDBusError>
+
+#ifdef FLOW_DBUS
+# include <QDBusConnection>
+# include <QDBusError>
+#endif
 
 
 void initDBus()
