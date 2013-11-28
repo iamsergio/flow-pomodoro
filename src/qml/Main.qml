@@ -181,6 +181,8 @@ Rectangle {
         } else if (event.key === Qt.Key_N) {
             _controller.expanded = true
             _controller.addTask("New Task", /**open editor=*/true)
+        } else if (event.key === Qt.Key_Delete) {
+            _controller.stopPomodoro(false)
         }
     }
 
