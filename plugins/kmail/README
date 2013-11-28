@@ -1,0 +1,5 @@
+When a pomodoro is running this plugin disables the new mail agent and also
+forbids the systray icon from showing unread count.
+
+Requires KDE 4.11.4 for the systray thing. Not sure about the requirement for
+the new mail agent.

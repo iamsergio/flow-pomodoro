@@ -1,0 +1,5 @@
+Pidgin's icon usually changes when you have unread messages. This plugin
+disables that when a pomodoro is running.
+
+You will need to apply this patch https://developer.pidgin.im/ticket/15824 to pidgin.
+The above patch might get into 2.10.8

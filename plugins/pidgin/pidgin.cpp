@@ -47,35 +47,12 @@ bool PidginPlugin::enabled() const
 
 void PidginPlugin::update(bool enable)
 {
-    QDBusMessage message = QDBusMessage::createMethodCall("im.pidgin.purple.PurpleService", "/im/pidgin/purple/PurpleObject", "", "PurpleSavedstatusesGetAll");
-    QDBusMessage reply = QDBusConnection::sessionBus().call(message);
-
-    if (reply.arguments().count() != 1) {
-        qWarning() << "Pidgin: Invalid dbus reply";
-        return;
-    }
-
-    const QDBusArgument returnValue = reply.arguments().first().value<QDBusArgument>();
-
-    if (returnValue.currentType() != QDBusArgument::ArrayType) {
-        qWarning() << "Pidgin: was expecting Array";
-        return;
-    }
-
-    qDebug() << returnValue.currentSignature();
-
-    returnValue.beginArray();
-
-    while (!returnValue.atEnd()) {
-        int a = 0;
-        returnValue >> a;
-        qDebug() << a;
-    }
-
-    returnValue.endArray();
-    Q_UNUSED(enable);
-
-    //qWarning() << "Pidgin " << returnValue.asVariant().type() <<  reply.arguments().first() << 	returnValue.currentType() << enable;
+	QDBusMessage message = QDBusMessage::createMethodCall("im.pidgin.purple.PurpleService", "/im/pidgin/purple/PurpleObject", "", "PurplePrefsSetBool");
+	message << "/pidgin/docklet/change_icon_on_unread" << (enable ? 1 : 0);
+	const bool queued = QDBusConnection::sessionBus().send(message);
+	if (!queued) {
+		qWarning() << "Could not queue D-Bus message for pidgin";
+	}
 }
 
 void PidginPlugin::setTaskStatus(TaskStatus status)
