@@ -82,6 +82,11 @@ QuickView::QuickView(bool developerMode, QWindow *parent)
     loadPlugins();
 }
 
+Controller *QuickView::controller() const
+{
+    return m_controller;
+}
+
 void QuickView::onTaskStatusChanged()
 {
     notifyPlugins(m_controller->taskStatus());

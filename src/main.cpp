@@ -19,8 +19,35 @@
 */
 
 #include "quickview.h"
+#include "dbus/flow.h"
 
 #include <QGuiApplication>
+
+#include <QDBusConnection>
+#include <QDebug>
+#include <QDBusError>
+
+
+void initDBus(QuickView *view)
+{
+#ifdef FLOW_DBUS
+    if (!QDBusConnection::sessionBus().isConnected()) {
+        qWarning() << "Cannot connect to the D-Bus session bus.\n"
+                      "To start it, run:\n"
+                      "\teval `dbus-launch --auto-syntax`\n";
+        exit(-1);
+    }
+
+    if (!QDBusConnection::sessionBus().registerService("com.kdab.flow-pomodoro.FlowInterface")) {
+        qWarning() << QDBusConnection::sessionBus().lastError();
+        exit(-2);
+    }
+
+    Flow *flowDBusInterface = new Flow(view->controller(), qApp);
+    QDBusConnection::sessionBus().registerObject("/", flowDBusInterface, QDBusConnection::ExportScriptableSlots);
+#endif
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -34,6 +61,8 @@ int main(int argc, char *argv[])
 
     QuickView window(app.arguments().contains("-d"));
     window.show();
+
+    initDBus(&window);
 
     return app.exec();
 }

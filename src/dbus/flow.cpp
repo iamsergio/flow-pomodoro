@@ -18,43 +18,26 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _QUICK_WINDOW_H_
-#define _QUICK_WINDOW_H_
+#include "flow.h"
 
-#include "task.h"
-#include "plugininterface.h"
+Flow::Flow(Controller *controller, QObject *parent)
+    : QObject(parent)
 
-#include <QQuickView>
-#include <QUrl>
+{
+    m_controller = controller;
+}
 
-class Controller;
-class QKeyEvent;
+void Flow::toggleExpand()
+{
+    if (m_controller) {
+        m_controller->setExpanded(!m_controller->expanded());
+    }
+}
 
-class PluginModel;
-
-class QuickView : public QQuickView {
-    Q_OBJECT
-
-public:
-    explicit QuickView(bool developerMode, QWindow *parent = 0);
-    Controller *controller() const;
-
-protected:
-    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
-
-private Q_SLOTS:
-    void onTaskStatusChanged();
-
-private:
-    void loadPlugins();
-    void reloadQML();
-    void notifyPlugins(TaskStatus newStatus);
-    QUrl styleFileName() const;
-    void createStyleComponent();
-
-    Controller *m_controller;
-    PluginModel *m_pluginModel;
-    bool m_developerMode;
-};
-
-#endif
+void Flow::newTask(const QString &text, bool startEditor, bool expand)
+{
+    if (m_controller) {
+        m_controller->setExpanded(expand);
+        m_controller->addTask(text, startEditor);
+    }
+}

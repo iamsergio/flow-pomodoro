@@ -20,6 +20,13 @@ HEADERS += controller.h      \
            task.h            \
            taskmodel.h
 
+contains(QT_CONFIG, dbus) {
+    QT += dbus
+    SOURCES += dbus/flow.cpp
+    HEADERS += dbus/flow.h
+    DEFINES += FLOW_DBUS
+}
+
 OTHER_FILES += ClickableImage.qml \
                ConfigurePage.qml  \
                DefaultStyle.qml   \

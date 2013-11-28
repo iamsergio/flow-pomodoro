@@ -18,43 +18,24 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _QUICK_WINDOW_H_
-#define _QUICK_WINDOW_H_
+#ifndef _DBUS_FLOW_H_
+#define _DBUS_FLOW_H_
 
-#include "task.h"
-#include "plugininterface.h"
+#include "controller.h"
+#include <QObject>
+#include <QPointer>
 
-#include <QQuickView>
-#include <QUrl>
-
-class Controller;
-class QKeyEvent;
-
-class PluginModel;
-
-class QuickView : public QQuickView {
+class Flow : public QObject {
     Q_OBJECT
-
 public:
-    explicit QuickView(bool developerMode, QWindow *parent = 0);
-    Controller *controller() const;
+    explicit Flow(Controller *controller, QObject *parent = 0);
 
-protected:
-    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
-
-private Q_SLOTS:
-    void onTaskStatusChanged();
+public Q_SLOTS:
+    Q_SCRIPTABLE void toggleExpand();
+    Q_SCRIPTABLE void newTask(const QString &text, bool startEditor, bool expand);
 
 private:
-    void loadPlugins();
-    void reloadQML();
-    void notifyPlugins(TaskStatus newStatus);
-    QUrl styleFileName() const;
-    void createStyleComponent();
-
-    Controller *m_controller;
-    PluginModel *m_pluginModel;
-    bool m_developerMode;
+    QPointer<Controller> m_controller;
 };
 
 #endif
