@@ -83,8 +83,13 @@ void TaskModel::removeTask(int index)
 
 void TaskModel::updateTask(int i, const QString &newText)
 {
-    //qDebug() << "TaskModel::updateTask()";
-    Q_ASSERT(i>=0 && i<m_tasks.count());
+
+    if (!(i>=0 && i<m_tasks.count())) {
+        qDebug() << i;
+        Q_ASSERT(false);
+        return;
+    }
+
     Task task;
     task.text = newText.isEmpty() ? tr("New Task") : newText;
     m_tasks[i] = task;

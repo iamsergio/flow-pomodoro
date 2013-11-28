@@ -115,6 +115,7 @@ Q_SIGNALS:
     void defaultPomodoroDurationChanged(int);
     void taskStatusChanged();
     void selectedIndexChanged(int);
+    void forceFocus(int index);
 
 private:
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;

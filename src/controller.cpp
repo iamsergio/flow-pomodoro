@@ -83,7 +83,9 @@ void Controller::setIndexBeingEdited(int index)
     } else {
         m_indexBeingEdited = -1;
     }
-    emit indexBeingEditedChanged(index);
+
+    // qDebug() << "Controller::setIndexBeingEdited " << m_indexBeingEdited;
+    emit indexBeingEditedChanged(m_indexBeingEdited);
 }
 
 void Controller::startPomodoro(int queueIndex)
@@ -278,6 +280,7 @@ void Controller::onTimerTick()
     }
 }
 
+
 bool Controller::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() != QEvent::KeyRelease) {
@@ -364,7 +367,6 @@ bool Controller::eventFilter(QObject *, QEvent *event)
 
 void Controller::addTask(const QString &text, bool startEditMode)
 {
-    //qDebug() << "Controller::addTask";
     m_model->addTask(text);
     setIndexBeingEdited(-1);
 

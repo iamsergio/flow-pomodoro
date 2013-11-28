@@ -59,6 +59,16 @@ Rectangle {
             visible: !textField.visible
         }
 
+        Connections {
+            target: _controller
+            onForceFocus: {
+                if (index === modelIndex && modelIndex !== -1) {
+                    textField.forceActiveFocus()
+                    textField.selectAll()
+                }
+            }
+        }
+
         TextField {
             id: textField
             visible: root.editMode
@@ -70,18 +80,13 @@ Rectangle {
             focus: true
             onVisibleChanged: {
                 if (visible) {
-                    text = taskText // The binding gets broken each time you edit, so do it here
+                    text = taskText
                     forceActiveFocus()
                 }
             }
 
-            Component.onCompleted: {
-                forceActiveFocus()
-                selectAll()
-            }
-
             onTextChanged: {
-                if (modelIndex !== -1) {
+                if (modelIndex !== -1 && visible) {
                     _controller.updateTask(modelIndex, text)
                 }
             }

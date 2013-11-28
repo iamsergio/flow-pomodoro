@@ -21,9 +21,17 @@ Page {
             clip: true
 
             spacing: 3
+
+            onCountChanged: {
+                // HACK: For some reason the first inserted element takes more than 1 event loop.
+                // It doesn't go immediately into the list view after we insert it into the model in controller.cpp
+                // that event loop run breaks focus, so restore it here.
+                _controller.forceFocus(count-1)
+            }
+
             delegate: Task {
                 taskText: name
-                editMode: index === _controller.indexBeingEdited
+                editMode: index === _controller.indexBeingEdited && index !== -1
                 otherItemBeingEdited: index !==_controller.indexBeingEdited && _controller.indexBeingEdited !== -1
                 buttonsVisible: !otherItemBeingEdited && (editMode || hasMouseOver)
                 modelIndex: index
