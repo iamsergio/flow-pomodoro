@@ -21,6 +21,7 @@
 #include "controller.h"
 #include "taskmodel.h"
 #include "settings.h"
+#include "quickview.h"
 
 #include <QTimer>
 #include <QDebug>
@@ -142,7 +143,9 @@ void Controller::setExpanded(bool expanded)
 {
     if (expanded != m_expanded) {
         m_expanded = expanded;
-        if (!expanded) {
+        if (expanded) {
+            QuickView::instance().requestActivate();
+        } else {
             setIndexBeingEdited(-1);
         }
         emit expandedChanged(expanded);
