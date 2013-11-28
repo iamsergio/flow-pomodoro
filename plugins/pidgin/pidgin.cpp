@@ -34,9 +34,7 @@ void PidginPlugin::setEnabled(bool enabled)
 {
     if (enabled != m_enabled) {
         m_enabled = enabled;
-        if (!m_enabled) {
-            update(true);
-        }
+        update(m_enabled);
     }
 }
 
