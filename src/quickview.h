@@ -36,7 +36,7 @@ class QuickView : public QQuickView {
     Q_OBJECT
 
 public:
-    static QuickView& instance();
+    static QuickView* instance();
     Controller *controller() const;
 
 protected:

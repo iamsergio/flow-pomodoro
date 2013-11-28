@@ -92,9 +92,13 @@ QuickView::QuickView() : QQuickView()
     loadPlugins();
 }
 
-QuickView& QuickView::instance()
+QuickView* QuickView::instance()
 {
-    static QuickView window;
+    static QuickView *window = 0;
+    if (!window) {
+        window = new QuickView();
+    }
+
     return window;
 }
 

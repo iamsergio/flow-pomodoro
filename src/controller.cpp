@@ -183,7 +183,7 @@ void Controller::setExpanded(bool expanded)
     if (expanded != m_expanded) {
         m_expanded = expanded;
         if (expanded) {
-            QuickView::instance().requestActivate();
+            QuickView::instance()->requestActivate();
         } else {
             setIndexBeingEdited(-1);
         }

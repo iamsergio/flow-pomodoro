@@ -46,7 +46,7 @@ void initDBus()
         exit(-2);
     }
 
-    Flow *flowDBusInterface = new Flow(QuickView::instance().controller(), qApp);
+    Flow *flowDBusInterface = new Flow(QuickView::instance()->controller(), qApp);
     QDBusConnection::sessionBus().registerObject("/", flowDBusInterface, QDBusConnection::ExportScriptableSlots);
 #endif
 }
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("KDAB");
     app.setApplicationName("flow");
 
-    QuickView::instance().show();
+    QuickView::instance()->show();
 
     initDBus();
 
