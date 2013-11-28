@@ -9,6 +9,7 @@
     <file>img/stop.png</file>
     <file>img/window-close.png</file>
 
+    <file>qml/AboutPage.qml</file>
     <file>qml/ClickableImage.qml</file>
     <file>qml/ConfigurePage.qml</file>
     <file>qml/DefaultStyle.qml</file>

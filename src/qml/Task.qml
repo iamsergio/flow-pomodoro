@@ -108,8 +108,8 @@ Rectangle {
             id: editImage
             source: "qrc:/img/edit.png"
             anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: _style.buttonsRightMargin
+            anchors.right: playImage.left
+            anchors.rightMargin: _style.buttonsSpacing
             visible: root.buttonsVisible
             onClicked: {
                 if (modelIndex !== -1) {
@@ -121,17 +121,16 @@ Rectangle {
             }
         }
 
-        /*
         ClickableImage {
             id: playImage
             source: "qrc:/img/play.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            anchors.rightMargin: 10
-            visible: false root.buttonsVisible.
+            anchors.rightMargin: _style.buttonsRightMargin
+            visible: root.buttonsVisible
             onClicked: {
                 _controller.startPomodoro(modelIndex, _style.defaultPomodoroDuration)
             }
-        }*/
+        }
     }
 }

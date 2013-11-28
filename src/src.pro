@@ -27,7 +27,8 @@ contains(QT_CONFIG, dbus) {
     DEFINES += FLOW_DBUS
 }
 
-OTHER_FILES += ClickableImage.qml \
+OTHER_FILES += AboutPage.qml \
+               ClickableImage.qml \
                ConfigurePage.qml  \
                DefaultStyle.qml   \
                Main.qml           \

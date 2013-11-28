@@ -126,6 +126,12 @@ Rectangle {
             anchors.bottomMargin: progressBar.visible ? 5 : 10
         }
 
+        AboutPage {
+            z: 2
+            id: aboutPage
+            anchors.bottom:  progressBar.visible ? progressBar.top : parent.bottom
+            anchors.bottomMargin: progressBar.visible ? 5 : 10
+        }
 
         ProgressBar
         {
@@ -213,7 +219,8 @@ Rectangle {
         MenuItem {
             text: qsTr("About")
             onTriggered: {
-                _controller.currentPage = Controller.TheQueuePage
+                _controller.currentPage = Controller.AboutPage
+                _controller.expanded = true
             }
         }
         MenuItem {
