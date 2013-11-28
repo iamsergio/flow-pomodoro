@@ -73,8 +73,7 @@ void KMailPlugin::update(bool enable)
 void KMailPlugin::setTaskStatus(TaskStatus status)
 {
     if (m_enabled) {
-        // No e-mail for you while paused and started.
-        update(status == TaskStopped);
+        update(status != TaskStarted);
     }
 }
 

@@ -56,8 +56,7 @@ void PidginPlugin::update(bool enable)
 void PidginPlugin::setTaskStatus(TaskStatus status)
 {
     if (m_enabled) {
-        // No e-mail for you while paused and started.
-        update(status == TaskStopped);
+        update(status != TaskStarted);
     }
 }
 
