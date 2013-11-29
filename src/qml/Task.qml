@@ -38,12 +38,6 @@ Rectangle {
             textField.forceActiveFocus()
         }
 
-        onDoubleClicked: {
-            if (modelIndex !== -1) {
-                _controller.startPomodoro(modelIndex)
-            }
-        }
-
         Text {
             id: textItem
             text: taskText
