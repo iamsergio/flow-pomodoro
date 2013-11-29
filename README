@@ -1,0 +1,7 @@
+Qt 5.1 with QtQuick Controls and Layouts is required.
+On Windows 5.2 is recommended unless you don't want transparency.
+
+Building instructions:
+qmake && make
+
+Feel free to checkout the cmake branch and fix plugin building.
