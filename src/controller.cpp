@@ -353,6 +353,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
         cycleSelectionDown();
         return true;
         break;
+    case Qt::Key_F2:
     case Qt::Key_E:
         if (m_selectedIndex != -1) {
             setIndexBeingEdited(m_selectedIndex);
