@@ -17,9 +17,9 @@ Rectangle {
     color: selected ? _style.selectedTaskBgColor : _style.taskBackgroundColor
     anchors.left: parent.left
     anchors.right: parent.right
-    anchors.leftMargin: 5
-    anchors.rightMargin: 5
-    height: 50
+    anchors.leftMargin: _style.marginSmall
+    anchors.rightMargin: _style.marginSmall
+    height: 50 * _controller.dpiFactor
     border.color: _style.taskBorderColor
     border.width: selected ? _style.selectedTaskBorderWidth : 1
     radius: _style.taskBorderRadius
@@ -46,9 +46,9 @@ Rectangle {
             font.bold: true
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
-            anchors.leftMargin: 10
+            anchors.leftMargin: 10* _controller.dpiFactor
             anchors.right: parent.right
-            anchors.rightMargin: 16*3 + 15 // 3 icons, 3 margins
+            anchors.rightMargin: (16*3 + 15) * _controller.dpiFactor // 3 icons, 3 margins
             font.pointSize: _style.taskFontSize
             visible: !textField.visible
         }
@@ -70,7 +70,7 @@ Rectangle {
             anchors.left: textItem.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: deleteImage.left
-            anchors.rightMargin: 10
+            anchors.rightMargin: _style.marginMedium
             focus: true
             onVisibleChanged: {
                 if (visible) {

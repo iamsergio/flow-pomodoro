@@ -4,6 +4,6 @@ Text {
     font.bold: true
     font.pointSize: _style.titleSize
     color: _style.titleColor
-    anchors.leftMargin: 10
+    anchors.leftMargin: _style.marginMedium
     anchors.left: parent.left
 }

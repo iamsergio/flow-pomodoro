@@ -25,6 +25,7 @@
 
 #include <QTimer>
 #include <QDebug>
+#include <QScreen>
 #include <QGuiApplication>
 
 enum {
@@ -266,6 +267,14 @@ bool Controller::stopped() const
 bool Controller::paused() const
 {
     return m_taskStatus == TaskPaused;
+}
+
+qreal Controller::dpiFactor() const
+{
+    QScreen *screen = QGuiApplication::primaryScreen();
+    Q_ASSERT(screen);
+
+    return screen->logicalDotsPerInch() / 96.0;
 }
 
 void Controller::onTimerTick()

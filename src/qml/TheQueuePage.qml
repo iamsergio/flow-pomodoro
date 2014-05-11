@@ -15,12 +15,12 @@ Page {
 
         ListView {
             id: listView
-            anchors.topMargin: 5
+            anchors.topMargin: _style.marginSmall
             anchors.fill: parent
             model: _taskModel
             clip: true
 
-            spacing: 3
+            spacing: 3 * _controller.dpiFactor
 
             onCountChanged: {
                 // HACK: For some reason the first inserted element takes more than 1 event loop.

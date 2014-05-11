@@ -48,6 +48,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool stopped READ stopped NOTIFY taskStatusChanged)
     Q_PROPERTY(bool running READ running NOTIFY taskStatusChanged)
 
+    Q_PROPERTY(qreal dpiFactor READ dpiFactor CONSTANT)
 public:
 
     enum Page {
@@ -86,6 +87,8 @@ public:
     bool running() const;
     bool stopped() const;
     bool paused() const;
+
+    qreal dpiFactor() const;
 
 public Q_SLOTS:
     void addTask(const QString &text, bool startEditMode);

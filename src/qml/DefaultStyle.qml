@@ -4,9 +4,9 @@ Item {
 
     // Main Window:
     readonly property string backgroundColor    : "black"
-    readonly property int borderRadius          : 7
+    readonly property int borderRadius          : Math.ceil(8 * _controller.dpiFactor)
     readonly property string borderColor        : "gray"
-    readonly property int borderWidth           : 1
+    readonly property int borderWidth           : 1 * _controller.dpiFactor
     readonly property color fontColor           : Qt.rgba(0.9, 0.9, 0.5, 1)
     readonly property int fontSize              : 20
     readonly property int clickHereFontSize     : 10
@@ -16,13 +16,13 @@ Item {
     // progress bar:
     readonly property string progressBarBgColor       : "white"
     readonly property string progressBarFgBorderColor : "darkgray"
-    readonly property int progressBarBorderRadius     : 3
+    readonly property int progressBarBorderRadius     : Math.ceil(3 * _controller.dpiFactor)
 
 
-    readonly property int queueRadius            : 4
+    readonly property int queueRadius            : Math.ceil(5 * _controller.dpiFactor)
     readonly property string taskBackgroundColor : "black"
     readonly property string taskBorderColor     : "gray"
-    readonly property int taskBorderRadius       : 4
+    readonly property int taskBorderRadius       : Math.ceil(5 * _controller.dpiFactor)
 
     readonly property string taskFontColor       : "white"
     readonly property int taskFontSize           : 15
@@ -30,17 +30,17 @@ Item {
 
     readonly property bool deleteAnimationEnabled : true
 
-    readonly property int pageHeight : 500
+    readonly property int pageHeight : 500 * _controller.dpiFactor
 
-    readonly property int selectedTaskBorderWidth    : 1
+    readonly property int selectedTaskBorderWidth    : Math.ceil(1 * _controller.dpiFactor)
     readonly property string selectedTaskBorderColor : "black"
     readonly property string selectedTaskBgColor     : "lightgray"
     readonly property string selectedTaskFgColor     : "black"
 
-    readonly property int buttonsRightMargin : 10
-    readonly property int buttonsSpacing : 5
+    readonly property int buttonsRightMargin : 10 * _controller.dpiFactor
+    readonly property int buttonsSpacing : Math.ceil(5 * _controller.dpiFactor)
 
-    readonly property int pageMargin : 10
+    readonly property int pageMargin : Math.ceil(10 * _controller.dpiFactor)
     readonly property int titleSize : 22
     readonly property string titleColor : "black"
     readonly property int regularTextSize : 13
@@ -48,4 +48,10 @@ Item {
 
     readonly property int smallTextSize     : 10
     readonly property string smallTextColor : "black"
+
+    readonly property int progressBarHeight: 10 * _controller.dpiFactor
+
+    readonly property int marginSmall: Math.ceil(5 * _controller.dpiFactor)
+    readonly property int marginMedium: Math.ceil(10 * _controller.dpiFactor)
+    readonly property int marginBig: Math.ceil(20 * _controller.dpiFactor)
 }

@@ -16,8 +16,8 @@ Page {
             id: titleText
             text: qsTr("Configuration")
             anchors.top: parent.top
-            anchors.topMargin: 5
-            height: 50
+            anchors.topMargin: _style.marginSmall
+            height: 50 * _controller.dpiFactor
         }
 
         GridLayout {
@@ -26,9 +26,9 @@ Page {
 
             anchors.top: titleText.bottom
             anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.rightMargin: 40
-            columnSpacing: 20
+            anchors.leftMargin: _style.marginMedium
+            anchors.rightMargin: 40 * _controller.dpiFactor
+            columnSpacing: _style.marginBig
 
             RegularText {
                 text: qsTr("Pomodoro duration")
@@ -50,12 +50,12 @@ Page {
             id: titleText2
             text: qsTr("Plugins")
             anchors.top: grid1.bottom
-            anchors.topMargin: 40
+            anchors.topMargin: 40 * _controller.dpiFactor
         }
 
         SmallText {
             id: smallText1
-            anchors.topMargin: 5
+            anchors.topMargin: _style.marginSmall
             anchors.top: titleText2.bottom
             text: qsTr("Plugins disable certain distractions when a task is running. Distractions are re-enabled when the task stops.") +
                   "\n" + qsTr("The following plugins were found:")
@@ -64,9 +64,9 @@ Page {
 
         ListView {
             anchors.top: smallText1.bottom
-            anchors.leftMargin: 10
-            anchors.rightMargin: 40
-            anchors.topMargin: 25
+            anchors.leftMargin: _style.marginMedium
+            anchors.rightMargin: 40 * _controller.dpiFactor
+            anchors.topMargin: 25 * _controller.dpiFactor
             anchors.left: parent.left
             anchors.right: parent.right
             model: _pluginModel
@@ -74,12 +74,12 @@ Page {
             delegate: Row {
 
                 id: row
-                height: 30
-                spacing: 30
+                height: 30 * _controller.dpiFactor
+                spacing: 30 * _controller.dpiFactor
 
                 RegularText {
                     height: row.height
-                    width: 150
+                    width: 150 * _controller.dpiFactor
                     text: textRole
                 }
 
@@ -96,12 +96,12 @@ Page {
         }
 
         Button {
-            width : 100
-            height: 50
+            width : 100 * _controller.dpiFactor
+            height: 50 * _controller.dpiFactor
             text: qsTr("OK")
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 5
+            anchors.bottomMargin: _style.marginSmall
 
             onClicked: {
                 _controller.currentPage = Controller.TheQueuePage

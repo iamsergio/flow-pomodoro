@@ -16,8 +16,8 @@ Page {
             id: titleText
             text: qsTr("About")
             anchors.top: parent.top
-            anchors.topMargin: 5
-            height: 50
+            anchors.topMargin: _style.marginSmall
+            height: 50 * _controller.dpiFactor
         }
 
 
@@ -33,19 +33,19 @@ Page {
             id: keysText
             text: qsTr("Keyboard bindings") + ":"
             anchors.top: copyrightText.bottom
-            anchors.topMargin: 60
+            anchors.topMargin: 60 * _controller.dpiFactor
             anchors.left: parent.left
-            anchors.leftMargin: 10
+            anchors.leftMargin: _style.marginMedium
             font.bold: true
         }
 
         GridLayout {
             anchors.top: keysText.bottom
-            anchors.topMargin: 5
+            anchors.topMargin: _style.marginSmall
             anchors.left: parent.left
-            anchors.leftMargin: 10
+            anchors.leftMargin: _style.marginMedium
             columns: 2
-            columnSpacing: 10
+            columnSpacing: _style.marginMedium
 
             Text  {
                 font.pointSize: _style.smallTextSize
@@ -114,12 +114,12 @@ Page {
 
         Button {
             z: 2
-            width : 100
-            height: 50
+            width : 100 * _controller.dpiFactor
+            height: 50 * _controller.dpiFactor
             text: qsTr("OK")
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 5
+            anchors.bottomMargin: _style.marginSmall
 
             onClicked: {
                 _controller.currentPage = Controller.TheQueuePage

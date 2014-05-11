@@ -9,8 +9,8 @@ Rectangle {
     id: root
     radius: 4
     color: "transparent"
-    width: 400
-    height: 50 + (_controller.expanded ? _style.pageHeight + 10 : 0)
+    width: 400 * _controller.dpiFactor
+    height: 50 * _controller.dpiFactor + (_controller.expanded ? _style.pageHeight + 10* _controller.dpiFactor : 0)
 
     function mouseOver()
     {
@@ -40,9 +40,9 @@ Rectangle {
             font.pointSize: _style.fontSize
             font.bold: true
             anchors.left: parent.left
-            anchors.leftMargin: 10
+            anchors.leftMargin: _style.marginMedium
             anchors.right: parent.right
-            anchors.rightMargin: 16*2 + 15 // ( two icons, 3 margins)
+            anchors.rightMargin: (16*2 + 15) * _controller.dpiFactor // ( two icons, 3 margins)
             anchors.top: parent.top
             text: _controller.stopped ? qsTr("You're slacking") : _controller.taskText
             visible: !remainingText.visible
@@ -55,9 +55,9 @@ Rectangle {
             color: _style.clickHereFontColor
             visible: _controller.stopped && !_controller.expanded
             anchors.left: titleText.left
-            anchors.leftMargin: 5
+            anchors.leftMargin: _style.marginSmall
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 5
+            anchors.bottomMargin: _style.marginSmall
         }
 
         Text {
@@ -67,7 +67,7 @@ Rectangle {
             font.pointSize: _style.remainingFontSize
             font.bold: true
             anchors.left: parent.left
-            anchors.leftMargin: 10
+            anchors.leftMargin: _style.marginMedium
             anchors.top: parent.top
             text: _controller.paused ? qsTr("Paused (%1m)").arg(_controller.remainingMinutes) : (_controller.remainingMinutes + "m " + qsTr("remaining ..."))
         }
@@ -116,21 +116,21 @@ Rectangle {
             z: 2
             id: theQueuePage
             anchors.bottom:  progressBar.visible ? progressBar.top : parent.bottom
-            anchors.bottomMargin: progressBar.visible ? 5 : 10
+            anchors.bottomMargin: progressBar.visible ? _style.marginSmall : _style.marginMedium
         }
 
         ConfigurePage {
             z: 2
             id: configurePage
             anchors.bottom:  progressBar.visible ? progressBar.top : parent.bottom
-            anchors.bottomMargin: progressBar.visible ? 5 : 10
+            anchors.bottomMargin: progressBar.visible ? _style.marginSmall : _style.marginMedium
         }
 
         AboutPage {
             z: 2
             id: aboutPage
             anchors.bottom:  progressBar.visible ? progressBar.top : parent.bottom
-            anchors.bottomMargin: progressBar.visible ? 5 : 10
+            anchors.bottomMargin: progressBar.visible ? _style.marginSmall : _style.marginMedium
         }
 
         ProgressBar
@@ -139,11 +139,11 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 5
-            anchors.leftMargin: 10
-            anchors.rightMargin: 10
+            anchors.bottomMargin: _style.marginSmall
+            anchors.leftMargin: _style.marginMedium
+            anchors.rightMargin: _style.marginMedium
 
-            height: 10
+            height: _style.progressBarHeight
             visible: !_controller.stopped
 
             minimumValue: 0
