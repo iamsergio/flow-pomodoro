@@ -57,7 +57,7 @@ public:
         ConfigurePage,
         AboutPage
     };
-    Q_ENUMS(Page);
+    Q_ENUMS(Page)
 
     explicit Controller(TaskModel *model, QObject *parent = 0);
 
