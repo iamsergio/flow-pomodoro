@@ -21,7 +21,6 @@
 #include "settings.h"
 
 #include <QMetaType>
-#include <QDebug>
 #include <QSettings>
 #include <QCoreApplication>
 

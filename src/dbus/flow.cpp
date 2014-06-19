@@ -19,6 +19,7 @@
 */
 
 #include "flow.h"
+#include "controller.h"
 
 Flow::Flow(Controller *controller, QObject *parent)
     : QObject(parent)

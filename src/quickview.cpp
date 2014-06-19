@@ -19,22 +19,20 @@
 */
 
 #include "quickview.h"
-#include "controller.h"
 #include "taskmodel.h"
 #include "pluginmodel.h"
 #include "plugininterface.h"
-#include "controller.h"
 #include "settings.h"
+#include "controller.h"
 
+#include <QStandardPaths>
 #include <QQmlContext>
 #include <QString>
 #include <QScreen>
 #include <QGuiApplication>
 #include <QDebug>
 #include <QQmlEngine>
-#include <QFileSystemWatcher>
 #include <QDir>
-#include <QtQml>
 #include <QPluginLoader>
 #include <QQuickItem>
 #include <QGuiApplication>

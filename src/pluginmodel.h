@@ -24,7 +24,6 @@
 #include "plugininterface.h"
 
 #include <QAbstractListModel>
-#include <QList>
 
 class PluginModel : public QAbstractListModel {
     Q_OBJECT

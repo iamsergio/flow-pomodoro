@@ -22,7 +22,6 @@
 #define _QUICK_WINDOW_H_
 
 #include "task.h"
-#include "plugininterface.h"
 
 #include <QQuickView>
 #include <QUrl>

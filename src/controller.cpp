@@ -24,7 +24,6 @@
 #include "quickview.h"
 
 #include <QTimer>
-#include <QDebug>
 #include <QScreen>
 #include <QGuiApplication>
 

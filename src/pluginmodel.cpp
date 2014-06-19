@@ -21,7 +21,6 @@
 #include "pluginmodel.h"
 #include "settings.h"
 
-#include <QDebug>
 
 PluginModel::PluginModel(QObject *parent) : QAbstractListModel(parent)
 {

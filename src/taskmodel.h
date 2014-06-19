@@ -24,7 +24,6 @@
 #include "task.h"
 
 #include <QAbstractListModel>
-#include <QList>
 
 class TaskModel : public QAbstractListModel {
     Q_OBJECT

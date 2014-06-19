@@ -21,9 +21,10 @@
 #ifndef _DBUS_FLOW_H_
 #define _DBUS_FLOW_H_
 
-#include "controller.h"
 #include <QObject>
 #include <QPointer>
+
+class Controller;
 
 class Flow : public QObject {
     Q_OBJECT
