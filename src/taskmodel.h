@@ -27,7 +27,6 @@
 
 class TaskModel : public QAbstractListModel {
     Q_OBJECT
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
 
 public:
 
@@ -48,9 +47,6 @@ public:
     void addTask(const QString &taskText);
     void removeTask(int index);
     void updateTask(int index, const QString &newText);
-
-Q_SIGNALS:
-    void countChanged(int);
 
 private:
     void populate();

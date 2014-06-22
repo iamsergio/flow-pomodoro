@@ -85,7 +85,7 @@ void Controller::setIndexBeingEdited(int index)
     }
 
     // qDebug() << "Controller::setIndexBeingEdited " << m_indexBeingEdited;
-    emit indexBeingEditedChanged(m_indexBeingEdited);
+    emit indexBeingEditedChanged();
 }
 
 void Controller::startPomodoro(int queueIndex)
@@ -188,7 +188,7 @@ void Controller::setExpanded(bool expanded)
             setIndexBeingEdited(-1);
         }
         setSelectedIndex(-1);
-        emit expandedChanged(expanded);
+        emit expandedChanged();
     }
 }
 
@@ -206,7 +206,7 @@ void Controller::setCurrentPage(Controller::Page page)
 {
     if (page != m_page) {
         m_page = page;
-        emit currentPageChanged(page);
+        emit currentPageChanged();
     }
 }
 
@@ -220,9 +220,9 @@ void Controller::setTaskStatus(TaskStatus status)
     if (status != m_taskStatus) {
         m_taskStatus = status;
         emit taskTextChanged();
-        emit remainingMinutesChanged(remainingMinutes());
+        emit remainingMinutesChanged();
         emit taskStatusChanged();
-        emit currentTaskDurationChanged(m_currentTaskDuration);
+        emit currentTaskDurationChanged();
     }
 }
 
@@ -231,7 +231,7 @@ void Controller::setDefaultPomodoroDuration(int duration)
     if (m_defaultPomodoroDuration != duration && duration > 0 && duration < 59) {
         m_defaultPomodoroDuration = duration;
         Settings::instance()->setValue("defaultPomodoroDuration", QVariant(duration));
-        emit defaultPomodoroDurationChanged(duration);
+        emit defaultPomodoroDurationChanged();
     }
 }
 
@@ -249,7 +249,7 @@ void Controller::setSelectedIndex(int index)
 {
     if (index != m_selectedIndex) {
         m_selectedIndex = index;
-        emit selectedIndexChanged(index);
+        emit selectedIndexChanged();
     }
 }
 
@@ -280,7 +280,7 @@ void Controller::onTimerTick()
 {
     //qDebug() << "Timer ticked";
     m_elapsedMinutes++;
-    emit remainingMinutesChanged(remainingMinutes());
+    emit remainingMinutesChanged();
 
     if (remainingMinutes() == 0) {
         stopPomodoro(/**requeue=*/true);

@@ -107,17 +107,17 @@ private Q_SLOTS:
     void onTimerTick();
 
 Q_SIGNALS:
-    void remainingMinutesChanged(int);
-    void currentTaskDurationChanged(int);
+    void remainingMinutesChanged();
+    void currentTaskDurationChanged();
     void taskTextChanged();
     void taskFinished();
-    void indexBeingEditedChanged(int);
-    void expandedChanged(bool);
+    void indexBeingEditedChanged();
+    void expandedChanged();
     void firstSecondsAfterAddingChanged();
-    void currentPageChanged(Page page);
-    void defaultPomodoroDurationChanged(int);
+    void currentPageChanged();
+    void defaultPomodoroDurationChanged();
     void taskStatusChanged();
-    void selectedIndexChanged(int);
+    void selectedIndexChanged();
     void forceFocus(int index);
 
 private:

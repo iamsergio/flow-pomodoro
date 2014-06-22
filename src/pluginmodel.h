@@ -27,7 +27,6 @@
 
 class PluginModel : public QAbstractListModel {
     Q_OBJECT
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
 
 public:
 
@@ -48,9 +47,6 @@ public:
     PluginInterface::List plugins() const;
 
     Q_INVOKABLE void setPluginEnabled(bool enabled, int index);
-
-Q_SIGNALS:
-    void countChanged(int);
 
 private:
     PluginInterface::List m_plugins;
