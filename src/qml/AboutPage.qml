@@ -24,7 +24,7 @@ Page {
         SmallText {
             id: copyrightText
             anchors.top: titleText.bottom
-            text: "<html>Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, <a href=\"mailto:info@kdab.com\">info@kdab.com</a><br><br>" +
+            text: "<html>Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, <a href=\"mailto:info@kdab.com\">info@kdab.com</a><br><br>" +
                   qsTr("Author" + ": Sérgio Martins &lt;<a href=\"sergio.martins@kdab.com\" >sergio.martins@kdab.com</a>&gt;</html>")
             onLinkActivated: Qt.openUrlExternally(link)
         }
