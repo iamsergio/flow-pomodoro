@@ -49,8 +49,18 @@ Rectangle {
             anchors.leftMargin: 10* _controller.dpiFactor
             anchors.right: parent.right
             anchors.rightMargin: (16*3 + 15) * _controller.dpiFactor // 3 icons, 3 margins
-            font.pointSize: _style.taskFontSize
+            font.pointSize: invisibleHelper.isOverflowing ? _style.taskFontSize - 5
+                                                          : _style.taskFontSize
             visible: !textField.visible
+        }
+
+        Text {
+            id: invisibleHelper
+            property bool isOverflowing: contentWidth > width
+            visible: false
+            anchors.fill: textItem
+            text: textItem.text
+            font.pointSize: _style.taskFontSize
         }
 
         Connections {
