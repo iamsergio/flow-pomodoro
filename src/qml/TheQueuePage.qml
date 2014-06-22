@@ -19,6 +19,8 @@ Page {
             anchors.fill: parent
             model: _taskModel
             clip: true
+            highlightFollowsCurrentItem: true
+            currentIndex: _controller.indexBeingEdited
 
             spacing: 3 * _controller.dpiFactor
 
