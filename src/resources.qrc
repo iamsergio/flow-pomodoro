@@ -20,5 +20,8 @@
     <file>qml/Task.qml</file>
     <file>qml/TheQueuePage.qml</file>
     <file>qml/TitleText.qml</file>
+
+    <file>qml/config/General.qml</file>
+    <file>qml/config/Plugins.qml</file>
 </qresource>
 </RCC>
