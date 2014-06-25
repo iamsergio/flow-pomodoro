@@ -6,7 +6,6 @@ import Controller 1.0
 import ".."
 
 Item {
-    z: 1
     id: root
     anchors.fill: parent
 
