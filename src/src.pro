@@ -10,15 +10,29 @@ SOURCES += controller.cpp  \
            pluginmodel.cpp \
            quickview.cpp   \
            settings.cpp    \
-           taskmodel.cpp
+           sortmodel.cpp   \
+           tag.cpp \
+           taskstorage.cpp \
+           taskstorageqsettings.cpp \
+           task.cpp \
+           tagstorage.cpp \
+           tagstorageqsettings.cpp \
+           taskfilterproxymodel.cpp
 
 HEADERS += controller.h      \
            plugininterface.h \
            pluginmodel.h     \
            quickview.h       \
            settings.h        \
+           sortmodel.h       \
            task.h            \
-           taskmodel.h
+           tag.h \
+           taskstorage.h \
+           taskstorageqsettings.h \
+           tagstorage.h \
+           tagstorageqsettings.h \
+           taskfilterproxymodel.h \
+           genericlistmodel.h
 
 contains(QT_CONFIG, dbus) {
     QT += dbus

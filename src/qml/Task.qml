@@ -5,13 +5,14 @@ Rectangle {
 
     signal deleteClicked()
 
-    property string taskText: ""
+    property QtObject taskObj: null
     property bool editMode: false
     property bool otherItemBeingEdited: false
     property bool buttonsVisible: true
     property bool hasMouseOver: mouseArea.containsMouse
     property int modelIndex: -1
     property bool selected: _controller.selectedIndex === modelIndex && !editMode && modelIndex !== -1
+
 
     id: root
     color: selected ? _style.selectedTaskBgColor : _style.taskBackgroundColor
@@ -23,6 +24,24 @@ Rectangle {
     border.color: _style.taskBorderColor
     border.width: selected ? _style.selectedTaskBorderWidth : 1
     radius: _style.taskBorderRadius
+/*
+    Row {
+        anchors.left: parent.left
+        anchors.leftMargin: 3
+        anchors.top: parent.top
+        spacing: 5
+        Text {
+            text: root.taskObj === null ? 0 : root.taskObj.tagModel.count
+            color: "white"
+        }
+        Repeater {
+            model: root.taskObj === null ? 0 : root.taskObj.tagModel
+            Text {
+                text: tag.name + ": " + tag.taskCount
+                color: "white"
+            }
+        }
+    }*/
 
     MouseArea {
         id: mouseArea
@@ -40,7 +59,7 @@ Rectangle {
 
         Text {
             id: textItem
-            text: taskText
+            text: root.taskObj === null ? "" : root.taskObj.text
             elide: Text.ElideRight
             color: root.selected ? _style.selectedTaskFgColor : _style.taskFontColor
             font.bold: true
@@ -76,7 +95,7 @@ Rectangle {
         TextField {
             id: textField
             visible: root.editMode
-            text: taskText
+            text: root.taskObj === null ? "" : root.taskObj.text
             anchors.left: textItem.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: deleteImage.left
@@ -84,14 +103,14 @@ Rectangle {
             focus: true
             onVisibleChanged: {
                 if (visible) {
-                    text = taskText
+                    text = root.taskObj.text
                     forceActiveFocus()
-                }
+                } // TODO only write when not visible
             }
 
             onTextChanged: {
-                if (modelIndex !== -1 && visible) {
-                    _controller.updateTask(modelIndex, text)
+                if (visible) {
+                    root.taskObj.text = text
                 }
             }
         }
@@ -116,6 +135,7 @@ Rectangle {
             anchors.rightMargin: _style.buttonsSpacing
             visible: root.buttonsVisible
             onClicked: {
+
                 if (modelIndex !== -1) {
                     _controller.indexBeingEdited = modelIndex
                     if (_controller.indexBeingEdited !== -1) {

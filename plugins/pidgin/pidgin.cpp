@@ -22,7 +22,6 @@
 
 #include <QDBusConnection>
 #include <QDBusMessage>
-#include <QDBusArgument>
 #include <QDebug>
 
 PidginPlugin::PidginPlugin() : QObject(), PluginInterface()

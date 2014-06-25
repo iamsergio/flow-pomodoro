@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   This program is free software; you can redistribute it and/or modify
@@ -30,12 +30,12 @@ class Controller;
 class QKeyEvent;
 
 class PluginModel;
+class TaskStorage;
 
 class QuickView : public QQuickView {
     Q_OBJECT
-
 public:
-    static QuickView* instance();
+    explicit QuickView(QWindow *parent = 0);
     Controller *controller() const;
 
 protected:
@@ -45,13 +45,13 @@ private Q_SLOTS:
     void onTaskStatusChanged();
 
 private:
-    explicit QuickView();
     void loadPlugins();
     void reloadQML();
     void notifyPlugins(TaskStatus newStatus);
     QUrl styleFileName() const;
     void createStyleComponent();
 
+    TaskStorage *m_taskStorage;
     Controller *m_controller;
     PluginModel *m_pluginModel;
     bool m_developerMode;

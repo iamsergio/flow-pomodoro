@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   This program is free software; you can redistribute it and/or modify
@@ -19,67 +19,18 @@
 */
 
 #include "settings.h"
-
-#include <QMetaType>
-#include <QSettings>
+#include "task.h"
 #include <QCoreApplication>
+#include <QMetaType>
 
-static Settings *s_instance = 0;
-
-Settings::Settings(QObject *parent) : QObject(parent)
+Settings::Settings(QObject *parent) : QSettings("KDAB", "flow-pomodoro", parent)
 {
-    qRegisterMetaTypeStreamOperators<Task>("Task");
+    qRegisterMetaTypeStreamOperators<Task::Ptr>("Task");
     qRegisterMetaTypeStreamOperators<Task::List>("Task::List");
-    m_settings = new QSettings(QLatin1String("KDAB"), QLatin1String("flow-pomodoro"), this);
 }
-
 
 Settings *Settings::instance()
 {
-    if (!s_instance) {
-        s_instance = new Settings(qApp);
-    }
-
-    return s_instance;
-}
-
-Task::List Settings::tasks() const
-{
-    QVariant v = m_settings->value("tasks");
-    Task::List tasks = v.value<Task::List>();
-    return tasks;
-}
-
-void Settings::saveTasks(const Task::List &tasks)
-{
-    QVariant v = QVariant::fromValue(tasks);
-    m_settings->setValue("tasks", v);
-    m_settings->sync();
-    /*
-    foreach (const Task &task, tasks) {
-        qDebug() << "Saving task: " << task.text;
-    }*/
-}
-
-QDataStream &operator<<(QDataStream &out, const Task &task)
-{
-    out << task.text;
-    return out;
-}
-
-QDataStream &operator>>(QDataStream &in, Task &task)
-{
-    in >> task.text;
-    return in;
-}
-
-void Settings::setValue(const QString &key, const QVariant &value)
-{
-    m_settings->setValue(key, value);
-    m_settings->sync();
-}
-
-QVariant Settings::value(const QString &key, const QVariant &defaultValue) const
-{
-    return m_settings->value(key, defaultValue);
+    static Settings *instance = new Settings(qApp);
+    return instance;
 }

@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@
 #endif
 
 
-void initDBus()
+void initDBus(Controller *controller)
 {
 #ifdef FLOW_DBUS
     if (!QDBusConnection::sessionBus().isConnected()) {
@@ -46,7 +46,7 @@ void initDBus()
         exit(-2);
     }
 
-    Flow *flowDBusInterface = new Flow(QuickView::instance()->controller(), qApp);
+    Flow *flowDBusInterface = new Flow(controller, qApp);
     QDBusConnection::sessionBus().registerObject("/", flowDBusInterface, QDBusConnection::ExportScriptableSlots);
 #endif
 }
@@ -57,14 +57,13 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_WIN
     qputenv("QT_QPA_PLATFORM","windows:fontengine=freetype");
 #endif
-
     QGuiApplication app(argc, argv);
     app.setOrganizationName("KDAB");
     app.setApplicationName("flow");
 
-    QuickView::instance()->show();
-
-    initDBus();
+    QuickView window;
+    initDBus(window.controller());
+    window.show();
 
     return app.exec();
 }

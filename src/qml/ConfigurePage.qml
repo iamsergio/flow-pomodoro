@@ -30,6 +30,7 @@ Page {
             anchors.margins: _style.marginSmall
             frameVisible: false
 
+
             Tab {
                 title: qsTr("General")
                 source: "config/General.qml"
@@ -38,6 +39,11 @@ Page {
             Tab {
                 title: qsTr("Plugins")
                 source: "config/Plugins.qml"
+            }
+
+            Tab {
+                title: qsTr("Tags")
+                source: "config/Tags.qml"
             }
         }
 

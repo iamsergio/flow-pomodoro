@@ -23,8 +23,6 @@
 
 #include "plugininterface.h"
 #include "task.h"
-
-#include <QtPlugin>
 #include <QObject>
 
 class PidginPlugin : public QObject, public PluginInterface

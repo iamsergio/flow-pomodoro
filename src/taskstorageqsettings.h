@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Copyright (C) 2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   This program is free software; you can redistribute it and/or modify
@@ -18,34 +18,24 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KMAIL_PLUGIN_H
-#define KMAIL_PLUGIN_H
+#ifndef TASKSTORAGEQSETTINGS_H
+#define TASKSTORAGEQSETTINGS_H
 
-#include "plugininterface.h"
 #include "task.h"
+#include "taskstorage.h"
 
-#include <QObject>
+class QSettings;
 
-class KMailPlugin : public QObject, public PluginInterface
+class TaskStorageQSettings : public TaskStorage
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "com.kdab.flow.PluginInterface")
-    Q_INTERFACES(PluginInterface)
-
 public:
-    KMailPlugin();
+    explicit TaskStorageQSettings(QObject *parent = 0);
+    ~TaskStorageQSettings();
 
-    void setEnabled(bool enabled) Q_DECL_OVERRIDE;
-    bool enabled() const Q_DECL_OVERRIDE;
-
-    void setTaskStatus(TaskStatus status) Q_DECL_OVERRIDE;
-    QString text() const Q_DECL_OVERRIDE;
-
+    void loadTasks_impl() Q_DECL_OVERRIDE;
+    void saveTasks_impl() Q_DECL_OVERRIDE;
 private:
-    void setSystrayIconsNotificationsEnabled(bool enabled);
-    void setNewMailAgentEnabled(bool enabled);
-    void update(bool enable);
-    bool m_enabled;
+    QSettings *m_settings;
 };
 
 #endif

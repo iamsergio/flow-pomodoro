@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   This program is free software; you can redistribute it and/or modify
@@ -19,11 +19,13 @@
 */
 
 #include "quickview.h"
-#include "taskmodel.h"
+#include "taskfilterproxymodel.h"
 #include "pluginmodel.h"
 #include "plugininterface.h"
 #include "settings.h"
 #include "controller.h"
+#include "tagstorage.h"
+#include "taskstorageqsettings.h"
 
 #include <QStandardPaths>
 #include <QQmlContext>
@@ -37,23 +39,35 @@
 #include <QQuickItem>
 #include <QGuiApplication>
 
-QuickView::QuickView() : QQuickView()
+QuickView::QuickView(QWindow *parent)
+    : QQuickView(parent)
+    , m_taskStorage(new TaskStorageQSettings(this))
+    , m_controller(new Controller(this, m_taskStorage, this))
+    , m_pluginModel(new PluginModel(this))
     , m_developerMode(qApp->arguments().contains("-d"))
 {
-    TaskModel *taskModel = new TaskModel(this);
-    m_pluginModel = new PluginModel(this);
-
-    m_controller = new Controller(taskModel, this);
     rootContext()->setContextProperty("_controller", m_controller);
-    rootContext()->setContextProperty("_taskModel", taskModel);
     rootContext()->setContextProperty("_pluginModel", m_pluginModel);
+    rootContext()->setContextProperty("_taskStorage", m_taskStorage);
+    rootContext()->setContextProperty("_tagStorage", TagStorage::instance());
     rootContext()->setContextProperty("_window", this);
 
     createStyleComponent();
+    qmlRegisterUncreatableType<QAbstractItemModel>("Controller",
+                                                   1, 0, "QAbstractItemModel",
+                                                   "QAbstractItemModel is not creatable");
+
+    qmlRegisterUncreatableType<QAbstractListModel>("Controller",
+                                                   1, 0, "QAbstractListModel",
+                                                   "QAbstractListModel is not creatable");
+
+    qmlRegisterUncreatableType<TaskFilterProxyModel>("Controller",
+                                                     1, 0, "TaskFilterProxyModel",
+                                                     "TaskFilterProxyModel is not creatable");
 
     qmlRegisterUncreatableType<Controller>("Controller",
                                            1, 0, "Controller",
-                                           QStringLiteral("Controller is not creatable"));
+                                           "Controller is not creatable");
 
     if (m_developerMode) {
         // So that F5 reloads QML without having to restart the application
@@ -77,7 +91,6 @@ QuickView::QuickView() : QQuickView()
     setColor(Qt::transparent);
 #endif
 
-
     const int width = 400; // TODO: it's hardcoded
 
     QSize screenSize = qApp->primaryScreen()->size();
@@ -86,18 +99,7 @@ QuickView::QuickView() : QQuickView()
     connect(m_controller, SIGNAL(taskStatusChanged()), SLOT(onTaskStatusChanged()));
     connect(engine(), SIGNAL(quit()), qApp, SLOT(quit()));
 
-
     loadPlugins();
-}
-
-QuickView* QuickView::instance()
-{
-    static QuickView *window = 0;
-    if (!window) {
-        window = new QuickView();
-    }
-
-    return window;
 }
 
 Controller *QuickView::controller() const
@@ -173,7 +175,7 @@ void QuickView::loadPlugins()
 
         qDebug() << "Looking for plugins in " << candidatePath;
         QDir pluginsDir = QDir(candidatePath);
-
+        QSettings *settings = Settings::instance();
         foreach (const QString &fileName, pluginsDir.entryList(QDir::Files)) {
             QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
             QObject *pluginObject = loader.instance();
@@ -182,7 +184,9 @@ void QuickView::loadPlugins()
                 if (pluginInterface) {
                     pluginInterface->setTaskStatus(TaskStopped);
                     const QString pluginName = pluginObject->metaObject()->className();
-                    const bool enabled = Settings::instance()->value(pluginName + ".enabled", /**defaul=*/true).toBool();
+                    settings->beginGroup("plugins");
+                    const bool enabled = settings->value(pluginName + ".enabled", /**defaul=*/true).toBool();
+                    settings->endGroup();
                     pluginInterface->setEnabled(enabled);
                     m_pluginModel->addPlugin(pluginInterface);
                 }
@@ -199,6 +203,8 @@ void QuickView::keyReleaseEvent(QKeyEvent *event)
     if (m_developerMode && event->key() == Qt::Key_F5) {
         event->accept();
         reloadQML();
+    } else if (m_developerMode && event->key() == Qt::Key_F4) {
+        m_taskStorage->dumpDebugInfo();
     } else {
         QQuickView::keyReleaseEvent(event);
     }

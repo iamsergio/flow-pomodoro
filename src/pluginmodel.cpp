@@ -87,7 +87,9 @@ void PluginModel::setPluginEnabled(bool enabled, int i)
     PluginInterface *plugin = m_plugins.at(i);
     plugin->setEnabled(enabled);
     const QString pluginName = dynamic_cast<QObject*>(plugin)->metaObject()->className();
+    Settings::instance()->beginGroup("plugins");
     Settings::instance()->setValue(pluginName + ".enabled", enabled);
+    Settings::instance()->endGroup();
     plugin->setEnabled(enabled);
 
     emit dataChanged(index(0, 0), index(rowCount()-1, 0));

@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   This program is free software; you can redistribute it and/or modify
@@ -19,9 +19,10 @@
 */
 
 #include "controller.h"
-#include "taskmodel.h"
 #include "settings.h"
 #include "quickview.h"
+#include "taskstorage.h"
+#include "taskfilterproxymodel.h"
 
 #include <QTimer>
 #include <QScreen>
@@ -32,17 +33,20 @@ enum {
     TickInterval = 1000*60 // Ticks every minute
 };
 
-Controller::Controller(TaskModel *model, QObject *parent) : QObject(parent)
-  , m_currentTaskDuration()
-  , m_tickTimer(new QTimer(this))
-  , m_afterAddingTimer(new QTimer(this))
-  , m_elapsedMinutes(0)
-  , m_expanded(false)
-  , m_indexBeingEdited(-1)
-  , m_model(model)
-  , m_taskStatus(TaskStopped)
-  , m_page(TheQueuePage)
-  , m_selectedIndex(-1)
+Controller::Controller(QuickView *quickView,
+                       TaskStorage *taskStorage, QObject *parent)
+    : QObject(parent)
+    , m_currentTaskDuration(0)
+    , m_tickTimer(new QTimer(this))
+    , m_afterAddingTimer(new QTimer(this))
+    , m_elapsedMinutes(0)
+    , m_expanded(false)
+    , m_indexBeingEdited(-1)
+    , m_taskStorage(taskStorage)
+    , m_taskStatus(TaskStopped)
+    , m_page(TheQueuePage)
+    , m_selectedIndex(-1)
+    , m_quickView(quickView)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -66,11 +70,6 @@ int Controller::currentTaskDuration() const
     return m_currentTaskDuration;
 }
 
-QString Controller::taskText() const
-{
-    return m_currentTask.text;
-}
-
 int Controller::indexBeingEdited() const
 {
     return m_indexBeingEdited;
@@ -92,8 +91,8 @@ void Controller::startPomodoro(int queueIndex)
 {
     stopPomodoro(/*requeue=*/true); // Stop previous one, if any
 
-    m_currentTask = m_model->at(queueIndex);
-    m_model->removeTask(queueIndex);
+    m_currentTask = m_taskStorage->at(queueIndex);
+    m_taskStorage->removeTask(queueIndex);
 
     m_elapsedMinutes = 0;
     m_currentTaskDuration = m_defaultPomodoroDuration;
@@ -113,13 +112,13 @@ void Controller::stopPomodoro(bool reQueueTask)
         return;
     }
 
-    if (reQueueTask && !m_currentTask.text.isEmpty()) {
+    if (reQueueTask && !m_currentTask->text().isEmpty()) {
         // Return it to the queue
-        addTask(m_currentTask.text, false);
+        addTask(m_currentTask->text(), false);
     }
     m_tickTimer->stop();
     m_elapsedMinutes = 0;
-    m_currentTask = Task();
+    m_currentTask.clear();
 
     setTaskStatus(TaskStopped);
 }
@@ -152,7 +151,7 @@ void Controller::toggleSelectedIndex(int index)
 void Controller::cycleSelectionUp()
 {
     if (m_selectedIndex == -1) {
-        const int lastIndex = m_model->count()-1;
+        const int lastIndex = m_taskStorage->taskFilterModel()->count()-1;
         setSelectedIndex(lastIndex);
     } else if (m_selectedIndex > 0){
         setSelectedIndex(m_selectedIndex-1);
@@ -161,7 +160,7 @@ void Controller::cycleSelectionUp()
 
 void Controller::cycleSelectionDown()
 {
-    const int lastIndex = m_model->count()-1;
+    const int lastIndex = m_taskStorage->taskFilterModel()->count()-1;
     if (m_selectedIndex == -1 && lastIndex == -1) {
         return;
     }
@@ -183,7 +182,7 @@ void Controller::setExpanded(bool expanded)
     if (expanded != m_expanded) {
         m_expanded = expanded;
         if (expanded) {
-            QuickView::instance()->requestActivate();
+            m_quickView->requestActivate();
         } else {
             setIndexBeingEdited(-1);
         }
@@ -219,7 +218,7 @@ void Controller::setTaskStatus(TaskStatus status)
 {
     if (status != m_taskStatus) {
         m_taskStatus = status;
-        emit taskTextChanged();
+        emit currentTaskChanged();
         emit remainingMinutesChanged();
         emit taskStatusChanged();
         emit currentTaskDurationChanged();
@@ -274,6 +273,11 @@ qreal Controller::dpiFactor() const
     Q_ASSERT(screen);
 
     return screen->logicalDotsPerInch() / 96.0;
+}
+
+Task *Controller::currentTask() const
+{
+    return m_currentTask.data();
 }
 
 void Controller::onTimerTick()
@@ -378,22 +382,17 @@ bool Controller::eventFilter(QObject *, QEvent *event)
 
 void Controller::addTask(const QString &text, bool startEditMode)
 {
-    m_model->addTask(text);
+    m_taskStorage->addTask(text);
     setIndexBeingEdited(-1);
 
     if (startEditMode) {
         setExpanded(true);
-        setIndexBeingEdited(m_model->rowCount()-1);
+        setIndexBeingEdited(m_taskStorage->taskFilterModel()->rowCount()-1);
     }
 }
 
 void Controller::removeTask(int index)
 {
     setIndexBeingEdited(-1);
-    m_model->removeTask(index);
-}
-
-void Controller::updateTask(int index, const QString &newText)
-{
-    m_model->updateTask(index, newText);
+    m_taskStorage->removeTask(index);
 }

@@ -17,7 +17,7 @@ Page {
             id: listView
             anchors.topMargin: _style.marginSmall
             anchors.fill: parent
-            model: _taskModel
+            model: _taskStorage.taskFilterModel
             clip: true
             highlightFollowsCurrentItem: true
             currentIndex: _controller.indexBeingEdited
@@ -32,7 +32,7 @@ Page {
             }
 
             delegate: Task {
-                taskText: name
+                taskObj: task
                 editMode: index === _controller.indexBeingEdited && index !== -1
                 otherItemBeingEdited: index !==_controller.indexBeingEdited && _controller.indexBeingEdited !== -1
                 buttonsVisible: !otherItemBeingEdited && (editMode || hasMouseOver)
@@ -44,7 +44,7 @@ Page {
                     if (_style.deleteAnimationEnabled) {
                         visible = false
                         animatedRectangle.y = y
-                        animatedRectangle.taskText = taskText
+                        animatedRectangle.taskObj = task
                         animatedRectangle.visible = true
                         animation.running = true
                     }

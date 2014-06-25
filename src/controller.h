@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   This program is free software; you can redistribute it and/or modify
@@ -27,19 +27,21 @@
 #include <QString>
 
 class QTimer;
-class TaskModel;
+class TaskStorage;
+class QuickView;
 
 class Controller : public QObject {
     Q_OBJECT
     Q_PROPERTY(bool firstSecondsAfterAdding READ firstSecondsAfterAdding NOTIFY firstSecondsAfterAddingChanged)
     Q_PROPERTY(int remainingMinutes READ remainingMinutes NOTIFY remainingMinutesChanged)
     Q_PROPERTY(int currentTaskDuration READ currentTaskDuration NOTIFY currentTaskDurationChanged)
-    Q_PROPERTY(QString taskText READ taskText NOTIFY taskTextChanged)
     Q_PROPERTY(bool expanded READ expanded WRITE setExpanded NOTIFY expandedChanged)
     Q_PROPERTY(int indexBeingEdited READ indexBeingEdited WRITE setIndexBeingEdited NOTIFY indexBeingEditedChanged)
     Q_PROPERTY(Page currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged)
     Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
     Q_PROPERTY(TaskStatus taskStatus READ taskStatus NOTIFY taskStatusChanged)
+
+    Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged)
 
     Q_PROPERTY(int selectedIndex READ selectedIndex NOTIFY selectedIndexChanged)
 
@@ -59,11 +61,11 @@ public:
     };
     Q_ENUMS(Page)
 
-    explicit Controller(TaskModel *model, QObject *parent = 0);
+    Controller(QuickView *quickView, TaskStorage *model, QObject *parent = 0);
 
     int remainingMinutes() const;
     int currentTaskDuration() const; // in minutes
-    QString taskText() const;
+    Task *currentTask() const;
     int indexBeingEdited() const;
     void setIndexBeingEdited(int index);
 
@@ -89,11 +91,9 @@ public:
     bool paused() const;
 
     qreal dpiFactor() const;
-
 public Q_SLOTS:
     void addTask(const QString &text, bool startEditMode);
     void removeTask(int index);
-    void updateTask(int index, const QString &newText);
 
     void startPomodoro(int queueIndex);
     void stopPomodoro(bool reQueueTask);
@@ -109,7 +109,6 @@ private Q_SLOTS:
 Q_SIGNALS:
     void remainingMinutesChanged();
     void currentTaskDurationChanged();
-    void taskTextChanged();
     void taskFinished();
     void indexBeingEditedChanged();
     void expandedChanged();
@@ -119,6 +118,7 @@ Q_SIGNALS:
     void taskStatusChanged();
     void selectedIndexChanged();
     void forceFocus(int index);
+    void currentTaskChanged();
 
 private:
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
@@ -129,12 +129,13 @@ private:
     int m_elapsedMinutes;
     bool m_expanded;
     int m_indexBeingEdited;
-    TaskModel *m_model;
+    TaskStorage *m_taskStorage;
     TaskStatus m_taskStatus;
-    Task m_currentTask;
+    Task::Ptr m_currentTask;
     Page m_page;
     int m_defaultPomodoroDuration;
     int m_selectedIndex;
+    QuickView *m_quickView;
 };
 
 #endif

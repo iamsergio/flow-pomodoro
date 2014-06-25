@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   This program is free software; you can redistribute it and/or modify
@@ -21,27 +21,15 @@
 #ifndef _SETTINGS_H_
 #define _SETTINGS_H_
 
-#include "task.h"
+#include <QSettings>
 
-#include <QObject>
-#include <QVariant>
-
-class QSettings;
-
-class Settings : public QObject {
+class Settings : public QSettings {
     Q_OBJECT
 public:
     static Settings* instance();
 
-    Task::List tasks() const;
-    void saveTasks(const Task::List &tasks);
-
-    void setValue(const QString &key, const QVariant &value);
-    QVariant value(const QString &key, const QVariant &defaultValue) const;
-
 private:
     explicit Settings(QObject *parent = 0);
-    QSettings *m_settings;
 };
 
 #endif
