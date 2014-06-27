@@ -29,9 +29,15 @@ Page {
             anchors.right: parent.right
             anchors.margins: _style.marginSmall
             frameVisible: false
-            Component.onCompleted: {
-                addTab(qsTr("General"), Qt.createComponent("config/General.qml"))
-                addTab(qsTr("Plugins"), Qt.createComponent("config/Plugins.qml"))
+
+            Tab {
+                title: qsTr("General")
+                source: "config/General.qml"
+            }
+
+            Tab {
+                title: qsTr("Plugins")
+                source: "config/Plugins.qml"
             }
         }
 
