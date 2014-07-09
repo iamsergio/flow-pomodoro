@@ -39,15 +39,14 @@ Page {
                 modelIndex: index
 
                 onDeleteClicked: {
-                    _controller.removeTask(index)
-
                     if (_style.deleteAnimationEnabled) {
                         visible = false
                         animatedRectangle.y = y
-                        animatedRectangle.taskObj = task
+                        animatedRectangle.taskText = taskObj.text
                         animatedRectangle.visible = true
                         animation.running = true
                     }
+                    _controller.removeTask(index)
                 }
             }
 

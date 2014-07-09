@@ -6,6 +6,7 @@ Rectangle {
     signal deleteClicked()
 
     property QtObject taskObj: null
+    property string taskText: taskObj !== null ? taskObj.text : ""
     property bool editMode: false
     property bool otherItemBeingEdited: false
     property bool buttonsVisible: true
@@ -59,7 +60,7 @@ Rectangle {
 
         Text {
             id: textItem
-            text: root.taskObj === null ? "" : root.taskObj.text
+            text: root.taskText
             elide: Text.ElideRight
             color: root.selected ? _style.selectedTaskFgColor : _style.taskFontColor
             font.bold: true
@@ -95,7 +96,7 @@ Rectangle {
         TextField {
             id: textField
             visible: root.editMode
-            text: root.taskObj === null ? "" : root.taskObj.text
+            text: root.taskText
             anchors.left: textItem.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: deleteImage.left
