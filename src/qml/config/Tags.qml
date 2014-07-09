@@ -27,30 +27,51 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         spacing: 5
+
+        Text {
+            id: invisible_helper
+            text: "Invisible Item"
+            visible: false
+            font.pointSize: _style.tagFontSize
+            font.bold: _style.tagFontBold
+            color: _style.tagFontColor
+        }
+
         Repeater {
             model: _tagStorage.model
             delegate: Row {
                 id: row
-                height: 30 * _controller.dpiFactor
+                height: invisible_helper.height + 2 *  _controller.dpiFactor
                 spacing: 30 * _controller.dpiFactor
 
                 Rectangle {
-                    height: label.contentHeight
-                    width: label.contentWidth + 30
-                    border.width: 1
-                    border.color: "black"
-                    color: "transparent"
-                    radius: 10
-                    RegularText {
+                    height: row.height
+                    width: label.contentWidth + taskCountLabel.contentWidth + 30
+                    border.width: _style.tagBorderWidth
+                    border.color: _style.tagBorderColor
+                    color: _style.tagBackgroundColor
+                    radius: _style.tagRadius
+                    Text {
                         id: label
+                        font.pointSize: invisible_helper.font.pointSize
+                        color: _style.tagFontColor
+                        font.bold: true
                         anchors.left: parent.left
-                        anchors.leftMargin: 4
+                        anchors.leftMargin: 5
                         anchors.verticalCenterOffset: 2
                         anchors.verticalCenter: parent.verticalCenter
                         height: row.height
-                        width: 150 * _controller.dpiFactor
-                        text: tag.name + "; " + tag.taskCount
+                        text: tag.name
+                    }
 
+                    Text {
+                        id: taskCountLabel
+                        anchors.left: label.right
+                        text: !tag.taskCount ? "" : " (" + tag.taskCount + ")"
+                        font.pointSize: _style.tagFontSize - 2
+                        anchors.verticalCenterOffset: -1
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: _style.tagFontColor
                     }
 
                     ClickableImage {

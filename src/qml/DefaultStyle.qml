@@ -18,6 +18,14 @@ Item {
     readonly property string progressBarFgBorderColor : "darkgray"
     readonly property int progressBarBorderRadius     : Math.ceil(3 * _controller.dpiFactor)
 
+    // tags
+    readonly property string tagBackgroundColor: "blue"
+    readonly property string tagFontColor: "white"
+    readonly property int tagRadius: 5
+    readonly property int tagFontSize: 10
+    readonly property string tagBorderColor: "black"
+    readonly property int tagBorderWidth: 2
+    readonly property bool tagFontBold: true
 
     // BlockingOverlay
     readonly property string blockingOverlayColor: "blue"
