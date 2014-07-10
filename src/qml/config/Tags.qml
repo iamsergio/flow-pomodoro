@@ -60,8 +60,18 @@ Item {
                         anchors.right: parent.right
                         anchors.rightMargin: _style.buttonsSpacing
                         visible: true
+
+                        function reallyRemove()
+                        {
+                            _tagStorage.removeTag(tag.name);
+                        }
+
                         onClicked: {
-                            _tagStorage.removeTag(tag.name)
+                            if (tag.taskCount > 0 || true) {
+                                _controller.showQuestionPopup(this, qsTr("There are tasks using this tag. Are you sure you want to delete it?"), "reallyRemove()")
+                            } else {
+                                _tagStorage.removeTag(tag.name)
+                            }
                         }
                     }
                 }

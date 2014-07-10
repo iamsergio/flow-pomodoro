@@ -19,6 +19,11 @@ Item {
     readonly property int progressBarBorderRadius     : Math.ceil(3 * _controller.dpiFactor)
 
 
+    // BlockingOverlay
+    readonly property string blockingOverlayColor: "blue"
+    readonly property real blockingOverlayOpacity: 0.6
+
+
     readonly property int queueRadius            : Math.ceil(5 * _controller.dpiFactor)
     readonly property string taskBackgroundColor : "black"
     readonly property string taskBorderColor     : "gray"

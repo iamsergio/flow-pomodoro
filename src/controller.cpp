@@ -27,6 +27,7 @@
 #include <QTimer>
 #include <QScreen>
 #include <QGuiApplication>
+#include <QQmlExpression>
 
 enum {
     AfterAddingTimeout = 1000,
@@ -47,6 +48,7 @@ Controller::Controller(QuickView *quickView,
     , m_page(TheQueuePage)
     , m_selectedIndex(-1)
     , m_quickView(quickView)
+    , m_popupVisible(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -172,6 +174,38 @@ void Controller::cycleSelectionDown()
     }
 }
 
+void Controller::showQuestionPopup(QObject *obj, const QString &text, const QString &callback)
+{
+    if (!obj || callback.isEmpty() || text.isEmpty()) {
+        Q_ASSERT(false);
+        return;
+    }
+
+    m_popupCallbackOwner = obj;
+    m_popupOkCallback = callback;
+
+    setPopupText(text);
+    setPopupVisible(true);
+}
+
+void Controller::onPopupButtonClicked(bool okClicked)
+{
+    if (!m_popupCallbackOwner) {
+        qWarning() << "Null callback owner." << m_popupOkCallback;
+        setPopupVisible(false);
+        return;
+    }
+
+    if (okClicked) {
+        // qDebug() << "Running " << m_popupOkCallback << "of" << m_popupCallbackOwner;
+        QQmlExpression expr(m_quickView->rootContext(), m_popupCallbackOwner, m_popupOkCallback);
+        bool valueIsUndefined = false;
+        expr.evaluate(&valueIsUndefined);
+    }
+
+    setPopupVisible(false);
+}
+
 bool Controller::expanded() const
 {
     return m_expanded;
@@ -275,6 +309,32 @@ qreal Controller::dpiFactor() const
     return screen->logicalDotsPerInch() / 96.0;
 }
 
+bool Controller::popupVisible() const
+{
+    return m_popupVisible;
+}
+
+void Controller::setPopupVisible(bool visible)
+{
+    if (m_popupVisible != visible) {
+        m_popupVisible = visible;
+        emit popupVisibleChanged();
+    }
+}
+
+QString Controller::popupText() const
+{
+    return m_popupText;
+}
+
+void Controller::setPopupText(const QString &text)
+{
+    if (m_popupText != text) {
+        m_popupText = text;
+        emit popupTextChanged();
+    }
+}
+
 Task *Controller::currentTask() const
 {
     return m_currentTask.data();
@@ -291,7 +351,6 @@ void Controller::onTimerTick()
         emit taskFinished();
     }
 }
-
 
 bool Controller::eventFilter(QObject *, QEvent *event)
 {

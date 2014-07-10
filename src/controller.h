@@ -25,6 +25,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QPointer>
 
 class QTimer;
 class TaskStorage;
@@ -40,15 +41,15 @@ class Controller : public QObject {
     Q_PROPERTY(Page currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged)
     Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
     Q_PROPERTY(TaskStatus taskStatus READ taskStatus NOTIFY taskStatusChanged)
-
     Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged)
-
     Q_PROPERTY(int selectedIndex READ selectedIndex NOTIFY selectedIndexChanged)
-
     // Shortcuts
     Q_PROPERTY(bool paused  READ paused  NOTIFY taskStatusChanged)
     Q_PROPERTY(bool stopped READ stopped NOTIFY taskStatusChanged)
     Q_PROPERTY(bool running READ running NOTIFY taskStatusChanged)
+    // Popup properties
+    Q_PROPERTY(QString popupText READ popupText NOTIFY popupTextChanged)
+    Q_PROPERTY(bool popupVisible READ popupVisible NOTIFY popupVisibleChanged)
 
     Q_PROPERTY(qreal dpiFactor READ dpiFactor CONSTANT)
 public:
@@ -91,6 +92,13 @@ public:
     bool paused() const;
 
     qreal dpiFactor() const;
+
+    bool popupVisible() const;
+    void setPopupVisible(bool);
+
+    QString popupText() const;
+    void setPopupText(const QString &);
+
 public Q_SLOTS:
     void addTask(const QString &text, bool startEditMode);
     void removeTask(int index);
@@ -102,6 +110,9 @@ public Q_SLOTS:
     void toggleSelectedIndex(int index);
     void cycleSelectionUp();
     void cycleSelectionDown();
+
+    void showQuestionPopup(QObject *obj, const QString &text, const QString &callback);
+    void onPopupButtonClicked(bool okClicked);
 
 private Q_SLOTS:
     void onTimerTick();
@@ -119,6 +130,8 @@ Q_SIGNALS:
     void selectedIndexChanged();
     void forceFocus(int index);
     void currentTaskChanged();
+    void popupVisibleChanged();
+    void popupTextChanged();
 
 private:
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
@@ -136,6 +149,10 @@ private:
     int m_defaultPomodoroDuration;
     int m_selectedIndex;
     QuickView *m_quickView;
+    bool m_popupVisible;
+    QString m_popupText;
+    QString m_popupOkCallback;
+    QPointer<QObject> m_popupCallbackOwner;
 };
 
 #endif

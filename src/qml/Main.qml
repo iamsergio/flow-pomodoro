@@ -26,7 +26,14 @@ Rectangle {
         }
     }
 
+    QuestionPopup {
+        id: questionPopup
+        anchors.fill: parent
+        z: main.z + 1
+    }
+
     Rectangle {
+        id: main
         anchors.fill: parent
         color: _style.backgroundColor
         radius: _style.borderRadius
@@ -170,7 +177,7 @@ Rectangle {
                     _controller.expanded = !_controller.expanded
                     mouse.accepted = false
                 } else if (mouse.button === Qt.RightButton) {
-                    if (_controller.indexBeingEdited == -1) {
+                    if (_controller.indexBeingEdited == -1 && !_controller.popupVisible) {
                         contextMenu.popup()
                     }
                 }
@@ -181,6 +188,7 @@ Rectangle {
     Menu {
         id: contextMenu
         title: qsTr("Edit")
+        enabled: !_controller.popupVisible
 
         MenuItem {
             enabled: !_controller.stopped
