@@ -29,6 +29,7 @@ class Tag : public QObject
 {
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged)
+    Q_PROPERTY(bool beingEdited READ beingEdited NOTIFY beingEditedChanged)
     Q_OBJECT
 public:
     typedef QSharedPointer<Tag> Ptr;
@@ -40,15 +41,19 @@ public:
     int taskCount() const;
     void setTaskCount(int count);
     QString name() const;
+    bool beingEdited() const;
+    void setBeingEdited(bool);
 
 Q_SIGNALS:
     void taskCountChanged();
+    void beingEditedChanged();
 
 private:
     Tag() = delete;
     Tag(const Tag &other) = delete;
     const QString m_name;
     int m_taskCount;
+    bool m_beingEdited;
 };
 
 class TagRef

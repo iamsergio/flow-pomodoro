@@ -25,6 +25,7 @@ Tag::Tag(const QString &_name)
     : QObject()
     , m_name(_name)
     , m_taskCount(0)
+    , m_beingEdited(false)
 {
     Q_ASSERT(!m_name.isEmpty());
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
@@ -50,6 +51,19 @@ void Tag::setTaskCount(int count)
 QString Tag::name() const
 {
     return m_name;
+}
+
+bool Tag::beingEdited() const
+{
+    return m_beingEdited;
+}
+
+void Tag::setBeingEdited(bool yes)
+{
+    if (m_beingEdited != yes) {
+        m_beingEdited = yes;
+        emit beingEditedChanged();
+    }
 }
 
 bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
