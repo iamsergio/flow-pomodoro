@@ -19,22 +19,29 @@
 
 #include "tagref.h"
 #include "tagstorage.h"
+#include "task.h"
 
 TagRef::TagRef(const TagRef &other)
 {
+    m_task = other.m_task;
     m_tag = other.m_tag;
     m_tag->setTaskCount(m_tag->taskCount() + 1);
 }
 
-TagRef::TagRef(const QString &name)
-    : m_tag(TagStorage::instance()->tag(name))
+TagRef::TagRef(const QPointer<Task> &task, const QString &tagName)
+    : m_tag(TagStorage::instance()->tag(tagName))
+    , m_task(task)
 {
     m_tag->setTaskCount(m_tag->taskCount() + 1);
+    QObject::connect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
 }
 
 TagRef::~TagRef()
 {
     m_tag->setTaskCount(m_tag->taskCount() - 1);
+    if (m_task) {
+        QObject::disconnect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
+    }
 }
 
 bool operator==(const TagRef &tagRef, const QString &name)

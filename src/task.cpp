@@ -78,7 +78,7 @@ void Task::addTag(const QString &tagName)
                            [&](const TagRef &ref) { return ref.m_tag->name() == trimmedName; });
 
     if (it == m_tags.cend()) {
-        m_tags.append(trimmedName);
+        m_tags.append(TagRef(this, trimmedName));
     }
 }
 
@@ -124,7 +124,7 @@ QDataStream &operator>>(QDataStream &in, Task::Ptr &task)
         for (int i = 0; i < tagCount; i++) {
             QString name;
             in >> name;
-            tags << TagRef(name);
+            tags << TagRef(task.data(), name);
         }
     } else {
         Q_ASSERT(false);

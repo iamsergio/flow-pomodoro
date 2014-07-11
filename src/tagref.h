@@ -20,9 +20,11 @@
 #ifndef TAGREF_H
 #define TAGREF_H
 
-#include "genericlistmodel.h"
 #include "tag.h"
+#include "genericlistmodel.h"
+#include <QPointer>
 
+class Task;
 class TagRef
 {
 public:
@@ -30,10 +32,12 @@ public:
 
     TagRef() = delete;
     TagRef(const TagRef &other);
-    TagRef(const QString &name);
+    TagRef(const QPointer<Task> &task, const QString &tagName);
     ~TagRef();
 
     Tag::Ptr m_tag;
+    QPointer<Task> m_task;
+
 };
 
 #endif

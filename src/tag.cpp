@@ -18,7 +18,6 @@
 */
 
 #include "tag.h"
-#include "tagstorage.h"
 #include <QQmlEngine>
 
 Tag::Tag(const QString &_name)
