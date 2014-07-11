@@ -43,60 +43,54 @@ Item {
 
         Repeater {
             model: _tagStorage.model
-            delegate: Row {
-                id: row
+            delegate: Rectangle {
                 height: invisible_helper.height + 2 *  _controller.dpiFactor
-                spacing: 30 * _controller.dpiFactor
+                width: label.contentWidth + taskCountLabel.contentWidth + 30
+                border.width: _style.tagBorderWidth
+                border.color: _style.tagBorderColor
+                color: _style.tagBackgroundColor
+                radius: _style.tagRadius
+                Text {
+                    id: label
+                    font.pointSize: invisible_helper.font.pointSize
+                    color: _style.tagFontColor
+                    font.bold: true
+                    anchors.left: parent.left
+                    anchors.leftMargin: 5
+                    anchors.verticalCenterOffset: 2
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height
+                    text: tag.name
+                }
 
-                Rectangle {
-                    height: row.height
-                    width: label.contentWidth + taskCountLabel.contentWidth + 30
-                    border.width: _style.tagBorderWidth
-                    border.color: _style.tagBorderColor
-                    color: _style.tagBackgroundColor
-                    radius: _style.tagRadius
-                    Text {
-                        id: label
-                        font.pointSize: invisible_helper.font.pointSize
-                        color: _style.tagFontColor
-                        font.bold: true
-                        anchors.left: parent.left
-                        anchors.leftMargin: 5
-                        anchors.verticalCenterOffset: 2
-                        anchors.verticalCenter: parent.verticalCenter
-                        height: row.height
-                        text: tag.name
+                Text {
+                    id: taskCountLabel
+                    anchors.left: label.right
+                    text: !tag.taskCount ? "" : " (" + tag.taskCount + ")"
+                    font.pointSize: _style.tagFontSize - 2
+                    anchors.verticalCenterOffset: -1
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: _style.tagFontColor
+                }
+
+                ClickableImage {
+                    id: deleteImage
+                    source: "qrc:/img/delete.png"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    anchors.rightMargin: _style.buttonsSpacing
+                    visible: true
+
+                    function reallyRemove()
+                    {
+                        _tagStorage.removeTag(tag.name);
                     }
 
-                    Text {
-                        id: taskCountLabel
-                        anchors.left: label.right
-                        text: !tag.taskCount ? "" : " (" + tag.taskCount + ")"
-                        font.pointSize: _style.tagFontSize - 2
-                        anchors.verticalCenterOffset: -1
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: _style.tagFontColor
-                    }
-
-                    ClickableImage {
-                        id: deleteImage
-                        source: "qrc:/img/delete.png"
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.right: parent.right
-                        anchors.rightMargin: _style.buttonsSpacing
-                        visible: true
-
-                        function reallyRemove()
-                        {
-                            _tagStorage.removeTag(tag.name);
-                        }
-
-                        onClicked: {
-                            if (tag.taskCount > 0) {
-                                _controller.showQuestionPopup(this, qsTr("There are tasks using this tag. Are you sure you want to delete it?"), "reallyRemove()")
-                            } else {
-                                _tagStorage.removeTag(tag.name)
-                            }
+                    onClicked: {
+                        if (tag.taskCount > 0) {
+                            _controller.showQuestionPopup(this, qsTr("There are tasks using this tag. Are you sure you want to delete it?"), "reallyRemove()")
+                        } else {
+                            _tagStorage.removeTag(tag.name)
                         }
                     }
                 }
