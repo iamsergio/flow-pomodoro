@@ -92,7 +92,7 @@ Item {
                         }
 
                         onClicked: {
-                            if (tag.taskCount > 0 || true) {
+                            if (tag.taskCount > 0) {
                                 _controller.showQuestionPopup(this, qsTr("There are tasks using this tag. Are you sure you want to delete it?"), "reallyRemove()")
                             } else {
                                 _tagStorage.removeTag(tag.name)
