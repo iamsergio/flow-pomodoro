@@ -28,6 +28,10 @@ Item {
         anchors.right: parent.right
         spacing: 5
 
+        move: Transition {
+            NumberAnimation { properties: "x"; duration: _style.tagMoveAnimationDuration }
+        }
+
         Text {
             id: invisible_helper
             text: "Invisible Item"

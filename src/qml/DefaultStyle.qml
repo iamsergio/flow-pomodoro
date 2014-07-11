@@ -26,6 +26,7 @@ Item {
     readonly property string tagBorderColor: "black"
     readonly property int tagBorderWidth: 2
     readonly property bool tagFontBold: true
+    readonly property int tagMoveAnimationDuration: 150
 
     // BlockingOverlay
     readonly property string blockingOverlayColor: "blue"
