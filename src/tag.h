@@ -27,7 +27,7 @@
 
 class Tag : public QObject
 {
-    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged)
     Q_PROPERTY(bool beingEdited READ beingEdited NOTIFY beingEditedChanged)
     Q_OBJECT
@@ -41,17 +41,19 @@ public:
     int taskCount() const;
     void setTaskCount(int count);
     QString name() const;
+    void setName(const QString &name);
     bool beingEdited() const;
     void setBeingEdited(bool);
 
 Q_SIGNALS:
+    void nameChanged();
     void taskCountChanged();
     void beingEditedChanged();
 
 private:
     Tag() = delete;
     Tag(const Tag &other) = delete;
-    const QString m_name;
+    QString m_name;
     int m_taskCount;
     bool m_beingEdited;
 };

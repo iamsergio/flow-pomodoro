@@ -53,6 +53,14 @@ QString Tag::name() const
     return m_name;
 }
 
+void Tag::setName(const QString &name)
+{
+    if (name != m_name) {
+        m_name = name;
+        emit nameChanged();
+    }
+}
+
 bool Tag::beingEdited() const
 {
     return m_beingEdited;

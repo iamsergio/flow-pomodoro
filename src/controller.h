@@ -51,6 +51,7 @@ class Controller : public QObject {
     Q_PROPERTY(QString popupText READ popupText NOTIFY popupTextChanged)
     Q_PROPERTY(bool popupVisible READ popupVisible NOTIFY popupVisibleChanged)
 
+    // Other properties
     Q_PROPERTY(qreal dpiFactor READ dpiFactor CONSTANT)
 public:
 
@@ -114,6 +115,9 @@ public Q_SLOTS:
     void showQuestionPopup(QObject *obj, const QString &text, const QString &callback);
     void onPopupButtonClicked(bool okClicked);
 
+    void editTag(const QString &tagName);
+    bool renameTag(const QString &oldName, const QString &newName);
+
 private Q_SLOTS:
     void onTimerTick();
 
@@ -153,6 +157,7 @@ private:
     QString m_popupText;
     QString m_popupOkCallback;
     QPointer<QObject> m_popupCallbackOwner;
+    Tag::Ptr m_tagBeingEdited;
 };
 
 #endif

@@ -110,10 +110,10 @@ Tag::Ptr TagStorage::createTag(const QString &tagName)
     return tag;
 }
 
-Tag::Ptr TagStorage::tag(const QString &name)
+Tag::Ptr TagStorage::tag(const QString &name, bool create)
 {
     Tag::Ptr tag = m_tags.value(indexOf(name));
-    return tag ? tag : createTag(name);
+    return (tag || !create) ? tag : createTag(name);
 }
 
 bool TagStorage::contains(const QString &name) const
@@ -125,6 +125,28 @@ bool TagStorage::contains(const QString &name) const
 QAbstractItemModel *TagStorage::model() const
 {
     return m_sortModel;
+}
+
+bool TagStorage::renameTag(const QString &oldName, const QString &newName)
+{
+    QString trimmedNewName = newName.trimmed();
+    if (oldName == newName || trimmedNewName.isEmpty())
+        return true;
+
+    if (indexOf(trimmedNewName) != -1)
+        return false; // New name already exists
+
+    Tag::Ptr tag = m_tags.value(indexOf(oldName));
+    if (!tag) {
+        qWarning() << "Could not find tag with name" << oldName;
+        Q_ASSERT(false);
+        return false;
+    }
+
+    tag->setName(trimmedNewName);
+    scheduleSaveTags();
+
+    return true;
 }
 
 void TagStorage::setTags(const Tag::List &tags)

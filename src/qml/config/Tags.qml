@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
+import QtQuick.Controls.Styles 1.0
 
 import Controller 1.0
 import ".."
@@ -51,8 +52,16 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: {
-                        console.log("foo")
+                    onDoubleClicked: {
+                        _controller.editTag(tag.name)
+                        textField.text = tag.name
+                        textField.forceActiveFocus()
+                    }
+
+                    onPressAndHold: {
+                        _controller.editTag(tag.name)
+                        textField.text = tag.name
+                        textField.forceActiveFocus()
                     }
 
                     Rectangle {
@@ -61,6 +70,34 @@ Item {
                         border.color: _style.tagBorderColor
                         color: _style.tagBackgroundColor
                         radius: _style.tagRadius
+
+                        TextField {
+                            id: textField
+                            focus: true
+                            anchors.centerIn: parent
+                            visible: tag.beingEdited
+                            width: parent.width + 2
+                            text: tag.name
+                            style: TextFieldStyle {
+                                 textColor: "black"
+                                 background: Rectangle {
+                                     radius: 6
+                                     implicitWidth: 100
+                                     implicitHeight: 24
+                                     border.color: "#333"
+                                     border.width: 1
+                                 }
+                            }
+                            onAccepted: {
+                                _controller.renameTag(tag.name, textField.text)
+                            }
+                            onActiveFocusChanged: {
+                                if (!activeFocus) {
+                                    _controller.editTag("")
+                                }
+                            }
+                        }
+
                         Text {
                             id: label
                             font.pointSize: invisible_helper.font.pointSize
@@ -72,6 +109,7 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                             height: parent.height
                             text: tag.name
+                            visible: !tag.beingEdited
                         }
 
                         Text {
@@ -82,6 +120,7 @@ Item {
                             anchors.verticalCenterOffset: -1
                             anchors.verticalCenter: parent.verticalCenter
                             color: _style.tagFontColor
+                            visible: !tag.beingEdited
                         }
 
                         ClickableImage {
@@ -90,7 +129,7 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
                             anchors.rightMargin: _style.buttonsSpacing
-                            visible: true
+                            visible: !tag.beingEdited
 
                             function reallyRemove()
                             {

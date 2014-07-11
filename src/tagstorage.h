@@ -50,13 +50,16 @@ public:
     Q_INVOKABLE bool removeTag(const QString &tagName);
     Q_INVOKABLE Tag::Ptr createTag(const QString &tagName);
 
-    Tag::Ptr tag(const QString &name);
+    Tag::Ptr tag(const QString &name, bool create = true);
     bool contains(const QString &name) const;
 
     QAbstractItemModel *model() const;
 
 Q_SIGNALS:
     void tagAboutToBeRemoved(const QString &name);
+
+public Q_SLOTS:
+    bool renameTag(const QString &oldName, const QString &newName);
 
 protected:
     explicit TagStorage(QObject *parent = 0);

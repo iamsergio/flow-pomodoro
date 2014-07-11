@@ -23,6 +23,7 @@
 #include "quickview.h"
 #include "taskstorage.h"
 #include "taskfilterproxymodel.h"
+#include "tagstorage.h"
 
 #include <QTimer>
 #include <QScreen>
@@ -437,6 +438,32 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     }
 
     return false;
+}
+
+void Controller::editTag(const QString &tagName)
+{
+    if (m_tagBeingEdited) {
+        m_tagBeingEdited->setBeingEdited(false);
+        m_tagBeingEdited.clear();
+    }
+
+    if (tagName.isEmpty()) return;
+    Tag::Ptr tag = TagStorage::instance()->tag(tagName, /*create=*/false);
+    if (!tag) return;
+
+    tag->setBeingEdited(true);
+    m_tagBeingEdited = tag;
+}
+
+bool Controller::renameTag(const QString &oldName, const QString &newName)
+{
+    bool success = TagStorage::instance()->renameTag(oldName, newName);
+    if (success && m_tagBeingEdited) {
+        m_tagBeingEdited->setBeingEdited(false);
+        m_tagBeingEdited.clear();
+    }
+
+    return success;
 }
 
 void Controller::addTask(const QString &text, bool startEditMode)
