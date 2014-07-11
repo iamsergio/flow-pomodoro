@@ -58,17 +58,4 @@ private:
     bool m_beingEdited;
 };
 
-class TagRef
-{
-public:
-    typedef GenericListModel<TagRef> List;
-
-    TagRef() = delete;
-    TagRef(const TagRef &other);
-    TagRef(const QString &name);
-    ~TagRef();
-
-    Tag::Ptr m_tag;
-};
-
 #endif

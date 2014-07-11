@@ -12,6 +12,7 @@ SOURCES += controller.cpp  \
            settings.cpp    \
            sortmodel.cpp   \
            tag.cpp \
+           tagref.cpp \
            taskstorage.cpp \
            taskstorageqsettings.cpp \
            task.cpp \
@@ -27,6 +28,7 @@ HEADERS += controller.h      \
            sortmodel.h       \
            task.h            \
            tag.h \
+           tagref.h \
            taskstorage.h \
            taskstorageqsettings.h \
            tagstorage.h \

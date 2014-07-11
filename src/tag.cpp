@@ -78,25 +78,3 @@ bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
 {
     return tag1 && tag2 && tag1->name() == tag2->name();
 }
-
-TagRef::TagRef(const TagRef &other)
-{
-    m_tag = other.m_tag;
-    m_tag->setTaskCount(m_tag->taskCount() + 1);
-}
-
-TagRef::TagRef(const QString &name)
-    : m_tag(TagStorage::instance()->tag(name))
-{
-    m_tag->setTaskCount(m_tag->taskCount() + 1);
-}
-
-TagRef::~TagRef()
-{
-    m_tag->setTaskCount(m_tag->taskCount() - 1);
-}
-
-bool operator==(const TagRef &tagRef, const QString &name)
-{
-    return tagRef.m_tag->name() == name;
-}

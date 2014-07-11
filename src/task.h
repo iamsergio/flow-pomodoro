@@ -22,6 +22,7 @@
 #define _TASK_H_
 
 #include "tag.h"
+#include "tagref.h"
 #include "genericlistmodel.h"
 
 #include <QString>
