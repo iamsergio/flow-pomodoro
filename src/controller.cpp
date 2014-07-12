@@ -53,8 +53,8 @@ Controller::Controller(QuickView *quickView,
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
-    connect(m_tickTimer, SIGNAL(timeout()), SLOT(onTimerTick()));
-    connect(m_afterAddingTimer, SIGNAL(timeout()), SIGNAL(firstSecondsAfterAddingChanged()));
+    connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
+    connect(m_afterAddingTimer, &QTimer::timeout, this, &Controller::firstSecondsAfterAddingChanged);
     m_afterAddingTimer->setSingleShot(true);
     m_afterAddingTimer->setInterval(AfterAddingTimeout);
 

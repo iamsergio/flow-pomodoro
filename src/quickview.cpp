@@ -96,8 +96,8 @@ QuickView::QuickView(QWindow *parent)
     QSize screenSize = qApp->primaryScreen()->size();
     setGeometry(screenSize.width()/2 - width/2, 0, width, height());
 
-    connect(m_controller, SIGNAL(taskStatusChanged()), SLOT(onTaskStatusChanged()));
-    connect(engine(), SIGNAL(quit()), qApp, SLOT(quit()));
+    connect(m_controller, &Controller::taskStatusChanged, this, &QuickView::onTaskStatusChanged);
+    connect(engine(), &QQmlEngine::quit, qApp, &QGuiApplication::quit);
 
     loadPlugins();
 }
