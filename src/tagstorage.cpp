@@ -36,7 +36,7 @@ static bool tagLessThan(const QVariant &left, const QVariant &right)
         return false;
 
     if (leftTag->taskCount() == rightTag->taskCount()) {
-        return leftTag->name() < rightTag->name();
+        return QString::compare(leftTag->name(), rightTag->name(), Qt::CaseInsensitive) < 0;
     } else {
         return leftTag->taskCount() < rightTag->taskCount();
     }
