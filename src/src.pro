@@ -64,4 +64,8 @@ OTHER_FILES += AboutPage.qml      \
 
 RESOURCES += resources.qrc
 
+linux {
+    QMAKE_POST_LINK += "runqmllint.sh"
+}
+
 DESTDIR = ../
