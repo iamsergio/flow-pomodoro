@@ -25,24 +25,27 @@ Rectangle {
     border.color: _style.taskBorderColor
     border.width: selected ? _style.selectedTaskBorderWidth : 1
     radius: _style.taskBorderRadius
-/*
+
     Row {
+        id: tagRow
         anchors.left: parent.left
-        anchors.leftMargin: 3
-        anchors.top: parent.top
-        spacing: 5
-        Text {
-            text: root.taskObj === null ? 0 : root.taskObj.tagModel.count
-            color: "white"
-        }
+        anchors.leftMargin: textItem.anchors.leftMargin
+        anchors.right: parent.right
+        anchors.rightMargin: 6
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 1
+        clip: true
+
         Repeater {
             model: root.taskObj === null ? 0 : root.taskObj.tagModel
             Text {
-                text: tag.name + ": " + tag.taskCount
-                color: "white"
+                property bool last: root.taskObj.tagModel.count === index + 1
+                text: tag.name + (last ? "" : ", ")
+                color: _style.taskTagFontColor
+                elide: Text.ElideRight
             }
         }
-    }*/
+    }
 
     MouseArea {
         id: mouseArea

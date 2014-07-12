@@ -28,6 +28,9 @@ Item {
     readonly property bool tagFontBold: true
     readonly property int tagMoveAnimationDuration: 150
 
+    // tags in task list
+    readonly property color taskTagFontColor: "lightsteelblue"
+
     // BlockingOverlay
     readonly property string blockingOverlayColor: "blue"
     readonly property real blockingOverlayOpacity: 0.6
