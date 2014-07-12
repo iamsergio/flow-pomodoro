@@ -4,6 +4,7 @@ import QtQuick.Controls 1.0
 Item {
     id: root
     property alias content: contentItem.children
+    property int dialogHeight: 75
     visible: enabled
 
     Rectangle {
@@ -23,7 +24,7 @@ Item {
     Rectangle {
         id: contentItem
         z: overlay.z + 1
-        height: 75
+        height: root.dialogHeight
         color: _style.dialogColor
         border.color: _style.dialogBorderColor
         border.width:  _style.dialogBorderWidth

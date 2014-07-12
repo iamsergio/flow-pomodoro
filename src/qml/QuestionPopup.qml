@@ -4,6 +4,7 @@ import QtQuick.Controls 1.0
 ModalDialog {
     id: root
     enabled: _controller.popupVisible
+    dialogHeight: _style.questionDialogHeight
 
     content:
     Item {
