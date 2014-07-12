@@ -6,7 +6,7 @@ Rectangle {
     signal deleteClicked()
 
     property QtObject taskObj: null
-    property string taskText: taskObj !== null ? taskObj.text : ""
+    property string taskSummary: taskObj !== null ? taskObj.summary : ""
     property bool editMode: false
     property bool otherItemBeingEdited: false
     property bool buttonsVisible: true
@@ -63,7 +63,7 @@ Rectangle {
 
         Text {
             id: textItem
-            text: root.taskText
+            text: root.taskSummary
             elide: Text.ElideRight
             color: root.selected ? _style.selectedTaskFgColor : _style.taskFontColor
             font.bold: true
@@ -99,7 +99,7 @@ Rectangle {
         TextField {
             id: textField
             visible: root.editMode
-            text: root.taskText
+            text: root.taskSummary
             anchors.left: textItem.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: deleteImage.left
@@ -107,14 +107,14 @@ Rectangle {
             focus: true
             onVisibleChanged: {
                 if (visible) {
-                    text = root.taskObj.text
+                    text = root.taskObj.summary
                     forceActiveFocus()
                 } // TODO only write when not visible
             }
 
             onTextChanged: {
                 if (visible) {
-                    root.taskObj.text = text
+                    root.taskObj.summary = text
                 }
             }
         }

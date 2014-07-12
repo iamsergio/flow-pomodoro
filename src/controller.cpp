@@ -115,9 +115,9 @@ void Controller::stopPomodoro(bool reQueueTask)
         return;
     }
 
-    if (reQueueTask && !m_currentTask->text().isEmpty()) {
+    if (reQueueTask && !m_currentTask->summary().isEmpty()) {
         // Return it to the queue
-        addTask(m_currentTask->text(), false);
+        addTask(m_currentTask->summary(), false);
     }
     m_tickTimer->stop();
     m_elapsedMinutes = 0;

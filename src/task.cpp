@@ -28,11 +28,11 @@
 
 Task::Task(const QString &name)
     : QObject()
-    , m_text(name.isEmpty() ? tr("New Task") : name)
+    , m_summary(name.isEmpty() ? tr("New Task") : name)
 {
     m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); });
 
-    connect(this, &Task::textChanged, &Task::changed);
+    connect(this, &Task::summaryChanged, &Task::changed);
     connect(this, &Task::tagsChanged, &Task::changed);
     connect(m_tags, &QAbstractListModel::modelReset, this, &Task::tagsChanged);
     connect(m_tags, &QAbstractListModel::rowsInserted, this, &Task::tagsChanged);
@@ -43,16 +43,16 @@ Task::Task(const QString &name)
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 }
 
-QString Task::text() const
+QString Task::summary() const
 {
-    return m_text;
+    return m_summary;
 }
 
-void Task::setText(const QString &text)
+void Task::setSummary(const QString &text)
 {
-    if (m_text != text) {
-        m_text = text.isEmpty() ? tr("New Task") : text;
-        emit textChanged();
+    if (m_summary != text) {
+        m_summary = text.isEmpty() ? tr("New Task") : text;
+        emit summaryChanged();
     }
 }
 
@@ -96,7 +96,7 @@ QDataStream &operator<<(QDataStream &out, const Task::Ptr &task)
 {
     Q_ASSERT(task);
     quint32 version = SerializerVersion1;
-    out << version << task->text();
+    out << version << task->summary();
 
     TagRef::List tags = task->tags();
     out << tags.count();
@@ -130,7 +130,7 @@ QDataStream &operator>>(QDataStream &in, Task::Ptr &task)
         Q_ASSERT(false);
     }
 
-    task->setText(text);
+    task->setSummary(text);
     task->setTagList(tags);
     return in;
 }

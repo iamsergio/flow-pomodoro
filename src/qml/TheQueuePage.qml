@@ -42,7 +42,7 @@ Page {
                     if (_style.deleteAnimationEnabled) {
                         visible = false
                         animatedRectangle.y = y
-                        animatedRectangle.taskText = taskObj.text
+                        animatedRectangle.taskSummary = taskObj.summary
                         animatedRectangle.visible = true
                         animation.running = true
                     }

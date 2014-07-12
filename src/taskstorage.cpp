@@ -82,7 +82,7 @@ void TaskStorage::dumpDebugInfo()
 {
     qDebug() << Q_FUNC_INFO << "task count:" << m_tasks.count();
     for (int i = 0; i < m_tasks.count(); ++i)
-        qDebug() << Q_FUNC_INFO << i << m_tasks.at(i)->text();
+        qDebug() << Q_FUNC_INFO << i << m_tasks.at(i)->summary();
 }
 
 void TaskStorage::loadTasks()

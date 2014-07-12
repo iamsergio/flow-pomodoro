@@ -44,15 +44,15 @@ class QAbstractListModel;
 
 class Task : public QObject {
     Q_OBJECT
-    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
+    Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
     Q_PROPERTY(QObject * tagModel READ tagModel CONSTANT)
 public:
     typedef QSharedPointer<Task> Ptr;
     typedef GenericListModel<Ptr> List;
     Task(const QString &name = QString());
 
-    QString text() const;
-    void setText(const QString &text);
+    QString summary() const;
+    void setSummary(const QString &text);
 
     TagRef::List tags() const;
     void setTagList(const TagRef::List &);
@@ -62,12 +62,12 @@ public:
     Q_INVOKABLE void removeTag(const QString &tagName);
 
 Q_SIGNALS:
-    void textChanged();
+    void summaryChanged();
     void tagsChanged();
     void changed();
 
 private:
-    QString m_text;
+    QString m_summary;
     TagRef::List m_tags;
 };
 

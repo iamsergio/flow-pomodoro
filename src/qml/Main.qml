@@ -51,7 +51,7 @@ Rectangle {
             anchors.right: parent.right
             anchors.rightMargin: (16*2 + 15) * _controller.dpiFactor // ( two icons, 3 margins)
             anchors.top: parent.top
-            text: _controller.stopped ? qsTr("You're slacking") : _controller.currentTask.text
+            text: _controller.stopped ? qsTr("You're slacking") : _controller.currentTask.summary
             visible: !remainingText.visible
         }
 
