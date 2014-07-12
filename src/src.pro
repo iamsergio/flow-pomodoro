@@ -43,13 +43,17 @@ contains(QT_CONFIG, dbus) {
     DEFINES += FLOW_DBUS
 }
 
-OTHER_FILES += AboutPage.qml \
+OTHER_FILES += AboutPage.qml      \
                ClickableImage.qml \
                ConfigurePage.qml  \
                DefaultStyle.qml   \
                Main.qml           \
+               ModalDialog.qml    \
                Task.qml           \
-               TheQueuePage.qml
+               Tags.qml           \
+               TheQueuePage.qml   \
+               QuestionDialog.qml
+
 
 RESOURCES += resources.qrc
 
