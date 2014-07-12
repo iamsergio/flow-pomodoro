@@ -39,6 +39,7 @@ Item {
     readonly property string dialogBorderColor: "darkblue"
     readonly property int dialogBorderWidth: 2 * _controller.dpiFactor
     readonly property int dialogFontSize: 11
+    readonly property int extraMargin: 4
 
     readonly property int queueRadius            : Math.ceil(5 * _controller.dpiFactor)
     readonly property string taskBackgroundColor : "black"
