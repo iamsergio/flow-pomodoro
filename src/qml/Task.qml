@@ -35,6 +35,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 1
         clip: true
+        visible: !root.editMode
 
         Repeater {
             model: root.taskObj === null ? 0 : root.taskObj.tagModel
