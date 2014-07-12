@@ -113,6 +113,6 @@ int TaskStorage::proxyRowToSource(int proxyRow) const
 {
     QModelIndex proxyIndex = m_taskFilterModel->index(proxyRow, 0);
     QModelIndex index = m_taskFilterModel->mapToSource(proxyIndex);
-    Q_ASSERT(index.isValid());
-    return index.row();
+
+    return index.isValid() ? index.row() : -1;
 }
