@@ -74,6 +74,9 @@ QAbstractListModel *Task::tagModel() const
 void Task::addTag(const QString &tagName)
 {
     QString trimmedName = tagName.trimmed();
+    if (trimmedName.isEmpty())
+        return;
+
     auto it = std::find_if(m_tags.cbegin(), m_tags.cend(),
                            [&](const TagRef &ref) { return ref.m_tag->name() == trimmedName; });
 
