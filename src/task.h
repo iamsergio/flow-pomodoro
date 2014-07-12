@@ -37,7 +37,8 @@ enum TaskStatus {
 };
 
 enum SerializerVersion {
-    SerializerVersion1 = 100
+    SerializerVersion1 = 100,
+    SerializerVersion2 = 101 // Added Task::description()
 };
 
 class QAbstractListModel;
@@ -45,6 +46,7 @@ class QAbstractListModel;
 class Task : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
+    Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
     Q_PROPERTY(QObject * tagModel READ tagModel CONSTANT)
 public:
     typedef QSharedPointer<Task> Ptr;
@@ -53,6 +55,9 @@ public:
 
     QString summary() const;
     void setSummary(const QString &text);
+
+    QString description() const;
+    void setDescription(const QString &text);
 
     TagRef::List tags() const;
     void setTagList(const TagRef::List &);
@@ -63,11 +68,13 @@ public:
 
 Q_SIGNALS:
     void summaryChanged();
+    void descriptionChanged();
     void tagsChanged();
     void changed();
 
 private:
     QString m_summary;
+    QString m_description;
     TagRef::List m_tags;
 };
 

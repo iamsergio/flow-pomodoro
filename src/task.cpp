@@ -34,6 +34,7 @@ Task::Task(const QString &name)
 
     connect(this, &Task::summaryChanged, &Task::changed);
     connect(this, &Task::tagsChanged, &Task::changed);
+    connect(this, &Task::descriptionChanged, &Task::changed);
     connect(m_tags, &QAbstractListModel::modelReset, this, &Task::tagsChanged);
     connect(m_tags, &QAbstractListModel::rowsInserted, this, &Task::tagsChanged);
     connect(m_tags, &QAbstractListModel::rowsRemoved, this, &Task::tagsChanged);
@@ -53,6 +54,19 @@ void Task::setSummary(const QString &text)
     if (m_summary != text) {
         m_summary = text.isEmpty() ? tr("New Task") : text;
         emit summaryChanged();
+    }
+}
+
+QString Task::description() const
+{
+    return m_description;
+}
+
+void Task::setDescription(const QString &text)
+{
+    if (m_description != text) {
+        m_description = text;
+        emit descriptionChanged();
     }
 }
 
@@ -98,7 +112,7 @@ void Task::removeTag(const QString &tagName)
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task)
 {
     Q_ASSERT(task);
-    quint32 version = SerializerVersion1;
+    quint32 version = SerializerVersion2;
     out << version << task->summary();
 
     TagRef::List tags = task->tags();
@@ -106,6 +120,7 @@ QDataStream &operator<<(QDataStream &out, const Task::Ptr &task)
     for (int i = 0; i < tags.count(); ++i)
         out << tags.at(i).m_tag->name();
 
+    out << task->description();
     return out;
 }
 
@@ -118,22 +133,32 @@ QDataStream &operator>>(QDataStream &in, Task::Ptr &task)
     quint32 version = 0;
     in >> version;
 
-    QString text;
+    QString summary;
+    QString description;
     TagRef::List tags;
-    if (version == SerializerVersion1) {
-        int tagCount;
-        in >> text >> tagCount;
 
+    switch (version) {
+    case SerializerVersion1:
+    case SerializerVersion2:
+        int tagCount;
+        in >> summary >> tagCount;
         for (int i = 0; i < tagCount; i++) {
             QString name;
             in >> name;
             tags << TagRef(task.data(), name);
         }
-    } else {
+        break;
+
+    default:
         Q_ASSERT(false);
     }
 
-    task->setSummary(text);
+    if (version == SerializerVersion2) {
+        in >> description;
+    }
+
+    task->setSummary(summary);
+    task->setDescription(description);
     task->setTagList(tags);
     return in;
 }
