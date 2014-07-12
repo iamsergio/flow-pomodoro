@@ -41,7 +41,7 @@ Rectangle {
             Text {
                 property bool last: root.taskObj.tagModel.count === index + 1
                 text: tag.name + (last ? "" : ", ")
-                color: _style.taskTagFontColor
+                color: root.selected ?  _style.selectedTaskTagFontColor : _style.taskTagFontColor
                 elide: Text.ElideRight
             }
         }

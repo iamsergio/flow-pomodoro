@@ -30,6 +30,7 @@ Item {
 
     // tags in task list
     readonly property color taskTagFontColor: "lightsteelblue"
+    readonly property color selectedTaskTagFontColor: "black"
 
     // BlockingOverlay
     readonly property string blockingOverlayColor: "blue"
