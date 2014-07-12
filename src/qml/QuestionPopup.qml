@@ -13,7 +13,7 @@ ModalDialog {
             anchors.left: parent.left
             anchors.leftMargin: 7
             anchors.right: parent.right
-            font.pointSize: 11
+            font.pointSize: _style.dialogFontSize
             wrapMode: Text.WordWrap
             text: _controller.popupText
         }
@@ -28,7 +28,7 @@ ModalDialog {
 
             Button {
                 id: buttonOk
-                text: "OK"
+                text: qsTr("OK")
                 onClicked: {
                     _controller.onPopupButtonClicked(true)
                 }
@@ -36,7 +36,7 @@ ModalDialog {
 
             Button {
                 id: buttonCancel
-                text: "Cancel"
+                text: qsTr("Cancel")
                 onClicked: {
                     _controller.onPopupButtonClicked(false)
                 }

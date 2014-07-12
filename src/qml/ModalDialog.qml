@@ -24,15 +24,15 @@ Item {
         id: contentItem
         z: overlay.z + 1
         height: 75
-        color: "lightgray"
-        border.color: "darkblue"
-        border.width: 2
+        color: _style.dialogColor
+        border.color: _style.dialogBorderColor
+        border.width:  _style.dialogBorderWidth
         radius: _style.queueRadius
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: _style.pageMargin+4
-        anchors.rightMargin: _style.pageMargin+4
-        anchors.bottomMargin: (!_controller.stopped ? _style.marginSmall : _style.marginMedium) + 4
+        anchors.leftMargin: _style.pageMargin + _style.extraMargin
+        anchors.rightMargin: anchors.leftMargin
+        anchors.bottomMargin: (!_controller.stopped ? _style.marginSmall : _style.marginMedium) + _style.extraMargin
     }
 }

@@ -21,10 +21,10 @@ Item {
     // tags
     readonly property string tagBackgroundColor: "blue"
     readonly property string tagFontColor: "white"
-    readonly property int tagRadius: 5
+    readonly property int tagRadius: 5 * _controller.dpiFactor
     readonly property int tagFontSize: 10
     readonly property string tagBorderColor: "black"
-    readonly property int tagBorderWidth: 2
+    readonly property int tagBorderWidth: 2 * _controller.dpiFactor
     readonly property bool tagFontBold: true
     readonly property int tagMoveAnimationDuration: 150
 
@@ -32,10 +32,13 @@ Item {
     readonly property color taskTagFontColor: "lightsteelblue"
     readonly property color selectedTaskTagFontColor: "black"
 
-    // BlockingOverlay
+    // ModalDialog
     readonly property string blockingOverlayColor: "blue"
     readonly property real blockingOverlayOpacity: 0.6
-
+    readonly property string dialogColor: "lightgray"
+    readonly property string dialogBorderColor: "darkblue"
+    readonly property int dialogBorderWidth: 2 * _controller.dpiFactor
+    readonly property int dialogFontSize: 11
 
     readonly property int queueRadius            : Math.ceil(5 * _controller.dpiFactor)
     readonly property string taskBackgroundColor : "black"
