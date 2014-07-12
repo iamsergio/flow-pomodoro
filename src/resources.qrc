@@ -24,7 +24,7 @@
     <file>qml/TitleText.qml</file>
 
     <file>qml/config/General.qml</file>
-    <file>qml/config/Tags.qml</file>
     <file>qml/config/Plugins.qml</file>
+    <file>qml/config/Tags.qml</file>
 </qresource>
 </RCC>

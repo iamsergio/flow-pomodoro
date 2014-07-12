@@ -13,28 +13,28 @@ SOURCES += controller.cpp  \
            sortmodel.cpp   \
            tag.cpp \
            tagref.cpp \
+           tagstorage.cpp \
+           tagstorageqsettings.cpp \
            taskstorage.cpp \
            taskstorageqsettings.cpp \
            task.cpp \
-           tagstorage.cpp \
-           tagstorageqsettings.cpp \
            taskfilterproxymodel.cpp
 
 HEADERS += controller.h      \
+           genericlistmodel.h \
            plugininterface.h \
            pluginmodel.h     \
            quickview.h       \
            settings.h        \
            sortmodel.h       \
-           task.h            \
            tag.h \
            tagref.h \
-           taskstorage.h \
-           taskstorageqsettings.h \
            tagstorage.h \
            tagstorageqsettings.h \
+           task.h            \
            taskfilterproxymodel.h \
-           genericlistmodel.h
+           taskstorage.h \
+           taskstorageqsettings.h
 
 contains(QT_CONFIG, dbus) {
     QT += dbus
@@ -44,15 +44,22 @@ contains(QT_CONFIG, dbus) {
 }
 
 OTHER_FILES += AboutPage.qml      \
+               config/General.qml \
+               config/Plugins.qml \
+               config/Tags.qml    \
                ClickableImage.qml \
                ConfigurePage.qml  \
                DefaultStyle.qml   \
                Main.qml           \
                ModalDialog.qml    \
+               Page.qml           \
+               QuestionPopup.qml  \
+               RegularText.qml    \
+               SmallText.qml      \
                Task.qml           \
-               Tags.qml           \
-               TheQueuePage.qml   \
-               QuestionDialog.qml
+               TitleText.qml      \
+               TheQueuePage.qml
+
 
 
 RESOURCES += resources.qrc
