@@ -177,7 +177,7 @@ Rectangle {
                     _controller.expanded = !_controller.expanded
                     mouse.accepted = false
                 } else if (mouse.button === Qt.RightButton) {
-                    if (_controller.indexBeingEdited == -1 && !_controller.popupVisible) {
+                    if (_controller.taskBeingEdited === null && !_controller.popupVisible) {
                         contextMenu.popup()
                     }
                 }

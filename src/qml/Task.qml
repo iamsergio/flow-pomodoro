@@ -7,13 +7,12 @@ Rectangle {
 
     property QtObject taskObj: null
     property string taskSummary: taskObj !== null ? taskObj.summary : ""
-    property bool editMode: false
-    property bool otherItemBeingEdited: false
+    property bool editMode: _controller.taskBeingEdited === taskObj
+    property bool otherItemBeingEdited: _controller.taskBeingEdited !== taskObj && _controller.taskBeingEdited !== null
     property bool buttonsVisible: true
     property bool hasMouseOver: mouseArea.containsMouse
     property int modelIndex: -1
     property bool selected: _controller.selectedIndex === modelIndex && !editMode && modelIndex !== -1
-
 
     id: root
     color: selected ? _style.selectedTaskBgColor : _style.taskBackgroundColor
@@ -143,7 +142,7 @@ Rectangle {
 
                 if (modelIndex !== -1) {
                     _controller.indexBeingEdited = modelIndex
-                    if (_controller.indexBeingEdited !== -1) {
+                    if (_controller.taskBeingEdited !== null) {
                         textField.forceActiveFocus()
                     }
                 }

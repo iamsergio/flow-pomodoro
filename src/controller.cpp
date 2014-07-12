@@ -82,8 +82,10 @@ void Controller::setIndexBeingEdited(int index)
 {
     if (m_indexBeingEdited != index) {
         m_indexBeingEdited = index;
+        m_taskBeingEdited = m_taskStorage->at(index).data();
     } else {
         m_indexBeingEdited = -1;
+        m_taskBeingEdited.clear();
     }
 
     // qDebug() << "Controller::setIndexBeingEdited " << m_indexBeingEdited;
@@ -334,6 +336,11 @@ void Controller::setPopupText(const QString &text)
         m_popupText = text;
         emit popupTextChanged();
     }
+}
+
+Task *Controller::taskBeingEdited() const
+{
+    return m_taskBeingEdited.data();
 }
 
 Task *Controller::currentTask() const

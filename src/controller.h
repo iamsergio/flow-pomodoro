@@ -37,12 +37,14 @@ class Controller : public QObject {
     Q_PROPERTY(int remainingMinutes READ remainingMinutes NOTIFY remainingMinutesChanged)
     Q_PROPERTY(int currentTaskDuration READ currentTaskDuration NOTIFY currentTaskDurationChanged)
     Q_PROPERTY(bool expanded READ expanded WRITE setExpanded NOTIFY expandedChanged)
-    Q_PROPERTY(int indexBeingEdited READ indexBeingEdited WRITE setIndexBeingEdited NOTIFY indexBeingEditedChanged)
     Q_PROPERTY(Page currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged)
     Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
     Q_PROPERTY(TaskStatus taskStatus READ taskStatus NOTIFY taskStatusChanged)
     Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged)
     Q_PROPERTY(int selectedIndex READ selectedIndex NOTIFY selectedIndexChanged)
+    // Editing task properties
+    Q_PROPERTY(int indexBeingEdited READ indexBeingEdited WRITE setIndexBeingEdited NOTIFY indexBeingEditedChanged)
+    Q_PROPERTY(QObject* taskBeingEdited READ taskBeingEdited NOTIFY indexBeingEditedChanged)
     // Shortcuts
     Q_PROPERTY(bool paused  READ paused  NOTIFY taskStatusChanged)
     Q_PROPERTY(bool stopped READ stopped NOTIFY taskStatusChanged)
@@ -99,6 +101,8 @@ public:
 
     QString popupText() const;
     void setPopupText(const QString &);
+
+    Task *taskBeingEdited() const;
 
 public Q_SLOTS:
     void addTask(const QString &text, bool startEditMode);
@@ -158,6 +162,7 @@ private:
     QString m_popupOkCallback;
     QPointer<QObject> m_popupCallbackOwner;
     Tag::Ptr m_tagBeingEdited;
+    QPointer<Task> m_taskBeingEdited;
 };
 
 #endif

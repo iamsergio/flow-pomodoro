@@ -62,7 +62,7 @@ TaskFilterProxyModel *TaskStorage::taskFilterModel() const
 
 Task::Ptr TaskStorage::at(int proxyIndex) const
 {
-    return m_tasks.at(proxyRowToSource(proxyIndex));
+    return m_tasks.value(proxyRowToSource(proxyIndex));
 }
 
 void TaskStorage::addTask(const QString &taskText)

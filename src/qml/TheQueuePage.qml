@@ -33,8 +33,6 @@ Page {
 
             delegate: Task {
                 taskObj: task
-                editMode: index === _controller.indexBeingEdited && index !== -1
-                otherItemBeingEdited: index !==_controller.indexBeingEdited && _controller.indexBeingEdited !== -1
                 buttonsVisible: !otherItemBeingEdited && !editMode && hasMouseOver
                 modelIndex: index
 
