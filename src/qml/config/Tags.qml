@@ -18,7 +18,6 @@ Item {
         horizontalAlignment: Text.AlignHCenter
     }
 
-
     Flow {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -45,108 +44,8 @@ Item {
         Repeater {
             model: _tagStorage.model
             delegate:
-            Item {
-                id: item
-                height: invisible_helper.height + 2 *  _controller.dpiFactor
-                width: label.contentWidth + taskCountLabel.contentWidth + 30
-
-                MouseArea {
-                    anchors.fill: parent
-                    onDoubleClicked: {
-                        _controller.editTag(tag.name)
-                        textField.text = tag.name
-                        textField.forceActiveFocus()
-                    }
-
-                    onPressAndHold: {
-                        _controller.editTag(tag.name)
-                        textField.text = tag.name
-                        textField.forceActiveFocus()
-                    }
-
-                    Rectangle {
-                        anchors.fill: parent
-                        border.width: _style.tagBorderWidth
-                        border.color: _style.tagBorderColor
-                        color: _style.tagBackgroundColor
-                        radius: _style.tagRadius
-
-                        TextField {
-                            id: textField
-                            focus: true
-                            objectName: "Tag text field"
-                            anchors.centerIn: parent
-                            visible: tag.beingEdited
-                            width: parent.width + 2
-                            text: tag.name
-                            style: TextFieldStyle {
-                                 textColor: "black"
-                                 background: Rectangle {
-                                     radius: 6
-                                     implicitWidth: 100
-                                     implicitHeight: 24
-                                     border.color: "#333"
-                                     border.width: 1
-                                 }
-                            }
-                            onAccepted: {
-                                _controller.renameTag(tag.name, textField.text)
-                            }
-                            onActiveFocusChanged: {
-                                if (!activeFocus) {
-                                    _controller.editTag("")
-                                }
-                            }
-                        }
-
-                        Text {
-                            id: label
-                            font.pointSize: invisible_helper.font.pointSize
-                            color: _style.tagFontColor
-                            font.bold: true
-                            anchors.left: parent.left
-                            anchors.leftMargin: 5
-                            anchors.verticalCenterOffset: 2
-                            anchors.verticalCenter: parent.verticalCenter
-                            height: parent.height
-                            text: tag.name
-                            visible: !tag.beingEdited
-                        }
-
-                        Text {
-                            id: taskCountLabel
-                            anchors.left: label.right
-                            text: !tag.taskCount ? "" : " (" + tag.taskCount + ")"
-                            font.pointSize: _style.tagFontSize - 2
-                            anchors.verticalCenterOffset: -1
-                            anchors.verticalCenter: parent.verticalCenter
-                            color: _style.tagFontColor
-                            visible: !tag.beingEdited
-                        }
-
-                        ClickableImage {
-                            id: deleteImage
-                            source: "qrc:/img/delete.png"
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.right: parent.right
-                            anchors.rightMargin: _style.buttonsSpacing
-                            visible: !tag.beingEdited
-
-                            function reallyRemove()
-                            {
-                                _tagStorage.removeTag(tag.name);
-                            }
-
-                            onClicked: {
-                                if (tag.taskCount > 0) {
-                                    _controller.showQuestionPopup(this, qsTr("There are tasks using this tag. Are you sure you want to delete it?"), "reallyRemove()")
-                                } else {
-                                    _tagStorage.removeTag(tag.name)
-                                }
-                            }
-                        }
-                    }
-                }
+            Tag {
+                tagObj: tag
             }
         }
     }

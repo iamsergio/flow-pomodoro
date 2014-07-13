@@ -46,6 +46,7 @@ contains(QT_CONFIG, dbus) {
 OTHER_FILES += AboutPage.qml      \
                config/General.qml \
                config/Plugins.qml \
+               config/Tag.qml     \
                config/Tags.qml    \
                ClickableImage.qml \
                ConfigurePage.qml  \
