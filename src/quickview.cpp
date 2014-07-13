@@ -205,6 +205,7 @@ void QuickView::keyReleaseEvent(QKeyEvent *event)
         reloadQML();
     } else if (m_developerMode && event->key() == Qt::Key_F4) {
         m_taskStorage->dumpDebugInfo();
+        qDebug() << "Active focus belongs to" << activeFocusItem();
     } else {
         QQuickView::keyReleaseEvent(event);
     }

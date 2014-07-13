@@ -58,9 +58,9 @@ OTHER_FILES += AboutPage.qml      \
                SmallText.qml      \
                Task.qml           \
                TaskEditorDialog.qml \
+               TaskTextField.qml \
                TitleText.qml      \
                TheQueuePage.qml
-
 
 
 RESOURCES += resources.qrc

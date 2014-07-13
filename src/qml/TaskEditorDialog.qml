@@ -37,25 +37,10 @@ ModalDialog {
                 text: qsTr("Summary:")
             }
 
-            TextField {
+            TaskTextField {
                 id: textField
+                objectName: "Task editor text field"
                 width: descriptionTextArea.width
-                text: _controller.taskBeingEdited !== null ? _controller.taskBeingEdited.summary : ""
-                focus: true
-                onVisibleChanged: {
-                    if (visible) {
-                        text = _controller.taskBeingEdited !== null ? _controller.taskBeingEdited.summary : ""
-                        forceActiveFocus()
-                    } // TODO only write when not visible
-                }
-
-                Binding {
-                    // two way binding
-                    target: _controller.taskBeingEdited
-                    when: textField.visible && _controller.taskBeingEdited !== null
-                    property: "summary"
-                    value: textField.text
-                }
             }
 
             Text {
@@ -64,6 +49,8 @@ ModalDialog {
 
             TextArea {
                 id: descriptionTextArea
+                objectName: "Task editor text area"
+                focus: false
                 height: 100
                 text: _controller.taskBeingEdited !== null ? _controller.taskBeingEdited.description : ""
                 Binding {

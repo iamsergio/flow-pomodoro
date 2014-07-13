@@ -74,6 +74,7 @@ Item {
                         TextField {
                             id: textField
                             focus: true
+                            objectName: "Tag text field"
                             anchors.centerIn: parent
                             visible: tag.beingEdited
                             width: parent.width + 2

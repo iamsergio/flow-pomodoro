@@ -88,40 +88,16 @@ Rectangle {
             font.pointSize: _style.taskFontSize
         }
 
-        Connections {
-            target: _controller
-            onForceFocus: {
-                if (index === modelIndex && modelIndex !== -1) {
-                    textField.forceActiveFocus()
-                    textField.selectAll()
-                }
-            }
-        }
-
-        TextField {
+        TaskTextField {
             id: textField
+            objectName: "inline text field"
             visible: root.inlineEditMode
-            text: root.taskSummary
             anchors.left: textItem.left
             anchors.top: parent.top
             anchors.topMargin:  _style.marginMedium
             anchors.right: parent.right
             anchors.rightMargin: _style.marginMedium
-            focus: true
-            onVisibleChanged: {
-                if (visible) {
-                    text = root.taskObj.summary
-                    forceActiveFocus()
-                } // TODO only write when not visible
-            }
-
-            Binding {
-                // two way binding
-                target: _controller.taskBeingEdited
-                when: textField.visible && _controller.taskBeingEdited !== null
-                property: "summary"
-                value: textField.text
-            }
+            taskIndex: modelIndex
         }
 
         ClickableImage {
@@ -146,7 +122,7 @@ Rectangle {
             onClicked: {
                 if (modelIndex !== -1) {
                     _controller.editTask(modelIndex, Controller.EditModeEditor)
-                    if (_controller.taskBeingEdited !== null) {
+                    if (_controller.taskBeingEdited !== null && _controller.editMode === Controller.EditModeInline) {
                         textField.forceActiveFocus()
                     }
                 }
