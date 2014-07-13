@@ -116,7 +116,7 @@ Rectangle {
 
             ClickableImage {
                 id: addIcon
-                visible: _controller.expanded || !_controller.running || mouseOver()
+                visible: (_controller.expanded || !_controller.running || mouseOver()) && _controller.currentPage === Controller.TheQueuePage
                 source: "qrc:/img/add.png"
                 onClicked: {
                     _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
