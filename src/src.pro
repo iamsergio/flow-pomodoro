@@ -57,6 +57,7 @@ OTHER_FILES += AboutPage.qml      \
                RegularText.qml    \
                SmallText.qml      \
                Task.qml           \
+               TaskEditorDialog.qml \
                TitleText.qml      \
                TheQueuePage.qml
 

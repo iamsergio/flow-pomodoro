@@ -22,9 +22,9 @@ ModalDialog {
         Row {
             id: row
             anchors.right: parent.right
-            anchors.rightMargin: 5
+            anchors.rightMargin: _style.dialogButtonsMargin
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 4
+            anchors.bottomMargin: _style.dialogButtonsMargin
             spacing: 4
 
             Button {

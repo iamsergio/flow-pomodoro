@@ -52,7 +52,7 @@ QString Task::summary() const
 void Task::setSummary(const QString &text)
 {
     if (m_summary != text) {
-        m_summary = text.isEmpty() ? tr("New Task") : text;
+        m_summary = text;
         emit summaryChanged();
     }
 }

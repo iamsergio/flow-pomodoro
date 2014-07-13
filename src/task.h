@@ -46,7 +46,7 @@ class QAbstractListModel;
 class Task : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
-    Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
+    Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(QObject * tagModel READ tagModel CONSTANT)
 public:
     typedef QSharedPointer<Task> Ptr;

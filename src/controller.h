@@ -43,8 +43,9 @@ class Controller : public QObject {
     Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged)
     Q_PROPERTY(int selectedIndex READ selectedIndex NOTIFY selectedIndexChanged)
     // Editing task properties
-    Q_PROPERTY(int indexBeingEdited READ indexBeingEdited WRITE setIndexBeingEdited NOTIFY indexBeingEditedChanged)
+    Q_PROPERTY(int indexBeingEdited READ indexBeingEdited NOTIFY indexBeingEditedChanged)
     Q_PROPERTY(QObject* taskBeingEdited READ taskBeingEdited NOTIFY indexBeingEditedChanged)
+    Q_PROPERTY(EditMode editMode READ editMode NOTIFY editModeChanged)
     // Shortcuts
     Q_PROPERTY(bool paused  READ paused  NOTIFY taskStatusChanged)
     Q_PROPERTY(bool stopped READ stopped NOTIFY taskStatusChanged)
@@ -58,12 +59,19 @@ class Controller : public QObject {
 public:
 
     enum Page {
-        InvalidPage,
+        InvalidPage = 0,
         TheQueuePage,
         ConfigurePage,
         AboutPage
     };
     Q_ENUMS(Page)
+
+    enum EditMode {
+        EditModeNone = 0, // We're not editing a task
+        EditModeInline, // We're editing inline
+        EditModeEditor // We're using the task editor
+    };
+    Q_ENUMS(EditMode)
 
     Controller(QuickView *quickView, TaskStorage *model, QObject *parent = 0);
 
@@ -71,7 +79,7 @@ public:
     int currentTaskDuration() const; // in minutes
     Task *currentTask() const;
     int indexBeingEdited() const;
-    void setIndexBeingEdited(int index);
+    EditMode editMode() const;
 
     bool expanded() const;
     void setExpanded(bool expanded);
@@ -122,6 +130,8 @@ public Q_SLOTS:
     void editTag(const QString &tagName);
     bool renameTag(const QString &oldName, const QString &newName);
 
+    void editTask(int proxyIndex, EditMode);
+
 private Q_SLOTS:
     void onTimerTick();
 
@@ -129,7 +139,6 @@ Q_SIGNALS:
     void remainingMinutesChanged();
     void currentTaskDurationChanged();
     void taskFinished();
-    void indexBeingEditedChanged();
     void expandedChanged();
     void firstSecondsAfterAddingChanged();
     void currentPageChanged();
@@ -140,6 +149,8 @@ Q_SIGNALS:
     void currentTaskChanged();
     void popupVisibleChanged();
     void popupTextChanged();
+    void indexBeingEditedChanged();
+    void editModeChanged();
 
 private:
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
@@ -163,6 +174,7 @@ private:
     QPointer<QObject> m_popupCallbackOwner;
     Tag::Ptr m_tagBeingEdited;
     QPointer<Task> m_taskBeingEdited;
+    EditMode m_editMode;
 };
 
 #endif

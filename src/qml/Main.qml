@@ -32,6 +32,11 @@ Rectangle {
         z: main.z + 1
     }
 
+    TaskEditorDialog {
+        anchors.fill: parent
+        z: main.z + 1
+    }
+
     Rectangle {
         id: main
         anchors.fill: parent
@@ -114,7 +119,7 @@ Rectangle {
                 visible: _controller.expanded || !_controller.running || mouseOver()
                 source: "qrc:/img/add.png"
                 onClicked: {
-                    _controller.addTask("New Task", /**open editor=*/true)
+                    _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
                 }
             }
         }

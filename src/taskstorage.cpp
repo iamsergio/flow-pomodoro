@@ -78,6 +78,11 @@ void TaskStorage::removeTask(int proxyIndex)
     m_tasks.removeAt(proxyRowToSource(proxyIndex));
 }
 
+void TaskStorage::setDisableSaving(bool disable)
+{
+    m_savingDisabled = disable;
+}
+
 void TaskStorage::dumpDebugInfo()
 {
     qDebug() << Q_FUNC_INFO << "task count:" << m_tasks.count();
@@ -106,6 +111,15 @@ void TaskStorage::scheduleSaveTasks()
 
 void TaskStorage::saveTasks()
 {
+    m_savingDisabled = true;
+    for (int i = 0; i < m_tasks.count(); ++i) {
+        Task::Ptr task = m_tasks.at(i);
+        if (task->summary().isEmpty()) {
+            task->setSummary(tr("New Task"));
+        }
+    }
+    m_savingDisabled = false;
+
     saveTasks_impl();
 }
 

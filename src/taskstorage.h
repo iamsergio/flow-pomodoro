@@ -43,12 +43,16 @@ public:
     explicit TaskStorage(QObject *parent = 0);
 
     void setTasks(const Task::List &);
+    void saveTasks();
 
     TaskFilterProxyModel* taskFilterModel() const;
 
     Task::Ptr at(int proxyIndex) const;
     void addTask(const QString &taskText);
     void removeTask(int proxyIndex);
+
+    // Temporary disable saving. For performance purposes
+    void setDisableSaving(bool);
 
 public Q_SLOTS:
     void dumpDebugInfo();
@@ -61,7 +65,6 @@ Q_SIGNALS:
 protected:
     GenericListModel<Task::Ptr> m_tasks;
     void loadTasks();
-    void saveTasks();
     virtual void saveTasks_impl() = 0;
     virtual void loadTasks_impl() = 0;
 

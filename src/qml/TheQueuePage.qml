@@ -33,7 +33,7 @@ Page {
 
             delegate: Task {
                 taskObj: task
-                buttonsVisible: !otherItemBeingEdited && !editMode && hasMouseOver
+                buttonsVisible: _controller.editMode === Controller.EditModeNone && hasMouseOver
                 modelIndex: index
 
                 onDeleteClicked: {
@@ -72,7 +72,7 @@ Page {
                 anchors.fill: parent
                 onClicked: {
                     if (_controller.indexBeingEdited !== -1) {
-                        _controller.indexBeingEdited = -1
+                        _controller.editTask(-1, Controller.EditModeNone)
                     } else {
                         _controller.expanded = false
                     }

@@ -1,18 +1,20 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 
+import Controller 1.0
+
 Rectangle {
 
     signal deleteClicked()
 
     property QtObject taskObj: null
     property string taskSummary: taskObj !== null ? taskObj.summary : ""
-    property bool editMode: _controller.taskBeingEdited === taskObj
+    property bool inlineEditMode: _controller.taskBeingEdited === taskObj && _controller.editMode === Controller.EditModeInline
     property bool otherItemBeingEdited: _controller.taskBeingEdited !== taskObj && _controller.taskBeingEdited !== null
     property bool buttonsVisible: true
     property bool hasMouseOver: mouseArea.containsMouse
     property int modelIndex: -1
-    property bool selected: _controller.selectedIndex === modelIndex && !editMode && modelIndex !== -1
+    property bool selected: _controller.selectedIndex === modelIndex && !inlineEditMode && modelIndex !== -1
 
     id: root
     color: selected ? _style.selectedTaskBgColor : _style.taskBackgroundColor
@@ -34,7 +36,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 1
         clip: true
-        visible: !root.editMode
+        visible: !root.inlineEditMode
 
         Repeater {
             model: root.taskObj === null ? 0 : root.taskObj.tagModel
@@ -52,12 +54,12 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
-            _controller.indexBeingEdited = -1
+            _controller.editTask(-1, Controller.EditModeNone)
             _controller.toggleSelectedIndex(modelIndex)
         }
 
         onPressAndHold: {
-            _controller.indexBeingEdited = modelIndex
+            _controller.editTask(modelIndex, Controller.EditModeInline)
             textField.forceActiveFocus()
         }
 
@@ -98,11 +100,12 @@ Rectangle {
 
         TextField {
             id: textField
-            visible: root.editMode
+            visible: root.inlineEditMode
             text: root.taskSummary
             anchors.left: textItem.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: deleteImage.left
+            anchors.top: parent.top
+            anchors.topMargin:  _style.marginMedium
+            anchors.right: parent.right
             anchors.rightMargin: _style.marginMedium
             focus: true
             onVisibleChanged: {
@@ -112,10 +115,12 @@ Rectangle {
                 } // TODO only write when not visible
             }
 
-            onTextChanged: {
-                if (visible) {
-                    root.taskObj.summary = text
-                }
+            Binding {
+                // two way binding
+                target: _controller.taskBeingEdited
+                when: textField.visible && _controller.taskBeingEdited !== null
+                property: "summary"
+                value: textField.text
             }
         }
 
@@ -139,9 +144,8 @@ Rectangle {
             anchors.rightMargin: _style.buttonsSpacing
             visible: root.buttonsVisible
             onClicked: {
-
                 if (modelIndex !== -1) {
-                    _controller.indexBeingEdited = modelIndex
+                    _controller.editTask(modelIndex, Controller.EditModeEditor)
                     if (_controller.taskBeingEdited !== null) {
                         textField.forceActiveFocus()
                     }

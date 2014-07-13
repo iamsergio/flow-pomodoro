@@ -41,6 +41,11 @@ Item {
     readonly property int dialogFontSize: 11
     readonly property int extraMargin: 4
     readonly property int questionDialogHeight: 75
+    readonly property int dialogButtonsMargin: 6
+
+    // Task Editor
+    readonly property int taskEditorFontSize: 14
+    readonly property int taskEditorHeight: 250
 
     readonly property int queueRadius            : Math.ceil(5 * _controller.dpiFactor)
     readonly property string taskBackgroundColor : "black"

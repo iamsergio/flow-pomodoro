@@ -50,6 +50,7 @@ Controller::Controller(QuickView *quickView,
     , m_selectedIndex(-1)
     , m_quickView(quickView)
     , m_popupVisible(false)
+    , m_editMode(EditModeNone)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -78,18 +79,9 @@ int Controller::indexBeingEdited() const
     return m_indexBeingEdited;
 }
 
-void Controller::setIndexBeingEdited(int index)
+Controller::EditMode Controller::editMode() const
 {
-    if (m_indexBeingEdited != index) {
-        m_indexBeingEdited = index;
-        m_taskBeingEdited = m_taskStorage->at(index).data();
-    } else {
-        m_indexBeingEdited = -1;
-        m_taskBeingEdited.clear();
-    }
-
-    // qDebug() << "Controller::setIndexBeingEdited " << m_indexBeingEdited;
-    emit indexBeingEditedChanged();
+    return m_editMode;
 }
 
 void Controller::startPomodoro(int queueIndex)
@@ -221,7 +213,7 @@ void Controller::setExpanded(bool expanded)
         if (expanded) {
             m_quickView->requestActivate();
         } else {
-            setIndexBeingEdited(-1);
+            editTask(-1, EditModeNone);
         }
         setSelectedIndex(-1);
         emit expandedChanged();
@@ -379,7 +371,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     switch (keyEvent->key()) {
     case Qt::Key_Escape:
         if (editing) {
-            setIndexBeingEdited(-1);
+            editTask(-1, EditModeNone);
         } else {
             setExpanded(false);
         }
@@ -390,7 +382,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     case Qt::Key_Enter:
         if (editing) {
             const int index = m_indexBeingEdited;
-            setIndexBeingEdited(-1);
+            editTask(-1, EditModeNone);
             setSelectedIndex(index);
         } else {
             if (m_selectedIndex != -1) {
@@ -435,7 +427,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     case Qt::Key_F2:
     case Qt::Key_E:
         if (m_selectedIndex != -1) {
-            setIndexBeingEdited(m_selectedIndex);
+            editTask(m_selectedIndex, EditModeInline);
             return true;
         }
         return false;
@@ -473,19 +465,52 @@ bool Controller::renameTag(const QString &oldName, const QString &newName)
     return success;
 }
 
+void Controller::editTask(int proxyIndex, Controller::EditMode editMode)
+{
+    if ((proxyIndex == -1 && editMode != EditModeNone) ||
+        (proxyIndex != -1 && editMode == EditModeNone)) {
+        // This doesn't happen.
+        qWarning() << Q_FUNC_INFO << proxyIndex << editMode;
+        Q_ASSERT(false);
+        proxyIndex = -1;
+        editMode = EditModeNone;
+    }
+
+    if (m_editMode != editMode) {
+        m_editMode = editMode;
+        emit editModeChanged();
+    }
+
+    if (m_indexBeingEdited != proxyIndex) {
+        m_indexBeingEdited = proxyIndex;
+
+        // Disabling saving when editor is opened, only save when it's closed.
+        m_taskStorage->setDisableSaving(proxyIndex != -1);
+
+        if (proxyIndex == -1) {
+            m_taskBeingEdited.clear();
+            m_taskStorage->saveTasks(); // Editor closed. Write to disk immediately.
+        } else {
+            m_taskBeingEdited = m_taskStorage->at(proxyIndex).data();
+        }
+        emit indexBeingEditedChanged();
+    }
+}
+
 void Controller::addTask(const QString &text, bool startEditMode)
 {
     m_taskStorage->addTask(text);
-    setIndexBeingEdited(-1);
+    editTask(-1, EditModeNone);
 
     if (startEditMode) {
         setExpanded(true);
-        setIndexBeingEdited(m_taskStorage->taskFilterModel()->rowCount()-1);
+        int lastIndex = m_taskStorage->taskFilterModel()->rowCount()-1;
+        editTask(lastIndex, EditModeInline);
     }
 }
 
 void Controller::removeTask(int index)
 {
-    setIndexBeingEdited(-1);
+    editTask(-1, EditModeNone);
     m_taskStorage->removeTask(index);
 }
