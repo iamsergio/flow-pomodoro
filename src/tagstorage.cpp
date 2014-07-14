@@ -117,8 +117,9 @@ Tag::Ptr TagStorage::tag(const QString &name, bool create)
 
 bool TagStorage::contains(const QString &name) const
 {
+    QString normalizedName = name.toLower().trimmed();
     return std::find_if(m_tags.cbegin(), m_tags.cend(),
-                        [&](const Tag::Ptr &tag) { return tag->name() == name; }) != m_tags.cend();
+                        [&](const Tag::Ptr &tag) { return tag->name().toLower() == normalizedName; }) != m_tags.cend();
 }
 
 QAbstractItemModel *TagStorage::model() const
@@ -168,8 +169,9 @@ void TagStorage::loadTags()
 
 int TagStorage::indexOf(const QString &name) const
 {
+    QString normalizedName = name.toLower().trimmed();
     for (int i = 0; i < m_tags.count(); ++i) {
-        if (m_tags.at(i)->name() == name)
+        if (m_tags.at(i)->name().toLower() == normalizedName)
             return i;
     }
 
