@@ -68,6 +68,7 @@ Item {
         id: addImage
         source: "qrc:/img/add.png"
         anchors.bottom: parent.bottomight
+        enabled: !_controller.addingNewTag
         onClicked: {
             _controller.beginAddingNewTag()
             newTag.textField.forceActiveFocus()
