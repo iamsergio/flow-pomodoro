@@ -160,6 +160,7 @@ Q_SIGNALS:
     void addingNewTagChanged();
 
 private:
+    void setAddingNewTag(bool);
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
 
     int m_currentTaskDuration;

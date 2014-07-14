@@ -358,6 +358,14 @@ void Controller::onTimerTick()
     }
 }
 
+void Controller::setAddingNewTag(bool adding)
+{
+    if (adding != m_addingNewTag) {
+        m_addingNewTag = adding;
+        emit addingNewTagChanged();
+    }
+}
+
 bool Controller::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() != QEvent::KeyRelease)
@@ -452,6 +460,8 @@ bool Controller::eventFilter(QObject *, QEvent *event)
 
 void Controller::editTag(const QString &tagName)
 {
+    setAddingNewTag(false);
+
     if (m_tagBeingEdited) {
         m_tagBeingEdited->setBeingEdited(false);
         m_tagBeingEdited.clear();
@@ -510,16 +520,20 @@ void Controller::editTask(int proxyIndex, Controller::EditMode editMode)
 
 void Controller::beginAddingNewTag()
 {
-    m_addingNewTag = true;
-    emit addingNewTagChanged();
+    setAddingNewTag(true);
 }
 
 void Controller::endAddingNewTag(const QString &tagName)
 {
+    if (tagName.isEmpty()) {
+        // Just close the editor. Don't add
+        setAddingNewTag(false);
+        return;
+    }
+
     Tag::Ptr tag = TagStorage::instance()->createTag(tagName);
     if (tag) {
-        m_addingNewTag = false;
-        emit addingNewTagChanged();
+        setAddingNewTag(false);
     }
 }
 

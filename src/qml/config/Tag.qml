@@ -61,8 +61,6 @@ Item {
                 }
                 onAccepted: {
                     root.edited(textField.text)
-                    if (root.tagObj === null)
-                        textField.text = ""
                 }
                 onActiveFocusChanged: {
                     if (!activeFocus) {

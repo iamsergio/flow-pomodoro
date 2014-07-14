@@ -70,6 +70,7 @@ Item {
         anchors.bottom: parent.bottomight
         enabled: !_controller.addingNewTag
         onClicked: {
+            newTag.textField.text = ""
             _controller.beginAddingNewTag()
             newTag.textField.forceActiveFocus()
         }
