@@ -366,6 +366,9 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     if (m_page != TheQueuePage)
         return false;
 
+    if (m_editMode == EditModeEditor)
+        return false;
+
     QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
     const bool editing = m_indexBeingEdited != -1;
