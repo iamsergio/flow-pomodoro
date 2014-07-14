@@ -4,23 +4,32 @@ import QtQuick.Controls.Styles 1.0
 import ".."
 
 Item {
-    id: item
+    id: root
     height: invisible_helper.height + 2 *  _controller.dpiFactor
     width: label.contentWidth + taskCountLabel.contentWidth + 30
     property QtObject tagObj: null
+    property bool beingEdited: false
+    property string tagName: ""
+
+    signal edited(string newTagName)
 
     MouseArea {
         anchors.fill: parent
-        onDoubleClicked: {
-            _controller.editTag(tagObj.name)
-            textField.text = tagObj.name
-            textField.forceActiveFocus()
+
+        function editTag()
+        {
+            if (tagObj !== null) {
+                _controller.editTag(root.tagName)
+                textField.text = root.tagName
+                textField.forceActiveFocus()
+            }
         }
 
+        onDoubleClicked: {
+            editTag()
+        }
         onPressAndHold: {
-            _controller.editTag(tagObj.name)
-            textField.text = tagObj.name
-            textField.forceActiveFocus()
+            editTag()
         }
 
         Rectangle {
@@ -35,9 +44,9 @@ Item {
                 focus: true
                 objectName: "Tag text field"
                 anchors.centerIn: parent
-                visible: tagObj.beingEdited
+                visible: root.beingEdited
                 width: parent.width + 2
-                text: tagObj.name
+                text: root.tagName
                 style: TextFieldStyle {
                      textColor: "black"
                      background: Rectangle {
@@ -49,7 +58,7 @@ Item {
                      }
                 }
                 onAccepted: {
-                    _controller.renameTag(tagObj.name, textField.text)
+                    root.edited(textField.text)
                 }
                 onActiveFocusChanged: {
                     if (!activeFocus) {
@@ -68,19 +77,19 @@ Item {
                 anchors.verticalCenterOffset: 2
                 anchors.verticalCenter: parent.verticalCenter
                 height: parent.height
-                text: tagObj.name
-                visible: !tagObj.beingEdited
+                text: root.tagName
+                visible: !root.beingEdited
             }
 
             Text {
                 id: taskCountLabel
                 anchors.left: label.right
-                text: !tagObj.taskCount ? "" : " (" + tagObj.taskCount + ")"
+                text: (tagObj === null || !tagObj.taskCount) ? "" : " (" + tagObj.taskCount + ")"
                 font.pointSize: _style.tagFontSize - 2
                 anchors.verticalCenterOffset: -1
                 anchors.verticalCenter: parent.verticalCenter
                 color: _style.tagFontColor
-                visible: !tagObj.beingEdited
+                visible: !root.beingEdited
             }
 
             ClickableImage {
@@ -89,7 +98,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: _style.buttonsSpacing
-                visible: !tagObj.beingEdited
+                visible: !root.beingEdited
 
                 function reallyRemove()
                 {
@@ -100,7 +109,7 @@ Item {
                     if (tagObj.taskCount > 0) {
                         _controller.showQuestionPopup(this, qsTr("There are tasks using this tag. Are you sure you want to delete it?"), "reallyRemove()")
                     } else {
-                        _tagStorage.removeTag(tagObj.name)
+                        _tagStorage.removeTag(root.tagName)
                     }
                 }
             }

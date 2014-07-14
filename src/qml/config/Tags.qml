@@ -46,6 +46,11 @@ Item {
             delegate:
             Tag {
                 tagObj: tag
+                beingEdited: tagObj.beingEdited
+                tagName: tagObj.name
+                onEdited: {
+                    _controller.renameTag(tag.name, newTagName)
+                }
             }
         }
     }
