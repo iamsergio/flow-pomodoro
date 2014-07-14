@@ -10,6 +10,7 @@ Item {
     property QtObject tagObj: null
     property bool beingEdited: false
     property string tagName: ""
+    property var textField: textField
 
     signal edited(string newTagName)
 
@@ -43,7 +44,8 @@ Item {
                 id: textField
                 focus: true
                 objectName: "Tag text field"
-                anchors.centerIn: parent
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
                 visible: root.beingEdited
                 width: parent.width + 2
                 text: root.tagName
@@ -59,6 +61,8 @@ Item {
                 }
                 onAccepted: {
                     root.edited(textField.text)
+                    if (root.tagObj === null)
+                        textField.text = ""
                 }
                 onActiveFocusChanged: {
                     if (!activeFocus) {
@@ -77,7 +81,7 @@ Item {
                 anchors.verticalCenterOffset: 2
                 anchors.verticalCenter: parent.verticalCenter
                 height: parent.height
-                text: root.tagName
+                text: root.beingEdited ? textField.text : root.tagName
                 visible: !root.beingEdited
             }
 

@@ -53,7 +53,8 @@ class Controller : public QObject {
     // Popup properties
     Q_PROPERTY(QString popupText READ popupText NOTIFY popupTextChanged)
     Q_PROPERTY(bool popupVisible READ popupVisible NOTIFY popupVisibleChanged)
-
+    //Editing Tag properties
+    Q_PROPERTY(bool addingNewTag READ addingNewTag NOTIFY addingNewTagChanged)
     // Other properties
     Q_PROPERTY(qreal dpiFactor READ dpiFactor CONSTANT)
 public:
@@ -112,6 +113,8 @@ public:
 
     Task *taskBeingEdited() const;
 
+    bool addingNewTag() const;
+
 public Q_SLOTS:
     void addTask(const QString &text, bool startEditMode);
     void removeTask(int index);
@@ -132,6 +135,9 @@ public Q_SLOTS:
 
     void editTask(int proxyIndex, EditMode);
 
+    void beginAddingNewTag();
+    void endAddingNewTag(const QString &tagName);
+
 private Q_SLOTS:
     void onTimerTick();
 
@@ -151,6 +157,7 @@ Q_SIGNALS:
     void popupTextChanged();
     void indexBeingEditedChanged();
     void editModeChanged();
+    void addingNewTagChanged();
 
 private:
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
@@ -175,6 +182,7 @@ private:
     Tag::Ptr m_tagBeingEdited;
     QPointer<Task> m_taskBeingEdited;
     EditMode m_editMode;
+    bool m_addingNewTag;
 };
 
 #endif

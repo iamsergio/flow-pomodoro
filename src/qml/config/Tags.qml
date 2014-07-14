@@ -53,16 +53,24 @@ Item {
                 }
             }
         }
+
+        Tag {
+            id: newTag
+            visible: _controller.addingNewTag
+            beingEdited: true
+            onEdited: {
+                _controller.endAddingNewTag(newTagName)
+            }
+        }
     }
 
     ClickableImage {
-        // Just for testing purposes
-        id: playImage
+        id: addImage
         source: "qrc:/img/add.png"
         anchors.bottom: parent.bottomight
-        visible: true
         onClicked: {
-            _tagStorage.createTag("Test" + _tagStorage.model.count)
+            _controller.beginAddingNewTag()
+            newTag.textField.forceActiveFocus()
         }
     }
 }

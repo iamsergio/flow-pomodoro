@@ -95,7 +95,6 @@ Tag::Ptr TagStorage::createTag(const QString &tagName)
     QString trimmedName = tagName.trimmed();
     if (trimmedName.isEmpty()) {
         qWarning() << Q_FUNC_INFO << "Will not add empty tag";
-        Q_ASSERT(false);
         return Tag::Ptr();
     }
 

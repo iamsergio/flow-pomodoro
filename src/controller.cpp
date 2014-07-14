@@ -51,6 +51,7 @@ Controller::Controller(QuickView *quickView,
     , m_quickView(quickView)
     , m_popupVisible(false)
     , m_editMode(EditModeNone)
+    , m_addingNewTag(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -335,6 +336,11 @@ Task *Controller::taskBeingEdited() const
     return m_taskBeingEdited.data();
 }
 
+bool Controller::addingNewTag() const
+{
+    return m_addingNewTag;
+}
+
 Task *Controller::currentTask() const
 {
     return m_currentTask.data();
@@ -494,6 +500,21 @@ void Controller::editTask(int proxyIndex, Controller::EditMode editMode)
             m_taskBeingEdited = m_taskStorage->at(proxyIndex).data();
         }
         emit indexBeingEditedChanged();
+    }
+}
+
+void Controller::beginAddingNewTag()
+{
+    m_addingNewTag = true;
+    emit addingNewTagChanged();
+}
+
+void Controller::endAddingNewTag(const QString &tagName)
+{
+    Tag::Ptr tag = TagStorage::instance()->createTag(tagName);
+    if (tag) {
+        m_addingNewTag = false;
+        emit addingNewTagChanged();
     }
 }
 
