@@ -360,9 +360,11 @@ void Controller::onTimerTick()
 
 bool Controller::eventFilter(QObject *, QEvent *event)
 {
-    if (event->type() != QEvent::KeyRelease) {
+    if (event->type() != QEvent::KeyRelease)
         return false;
-    }
+
+    if (m_page != TheQueuePage)
+        return false;
 
     QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
