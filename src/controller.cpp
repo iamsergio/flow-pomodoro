@@ -51,7 +51,7 @@ Controller::Controller(QuickView *quickView,
     , m_quickView(quickView)
     , m_popupVisible(false)
     , m_editMode(EditModeNone)
-    , m_addingNewTag(false)
+    , m_tagEditStatus(TagEditStatusNone)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -336,9 +336,9 @@ Task *Controller::taskBeingEdited() const
     return m_taskBeingEdited.data();
 }
 
-bool Controller::addingNewTag() const
+Controller::TagEditStatus Controller::tagEditStatus() const
 {
-    return m_addingNewTag;
+    return m_tagEditStatus;
 }
 
 Task *Controller::currentTask() const
@@ -358,11 +358,16 @@ void Controller::onTimerTick()
     }
 }
 
-void Controller::setAddingNewTag(bool adding)
+void Controller::setTagEditStatus(TagEditStatus status)
 {
-    if (adding != m_addingNewTag) {
-        m_addingNewTag = adding;
-        emit addingNewTagChanged();
+    if (status != m_tagEditStatus) {
+        if (status != TagEditStatusEdit && m_tagBeingEdited) {
+            m_tagBeingEdited->setBeingEdited(false);
+            m_tagBeingEdited.clear();
+        }
+
+        m_tagEditStatus = status;
+        emit tagEditStatusChanged();
     }
 }
 
@@ -460,16 +465,23 @@ bool Controller::eventFilter(QObject *, QEvent *event)
 
 void Controller::editTag(const QString &tagName)
 {
-    setAddingNewTag(false);
-
     if (m_tagBeingEdited) {
         m_tagBeingEdited->setBeingEdited(false);
         m_tagBeingEdited.clear();
     }
 
-    if (tagName.isEmpty()) return;
+    if (tagName.isEmpty()) {
+        setTagEditStatus(TagEditStatusNone);
+        return;
+    }
+
+    setTagEditStatus(TagEditStatusEdit);
+
     Tag::Ptr tag = TagStorage::instance()->tag(tagName, /*create=*/false);
-    if (!tag) return;
+    if (!tag) {
+        qWarning() << Q_FUNC_INFO << "Could not find tag to edit:" << tagName;
+        return;
+    }
 
     tag->setBeingEdited(true);
     m_tagBeingEdited = tag;
@@ -520,21 +532,19 @@ void Controller::editTask(int proxyIndex, Controller::EditMode editMode)
 
 void Controller::beginAddingNewTag()
 {
-    setAddingNewTag(true);
+    setTagEditStatus(TagEditStatusNew);
 }
 
 void Controller::endAddingNewTag(const QString &tagName)
 {
     if (tagName.isEmpty()) {
         // Just close the editor. Don't add
-        setAddingNewTag(false);
+        setTagEditStatus(TagEditStatusNone);
         return;
     }
 
-    Tag::Ptr tag = TagStorage::instance()->createTag(tagName);
-    if (tag) {
-        setAddingNewTag(false);
-    }
+    if (TagStorage::instance()->createTag(tagName))
+        setTagEditStatus(TagEditStatusNone);
 }
 
 void Controller::addTask(const QString &text, bool startEditMode)

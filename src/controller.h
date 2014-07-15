@@ -54,7 +54,7 @@ class Controller : public QObject {
     Q_PROPERTY(QString popupText READ popupText NOTIFY popupTextChanged)
     Q_PROPERTY(bool popupVisible READ popupVisible NOTIFY popupVisibleChanged)
     //Editing Tag properties
-    Q_PROPERTY(bool addingNewTag READ addingNewTag NOTIFY addingNewTagChanged)
+    Q_PROPERTY(TagEditStatus tagEditStatus READ tagEditStatus NOTIFY tagEditStatusChanged)
     // Other properties
     Q_PROPERTY(qreal dpiFactor READ dpiFactor CONSTANT)
 public:
@@ -73,6 +73,13 @@ public:
         EditModeEditor // We're using the task editor
     };
     Q_ENUMS(EditMode)
+
+    enum TagEditStatus {
+        TagEditStatusNone = 0,
+        TagEditStatusEdit, // Tag is being edited
+        TagEditStatusNew // Tag is being created
+    };
+    Q_ENUMS(TagEditStatus)
 
     Controller(QuickView *quickView, TaskStorage *model, QObject *parent = 0);
 
@@ -112,8 +119,7 @@ public:
     void setPopupText(const QString &);
 
     Task *taskBeingEdited() const;
-
-    bool addingNewTag() const;
+    TagEditStatus tagEditStatus() const;
 
 public Q_SLOTS:
     void addTask(const QString &text, bool startEditMode);
@@ -157,10 +163,10 @@ Q_SIGNALS:
     void popupTextChanged();
     void indexBeingEditedChanged();
     void editModeChanged();
-    void addingNewTagChanged();
+    void tagEditStatusChanged();
 
 private:
-    void setAddingNewTag(bool);
+    void setTagEditStatus(TagEditStatus);
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
 
     int m_currentTaskDuration;
@@ -183,7 +189,7 @@ private:
     Tag::Ptr m_tagBeingEdited;
     QPointer<Task> m_taskBeingEdited;
     EditMode m_editMode;
-    bool m_addingNewTag;
+    TagEditStatus m_tagEditStatus;
 };
 
 #endif

@@ -56,7 +56,7 @@ Item {
 
         Tag {
             id: newTag
-            visible: _controller.addingNewTag
+            visible: _controller.tagEditStatus === Controller.TagEditStatusNew
             beingEdited: true
             onEdited: {
                 _controller.endAddingNewTag(newTagName)
@@ -68,7 +68,7 @@ Item {
         id: addImage
         source: "qrc:/img/add.png"
         anchors.bottom: parent.bottomight
-        enabled: !_controller.addingNewTag
+        enabled: _controller.tagEditStatus !== Controller.TagEditStatusNew
         onClicked: {
             newTag.textField.text = ""
             _controller.beginAddingNewTag()
