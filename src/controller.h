@@ -125,7 +125,7 @@ public Q_SLOTS:
     void removeTask(int index);
 
     void startPomodoro(int queueIndex);
-    void stopPomodoro(bool reQueueTask);
+    void stopPomodoro();
     void pausePomodoro();
 
     void toggleSelectedIndex(int index);

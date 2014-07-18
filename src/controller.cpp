@@ -93,10 +93,9 @@ Controller::EditMode Controller::editMode() const
 
 void Controller::startPomodoro(int queueIndex)
 {
-    stopPomodoro(/*requeue=*/true); // Stop previous one, if any
+    stopPomodoro(); // Stop previous one, if any
 
     m_currentTask = m_taskStorage->at(queueIndex);
-    m_taskStorage->removeTask(queueIndex);
 
     m_elapsedMinutes = 0;
     m_currentTaskDuration = m_defaultPomodoroDuration;
@@ -108,21 +107,19 @@ void Controller::startPomodoro(int queueIndex)
     emit firstSecondsAfterAddingChanged();
 
     setTaskStatus(TaskStarted);
+    m_taskStorage->taskFilterModel()->invalidateFilter();
 }
 
-void Controller::stopPomodoro(bool reQueueTask)
+void Controller::stopPomodoro()
 {
     if (stopped())
         return;
 
-    if (reQueueTask && !currentTask()->summary().isEmpty()) {
-        // Return it to the queue
-        addTask(currentTask()->summary(), false);
-    }
     m_tickTimer->stop();
     m_elapsedMinutes = 0;
     setTaskStatus(TaskStopped);
     m_currentTask.clear();
+    m_taskStorage->taskFilterModel()->invalidateFilter();
 }
 
 void Controller::pausePomodoro()
@@ -367,7 +364,7 @@ void Controller::onTimerTick()
     emit remainingMinutesChanged();
 
     if (remainingMinutes() == 0) {
-        stopPomodoro(/**requeue=*/true);
+        stopPomodoro();
         emit taskFinished();
     }
 }
@@ -438,7 +435,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
         return true;
         break;
     case Qt::Key_S:
-        stopPomodoro(true);
+        stopPomodoro();
         return true;
         break;
     case Qt::Key_N:
@@ -448,7 +445,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
         break;
     case Qt::Key_Delete:
         if (m_selectedIndex == -1) {
-            stopPomodoro(false);
+            stopPomodoro();
         } else {
             removeTask(m_selectedIndex);
         }

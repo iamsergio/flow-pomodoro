@@ -20,6 +20,7 @@ Q_SIGNALS:
 
 private:
     QString m_tagText;
+    friend class Controller;
 };
 
 #endif

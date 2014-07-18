@@ -40,12 +40,15 @@ bool TaskFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &s
     if (!v.isValid())
         return false;
 
-    if (m_tagText.isEmpty())
-        return true;
-
     Task::Ptr task = v.value<Task::Ptr>();
     if (!task)
         return false;
+
+    if (task->status() == TaskStarted)
+        return false;
+
+    if (m_tagText.isEmpty())
+        return true;
 
     TagRef::List tags = task->tags();
     return std::find_if(tags.cbegin(), tags.cend(),
