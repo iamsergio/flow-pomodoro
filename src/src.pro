@@ -18,7 +18,8 @@ SOURCES += controller.cpp  \
            taskstorage.cpp \
            taskstorageqsettings.cpp \
            task.cpp \
-           taskfilterproxymodel.cpp
+           taskfilterproxymodel.cpp \
+           transform.cpp
 
 HEADERS += controller.h      \
            genericlistmodel.h \
@@ -34,7 +35,8 @@ HEADERS += controller.h      \
            task.h            \
            taskfilterproxymodel.h \
            taskstorage.h \
-           taskstorageqsettings.h
+           taskstorageqsettings.h \
+           transform.h
 
 contains(QT_CONFIG, dbus) {
     QT += dbus

@@ -53,9 +53,14 @@ Rectangle {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: {
-            _controller.editTask(-1, Controller.EditModeNone)
-            _controller.toggleSelectedIndex(modelIndex)
+            if (mouse.button === Qt.LeftButton) {
+                _controller.editTask(-1, Controller.EditModeNone)
+                _controller.toggleSelectedIndex(modelIndex)
+            } else {
+                _controller.requestContextMenu(task)
+            }
         }
 
         onPressAndHold: {

@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Controls 1.0
+import QtQuick 2.2
+import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.0
 
 import Controller 1.0
@@ -182,7 +182,8 @@ Rectangle {
                     _controller.expanded = !_controller.expanded
                     mouse.accepted = false
                 } else if (mouse.button === Qt.RightButton) {
-                    if (_controller.taskBeingEdited === null && !_controller.popupVisible) {
+                    if (_controller.taskBeingEdited === null) {
+                        _controller.requestContextMenu(null) // reset task
                         contextMenu.popup()
                     }
                 }
@@ -190,13 +191,21 @@ Rectangle {
         }
     }
 
+    Connections {
+        target: _controller
+        onRightClickedTaskChanged: {
+            if (_controller.rightClickedTask !== null)
+                contextMenu.popup()
+        }
+    }
+
     Menu {
         id: contextMenu
-        title: qsTr("Edit")
         enabled: !_controller.popupVisible
 
         MenuItem {
             enabled: !_controller.stopped
+            visible: _controller.rightClickedTask === null
             text: _controller.running ? qsTr("Pause") : qsTr("Resume")
             onTriggered: {
                 _controller.pausePomodoro()
@@ -205,6 +214,7 @@ Rectangle {
 
         MenuItem {
             enabled: !_controller.stopped
+            visible: _controller.rightClickedTask === null
             text: qsTr("Stop")
             onTriggered: {
                 _controller.stopPomodoro(true)
@@ -212,10 +222,37 @@ Rectangle {
         }
 
         MenuItem {
-            visible: !_controller.stopped
+            enabled: !_controller.stopped
+            visible: _controller.rightClickedTask === null
             text: qsTr("Delete")
             onTriggered: {
                 _controller.stopPomodoro(false)
+            }
+        }
+
+        Menu {
+            id: tagsMenu
+            visible: _controller.rightClickedTask !== null
+            enabled: _tagStorage.model.count > 0
+            title: qsTr("Tags")
+            Instantiator {
+                id: instantiator
+                model: _controller.rightClickedTask === null ? 0 : _controller.rightClickedTask.checkableTagModel
+                MenuItem {
+                    checkable: true
+                    checked: instantiator.model === null ? false : checkState
+                    text: instantiator.model === null ? "" : tag.name
+                    onToggled: {
+                        if (checked) {
+                            _controller.rightClickedTask.addTag(text)
+                        } else {
+                            _controller.rightClickedTask.removeTag(text)
+                        }
+                    }
+                }
+
+                onObjectAdded: tagsMenu.insertItem(index, object)
+                onObjectRemoved: tagsMenu.removeItem(object)
             }
         }
 

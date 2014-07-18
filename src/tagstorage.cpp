@@ -42,11 +42,6 @@ static bool tagLessThan(const QVariant &left, const QVariant &right)
     }
 }
 
-enum {
-    TagRole = Qt::UserRole + 1,
-    TagPtrRole
-};
-
 TagStorage::TagStorage(QObject *parent)
     : QObject(parent)
 {

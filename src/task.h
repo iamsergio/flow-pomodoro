@@ -41,6 +41,10 @@ enum SerializerVersion {
     SerializerVersion2 = 101 // Added Task::description()
 };
 
+namespace FunctionalModels {
+class Transform;
+};
+
 class QAbstractListModel;
 
 class Task : public QObject {
@@ -48,6 +52,7 @@ class Task : public QObject {
     Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(QObject * tagModel READ tagModel CONSTANT)
+    Q_PROPERTY(QObject * checkableTagModel READ checkableTagModel CONSTANT)
 public:
     typedef QSharedPointer<Task> Ptr;
     typedef GenericListModel<Ptr> List;
@@ -59,9 +64,11 @@ public:
     QString description() const;
     void setDescription(const QString &text);
 
+    bool containsTag(const QString &name) const;
     TagRef::List tags() const;
     void setTagList(const TagRef::List &);
-    QAbstractListModel* tagModel() const;
+    QAbstractItemModel *tagModel() const;
+    QAbstractItemModel *checkableTagModel() const;
 
     Q_INVOKABLE void addTag(const QString &tagName);
     Q_INVOKABLE void removeTag(const QString &tagName);
@@ -76,6 +83,7 @@ private:
     QString m_summary;
     QString m_description;
     TagRef::List m_tags;
+    FunctionalModels::Transform *m_checkableTagModel;
 };
 
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task);

@@ -20,17 +20,46 @@
 
 #include "task.h"
 #include "settings.h"
-
+#include "transform.h"
+#include "tagstorage.h"
 #include <QQmlEngine>
 
 #include <functional>
 #include <algorithm>
 
+using namespace std::placeholders;
+
+enum {
+    TagRole = Qt::UserRole,
+    TaskRole
+};
+
+static QVariant data(const QPointer<Task> task, const QModelIndex &sourceIndex, int role)
+{
+    if (role == Qt::CheckStateRole) {
+        if (!task) {
+            qWarning() << Q_FUNC_INFO <<"Unexpected null task";
+            return false;
+        }
+
+        Tag::Ptr tag = sourceIndex.data(TagStorage::TagPtrRole).value<Tag::Ptr>();
+        if (!tag) {
+            qWarning() << Q_FUNC_INFO <<"Unexpected null tag";
+            return false;
+        }
+
+        return task->containsTag(tag->name());
+    }
+
+    return sourceIndex.data(role);
+}
+
 Task::Task(const QString &name)
     : QObject()
     , m_summary(name.isEmpty() ? tr("New Task") : name)
 {
-    m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); });
+    m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); }, TagRole);
+    m_tags.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tags.at(i).m_task.data()); }, TaskRole);
 
     connect(this, &Task::summaryChanged, &Task::changed);
     connect(this, &Task::tagsChanged, &Task::changed);
@@ -42,6 +71,10 @@ Task::Task(const QString &name)
     connect(m_tags, &QAbstractListModel::dataChanged, this, &Task::tagsChanged);
 
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+    auto roleNames = TagStorage::instance()->model()->roleNames();
+    roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
+    FunctionalModels::DataFunc dataFunc = std::bind(&data, this, _1, _2);
+    m_checkableTagModel = new FunctionalModels::Transform(TagStorage::instance()->model(), dataFunc, roleNames, this);
 }
 
 QString Task::summary() const
@@ -70,6 +103,15 @@ void Task::setDescription(const QString &text)
     }
 }
 
+bool Task::containsTag(const QString &name) const
+{
+    QString trimmedName = name.toLower().trimmed();
+    auto it = std::find_if(m_tags.cbegin(), m_tags.cend(),
+                           [&](const TagRef &ref) { return ref.m_tag->name().toLower().trimmed() == trimmedName; });
+
+    return it != m_tags.cend();
+}
+
 TagRef::List Task::tags() const
 {
     return m_tags;
@@ -80,9 +122,14 @@ void Task::setTagList(const TagRef::List &list)
     m_tags = list;
 }
 
-QAbstractListModel *Task::tagModel() const
+QAbstractItemModel *Task::tagModel() const
 {
     return m_tags;
+}
+
+QAbstractItemModel *Task::checkableTagModel() const
+{
+    return m_checkableTagModel;
 }
 
 void Task::addTag(const QString &tagName)
@@ -91,10 +138,7 @@ void Task::addTag(const QString &tagName)
     if (trimmedName.isEmpty())
         return;
 
-    auto it = std::find_if(m_tags.cbegin(), m_tags.cend(),
-                           [&](const TagRef &ref) { return ref.m_tag->name() == trimmedName; });
-
-    if (it == m_tags.cend()) {
+    if (!containsTag(trimmedName)) {
         m_tags.append(TagRef(this, trimmedName));
     }
 }

@@ -341,6 +341,21 @@ Controller::TagEditStatus Controller::tagEditStatus() const
     return m_tagEditStatus;
 }
 
+Task *Controller::rightClickedTask() const
+{
+    return m_rightClickedTask;
+}
+
+void Controller::setRightClickedTask(Task *task)
+{
+    // We don't have a way to detect when the context menu is closed (QtQuick.Controls bug?)
+    // So comment the guards so we can click on the same task twice.
+    //if (m_rightClickedTask != task) {
+        m_rightClickedTask = task;
+        emit rightClickedTaskChanged();
+    //}
+}
+
 Task *Controller::currentTask() const
 {
     return m_currentTask.data();
@@ -545,6 +560,11 @@ void Controller::endAddingNewTag(const QString &tagName)
 
     if (TagStorage::instance()->createTag(tagName))
         setTagEditStatus(TagEditStatusNone);
+}
+
+void Controller::requestContextMenu(Task *task)
+{
+    setRightClickedTask(task);
 }
 
 void Controller::addTask(const QString &text, bool startEditMode)

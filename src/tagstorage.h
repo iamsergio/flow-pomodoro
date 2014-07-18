@@ -35,6 +35,11 @@ class TagStorage : public QObject
     Q_PROPERTY(QAbstractItemModel* model READ model CONSTANT)
     Q_OBJECT
 public:
+    enum {
+        TagRole = Qt::UserRole + 1,
+        TagPtrRole
+    };
+
     static TagStorage *instance();
 
     /**

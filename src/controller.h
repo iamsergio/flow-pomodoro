@@ -40,7 +40,8 @@ class Controller : public QObject {
     Q_PROPERTY(Page currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged)
     Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
     Q_PROPERTY(TaskStatus taskStatus READ taskStatus NOTIFY taskStatusChanged)
-    Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged)
+    Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged) // Task being played
+    Q_PROPERTY(Task* rightClickedTask READ rightClickedTask WRITE setRightClickedTask NOTIFY rightClickedTaskChanged)
     Q_PROPERTY(int selectedIndex READ selectedIndex NOTIFY selectedIndexChanged)
     // Editing task properties
     Q_PROPERTY(int indexBeingEdited READ indexBeingEdited NOTIFY indexBeingEditedChanged)
@@ -121,6 +122,7 @@ public:
     Task *taskBeingEdited() const;
     TagEditStatus tagEditStatus() const;
 
+    Task *rightClickedTask() const;
 public Q_SLOTS:
     void addTask(const QString &text, bool startEditMode);
     void removeTask(int index);
@@ -144,6 +146,7 @@ public Q_SLOTS:
     void beginAddingNewTag();
     void endAddingNewTag(const QString &tagName);
 
+    void requestContextMenu(Task *);
 private Q_SLOTS:
     void onTimerTick();
 
@@ -164,9 +167,11 @@ Q_SIGNALS:
     void indexBeingEditedChanged();
     void editModeChanged();
     void tagEditStatusChanged();
+    void rightClickedTaskChanged();
 
 private:
     void setTagEditStatus(TagEditStatus);
+    void setRightClickedTask(Task *);
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
 
     int m_currentTaskDuration;
@@ -190,6 +195,7 @@ private:
     QPointer<Task> m_taskBeingEdited;
     EditMode m_editMode;
     TagEditStatus m_tagEditStatus;
+    QPointer<Task> m_rightClickedTask;
 };
 
 #endif
