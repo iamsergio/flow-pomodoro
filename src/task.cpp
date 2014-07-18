@@ -57,6 +57,7 @@ static QVariant data(const QPointer<Task> task, const QModelIndex &sourceIndex, 
 Task::Task(const QString &name)
     : QObject()
     , m_summary(name.isEmpty() ? tr("New Task") : name)
+    , m_status(TaskStopped)
 {
     m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); }, TagRole);
     m_tags.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tags.at(i).m_task.data()); }, TaskRole);
@@ -150,6 +151,19 @@ void Task::removeTag(const QString &tagName)
 
     if (it != m_tags.cend()) {
         m_tags.removeAt(it - m_tags.cbegin());
+    }
+}
+
+TaskStatus Task::status() const
+{
+    return m_status;
+}
+
+void Task::setStatus(TaskStatus status)
+{
+    if (m_status != status) {
+        m_status = status;
+        emit statusChanged();
     }
 }
 

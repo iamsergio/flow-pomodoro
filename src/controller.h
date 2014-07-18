@@ -98,9 +98,6 @@ public:
     Controller::Page currentPage() const;
     void setCurrentPage(Page page);
 
-    TaskStatus taskStatus() const;
-    void setTaskStatus(TaskStatus status);
-
     void setDefaultPomodoroDuration(int duration);
     int defaultPomodoroDuration() const;
 
@@ -123,6 +120,8 @@ public:
     TagEditStatus tagEditStatus() const;
 
     Task *rightClickedTask() const;
+
+    TaskStatus taskStatus() const;
 public Q_SLOTS:
     void addTask(const QString &text, bool startEditMode);
     void removeTask(int index);
@@ -170,6 +169,7 @@ Q_SIGNALS:
     void rightClickedTaskChanged();
 
 private:
+    void setTaskStatus(TaskStatus status);
     void setTagEditStatus(TagEditStatus);
     void setRightClickedTask(Task *);
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
@@ -181,7 +181,6 @@ private:
     bool m_expanded;
     int m_indexBeingEdited;
     TaskStorage *m_taskStorage;
-    TaskStatus m_taskStatus;
     Task::Ptr m_currentTask;
     Page m_page;
     int m_defaultPomodoroDuration;

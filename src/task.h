@@ -73,10 +73,14 @@ public:
     Q_INVOKABLE void addTag(const QString &tagName);
     Q_INVOKABLE void removeTag(const QString &tagName);
 
+    TaskStatus status() const;
+    void setStatus(TaskStatus status);
+
 Q_SIGNALS:
     void summaryChanged();
     void descriptionChanged();
     void tagsChanged();
+    void statusChanged(); // not a stored property, so not connected to changed()
     void changed();
 
 private:
@@ -84,6 +88,7 @@ private:
     QString m_description;
     TagRef::List m_tags;
     FunctionalModels::Transform *m_checkableTagModel;
+    TaskStatus m_status;
 };
 
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task);

@@ -45,7 +45,6 @@ Controller::Controller(QuickView *quickView,
     , m_expanded(false)
     , m_indexBeingEdited(-1)
     , m_taskStorage(taskStorage)
-    , m_taskStatus(TaskStopped)
     , m_page(TheQueuePage)
     , m_selectedIndex(-1)
     , m_quickView(quickView)
@@ -106,9 +105,8 @@ void Controller::startPomodoro(int queueIndex)
 
 void Controller::stopPomodoro(bool reQueueTask)
 {
-    if (m_taskStatus == TaskStopped) {
+    if (stopped())
         return;
-    }
 
     if (reQueueTask && !m_currentTask->summary().isEmpty()) {
         // Return it to the queue
@@ -116,14 +114,13 @@ void Controller::stopPomodoro(bool reQueueTask)
     }
     m_tickTimer->stop();
     m_elapsedMinutes = 0;
-    m_currentTask.clear();
-
     setTaskStatus(TaskStopped);
+    m_currentTask.clear();
 }
 
 void Controller::pausePomodoro()
 {
-    switch (m_taskStatus) {
+    switch (m_currentTask->status()) {
     case TaskPaused:
         m_tickTimer->start();
         setTaskStatus(TaskStarted);
@@ -239,15 +236,10 @@ void Controller::setCurrentPage(Controller::Page page)
     }
 }
 
-TaskStatus Controller::taskStatus() const
-{
-    return m_taskStatus;
-}
-
 void Controller::setTaskStatus(TaskStatus status)
 {
-    if (status != m_taskStatus) {
-        m_taskStatus = status;
+    if (status != m_currentTask->status()) {
+        m_currentTask->setStatus(status);
         emit currentTaskChanged();
         emit remainingMinutesChanged();
         emit taskStatusChanged();
@@ -284,17 +276,17 @@ void Controller::setSelectedIndex(int index)
 
 bool Controller::running() const
 {
-    return m_taskStatus == TaskStarted;
+    return m_currentTask && m_currentTask->status() == TaskStarted;
 }
 
 bool Controller::stopped() const
 {
-    return m_taskStatus == TaskStopped;
+    return !m_currentTask || m_currentTask->status() == TaskStopped;
 }
 
 bool Controller::paused() const
 {
-    return m_taskStatus == TaskPaused;
+    return m_currentTask && m_currentTask->status() == TaskPaused;
 }
 
 qreal Controller::dpiFactor() const
@@ -344,6 +336,11 @@ Controller::TagEditStatus Controller::tagEditStatus() const
 Task *Controller::rightClickedTask() const
 {
     return m_rightClickedTask;
+}
+
+TaskStatus Controller::taskStatus() const
+{
+    return m_currentTask ? m_currentTask->status() : TaskStopped;
 }
 
 void Controller::setRightClickedTask(Task *task)
