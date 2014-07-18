@@ -51,6 +51,7 @@ Controller::Controller(QuickView *quickView,
     , m_popupVisible(false)
     , m_editMode(EditModeNone)
     , m_tagEditStatus(TagEditStatusNone)
+    , m_invalidTask(new Task())
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -62,6 +63,12 @@ Controller::Controller(QuickView *quickView,
     m_defaultPomodoroDuration = Settings::instance()->value(QStringLiteral("defaultPomodoroDuration"), /*default=*/QVariant(25)).toInt();
 
     qApp->installEventFilter(this);
+}
+
+Controller::~Controller()
+{
+    delete m_invalidTask;
+    m_invalidTask = 0;
 }
 
 int Controller::remainingMinutes() const
@@ -108,9 +115,9 @@ void Controller::stopPomodoro(bool reQueueTask)
     if (stopped())
         return;
 
-    if (reQueueTask && !m_currentTask->summary().isEmpty()) {
+    if (reQueueTask && !currentTask()->summary().isEmpty()) {
         // Return it to the queue
-        addTask(m_currentTask->summary(), false);
+        addTask(currentTask()->summary(), false);
     }
     m_tickTimer->stop();
     m_elapsedMinutes = 0;
@@ -120,7 +127,7 @@ void Controller::stopPomodoro(bool reQueueTask)
 
 void Controller::pausePomodoro()
 {
-    switch (m_currentTask->status()) {
+    switch (currentTask()->status()) {
     case TaskPaused:
         m_tickTimer->start();
         setTaskStatus(TaskStarted);
@@ -238,8 +245,8 @@ void Controller::setCurrentPage(Controller::Page page)
 
 void Controller::setTaskStatus(TaskStatus status)
 {
-    if (status != m_currentTask->status()) {
-        m_currentTask->setStatus(status);
+    if (status != currentTask()->status()) {
+        currentTask()->setStatus(status);
         emit currentTaskChanged();
         emit remainingMinutesChanged();
         emit taskStatusChanged();
@@ -276,17 +283,17 @@ void Controller::setSelectedIndex(int index)
 
 bool Controller::running() const
 {
-    return m_currentTask && m_currentTask->status() == TaskStarted;
+    return currentTask()->status() == TaskStarted;
 }
 
 bool Controller::stopped() const
 {
-    return !m_currentTask || m_currentTask->status() == TaskStopped;
+    return currentTask()->status() == TaskStopped;
 }
 
 bool Controller::paused() const
 {
-    return m_currentTask && m_currentTask->status() == TaskPaused;
+    return currentTask()->status() == TaskPaused;
 }
 
 qreal Controller::dpiFactor() const
@@ -338,11 +345,6 @@ Task *Controller::rightClickedTask() const
     return m_rightClickedTask;
 }
 
-TaskStatus Controller::taskStatus() const
-{
-    return m_currentTask ? m_currentTask->status() : TaskStopped;
-}
-
 void Controller::setRightClickedTask(Task *task)
 {
     // We don't have a way to detect when the context menu is closed (QtQuick.Controls bug?)
@@ -355,7 +357,7 @@ void Controller::setRightClickedTask(Task *task)
 
 Task *Controller::currentTask() const
 {
-    return m_currentTask.data();
+    return m_currentTask ? m_currentTask.data() : m_invalidTask;
 }
 
 void Controller::onTimerTick()

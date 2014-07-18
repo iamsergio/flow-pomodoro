@@ -39,7 +39,6 @@ class Controller : public QObject {
     Q_PROPERTY(bool expanded READ expanded WRITE setExpanded NOTIFY expandedChanged)
     Q_PROPERTY(Page currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged)
     Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
-    Q_PROPERTY(TaskStatus taskStatus READ taskStatus NOTIFY taskStatusChanged)
     Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged) // Task being played
     Q_PROPERTY(Task* rightClickedTask READ rightClickedTask WRITE setRightClickedTask NOTIFY rightClickedTaskChanged)
     Q_PROPERTY(int selectedIndex READ selectedIndex NOTIFY selectedIndexChanged)
@@ -83,6 +82,7 @@ public:
     Q_ENUMS(TagEditStatus)
 
     Controller(QuickView *quickView, TaskStorage *model, QObject *parent = 0);
+    ~Controller();
 
     int remainingMinutes() const;
     int currentTaskDuration() const; // in minutes
@@ -120,8 +120,6 @@ public:
     TagEditStatus tagEditStatus() const;
 
     Task *rightClickedTask() const;
-
-    TaskStatus taskStatus() const;
 public Q_SLOTS:
     void addTask(const QString &text, bool startEditMode);
     void removeTask(int index);
@@ -195,6 +193,7 @@ private:
     EditMode m_editMode;
     TagEditStatus m_tagEditStatus;
     QPointer<Task> m_rightClickedTask;
+    Task * m_invalidTask;
 };
 
 #endif

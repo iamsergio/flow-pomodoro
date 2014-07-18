@@ -113,7 +113,7 @@ Controller *QuickView::controller() const
 
 void QuickView::onTaskStatusChanged()
 {
-    notifyPlugins(m_controller->taskStatus());
+    notifyPlugins(m_controller->currentTask()->status());
 }
 
 void QuickView::reloadQML()
