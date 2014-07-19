@@ -62,8 +62,30 @@ ModalDialog {
                 }
             }
 
-            Text {
-                text: qsTr("Tags:")
+            Item {
+                height: 16
+                width: childrenRect.width
+                Row {
+                    spacing: 3
+                    ClickableImage {
+                        source: "qrc:/img/tag.png"
+                        anchors.verticalCenter: parent.verticalCenter
+                        onClicked: {
+                            tagsMenu.popup()
+                        }
+
+                        TagsMenu {
+                            id: tagsMenu
+                            task: _controller.taskBeingEdited
+                            showConfigureItem: false
+                        }
+                    }
+
+                    Text {
+                        id: tagsLabel
+                        text: qsTr("Tags:")
+                    }
+                }
             }
 
             Item {

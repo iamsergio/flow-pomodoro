@@ -7,6 +7,7 @@
     <file>img/pause.png</file>
     <file>img/play.png</file>
     <file>img/stop.png</file>
+    <file>img/tag.png</file>
     <file>img/window-close.png</file>
 
     <file>qml/AboutPage.qml</file>

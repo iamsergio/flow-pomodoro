@@ -231,7 +231,7 @@ Rectangle {
         }
 
         TagsMenu {
-
+            task: _controller.rightClickedTask
         }
 
         MenuSeparator { }

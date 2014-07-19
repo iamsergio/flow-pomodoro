@@ -1,31 +1,38 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.1
+import Controller 1.0
 
 Menu {
-    id: tagsMenu
-    visible: _controller.rightClickedTask !== null
+    id: root
+    property QtObject task: null
+    property bool showConfigureItem: true
+
+    visible: task !== null
     title: qsTr("Tags")
     Instantiator {
         id: instantiator
-        model: _controller.rightClickedTask === null ? 0 : _controller.rightClickedTask.checkableTagModel
+        model: task === null ? 0 : task.checkableTagModel
         MenuItem {
             checkable: true
             checked: instantiator.model === null ? false : checkState
             text: instantiator.model === null ? "" : tag.name
             onToggled: {
                 if (checked) {
-                    _controller.rightClickedTask.addTag(text)
+                    task.addTag(text)
                 } else {
-                    _controller.rightClickedTask.removeTag(text)
+                    task.removeTag(text)
                 }
             }
         }
 
-        onObjectAdded: tagsMenu.insertItem(index, object)
-        onObjectRemoved: tagsMenu.removeItem(object)
+        onObjectAdded: root.insertItem(index, object)
+        onObjectRemoved: root.removeItem(object)
     }
-    MenuSeparator { }
+    MenuSeparator {
+        visible: showConfigureItem
+    }
     MenuItem {
+        visible: showConfigureItem
         text: qsTr("Configure Tags...")
         onTriggered: {
             _controller.configureTabIndex = Controller.TagsTab
