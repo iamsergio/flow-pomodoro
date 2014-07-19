@@ -65,7 +65,6 @@ Rectangle {
 
         onPressAndHold: {
             _controller.editTask(modelIndex, Controller.EditModeInline)
-            textField.forceActiveFocus()
         }
 
         Text {
