@@ -234,7 +234,12 @@ QDataStream &operator>>(QDataStream &in, Task::Ptr &task)
         for (int i = 0; i < tagCount; i++) {
             QString name;
             in >> name;
-            tags << TagRef(task.data(), name);
+            if (TagStorage::instance()->deletedTagName() != name) {
+                // QSettings reads before saving, which invokes this deserializer
+                // Sometimes we're deleted a tag and it would get recreated because
+                // it was loaded when we were saving
+                tags << TagRef(task.data(), name);
+            }
         }
         break;
 

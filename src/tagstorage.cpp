@@ -82,6 +82,7 @@ bool TagStorage::removeTag(const QString &tagName)
 
     emit tagAboutToBeRemoved(tagName);
     m_tags.removeAt(index);
+    m_deletedTagName = tagName;
     return true;
 }
 
@@ -122,6 +123,11 @@ QAbstractItemModel *TagStorage::model() const
     return m_sortModel;
 }
 
+QString TagStorage::deletedTagName() const
+{
+    return m_deletedTagName;
+}
+
 bool TagStorage::renameTag(const QString &oldName, const QString &newName)
 {
     QString trimmedNewName = newName.trimmed();
@@ -153,6 +159,7 @@ void TagStorage::setTags(const Tag::List &tags)
 
 void TagStorage::saveTags()
 {
+    m_deletedTagName = QString();
     saveTags_impl();
 }
 

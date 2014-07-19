@@ -60,6 +60,8 @@ public:
 
     QAbstractItemModel *model() const;
 
+    QString deletedTagName() const;
+
 Q_SIGNALS:
     void tagAboutToBeRemoved(const QString &name);
 
@@ -80,6 +82,7 @@ private:
 
     QTimer m_scheduleTimer;
     FunctionalModels::SortModel *m_sortModel;
+    QString m_deletedTagName;
 };
 
 #endif
