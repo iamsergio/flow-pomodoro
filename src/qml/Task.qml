@@ -42,7 +42,9 @@ Rectangle {
             model: root.taskObj === null ? 0 : root.taskObj.tagModel
             Text {
                 property bool last: root.taskObj.tagModel.count === index + 1
-                text: tag.name + (last ? "" : ", ")
+                // For some reason when removing a tag QML prints a warning about tag being undefined.
+                // The underlying model signals are correct, so this looks like a Qt bug.
+                text: typeof tag != 'undefined' ? (tag.name + (last ? "" : ", ")) : ""
                 color: root.selected ?  _style.selectedTaskTagFontColor : _style.taskTagFontColor
                 elide: Text.ElideRight
             }
