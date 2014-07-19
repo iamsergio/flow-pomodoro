@@ -59,6 +59,7 @@ OTHER_FILES += AboutPage.qml      \
                QuestionPopup.qml  \
                RegularText.qml    \
                SmallText.qml      \
+               TagsMenu.qml       \
                Task.qml           \
                TaskEditorDialog.qml \
                TaskTextField.qml \
