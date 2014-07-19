@@ -266,7 +266,7 @@ Rectangle {
         MenuSeparator { }
 
         MenuItem {
-            text: qsTr("Configure")
+            text: qsTr("Configure...")
             onTriggered: {
                 _controller.currentPage = Controller.ConfigurePage
                 _controller.expanded = true
@@ -274,7 +274,7 @@ Rectangle {
         }
 
         MenuItem {
-            text: qsTr("About")
+            text: qsTr("About...")
             onTriggered: {
                 _controller.currentPage = Controller.AboutPage
                 _controller.expanded = true
