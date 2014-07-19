@@ -38,6 +38,7 @@ class Controller : public QObject {
     Q_PROPERTY(int currentTaskDuration READ currentTaskDuration NOTIFY currentTaskDurationChanged)
     Q_PROPERTY(bool expanded READ expanded WRITE setExpanded NOTIFY expandedChanged)
     Q_PROPERTY(Page currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged)
+    Q_PROPERTY(int configureTabIndex READ configureTabIndex WRITE setConfigureTabIndex NOTIFY configureTabIndexChanged)
     Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
     Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged) // Task being played
     Q_PROPERTY(Task* rightClickedTask READ rightClickedTask WRITE setRightClickedTask NOTIFY rightClickedTaskChanged)
@@ -61,6 +62,13 @@ public:
         AboutPage
     };
     Q_ENUMS(Page)
+
+    enum ConfigureTab {
+        GeneralTab = 0,
+        PluginsTab,
+        TagsTab
+    };
+    Q_ENUMS(ConfigureTab)
 
     enum EditMode {
         EditModeNone = 0, // We're not editing a task
@@ -111,6 +119,9 @@ public:
     TagEditStatus tagEditStatus() const;
 
     Task *rightClickedTask() const;
+
+    int configureTabIndex() const;
+    void setConfigureTabIndex(int);
 public Q_SLOTS:
     void addTask(const QString &text, bool startEditMode);
     void removeTask(int index);
@@ -155,6 +166,7 @@ Q_SIGNALS:
     void editModeChanged();
     void tagEditStatusChanged();
     void rightClickedTaskChanged();
+    void configureTabIndexChanged();
 
 private:
     void setTaskStatus(TaskStatus status);
@@ -184,6 +196,7 @@ private:
     TagEditStatus m_tagEditStatus;
     QPointer<Task> m_rightClickedTask;
     Task *m_invalidTask;
+    int m_configureTabIndex;
 };
 
 #endif

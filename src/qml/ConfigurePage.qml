@@ -29,7 +29,7 @@ Page {
             anchors.right: parent.right
             anchors.margins: _style.marginSmall
             frameVisible: false
-
+            currentIndex: _controller.configureTabIndex
 
             Tab {
                 title: qsTr("General")

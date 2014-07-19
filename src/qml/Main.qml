@@ -233,7 +233,6 @@ Rectangle {
         Menu {
             id: tagsMenu
             visible: _controller.rightClickedTask !== null
-            enabled: _tagStorage.model.count > 0
             title: qsTr("Tags")
             Instantiator {
                 id: instantiator
@@ -253,6 +252,14 @@ Rectangle {
 
                 onObjectAdded: tagsMenu.insertItem(index, object)
                 onObjectRemoved: tagsMenu.removeItem(object)
+            }
+            MenuSeparator { }
+            MenuItem {
+                text: qsTr("Configure Tags...")
+                onTriggered: {
+                    _controller.configureTabIndex = Controller.TagsTab
+                    _controller.currentPage = Controller.ConfigurePage
+                }
             }
         }
 

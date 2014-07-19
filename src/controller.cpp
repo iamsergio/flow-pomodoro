@@ -52,6 +52,7 @@ Controller::Controller(QuickView *quickView,
     , m_editMode(EditModeNone)
     , m_tagEditStatus(TagEditStatusNone)
     , m_invalidTask(new Task())
+    , m_configureTabIndex(0)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -324,6 +325,19 @@ Controller::TagEditStatus Controller::tagEditStatus() const
 Task *Controller::rightClickedTask() const
 {
     return m_rightClickedTask;
+}
+
+int Controller::configureTabIndex() const
+{
+    return m_configureTabIndex;
+}
+
+void Controller::setConfigureTabIndex(int index)
+{
+    if (m_configureTabIndex != index) {
+        m_configureTabIndex = index;
+        emit configureTabIndexChanged();
+    }
 }
 
 void Controller::setRightClickedTask(Task *task)
