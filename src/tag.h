@@ -28,8 +28,8 @@
 class Tag : public QObject
 {
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged)
-    Q_PROPERTY(bool beingEdited READ beingEdited NOTIFY beingEditedChanged)
+    Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged STORED false)
+    Q_PROPERTY(bool beingEdited READ beingEdited NOTIFY beingEditedChanged STORED false)
     Q_OBJECT
 public:
     typedef QSharedPointer<Tag> Ptr;
