@@ -9,10 +9,8 @@ TextField {
     text: _controller.taskBeingEdited.summary
     focus: true
     onVisibleChanged: {
-        if (visible) {
-            text = _controller.taskBeingEdited.summary
+        if (visible)
             forceActiveFocus()
-        }
     }
 
     Binding {
