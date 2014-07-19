@@ -46,10 +46,6 @@ class Controller : public QObject {
     Q_PROPERTY(int indexBeingEdited READ indexBeingEdited NOTIFY indexBeingEditedChanged)
     Q_PROPERTY(QObject* taskBeingEdited READ taskBeingEdited NOTIFY indexBeingEditedChanged)
     Q_PROPERTY(EditMode editMode READ editMode NOTIFY editModeChanged)
-    // Shortcuts
-    Q_PROPERTY(bool paused  READ paused  NOTIFY taskStatusChanged)
-    Q_PROPERTY(bool stopped READ stopped NOTIFY taskStatusChanged)
-    Q_PROPERTY(bool running READ running NOTIFY taskStatusChanged)
     // Popup properties
     Q_PROPERTY(QString popupText READ popupText NOTIFY popupTextChanged)
     Q_PROPERTY(bool popupVisible READ popupVisible NOTIFY popupVisibleChanged)
@@ -104,10 +100,6 @@ public:
     int selectedIndex() const;
     void setSelectedIndex(int index);
 
-    bool running() const;
-    bool stopped() const;
-    bool paused() const;
-
     qreal dpiFactor() const;
 
     bool popupVisible() const;
@@ -155,7 +147,6 @@ Q_SIGNALS:
     void firstSecondsAfterAddingChanged();
     void currentPageChanged();
     void defaultPomodoroDurationChanged();
-    void taskStatusChanged();
     void selectedIndexChanged();
     void forceFocus(int index);
     void currentTaskChanged();

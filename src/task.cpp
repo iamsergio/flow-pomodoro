@@ -167,6 +167,21 @@ void Task::setStatus(TaskStatus status)
     }
 }
 
+bool Task::running() const
+{
+    return m_status == TaskStarted;
+}
+
+bool Task::stopped() const
+{
+    return m_status == TaskStopped;
+}
+
+bool Task::paused() const
+{
+    return m_status == TaskPaused;
+}
+
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task)
 {
     Q_ASSERT(task);

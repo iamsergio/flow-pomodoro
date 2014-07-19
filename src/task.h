@@ -53,6 +53,10 @@ class Task : public QObject {
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(QObject * tagModel READ tagModel CONSTANT)
     Q_PROPERTY(QObject * checkableTagModel READ checkableTagModel CONSTANT)
+    // Shortcuts
+    Q_PROPERTY(bool paused  READ paused  NOTIFY statusChanged)
+    Q_PROPERTY(bool stopped READ stopped NOTIFY statusChanged)
+    Q_PROPERTY(bool running READ running NOTIFY statusChanged)
 public:
     typedef QSharedPointer<Task> Ptr;
     typedef GenericListModel<Ptr> List;
@@ -75,6 +79,10 @@ public:
 
     TaskStatus status() const;
     void setStatus(TaskStatus status);
+
+    bool running() const;
+    bool stopped() const;
+    bool paused() const;
 
 Q_SIGNALS:
     void summaryChanged();

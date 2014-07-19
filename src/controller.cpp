@@ -112,7 +112,7 @@ void Controller::startPomodoro(int queueIndex)
 
 void Controller::stopPomodoro()
 {
-    if (stopped())
+    if (currentTask()->stopped())
         return;
 
     m_tickTimer->stop();
@@ -246,7 +246,6 @@ void Controller::setTaskStatus(TaskStatus status)
         currentTask()->setStatus(status);
         emit currentTaskChanged();
         emit remainingMinutesChanged();
-        emit taskStatusChanged();
         emit currentTaskDurationChanged();
     }
 }
@@ -276,21 +275,6 @@ void Controller::setSelectedIndex(int index)
         m_selectedIndex = index;
         emit selectedIndexChanged();
     }
-}
-
-bool Controller::running() const
-{
-    return currentTask()->status() == TaskStarted;
-}
-
-bool Controller::stopped() const
-{
-    return currentTask()->status() == TaskStopped;
-}
-
-bool Controller::paused() const
-{
-    return currentTask()->status() == TaskPaused;
 }
 
 qreal Controller::dpiFactor() const

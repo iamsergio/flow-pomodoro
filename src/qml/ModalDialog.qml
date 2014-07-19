@@ -34,6 +34,6 @@ Item {
         anchors.right: parent.right
         anchors.leftMargin: _style.pageMargin + _style.extraMargin
         anchors.rightMargin: anchors.leftMargin
-        anchors.bottomMargin: (!_controller.stopped ? _style.marginSmall : _style.marginMedium) + _style.extraMargin
+        anchors.bottomMargin: (!_controller.currentTask.stopped ? _style.marginSmall : _style.marginMedium) + _style.extraMargin
     }
 }

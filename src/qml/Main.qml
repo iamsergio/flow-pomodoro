@@ -47,7 +47,7 @@ Rectangle {
 
         Text {
             id: titleText
-            elide: _controller.paused ? Text.ElideLeft : Text.ElideRight
+            elide: _controller.currentTask.paused ? Text.ElideLeft : Text.ElideRight
             color: _style.fontColor
             font.pointSize: _style.fontSize
             font.bold: true
@@ -56,7 +56,7 @@ Rectangle {
             anchors.right: parent.right
             anchors.rightMargin: (16*2 + 15) * _controller.dpiFactor // ( two icons, 3 margins)
             anchors.top: parent.top
-            text: _controller.stopped ? qsTr("You're slacking") : _controller.currentTask.summary
+            text: _controller.currentTask.stopped ? qsTr("You're slacking") : _controller.currentTask.summary
             visible: !remainingText.visible
         }
 
@@ -65,7 +65,7 @@ Rectangle {
             font.bold: false
             font.pointSize: _style.clickHereFontSize
             color: _style.clickHereFontColor
-            visible: _controller.stopped && !_controller.expanded
+            visible: _controller.currentTask.stopped && !_controller.expanded
             anchors.left: titleText.left
             anchors.leftMargin: _style.marginSmall
             anchors.bottom: parent.bottom
@@ -75,13 +75,13 @@ Rectangle {
         Text {
             id: remainingText
             color: _style.fontColor
-            visible: (mouseOver() || _controller.firstSecondsAfterAdding) && _controller.remainingMinutes > 0 && !_controller.stopped && !_controller.expanded
+            visible: (mouseOver() || _controller.firstSecondsAfterAdding) && _controller.remainingMinutes > 0 && !_controller.currentTask.stopped && !_controller.expanded
             font.pointSize: _style.remainingFontSize
             font.bold: true
             anchors.left: parent.left
             anchors.leftMargin: _style.marginMedium
             anchors.top: parent.top
-            text: _controller.paused ? qsTr("Paused (%1m)").arg(_controller.remainingMinutes) : (_controller.remainingMinutes + "m " + qsTr("remaining ..."))
+            text: _controller.currentTask.paused ? qsTr("Paused (%1m)").arg(_controller.remainingMinutes) : (_controller.remainingMinutes + "m " + qsTr("remaining ..."))
         }
 
         Row {
@@ -94,8 +94,8 @@ Rectangle {
 
             ClickableImage {
                 id: pauseIcon
-                visible: !_controller.stopped && (_controller.expanded || mouseOver() || _controller.paused)
-                source: _controller.paused ? "qrc:/img/play.png" : "qrc:/img/pause.png"
+                visible: !_controller.currentTask.stopped && (_controller.expanded || mouseOver() || _controller.currentTask.paused)
+                source: _controller.currentTask.paused ? "qrc:/img/play.png" : "qrc:/img/pause.png"
                 onClicked: {
                     _controller.pausePomodoro()
                 }
@@ -103,7 +103,7 @@ Rectangle {
 
             ClickableImage {
                 id: stopIcon
-                visible: !_controller.stopped && (_controller.expanded || mouseOver() || _controller.paused)
+                visible: !_controller.currentTask.stopped && (_controller.expanded || mouseOver() || _controller.currentTask.paused)
                 source: "qrc:/img/stop.png"
                 onClicked: {
                     _controller.stopPomodoro(true)
@@ -116,7 +116,7 @@ Rectangle {
 
             ClickableImage {
                 id: addIcon
-                visible: (_controller.expanded || !_controller.running || mouseOver()) && _controller.currentPage === Controller.TheQueuePage
+                visible: (_controller.expanded || !_controller.currentTask.running || mouseOver()) && _controller.currentPage === Controller.TheQueuePage
                 source: "qrc:/img/add.png"
                 onClicked: {
                     _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
@@ -156,7 +156,7 @@ Rectangle {
             anchors.rightMargin: _style.marginMedium
 
             height: _style.progressBarHeight
-            visible: !_controller.stopped
+            visible: !_controller.currentTask.stopped
 
             minimumValue: 0
             maximumValue: _controller.currentTaskDuration
@@ -204,16 +204,16 @@ Rectangle {
         enabled: !_controller.popupVisible
 
         MenuItem {
-            enabled: !_controller.stopped
+            enabled: !_controller.currentTask.stopped
             visible: _controller.rightClickedTask === null
-            text: _controller.running ? qsTr("Pause") : qsTr("Resume")
+            text: _controller.currentTask.running ? qsTr("Pause") : qsTr("Resume")
             onTriggered: {
                 _controller.pausePomodoro()
             }
         }
 
         MenuItem {
-            enabled: !_controller.stopped
+            enabled: !_controller.currentTask.stopped
             visible: _controller.rightClickedTask === null
             text: qsTr("Stop")
             onTriggered: {
@@ -222,7 +222,7 @@ Rectangle {
         }
 
         MenuItem {
-            enabled: !_controller.stopped
+            enabled: !_controller.currentTask.stopped
             visible: _controller.rightClickedTask === null
             text: qsTr("Delete")
             onTriggered: {
