@@ -49,12 +49,11 @@ class Controller : public QObject {
     // Popup properties
     Q_PROPERTY(QString popupText READ popupText NOTIFY popupTextChanged)
     Q_PROPERTY(bool popupVisible READ popupVisible NOTIFY popupVisibleChanged)
-    //Editing Tag properties
+    // Editing Tag properties
     Q_PROPERTY(TagEditStatus tagEditStatus READ tagEditStatus NOTIFY tagEditStatusChanged)
     // Other properties
     Q_PROPERTY(qreal dpiFactor READ dpiFactor CONSTANT)
 public:
-
     enum Page {
         InvalidPage = 0,
         TheQueuePage,
@@ -184,7 +183,7 @@ private:
     EditMode m_editMode;
     TagEditStatus m_tagEditStatus;
     QPointer<Task> m_rightClickedTask;
-    Task * m_invalidTask;
+    Task *m_invalidTask;
 };
 
 #endif
