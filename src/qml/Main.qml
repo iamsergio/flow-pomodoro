@@ -182,7 +182,7 @@ Rectangle {
                     _controller.expanded = !_controller.expanded
                     mouse.accepted = false
                 } else if (mouse.button === Qt.RightButton) {
-                    if (_controller.taskBeingEdited === null) {
+                    if (_controller.editMode === Controller.EditModeNone) {
                         _controller.requestContextMenu(null) // reset task
                         contextMenu.popup()
                     }

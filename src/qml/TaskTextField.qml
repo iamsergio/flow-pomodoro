@@ -6,7 +6,7 @@ import Controller 1.0
 TextField {
     id: textField
     property int taskIndex: -1
-    text: _controller.taskBeingEdited !== null ? _controller.taskBeingEdited.summary : ""
+    text: _controller.taskBeingEdited.summary
     focus: true
     onVisibleChanged: {
         if (visible) {
@@ -18,7 +18,7 @@ TextField {
     Binding {
         // two way binding
         target: _controller.taskBeingEdited
-        when: textField.visible && _controller.taskBeingEdited !== null
+        when: textField.visible && _controller.editMode !== Controller.EditModeNone
         property: "summary"
         value: textField.text
     }

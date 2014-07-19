@@ -314,7 +314,7 @@ void Controller::setPopupText(const QString &text)
 
 Task *Controller::taskBeingEdited() const
 {
-    return m_taskBeingEdited.data();
+    return m_taskBeingEdited.data() ? m_taskBeingEdited.data() : m_invalidTask;
 }
 
 Controller::TagEditStatus Controller::tagEditStatus() const

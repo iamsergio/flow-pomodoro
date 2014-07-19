@@ -10,7 +10,7 @@ Rectangle {
     property QtObject taskObj: null
     property string taskSummary: taskObj !== null ? taskObj.summary : ""
     property bool inlineEditMode: _controller.taskBeingEdited === taskObj && _controller.editMode === Controller.EditModeInline
-    property bool otherItemBeingEdited: _controller.taskBeingEdited !== taskObj && _controller.taskBeingEdited !== null
+    property bool otherItemBeingEdited: _controller.taskBeingEdited !== taskObj && _controller.editMode !== Controller.EditModeNone
     property bool buttonsVisible: true
     property bool hasMouseOver: mouseArea.containsMouse
     property int modelIndex: -1
@@ -127,7 +127,7 @@ Rectangle {
             onClicked: {
                 if (modelIndex !== -1) {
                     _controller.editTask(modelIndex, Controller.EditModeEditor)
-                    if (_controller.taskBeingEdited !== null && _controller.editMode === Controller.EditModeInline) {
+                    if (_controller.editMode === Controller.EditModeInline) {
                         textField.forceActiveFocus()
                     }
                 }

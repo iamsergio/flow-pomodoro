@@ -4,7 +4,7 @@ import QtQuick.Controls 1.0
 import Controller 1.0
 
 ModalDialog {
-    enabled: _controller.taskBeingEdited !== null && _controller.editMode === Controller.EditModeEditor
+    enabled: _controller.editMode === Controller.EditModeEditor
     dialogHeight: _style.taskEditorHeight
 
     content:
@@ -52,11 +52,11 @@ ModalDialog {
                 objectName: "Task editor text area"
                 focus: false
                 height: 100
-                text: _controller.taskBeingEdited !== null ? _controller.taskBeingEdited.description : ""
+                text: _controller.taskBeingEdited.description
                 Binding {
                     // two way binding
                     target: _controller.taskBeingEdited
-                    when: visible && _controller.taskBeingEdited !== null
+                    when: visible && _controller.editMode === Controller.EditModeEditor
                     property: "description"
                     value: descriptionTextArea.text
                 }
@@ -98,9 +98,9 @@ ModalDialog {
                     anchors.fill: parent
                     anchors.leftMargin: 3
                     Repeater {
-                        model: _controller.taskBeingEdited === null ? 0 : _controller.taskBeingEdited.tagModel
+                        model: _controller.taskBeingEdited.tagModel
                         Text {
-                            property bool last: model !== null && _controller.taskBeingEdited.tagModel.count === index + 1
+                            property bool last: _controller.taskBeingEdited.tagModel.count === index + 1
                             text: tag.name + (last ? "" : ", ")
                             color: "black"
                             elide: Text.ElideRight
