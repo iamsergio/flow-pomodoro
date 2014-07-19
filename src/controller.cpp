@@ -570,6 +570,7 @@ void Controller::addTask(const QString &text, bool startEditMode)
         setExpanded(true);
         int lastIndex = m_taskStorage->taskFilterModel()->rowCount()-1;
         editTask(lastIndex, EditModeInline);
+        emit forceFocus(lastIndex);
     }
 }
 
