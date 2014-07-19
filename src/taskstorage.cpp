@@ -34,7 +34,7 @@ TaskStorage::TaskStorage(QObject *parent)
 
     m_taskFilterModel->setSourceModel(m_tasks);
     m_scheduleTimer.setSingleShot(true);
-    m_scheduleTimer.setInterval(2000);
+    m_scheduleTimer.setInterval(0);
 
     connect(&m_scheduleTimer, &QTimer::timeout, this, &TaskStorage::saveTasks);
     connect(m_tasks, &QAbstractListModel::dataChanged, this, &TaskStorage::scheduleSaveTasks);
