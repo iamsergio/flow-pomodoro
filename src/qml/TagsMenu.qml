@@ -17,10 +17,12 @@ Menu {
             checked: instantiator.model === null ? false : checkState
             text: instantiator.model === null ? "" : tag.name
             onToggled: {
-                if (checked) {
-                    task.addTag(text)
-                } else {
-                    task.removeTag(text)
+                if (task !== null) { // For some reason this is triggered when popup closes, so check for null
+                    if (checked) {
+                        task.addTag(text)
+                    } else {
+                        task.removeTag(text)
+                    }
                 }
             }
         }
