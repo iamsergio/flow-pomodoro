@@ -45,7 +45,7 @@ Controller::Controller(QuickView *quickView,
     , m_expanded(false)
     , m_indexBeingEdited(-1)
     , m_taskStorage(taskStorage)
-    , m_page(TheQueuePage)
+    , m_page(MainPage)
     , m_selectedIndex(-1)
     , m_quickView(quickView)
     , m_popupVisible(false)
@@ -385,7 +385,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     if (event->type() != QEvent::KeyRelease)
         return false;
 
-    if (m_page != TheQueuePage)
+    if (m_page != MainPage)
         return false;
 
     if (m_editMode == EditModeEditor)

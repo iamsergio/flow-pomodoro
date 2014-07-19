@@ -5,7 +5,7 @@ import Controller 1.0
 
 Page {
     id: root
-    page: Controller.TheQueuePage
+    page: Controller.MainPage
 
     Rectangle {
         color: _style.queueBackgroundColor

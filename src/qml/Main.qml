@@ -116,7 +116,7 @@ Rectangle {
 
             ClickableImage {
                 id: addIcon
-                visible: (_controller.expanded || !_controller.currentTask.running || mouseOver()) && _controller.currentPage === Controller.TheQueuePage
+                visible: (_controller.expanded || !_controller.currentTask.running || mouseOver()) && _controller.currentPage === Controller.MainPage
                 source: "qrc:/img/add.png"
                 onClicked: {
                     _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
@@ -124,9 +124,9 @@ Rectangle {
             }
         }
 
-        TheQueuePage {
+        MainPage {
             z: 2
-            id: theQueuePage
+            id: mainPage
             anchors.bottom:  progressBar.visible ? progressBar.top : parent.bottom
             anchors.bottomMargin: progressBar.visible ? _style.marginSmall : _style.marginMedium
         }

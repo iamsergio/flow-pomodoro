@@ -122,7 +122,7 @@ Page {
             anchors.bottomMargin: _style.marginSmall
 
             onClicked: {
-                _controller.currentPage = Controller.TheQueuePage
+                _controller.currentPage = Controller.MainPage
             }
         }
 

@@ -54,6 +54,7 @@ OTHER_FILES += AboutPage.qml      \
                ConfigurePage.qml  \
                DefaultStyle.qml   \
                Main.qml           \
+               MainPage.qml       \
                ModalDialog.qml    \
                Page.qml           \
                QuestionPopup.qml  \
@@ -63,8 +64,7 @@ OTHER_FILES += AboutPage.qml      \
                Task.qml           \
                TaskEditorDialog.qml \
                TaskTextField.qml \
-               TitleText.qml      \
-               TheQueuePage.qml
+               TitleText.qml
 
 
 RESOURCES += resources.qrc

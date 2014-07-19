@@ -57,7 +57,7 @@ class Controller : public QObject {
 public:
     enum Page {
         InvalidPage = 0,
-        TheQueuePage,
+        MainPage,
         ConfigurePage,
         AboutPage
     };

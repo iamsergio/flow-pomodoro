@@ -16,6 +16,7 @@
     <file>qml/DefaultStyle.qml</file>
     <file>qml/QuestionPopup.qml</file>
     <file>qml/Main.qml</file>
+    <file>qml/MainPage.qml</file>
     <file>qml/ModalDialog.qml</file>
     <file>qml/Page.qml</file>
     <file>qml/RegularText.qml</file>
@@ -24,7 +25,6 @@
     <file>qml/Task.qml</file>
     <file>qml/TaskEditorDialog.qml</file>
     <file>qml/TaskTextField.qml</file>
-    <file>qml/TheQueuePage.qml</file>
     <file>qml/TitleText.qml</file>
 
     <file>qml/config/General.qml</file>
