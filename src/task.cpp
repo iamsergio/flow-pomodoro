@@ -58,6 +58,7 @@ Task::Task(const QString &name)
     : QObject()
     , m_summary(name.isEmpty() ? tr("New Task") : name)
     , m_status(TaskStopped)
+    , m_staged(false)
 {
     m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); }, TagRole);
     m_tags.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tags.at(i).m_task.data()); }, TaskRole);
@@ -65,6 +66,7 @@ Task::Task(const QString &name)
     connect(this, &Task::summaryChanged, &Task::changed);
     connect(this, &Task::tagsChanged, &Task::changed);
     connect(this, &Task::descriptionChanged, &Task::changed);
+    connect(this, &Task::statusChanged, &Task::changed);
     connect(m_tags, &QAbstractListModel::modelReset, this, &Task::tagsChanged);
     connect(m_tags, &QAbstractListModel::rowsInserted, this, &Task::tagsChanged);
     connect(m_tags, &QAbstractListModel::rowsRemoved, this, &Task::tagsChanged);
@@ -76,6 +78,19 @@ Task::Task(const QString &name)
     roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
     FunctionalModels::DataFunc dataFunc = std::bind(&data, this, _1, _2);
     m_checkableTagModel = new FunctionalModels::Transform(TagStorage::instance()->model(), dataFunc, roleNames, this);
+}
+
+bool Task::staged() const
+{
+   return m_staged;
+}
+
+void Task::setStaged(bool staged)
+{
+    if (m_staged != staged) {
+        m_staged = staged;
+        emit stagedChanged();
+    }
 }
 
 QString Task::summary() const
@@ -193,7 +208,7 @@ QDataStream &operator<<(QDataStream &out, const Task::Ptr &task)
     for (int i = 0; i < tags.count(); ++i)
         out << tags.at(i).m_tag->name();
 
-    out << task->description();
+    out << task->description() << task->staged();
     return out;
 }
 
@@ -206,6 +221,7 @@ QDataStream &operator>>(QDataStream &in, Task::Ptr &task)
     quint32 version = 0;
     in >> version;
 
+    bool staged = false;
     QString summary;
     QString description;
     TagRef::List tags;
@@ -227,9 +243,10 @@ QDataStream &operator>>(QDataStream &in, Task::Ptr &task)
     }
 
     if (version == SerializerVersion2) {
-        in >> description;
+        in >> description >> staged;
     }
 
+    task->setStaged(staged);
     task->setSummary(summary);
     task->setDescription(description);
     task->setTagList(tags);

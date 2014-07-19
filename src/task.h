@@ -49,6 +49,7 @@ class QAbstractListModel;
 
 class Task : public QObject {
     Q_OBJECT
+    Q_PROPERTY(bool staged READ staged NOTIFY stagedChanged)
     Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(QObject * tagModel READ tagModel CONSTANT)
@@ -61,6 +62,9 @@ public:
     typedef QSharedPointer<Task> Ptr;
     typedef GenericListModel<Ptr> List;
     Task(const QString &name = QString());
+
+    bool staged() const;
+    void setStaged(bool);
 
     QString summary() const;
     void setSummary(const QString &text);
@@ -89,6 +93,7 @@ Q_SIGNALS:
     void descriptionChanged();
     void tagsChanged();
     void statusChanged(); // not a stored property, so not connected to changed()
+    void stagedChanged();
     void changed();
 
 private:
@@ -97,6 +102,7 @@ private:
     TagRef::List m_tags;
     FunctionalModels::Transform *m_checkableTagModel;
     TaskStatus m_status;
+    bool m_staged;
 };
 
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task);
