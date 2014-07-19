@@ -63,6 +63,7 @@ OTHER_FILES += AboutPage.qml      \
                TagsMenu.qml       \
                Task.qml           \
                TaskEditorDialog.qml \
+               TaskListView.qml \
                TaskTextField.qml \
                TitleText.qml
 

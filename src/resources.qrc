@@ -24,6 +24,7 @@
     <file>qml/TagsMenu.qml</file>
     <file>qml/Task.qml</file>
     <file>qml/TaskEditorDialog.qml</file>
+    <file>qml/TaskListView.qml</file>
     <file>qml/TaskTextField.qml</file>
     <file>qml/TitleText.qml</file>
 
