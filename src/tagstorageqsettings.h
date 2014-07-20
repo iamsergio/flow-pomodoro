@@ -27,14 +27,13 @@ class QSettings;
 
 class TagStorageQSettings : public TagStorage
 {
-public:
-    explicit TagStorageQSettings(QObject *parent = 0);
-
 protected:
+    explicit TagStorageQSettings(QObject *parent = 0);
     void loadTags_impl() Q_DECL_OVERRIDE;
     void saveTags_impl() Q_DECL_OVERRIDE;
 private:
     QSettings *m_settings;
+    friend class TagStorage;
 };
 
 #endif

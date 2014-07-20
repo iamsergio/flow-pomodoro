@@ -29,13 +29,14 @@ class QSettings;
 class TaskStorageQSettings : public TaskStorage
 {
 public:
-    explicit TaskStorageQSettings(QObject *parent = 0);
     ~TaskStorageQSettings();
-
+protected:
+    explicit TaskStorageQSettings(QObject *parent = 0);
     void loadTasks_impl() Q_DECL_OVERRIDE;
     void saveTasks_impl() Q_DECL_OVERRIDE;
 private:
     QSettings *m_settings;
+    friend class TaskStorage;
 };
 
 #endif

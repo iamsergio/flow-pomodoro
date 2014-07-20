@@ -41,8 +41,8 @@
 
 QuickView::QuickView(QWindow *parent)
     : QQuickView(parent)
-    , m_taskStorage(new TaskStorageQSettings(this))
-    , m_controller(new Controller(this, m_taskStorage, this))
+    , m_taskStorage(TaskStorage::instance())
+    , m_controller(new Controller(this))
     , m_pluginModel(new PluginModel(this))
     , m_developerMode(qApp->arguments().contains("-d"))
 {

@@ -35,16 +35,15 @@ enum {
     TickInterval = 1000*60 // Ticks every minute
 };
 
-Controller::Controller(QuickView *quickView,
-                       TaskStorage *taskStorage, QObject *parent)
-    : QObject(parent)
+Controller::Controller(QuickView *quickView)
+    : QObject(quickView)
     , m_currentTaskDuration(0)
     , m_tickTimer(new QTimer(this))
     , m_afterAddingTimer(new QTimer(this))
     , m_elapsedMinutes(0)
     , m_expanded(false)
     , m_indexBeingEdited(-1)
-    , m_taskStorage(taskStorage)
+    , m_taskStorage(TaskStorage::instance())
     , m_page(MainPage)
     , m_selectedIndex(-1)
     , m_quickView(quickView)

@@ -19,12 +19,14 @@
 */
 
 #include "taskstorage.h"
+#include "taskstorageqsettings.h"
 #include "taskfilterproxymodel.h"
 #include "tagstorage.h"
 
 TaskStorage::TaskStorage(QObject *parent)
     : QObject(parent)
     , m_taskFilterModel(new TaskFilterProxyModel(this))
+    , m_stagedTasksModel(new TaskFilterProxyModel(this))
     , m_tagStorage(TagStorage::instance())
     , m_savingDisabled(false)
 {
@@ -44,6 +46,12 @@ TaskStorage::TaskStorage(QObject *parent)
 
     m_tasks.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tasks.at(i).data()); }, TaskRole);
     m_tasks.insertRole("taskPtr", [&](int i) { return QVariant::fromValue<Task::Ptr>(m_tasks.at(i)); }, TaskPtrRole);
+}
+
+TaskStorage *TaskStorage::instance()
+{
+    static TaskStorage *storage = new TaskStorageQSettings(qApp);
+    return storage;
 }
 
 void TaskStorage::setTasks(const Task::List &tasks)
@@ -121,6 +129,11 @@ void TaskStorage::saveTasks()
     m_savingDisabled = false;
 
     saveTasks_impl();
+}
+
+TaskFilterProxyModel *TaskStorage::stagedTasksModel() const
+{
+    return m_stagedTasksModel;
 }
 
 int TaskStorage::proxyRowToSource(int proxyRow) const

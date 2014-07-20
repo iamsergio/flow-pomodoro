@@ -84,7 +84,7 @@ public:
     };
     Q_ENUMS(TagEditStatus)
 
-    Controller(QuickView *quickView, TaskStorage *model, QObject *parent = 0);
+    Controller(QuickView *quickView);
     ~Controller();
 
     int remainingMinutes() const;
