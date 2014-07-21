@@ -162,9 +162,8 @@ void Task::addTag(const QString &tagName)
     if (trimmedName.isEmpty())
         return;
 
-    if (!containsTag(trimmedName)) {
+    if (!containsTag(trimmedName))
         m_tags.append(TagRef(this, trimmedName));
-    }
 }
 
 void Task::removeTag(const QString &tagName)
@@ -252,9 +251,8 @@ QDataStream &operator>>(QDataStream &in, Task::Ptr &task)
         Q_ASSERT(false);
     }
 
-    if (version == SerializerVersion2) {
+    if (version == SerializerVersion2)
         in >> description >> staged;
-    }
 
     task->setStaged(staged);
     task->setSummary(summary);
