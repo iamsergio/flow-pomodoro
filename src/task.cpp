@@ -121,11 +121,19 @@ void Task::setDescription(const QString &text)
 
 bool Task::containsTag(const QString &name) const
 {
-    QString trimmedName = name.toLower().trimmed();
-    auto it = std::find_if(m_tags.cbegin(), m_tags.cend(),
-                           [&](const TagRef &ref) { return ref.m_tag->name().toLower().trimmed() == trimmedName; });
+    return indexOfTag(name) != -1;
+}
 
-    return it != m_tags.cend();
+int Task::indexOfTag(const QString &name) const
+{
+    QString trimmedName = name.toLower().trimmed();
+    for (int i = 0; i < m_tags.count(); ++i) {
+        Q_ASSERT(m_tags.at(i).m_tag);
+        if (m_tags.at(i).m_tag->name().toLower() == trimmedName)
+            return i;
+    }
+
+    return -1;
 }
 
 TagRef::List Task::tags() const
@@ -161,12 +169,9 @@ void Task::addTag(const QString &tagName)
 
 void Task::removeTag(const QString &tagName)
 {
-    auto it = std::find_if(m_tags.cbegin(), m_tags.cend(),
-                           [&](const TagRef &ref) { return ref.m_tag->name() == tagName; });
-
-    if (it != m_tags.cend()) {
-        m_tags.removeAt(it - m_tags.cbegin());
-    }
+    int index = indexOfTag(tagName);
+    if (index != -1)
+        m_tags.removeAt(index);
 }
 
 TaskStatus Task::status() const

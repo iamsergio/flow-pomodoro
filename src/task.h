@@ -73,6 +73,7 @@ public:
     void setDescription(const QString &text);
 
     bool containsTag(const QString &name) const;
+    int indexOfTag(const QString &name) const;
     TagRef::List tags() const;
     void setTagList(const TagRef::List &);
     QAbstractItemModel *tagModel() const;
