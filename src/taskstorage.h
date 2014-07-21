@@ -32,6 +32,7 @@ class TagStorage;
 
 class TaskStorage : public QObject
 {
+    Q_PROPERTY(TaskFilterProxyModel* stagedTasksModel READ stagedTasksModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* taskFilterModel READ taskFilterModel CONSTANT)
     Q_OBJECT
 public:
@@ -45,11 +46,13 @@ public:
     void setTasks(const Task::List &);
     void saveTasks();
 
+    TaskFilterProxyModel* stagedTasksModel() const;
     TaskFilterProxyModel* taskFilterModel() const;
 
     Task::Ptr at(int proxyIndex) const;
     void addTask(const QString &taskText);
     void removeTask(int proxyIndex);
+    int indexOf(const Task*) const;
 
     // Temporary disable saving. For performance purposes
     void setDisableSaving(bool);
@@ -76,6 +79,7 @@ private Q_SLOTS:
 private:
     int proxyRowToSource(int proxyIndex) const;
     TaskFilterProxyModel *m_taskFilterModel;
+    TaskFilterProxyModel *m_stagedTasksModel;
     TagStorage *m_tagStorage;
     QTimer m_scheduleTimer;
     bool m_savingDisabled;

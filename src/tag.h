@@ -25,11 +25,16 @@
 #include <QString>
 #include <QSharedPointer>
 
+namespace FunctionalModels {
+class Remove_if;
+}
+
 class Tag : public QObject
 {
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged STORED false)
     Q_PROPERTY(bool beingEdited READ beingEdited NOTIFY beingEditedChanged STORED false)
+    Q_PROPERTY(QAbstractItemModel* taskModel READ taskModel CONSTANT)
     Q_OBJECT
 public:
     typedef QSharedPointer<Tag> Ptr;
@@ -45,9 +50,11 @@ public:
     bool beingEdited() const;
     void setBeingEdited(bool);
 
+    QAbstractItemModel* taskModel();
+
 Q_SIGNALS:
     void nameChanged();
-    void taskCountChanged();
+    void taskCountChanged(int oldValue, int newValue);
     void beingEditedChanged();
 
 private:
@@ -56,6 +63,7 @@ private:
     QString m_name;
     int m_taskCount;
     bool m_beingEdited;
+    FunctionalModels::Remove_if *m_taskModel; // All tasks with this tag
 };
 
 #endif

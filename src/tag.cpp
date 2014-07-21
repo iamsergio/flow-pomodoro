@@ -18,20 +18,41 @@
 */
 
 #include "tag.h"
+#include "tagstorage.h"
+#include "remove_if.h"
+#include "taskstorage.h"
+#include "taskfilterproxymodel.h"
 #include <QQmlEngine>
+
+using namespace std::placeholders;
+
+static bool taskIsTagged(const QPointer<Tag> &tag, const QVariant &variant)
+{
+    Task::Ptr task = variant.value<Task::Ptr>();
+    if (!task || !tag) {
+        qWarning() << Q_FUNC_INFO << "Unexpected null task or tag";
+        return false;
+    }
+
+    return task->containsTag(tag->name());
+}
 
 Tag::Tag(const QString &_name)
     : QObject()
     , m_name(_name)
     , m_taskCount(0)
     , m_beingEdited(false)
+    , m_taskModel(0)
 {
     Q_ASSERT(!m_name.isEmpty());
+
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+    TagStorage::instance()->monitorTag(this);
 }
 
 Tag::~Tag()
 {
+    delete m_taskModel;
 }
 
 int Tag::taskCount() const
@@ -42,8 +63,9 @@ int Tag::taskCount() const
 void Tag::setTaskCount(int count)
 {
     if (count != m_taskCount) {
+        int tmp = m_taskCount;
         m_taskCount = count;
-        emit taskCountChanged();
+        emit taskCountChanged(tmp, m_taskCount);
     }
 }
 
@@ -71,6 +93,22 @@ void Tag::setBeingEdited(bool yes)
         m_beingEdited = yes;
         emit beingEditedChanged();
     }
+}
+
+QAbstractItemModel *Tag::taskModel()
+{
+    // Delayed initialization do avoid deadlock accessing TaskStorage::instance() when TaskStorage is being constructed
+    if (!m_taskModel) {
+        auto filterFunc = std::bind(&taskIsTagged, QPointer<Tag>(this), _1);
+        m_taskModel = new FunctionalModels::Remove_if(TaskStorage::instance()->taskFilterModel(),
+                                                      filterFunc, TaskStorage::TaskPtrRole);
+
+        connect(this, &Tag::taskCountChanged,
+                m_taskModel, &FunctionalModels::Remove_if::invalidateFilter,
+                Qt::QueuedConnection);
+    }
+
+    return m_taskModel;
 }
 
 bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)

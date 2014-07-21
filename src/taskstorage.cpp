@@ -86,6 +86,16 @@ void TaskStorage::removeTask(int proxyIndex)
     m_tasks.removeAt(proxyRowToSource(proxyIndex));
 }
 
+int TaskStorage::indexOf(const Task *task) const
+{
+    for (int i = 0; i < m_tasks.count(); ++i) {
+        if (m_tasks.at(i) == task)
+            return i;
+    }
+
+    return -1;
+}
+
 void TaskStorage::setDisableSaving(bool disable)
 {
     m_savingDisabled = disable;

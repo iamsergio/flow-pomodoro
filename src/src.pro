@@ -9,6 +9,7 @@ SOURCES += controller.cpp  \
            main.cpp        \
            pluginmodel.cpp \
            quickview.cpp   \
+           remove_if.cpp   \
            settings.cpp    \
            sortmodel.cpp   \
            tag.cpp \
@@ -26,6 +27,7 @@ HEADERS += controller.h      \
            plugininterface.h \
            pluginmodel.h     \
            quickview.h       \
+           remove_if.h       \
            settings.h        \
            sortmodel.h       \
            tag.h \

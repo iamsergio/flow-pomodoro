@@ -21,6 +21,7 @@
 #include "tagstorage.h"
 #include "tagstorageqsettings.h"
 #include "sortmodel.h"
+#include "remove_if.h"
 
 #include <QDebug>
 #include <QGuiApplication>
@@ -42,6 +43,17 @@ static bool tagLessThan(const QVariant &left, const QVariant &right)
     }
 }
 
+static bool isNonEmptyTag(const QVariant &variant)
+{
+    Tag::Ptr tag = variant.value<Tag::Ptr>();
+    if (!tag) {
+        qWarning() << Q_FUNC_INFO << "Unexpected null tag";
+        return false;
+    }
+
+    return tag->taskCount() > 0;
+}
+
 TagStorage::TagStorage(QObject *parent)
     : QObject(parent)
 {
@@ -58,6 +70,7 @@ TagStorage::TagStorage(QObject *parent)
     connect(m_tags, &QAbstractListModel::modelReset, this, &TagStorage::scheduleSaveTags);
     qRegisterMetaType<Tag::Ptr>("Tag::Ptr");
     m_sortModel = new FunctionalModels::SortModel(m_tags, &tagLessThan, TagPtrRole);
+    m_nonEmptyTagModel = new FunctionalModels::Remove_if(m_sortModel, &isNonEmptyTag, TagPtrRole);
 }
 
 TagStorage *TagStorage::instance()
@@ -123,9 +136,20 @@ QAbstractItemModel *TagStorage::model() const
     return m_sortModel;
 }
 
+QAbstractItemModel *TagStorage::nonEmptyTagModel() const
+{
+    return m_nonEmptyTagModel;
+}
+
 QString TagStorage::deletedTagName() const
 {
     return m_deletedTagName;
+}
+
+void TagStorage::monitorTag(Tag *tag)
+{
+    connect(tag, &Tag::taskCountChanged,
+            this, &TagStorage::onTaskCountChanged);
 }
 
 bool TagStorage::renameTag(const QString &oldName, const QString &newName)
@@ -155,6 +179,12 @@ void TagStorage::setTags(const Tag::List &tags)
     Tag::List sanitizedList = tags;
     sanitizedList.removeAll(Tag::Ptr()); // Remove invalid tags
     m_tags = sanitizedList;
+}
+
+void TagStorage::onTaskCountChanged(int oldCount, int newCount)
+{
+    if (oldCount == 0 ^ newCount == 0)
+        m_nonEmptyTagModel->invalidateFilter();
 }
 
 void TagStorage::saveTags()
