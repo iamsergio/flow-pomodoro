@@ -34,7 +34,7 @@ enum {
     TaskRole
 };
 
-static QVariant data(const QPointer<Task> task, const QModelIndex &sourceIndex, int role)
+static QVariant data(const QPointer<Task> &task, const QModelIndex &sourceIndex, int role)
 {
     if (role == Qt::CheckStateRole) {
         if (!task) {
