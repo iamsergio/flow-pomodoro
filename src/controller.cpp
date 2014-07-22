@@ -45,7 +45,6 @@ Controller::Controller(QuickView *quickView)
     , m_indexBeingEdited(-1)
     , m_taskStorage(TaskStorage::instance())
     , m_page(MainPage)
-    , m_selectedIndex(-1)
     , m_quickView(quickView)
     , m_popupVisible(false)
     , m_editMode(EditModeNone)
@@ -144,36 +143,33 @@ void Controller::pausePomodoro()
     }
 }
 
-void Controller::toggleSelectedIndex(int index)
+void Controller::toggleSelectedTask(Task *task)
 {
-    if (m_selectedIndex == index) {
-        setSelectedIndex(-1);
-    } else {
-        setSelectedIndex(index);
-    }
+    setSelectedTask(m_selectedTask == task ? Task::Ptr() : task->weakPointer().toStrongRef());
 }
 
 void Controller::cycleSelectionUp()
 {
-    if (m_selectedIndex == -1) {
-        const int lastIndex = m_taskStorage->taskFilterModel()->count()-1;
-        setSelectedIndex(lastIndex);
-    } else if (m_selectedIndex > 0){
-        setSelectedIndex(m_selectedIndex-1);
+    if (!m_selectedTask) {
+        Task::Ptr lastTask = m_taskStorage->at(m_taskStorage->taskFilterModel()->count() - 1);
+        setSelectedTask(lastTask);
+    } else if (m_selectedTask != m_taskStorage->at(0).data()) {
+        Task::Ptr selectedTask = m_selectedTask->weakPointer().toStrongRef();
+        setSelectedTask(m_taskStorage->at(m_taskStorage->indexOf(selectedTask) - 1));
     }
 }
 
 void Controller::cycleSelectionDown()
 {
-    const int lastIndex = m_taskStorage->taskFilterModel()->count()-1;
-    if (m_selectedIndex == -1 && lastIndex == -1) {
+    int lastIndex = m_taskStorage->taskFilterModel()->count()-1;
+    if (!m_selectedTask && lastIndex == -1)
         return;
-    }
 
-    if (m_selectedIndex == -1) {
-        setSelectedIndex(0);
-    } else if (m_selectedIndex < lastIndex){
-        setSelectedIndex(m_selectedIndex+1);
+    int currentIndex = m_taskStorage->indexOf(m_selectedTask->weakPointer());
+    if (!m_selectedTask) {
+        setSelectedTask(m_taskStorage->at(0));
+    } else if (currentIndex < lastIndex){
+        setSelectedTask(m_taskStorage->at(currentIndex + 1));
     }
 }
 
@@ -223,7 +219,7 @@ void Controller::setExpanded(bool expanded)
         } else {
             editTask(nullptr, EditModeNone);
         }
-        setSelectedIndex(-1);
+        setSelectedTask(Task::Ptr());
         emit expandedChanged();
     }
 }
@@ -268,19 +264,6 @@ void Controller::setDefaultPomodoroDuration(int duration)
 int Controller::defaultPomodoroDuration() const
 {
     return m_defaultPomodoroDuration;
-}
-
-int Controller::selectedIndex() const
-{
-    return m_selectedIndex;
-}
-
-void Controller::setSelectedIndex(int index)
-{
-    if (index != m_selectedIndex) {
-        m_selectedIndex = index;
-        emit selectedIndexChanged();
-    }
 }
 
 qreal Controller::dpiFactor() const
@@ -342,6 +325,19 @@ void Controller::setConfigureTabIndex(int index)
     if (m_configureTabIndex != index) {
         m_configureTabIndex = index;
         emit configureTabIndexChanged();
+    }
+}
+
+Task *Controller::selectedTask() const
+{
+    return m_selectedTask;
+}
+
+void Controller::setSelectedTask(const Task::Ptr &task)
+{
+    if (m_selectedTask.data() != task) {
+        m_selectedTask = task.data();
+        emit selectedTaskChanged();
     }
 }
 
@@ -419,15 +415,14 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     case Qt::Key_Return:
     case Qt::Key_Enter:
         if (editing) {
-            const int index = m_indexBeingEdited;
             editTask(nullptr, EditModeNone);
-            setSelectedIndex(index);
+            setSelectedTask(m_taskStorage->at(m_indexBeingEdited));
         } else {
-            if (m_selectedIndex != -1) {
-                startPomodoro(m_taskStorage->at(m_selectedIndex).data()); // TODO: index
-                setExpanded(false);
-            } else {
+            if (m_selectedTask == nullptr) {
                 setExpanded(true);
+            } else {
+                startPomodoro(m_selectedTask);
+                setExpanded(false);
             }
         }
 
@@ -447,10 +442,10 @@ bool Controller::eventFilter(QObject *, QEvent *event)
         return true;
         break;
     case Qt::Key_Delete:
-        if (m_selectedIndex == -1) {
+        if (m_selectedTask == nullptr) {
             stopPomodoro();
         } else {
-            removeTask(m_taskStorage->at(m_selectedIndex).data()); // TODO: index
+            removeTask(m_selectedTask);
         }
         return true;
         break;
@@ -464,8 +459,8 @@ bool Controller::eventFilter(QObject *, QEvent *event)
         break;
     case Qt::Key_F2:
     case Qt::Key_E:
-        if (m_selectedIndex != -1) {
-            editTask(m_taskStorage->at(m_selectedIndex).data(), EditModeInline); // TODO: index
+        if (m_selectedTask) {
+            editTask(m_selectedTask, EditModeInline);
             return true;
         }
         return false;

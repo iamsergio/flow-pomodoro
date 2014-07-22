@@ -42,7 +42,7 @@ class Controller : public QObject {
     Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
     Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged) // Task being played
     Q_PROPERTY(Task* rightClickedTask READ rightClickedTask WRITE setRightClickedTask NOTIFY rightClickedTaskChanged)
-    Q_PROPERTY(int selectedIndex READ selectedIndex NOTIFY selectedIndexChanged)
+    Q_PROPERTY(Task *selectedTask READ selectedTask NOTIFY selectedTaskChanged)
     // Editing task properties
     Q_PROPERTY(int indexBeingEdited READ indexBeingEdited NOTIFY indexBeingEditedChanged)
     Q_PROPERTY(QObject* taskBeingEdited READ taskBeingEdited NOTIFY indexBeingEditedChanged)
@@ -104,9 +104,6 @@ public:
     void setDefaultPomodoroDuration(int duration);
     int defaultPomodoroDuration() const;
 
-    int selectedIndex() const;
-    void setSelectedIndex(int index);
-
     qreal dpiFactor() const;
 
     bool popupVisible() const;
@@ -122,6 +119,10 @@ public:
 
     int configureTabIndex() const;
     void setConfigureTabIndex(int);
+
+    Task *selectedTask() const;
+    void setSelectedTask(const Task::Ptr &task);
+
 public Q_SLOTS:
     void addTask(const QString &text, Tag *tag, bool startEditMode);
     void removeTask(Task *);
@@ -130,7 +131,7 @@ public Q_SLOTS:
     void stopPomodoro();
     void pausePomodoro();
 
-    void toggleSelectedIndex(int index);
+    void toggleSelectedTask(Task *task);
     void cycleSelectionUp();
     void cycleSelectionDown();
 
@@ -157,7 +158,6 @@ Q_SIGNALS:
     void firstSecondsAfterAddingChanged();
     void currentPageChanged();
     void defaultPomodoroDurationChanged();
-    void selectedIndexChanged();
     void forceFocus(int index);
     void currentTaskChanged();
     void popupVisibleChanged();
@@ -167,6 +167,7 @@ Q_SIGNALS:
     void tagEditStatusChanged();
     void rightClickedTaskChanged();
     void configureTabIndexChanged();
+    void selectedTaskChanged();
 
 private:
     void setTaskStatus(TaskStatus status);
@@ -184,7 +185,6 @@ private:
     Task::Ptr m_currentTask;
     Page m_page;
     int m_defaultPomodoroDuration;
-    int m_selectedIndex;
     QuickView *m_quickView;
     bool m_popupVisible;
     QString m_popupText;
@@ -197,6 +197,7 @@ private:
     QPointer<Task> m_rightClickedTask;
     Task::Ptr m_invalidTask;
     int m_configureTabIndex;
+    QPointer<Task> m_selectedTask;
 };
 
 #endif

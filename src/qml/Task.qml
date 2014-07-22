@@ -14,7 +14,7 @@ Rectangle {
     property bool buttonsVisible: true
     property bool hasMouseOver: mouseArea.containsMouse
     property int modelIndex: -1
-    property bool selected: _controller.selectedIndex === modelIndex && !inlineEditMode && modelIndex !== -1
+    property bool selected: _controller.selectedTask === taskObj && !inlineEditMode && taskObj !== null
 
     id: root
     color: selected ? _style.selectedTaskBgColor : _style.taskBackgroundColor
@@ -59,7 +59,7 @@ Rectangle {
         onClicked: {
             if (mouse.button === Qt.LeftButton) {
                 _controller.editTask(null, Controller.EditModeNone)
-                _controller.toggleSelectedIndex(modelIndex)
+                _controller.toggleSelectedTask(task)
             } else {
                 _controller.requestContextMenu(task)
             }
