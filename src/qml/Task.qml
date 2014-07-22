@@ -58,7 +58,7 @@ Rectangle {
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: {
             if (mouse.button === Qt.LeftButton) {
-                _controller.editTask(-1, Controller.EditModeNone)
+                _controller.editTask(null, Controller.EditModeNone)
                 _controller.toggleSelectedIndex(modelIndex)
             } else {
                 _controller.requestContextMenu(task)
@@ -127,7 +127,7 @@ Rectangle {
             visible: root.buttonsVisible
             onClicked: {
                 if (modelIndex !== -1) {
-                    _controller.editTask(modelIndex, Controller.EditModeEditor)
+                    _controller.editTask(root.taskObj, Controller.EditModeEditor)
                     if (_controller.editMode === Controller.EditModeInline) {
                         textField.forceActiveFocus()
                     }
@@ -143,7 +143,7 @@ Rectangle {
             anchors.rightMargin: _style.buttonsRightMargin
             visible: root.buttonsVisible
             onClicked: {
-                _controller.startPomodoro(modelIndex, _style.defaultPomodoroDuration)
+                _controller.startPomodoro(root.taskObj, _style.defaultPomodoroDuration)
             }
         }
     }

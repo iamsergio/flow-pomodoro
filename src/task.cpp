@@ -80,6 +80,13 @@ Task::Task(const QString &name)
     m_checkableTagModel = new FunctionalModels::Transform(TagStorage::instance()->model(), dataFunc, roleNames, this);
 }
 
+Task::Ptr Task::createTask(const QString &name)
+{
+    Task::Ptr task = Task::Ptr(new Task(name));
+    task->setWeakPointer(task);
+    return task;
+}
+
 bool Task::staged() const
 {
    return m_staged;
@@ -201,6 +208,17 @@ bool Task::paused() const
     return m_status == TaskPaused;
 }
 
+QWeakPointer<Task> Task::weakPointer() const
+{
+    Q_ASSERT(m_this);
+    return m_this;
+}
+
+void Task::setWeakPointer(const QWeakPointer<Task> &ptr)
+{
+    m_this = ptr;
+}
+
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task)
 {
     Q_ASSERT(task);
@@ -218,9 +236,8 @@ QDataStream &operator<<(QDataStream &out, const Task::Ptr &task)
 
 QDataStream &operator>>(QDataStream &in, Task::Ptr &task)
 {
-    if (!task) {
-        task = Task::Ptr(new Task());
-    }
+    if (!task)
+        task = Task::createTask();
 
     quint32 version = 0;
     in >> version;

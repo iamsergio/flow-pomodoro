@@ -29,7 +29,7 @@ ListView {
                 animatedTask.visible = true
                 animation.running = true
             }
-            _controller.removeTask(index)
+            _controller.removeTask(taskObj)
         }
     }
 
@@ -57,7 +57,7 @@ ListView {
         anchors.fill: parent
         onClicked: {
             if (_controller.indexBeingEdited !== -1) {
-                _controller.editTask(-1, Controller.EditModeNone)
+                _controller.editTask(null, Controller.EditModeNone)
             } else {
                 _controller.expanded = false
             }

@@ -12,6 +12,7 @@ Page {
         anchors.fill: parent
         radius: parent.radius
         TabView {
+            id: tabView
             anchors.margins: _style.marginSmall
             anchors.fill: parent
             frameVisible: false
@@ -40,7 +41,6 @@ Page {
                         anchors.fill: parent
                     }
                 }
-
             }
         }
     }

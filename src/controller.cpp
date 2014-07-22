@@ -50,7 +50,7 @@ Controller::Controller(QuickView *quickView)
     , m_popupVisible(false)
     , m_editMode(EditModeNone)
     , m_tagEditStatus(TagEditStatusNone)
-    , m_invalidTask(new Task())
+    , m_invalidTask(Task::createTask())
     , m_configureTabIndex(0)
 {
     m_tickTimer = new QTimer(this);
@@ -67,8 +67,6 @@ Controller::Controller(QuickView *quickView)
 
 Controller::~Controller()
 {
-    delete m_invalidTask;
-    m_invalidTask = 0;
 }
 
 int Controller::remainingMinutes() const
@@ -91,11 +89,18 @@ Controller::EditMode Controller::editMode() const
     return m_editMode;
 }
 
-void Controller::startPomodoro(int queueIndex)
+void Controller::startPomodoro(Task *t)
 {
+    if (!t || t == m_invalidTask) {
+        Q_ASSERT(false);
+        return;
+    }
+
+    Task::Ptr task = t->weakPointer().toStrongRef();
+
     stopPomodoro(); // Stop previous one, if any
 
-    m_currentTask = m_taskStorage->at(queueIndex);
+    m_currentTask = task;
 
     m_elapsedMinutes = 0;
     m_currentTaskDuration = m_defaultPomodoroDuration;
@@ -108,6 +113,7 @@ void Controller::startPomodoro(int queueIndex)
 
     setTaskStatus(TaskStarted);
     m_taskStorage->taskFilterModel()->invalidateFilter();
+
 }
 
 void Controller::stopPomodoro()
@@ -215,7 +221,7 @@ void Controller::setExpanded(bool expanded)
         if (expanded) {
             m_quickView->requestActivate();
         } else {
-            editTask(-1, EditModeNone);
+            editTask(nullptr, EditModeNone);
         }
         setSelectedIndex(-1);
         emit expandedChanged();
@@ -313,7 +319,7 @@ void Controller::setPopupText(const QString &text)
 
 Task *Controller::taskBeingEdited() const
 {
-    return m_taskBeingEdited.data() ? m_taskBeingEdited.data() : m_invalidTask;
+    return m_taskBeingEdited.data() ? m_taskBeingEdited.data() : m_invalidTask.data();
 }
 
 Controller::TagEditStatus Controller::tagEditStatus() const
@@ -351,7 +357,7 @@ void Controller::setRightClickedTask(Task *task)
 
 Task *Controller::currentTask() const
 {
-    return m_currentTask ? m_currentTask.data() : m_invalidTask;
+    return m_currentTask ? m_currentTask.data() : m_invalidTask.data();
 }
 
 void Controller::onTimerTick()
@@ -403,7 +409,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     switch (keyEvent->key()) {
     case Qt::Key_Escape:
         if (editing) {
-            editTask(-1, EditModeNone);
+            editTask(nullptr, EditModeNone);
         } else {
             setExpanded(false);
         }
@@ -414,11 +420,11 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     case Qt::Key_Enter:
         if (editing) {
             const int index = m_indexBeingEdited;
-            editTask(-1, EditModeNone);
+            editTask(nullptr, EditModeNone);
             setSelectedIndex(index);
         } else {
             if (m_selectedIndex != -1) {
-                startPomodoro(m_selectedIndex);
+                startPomodoro(m_taskStorage->at(m_selectedIndex).data()); // TODO: index
                 setExpanded(false);
             } else {
                 setExpanded(true);
@@ -444,7 +450,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
         if (m_selectedIndex == -1) {
             stopPomodoro();
         } else {
-            removeTask(m_selectedIndex);
+            removeTask(m_taskStorage->at(m_selectedIndex).data()); // TODO: index
         }
         return true;
         break;
@@ -459,7 +465,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     case Qt::Key_F2:
     case Qt::Key_E:
         if (m_selectedIndex != -1) {
-            editTask(m_selectedIndex, EditModeInline);
+            editTask(m_taskStorage->at(m_selectedIndex).data(), EditModeInline); // TODO: index
             return true;
         }
         return false;
@@ -506,14 +512,15 @@ bool Controller::renameTag(const QString &oldName, const QString &newName)
     return success;
 }
 
-void Controller::editTask(int proxyIndex, Controller::EditMode editMode)
+void Controller::editTask(Task *t, Controller::EditMode editMode)
 {
-    if ((proxyIndex == -1 && editMode != EditModeNone) ||
-        (proxyIndex != -1 && editMode == EditModeNone)) {
+    Task::Ptr task = t ? t->weakPointer().toStrongRef() : Task::Ptr();
+    if ((!task && editMode != EditModeNone) ||
+        (task && editMode == EditModeNone)) {
         // This doesn't happen.
-        qWarning() << Q_FUNC_INFO << proxyIndex << editMode;
+        qWarning() << Q_FUNC_INFO << t << editMode;
         Q_ASSERT(false);
-        proxyIndex = -1;
+        task = Task::Ptr();
         editMode = EditModeNone;
     }
 
@@ -522,17 +529,22 @@ void Controller::editTask(int proxyIndex, Controller::EditMode editMode)
         emit editModeChanged();
     }
 
-    if (m_indexBeingEdited != proxyIndex) {
-        m_indexBeingEdited = proxyIndex;
+    if (task == m_invalidTask) {
+        Q_ASSERT(false);
+        return;
+    }
+
+    if (m_taskBeingEdited != task.data()) {
+        m_indexBeingEdited = m_taskStorage->indexOf(task);
 
         // Disabling saving when editor is opened, only save when it's closed.
-        m_taskStorage->setDisableSaving(proxyIndex != -1);
+        m_taskStorage->setDisableSaving(!task.isNull());
 
-        if (proxyIndex == -1) {
+        if (task.isNull()) {
             m_taskBeingEdited.clear();
             m_taskStorage->saveTasks(); // Editor closed. Write to disk immediately.
         } else {
-            m_taskBeingEdited = m_taskStorage->at(proxyIndex).data();
+            m_taskBeingEdited = task.data();
         }
         emit indexBeingEditedChanged();
     }
@@ -563,18 +575,18 @@ void Controller::requestContextMenu(Task *task)
 void Controller::addTask(const QString &text, bool startEditMode)
 {
     m_taskStorage->addTask(text);
-    editTask(-1, EditModeNone);
+    editTask(nullptr, EditModeNone);
 
     if (startEditMode) {
         setExpanded(true);
         int lastIndex = m_taskStorage->taskFilterModel()->rowCount()-1;
-        editTask(lastIndex, EditModeInline);
+        editTask(m_taskStorage->at(lastIndex).data(), EditModeInline);
         emit forceFocus(lastIndex);
     }
 }
 
-void Controller::removeTask(int index)
+void Controller::removeTask(Task *task)
 {
-    editTask(-1, EditModeNone);
-    m_taskStorage->removeTask(index);
+    editTask(nullptr, EditModeNone);
+    m_taskStorage->removeTask(m_taskStorage->indexOf(task->weakPointer()));
 }

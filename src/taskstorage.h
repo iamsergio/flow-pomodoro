@@ -52,7 +52,7 @@ public:
     Task::Ptr at(int proxyIndex) const;
     void addTask(const QString &taskText);
     void removeTask(int proxyIndex);
-    int indexOf(const Task*) const;
+    int indexOf(const Task::Ptr &) const;
 
     // Temporary disable saving. For performance purposes
     void setDisableSaving(bool);

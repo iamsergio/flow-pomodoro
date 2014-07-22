@@ -117,7 +117,7 @@ ModalDialog {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: _style.dialogButtonsMargin
             onClicked: {
-                _controller.editTask(-1, Controller.EditModeNone)
+                _controller.editTask(null, Controller.EditModeNone)
             }
         }
     }

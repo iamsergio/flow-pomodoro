@@ -61,7 +61,8 @@ class Task : public QObject {
 public:
     typedef QSharedPointer<Task> Ptr;
     typedef GenericListModel<Ptr> List;
-    Task(const QString &name = QString());
+
+    static Task::Ptr createTask(const QString &name = QString());
 
     bool staged() const;
     void setStaged(bool);
@@ -89,6 +90,9 @@ public:
     bool stopped() const;
     bool paused() const;
 
+    QWeakPointer<Task> weakPointer() const;
+    void setWeakPointer(const QWeakPointer<Task> &);
+
 Q_SIGNALS:
     void summaryChanged();
     void descriptionChanged();
@@ -98,12 +102,14 @@ Q_SIGNALS:
     void changed();
 
 private:
+    explicit Task(const QString &name = QString());
     QString m_summary;
     QString m_description;
     TagRef::List m_tags;
     FunctionalModels::Transform *m_checkableTagModel;
     TaskStatus m_status;
     bool m_staged;
+    QWeakPointer<Task> m_this;
 };
 
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task);

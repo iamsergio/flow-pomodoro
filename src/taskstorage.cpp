@@ -75,10 +75,10 @@ Task::Ptr TaskStorage::at(int proxyIndex) const
 
 void TaskStorage::addTask(const QString &taskText)
 {
-    Task *task = new Task(taskText);
-    connect(task, &Task::changed, this,
+    Task::Ptr task = Task::createTask(taskText);
+    connect(task.data(), &Task::changed, this,
             &TaskStorage::scheduleSaveTasks, Qt::UniqueConnection);
-    m_tasks << Task::Ptr(task);
+    m_tasks << task;
 }
 
 void TaskStorage::removeTask(int proxyIndex)
@@ -86,7 +86,7 @@ void TaskStorage::removeTask(int proxyIndex)
     m_tasks.removeAt(proxyRowToSource(proxyIndex));
 }
 
-int TaskStorage::indexOf(const Task *task) const
+int TaskStorage::indexOf(const Task::Ptr &task) const
 {
     for (int i = 0; i < m_tasks.count(); ++i) {
         if (m_tasks.at(i) == task)

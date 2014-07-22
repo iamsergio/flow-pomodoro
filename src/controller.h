@@ -124,9 +124,9 @@ public:
     void setConfigureTabIndex(int);
 public Q_SLOTS:
     void addTask(const QString &text, bool startEditMode);
-    void removeTask(int index);
+    void removeTask(Task *);
 
-    void startPomodoro(int queueIndex);
+    void startPomodoro(Task *);
     void stopPomodoro();
     void pausePomodoro();
 
@@ -140,7 +140,7 @@ public Q_SLOTS:
     void editTag(const QString &tagName);
     bool renameTag(const QString &oldName, const QString &newName);
 
-    void editTask(int proxyIndex, EditMode);
+    void editTask(Task *, EditMode);
 
     void beginAddingNewTag();
     void endAddingNewTag(const QString &tagName);
@@ -195,7 +195,7 @@ private:
     EditMode m_editMode;
     TagEditStatus m_tagEditStatus;
     QPointer<Task> m_rightClickedTask;
-    Task *m_invalidTask;
+    Task::Ptr m_invalidTask;
     int m_configureTabIndex;
 };
 
