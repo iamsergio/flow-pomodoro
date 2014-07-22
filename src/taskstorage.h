@@ -50,7 +50,7 @@ public:
     TaskFilterProxyModel* taskFilterModel() const;
 
     Task::Ptr at(int proxyIndex) const;
-    void addTask(const QString &taskText);
+    Task::Ptr addTask(const QString &taskText);
     void removeTask(int proxyIndex);
     int indexOf(const Task::Ptr &) const;
 

@@ -6,6 +6,7 @@ import Controller 1.0
 Page {
     id: root
     page: Controller.MainPage
+    property QtObject selectedTagTab: typeof tabView.getTab(tabView.currentIndex) !== "undefined" ? tabView.getTab(tabView.currentIndex).tagObj : null // Compare to "undefined" to fix bogus Qt warning at startup
 
     Rectangle {
         color: _style.queueBackgroundColor
@@ -21,6 +22,7 @@ Page {
             }
 
             Tab {
+                property QtObject tagObj: null
                 title: "All"
                 sourceComponent:
                 TaskListView {
@@ -33,6 +35,7 @@ Page {
             Repeater {
                 model: _tagStorage.nonEmptyTagModel
                 Tab {
+                    property QtObject tagObj: tag
                     title: tag.name + " (" + tag.taskModel.count + ")"
                     sourceComponent:
                     TaskListView {

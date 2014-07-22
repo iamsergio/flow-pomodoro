@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   This program is free software; you can redistribute it and/or modify
@@ -30,15 +30,14 @@ Flow::Flow(Controller *controller, QObject *parent)
 
 void Flow::toggleExpand()
 {
-    if (m_controller) {
+    if (m_controller)
         m_controller->setExpanded(!m_controller->expanded());
-    }
 }
 
 void Flow::newTask(const QString &text, bool startEditor, bool expand)
 {
     if (m_controller) {
         m_controller->setExpanded(expand);
-        m_controller->addTask(text, startEditor);
+        m_controller->addTask(text, nullptr, startEditor);
     }
 }

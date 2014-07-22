@@ -119,7 +119,7 @@ Rectangle {
                 visible: (_controller.expanded || !_controller.currentTask.running || mouseOver()) && _controller.currentPage === Controller.MainPage
                 source: "qrc:/img/add.png"
                 onClicked: {
-                    _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
+                    _controller.addTask("New Task", mainPage.selectedTagTab, /**open editor=*/true) // TODO: Pass edit mode instead
                 }
             }
         }

@@ -73,12 +73,14 @@ Task::Ptr TaskStorage::at(int proxyIndex) const
     return m_tasks.value(proxyRowToSource(proxyIndex));
 }
 
-void TaskStorage::addTask(const QString &taskText)
+Task::Ptr TaskStorage::addTask(const QString &taskText)
 {
     Task::Ptr task = Task::createTask(taskText);
     connect(task.data(), &Task::changed, this,
             &TaskStorage::scheduleSaveTasks, Qt::UniqueConnection);
     m_tasks << task;
+
+    return task;
 }
 
 void TaskStorage::removeTask(int proxyIndex)

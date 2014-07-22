@@ -123,7 +123,7 @@ public:
     int configureTabIndex() const;
     void setConfigureTabIndex(int);
 public Q_SLOTS:
-    void addTask(const QString &text, bool startEditMode);
+    void addTask(const QString &text, Tag *tag, bool startEditMode);
     void removeTask(Task *);
 
     void startPomodoro(Task *);
