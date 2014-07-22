@@ -9,6 +9,7 @@ ListView {
     highlightFollowsCurrentItem: true
     currentIndex: _controller.indexBeingEdited
     spacing: 3 * _controller.dpiFactor
+    visible: _controller.expanded
     onCountChanged: {
         // HACK: For some reason the first inserted element takes more than 1 event loop.
         // It doesn't go immediately into the list view after we insert it into the model in controller.cpp
