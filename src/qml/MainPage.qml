@@ -36,7 +36,7 @@ Page {
                 model: _tagStorage.nonEmptyTagModel
                 Tab {
                     property QtObject tagObj: tag
-                    title: tag.name + (tag.taskModel.count == 1 ? "" : " (" + tag.taskModel.count + ")")
+                    title: tag.name + (tag.taskModel.count === 1 ? "" : " (" + tag.taskModel.count + ")")
                     sourceComponent:
                     TaskListView {
                         model: tag.taskModel
