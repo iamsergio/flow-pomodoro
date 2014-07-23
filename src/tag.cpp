@@ -102,6 +102,7 @@ QAbstractItemModel *Tag::taskModel()
         auto filterFunc = std::bind(&taskIsTagged, QPointer<Tag>(this), _1);
         m_taskModel = new FunctionalModels::Remove_if(TaskStorage::instance()->taskFilterModel(),
                                                       filterFunc, TaskStorage::TaskPtrRole);
+        m_taskModel->setObjectName(m_name);
 
         connect(this, &Tag::taskCountChanged,
                 m_taskModel, &FunctionalModels::Remove_if::invalidateFilter,

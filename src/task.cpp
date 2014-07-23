@@ -208,10 +208,10 @@ bool Task::paused() const
     return m_status == TaskPaused;
 }
 
-QWeakPointer<Task> Task::weakPointer() const
+Task::Ptr Task::toStrongRef() const
 {
     Q_ASSERT(m_this);
-    return m_this;
+    return m_this.toStrongRef();
 }
 
 void Task::setWeakPointer(const QWeakPointer<Task> &ptr)

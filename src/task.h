@@ -90,7 +90,7 @@ public:
     bool stopped() const;
     bool paused() const;
 
-    QWeakPointer<Task> weakPointer() const;
+    Task::Ptr toStrongRef() const;
     void setWeakPointer(const QWeakPointer<Task> &);
 
 Q_SIGNALS:

@@ -8,6 +8,10 @@ Page {
     page: Controller.MainPage
     property QtObject selectedTagTab: typeof tabView.getTab(tabView.currentIndex) !== "undefined" ? tabView.getTab(tabView.currentIndex).tagObj : null // Compare to "undefined" to fix bogus Qt warning at startup
 
+    onSelectedTagTabChanged: {
+        _controller.setCurrentTabTag(selectedTagTab)
+    }
+
     Rectangle {
         color: _style.queueBackgroundColor
         anchors.fill: parent

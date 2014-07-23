@@ -95,7 +95,7 @@ void Controller::startPomodoro(Task *t)
         return;
     }
 
-    Task::Ptr task = t->weakPointer().toStrongRef();
+    Task::Ptr task = t->toStrongRef();
 
     stopPomodoro(); // Stop previous one, if any
 
@@ -145,31 +145,41 @@ void Controller::pausePomodoro()
 
 void Controller::toggleSelectedTask(Task *task)
 {
-    setSelectedTask(m_selectedTask == task ? Task::Ptr() : task->weakPointer().toStrongRef());
+    setSelectedTask(m_selectedTask == task ? Task::Ptr() : task->toStrongRef());
 }
 
 void Controller::cycleSelectionUp()
 {
+    Task::Ptr firstTask = taskAtCurrentTab(0);
+    if (!firstTask)
+        return;
+
+    if (m_currentTabTag && !m_selectedTask->containsTag(m_currentTabTag->name()))
+        m_selectedTask.clear();
+
     if (!m_selectedTask) {
-        Task::Ptr lastTask = m_taskStorage->at(m_taskStorage->taskFilterModel()->count() - 1);
-        setSelectedTask(lastTask);
-    } else if (m_selectedTask != m_taskStorage->at(0).data()) {
-        Task::Ptr selectedTask = m_selectedTask->weakPointer().toStrongRef();
-        setSelectedTask(m_taskStorage->at(m_taskStorage->indexOf(selectedTask) - 1));
+        setSelectedTask(firstTask);
+    } else if (m_selectedTask != firstTask.data()) {
+        int currentIndex = indexOfTaskInCurrentTab(m_selectedTask->toStrongRef());
+        setSelectedTask(taskAtCurrentTab(currentIndex - 1));
     }
 }
 
 void Controller::cycleSelectionDown()
 {
-    int lastIndex = m_taskStorage->taskFilterModel()->count()-1;
-    if (!m_selectedTask && lastIndex == -1)
+    Task::Ptr firstTask = taskAtCurrentTab(0);
+    Task::Ptr lastTask = lastTaskAtCurrentTab();
+    if (!lastTask || m_selectedTask == lastTask.data())
         return;
 
-    int currentIndex = m_taskStorage->indexOf(m_selectedTask->weakPointer());
+    if (m_currentTabTag && !m_selectedTask->containsTag(m_currentTabTag->name()))
+        m_selectedTask.clear();
+
     if (!m_selectedTask) {
-        setSelectedTask(m_taskStorage->at(0));
-    } else if (currentIndex < lastIndex){
-        setSelectedTask(m_taskStorage->at(currentIndex + 1));
+        setSelectedTask(firstTask);
+    } else if (m_selectedTask != lastTask.data()) {
+        int currentIndex = indexOfTaskInCurrentTab(m_selectedTask->toStrongRef());
+        setSelectedTask(taskAtCurrentTab(currentIndex + 1));
     }
 }
 
@@ -341,6 +351,19 @@ void Controller::setSelectedTask(const Task::Ptr &task)
     }
 }
 
+Tag *Controller::currentTabTag() const
+{
+    return m_currentTabTag;
+}
+
+void Controller::setCurrentTabTag(Tag *tag)
+{
+    if (m_currentTabTag != tag) {
+        m_currentTabTag = tag;
+        emit currentTabTagChanged();
+    }
+}
+
 void Controller::setRightClickedTask(Task *task)
 {
     // We don't have a way to detect when the context menu is closed (QtQuick.Controls bug?)
@@ -366,6 +389,36 @@ void Controller::onTimerTick()
         stopPomodoro();
         emit taskFinished();
     }
+}
+
+int Controller::indexOfTaskInCurrentTab(const Task::Ptr &task)
+{
+    QAbstractItemModel *model = currentTabTaskModel();
+    int count = model->rowCount();
+    for (int i = 0; i < count; ++i) {
+        if (task == taskAtCurrentTab(i))
+            return i;
+    }
+
+    return -1;
+}
+
+Task::Ptr Controller::lastTaskAtCurrentTab() const
+{
+    QAbstractItemModel *model = currentTabTaskModel();
+    int lastIndex = model->rowCount() - 1;
+    return lastIndex == -1 ? Task::Ptr() : taskAtCurrentTab(lastIndex);
+}
+
+Task::Ptr Controller::taskAtCurrentTab(int taskIndex) const
+{
+    QAbstractItemModel *model = currentTabTaskModel();
+    return model->data(model->index(taskIndex, 0), TaskStorage::TaskPtrRole).value<Task::Ptr>();
+}
+
+QAbstractItemModel *Controller::currentTabTaskModel() const
+{
+    return m_currentTabTag ? m_currentTabTag->taskModel() : m_taskStorage->taskFilterModel();
 }
 
 void Controller::setTagEditStatus(TagEditStatus status)
@@ -509,7 +562,7 @@ bool Controller::renameTag(const QString &oldName, const QString &newName)
 
 void Controller::editTask(Task *t, Controller::EditMode editMode)
 {
-    Task::Ptr task = t ? t->weakPointer().toStrongRef() : Task::Ptr();
+    Task::Ptr task = t ? t->toStrongRef() : Task::Ptr();
     if ((!task && editMode != EditModeNone) ||
         (task && editMode == EditModeNone)) {
         // This doesn't happen.
@@ -585,5 +638,5 @@ void Controller::addTask(const QString &text, Tag *tag, bool startEditMode)
 void Controller::removeTask(Task *task)
 {
     editTask(nullptr, EditModeNone);
-    m_taskStorage->removeTask(m_taskStorage->indexOf(task->weakPointer()));
+    m_taskStorage->removeTask(m_taskStorage->indexOf(task->toStrongRef()));
 }

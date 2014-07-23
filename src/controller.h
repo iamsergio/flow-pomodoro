@@ -43,6 +43,7 @@ class Controller : public QObject {
     Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged) // Task being played
     Q_PROPERTY(Task* rightClickedTask READ rightClickedTask WRITE setRightClickedTask NOTIFY rightClickedTaskChanged)
     Q_PROPERTY(Task *selectedTask READ selectedTask NOTIFY selectedTaskChanged)
+    Q_PROPERTY(Tag* currentTabTag READ currentTabTag WRITE setCurrentTabTag NOTIFY currentTabTagChanged)
     // Editing task properties
     Q_PROPERTY(int indexBeingEdited READ indexBeingEdited NOTIFY indexBeingEditedChanged)
     Q_PROPERTY(QObject* taskBeingEdited READ taskBeingEdited NOTIFY indexBeingEditedChanged)
@@ -123,7 +124,11 @@ public:
     Task *selectedTask() const;
     void setSelectedTask(const Task::Ptr &task);
 
+    Tag *currentTabTag() const;
+
+
 public Q_SLOTS:
+    void setCurrentTabTag(Tag *);
     void addTask(const QString &text, Tag *tag, bool startEditMode);
     void removeTask(Task *);
 
@@ -168,8 +173,13 @@ Q_SIGNALS:
     void rightClickedTaskChanged();
     void configureTabIndexChanged();
     void selectedTaskChanged();
+    void currentTabTagChanged();
 
 private:
+    int indexOfTaskInCurrentTab(const Task::Ptr &task);
+    Task::Ptr lastTaskAtCurrentTab() const;
+    Task::Ptr taskAtCurrentTab(int taskIndex) const;
+    QAbstractItemModel *currentTabTaskModel() const;
     void setTaskStatus(TaskStatus status);
     void setTagEditStatus(TagEditStatus);
     void setRightClickedTask(Task *);
@@ -198,6 +208,7 @@ private:
     Task::Ptr m_invalidTask;
     int m_configureTabIndex;
     QPointer<Task> m_selectedTask;
+    QPointer<Tag> m_currentTabTag;
 };
 
 #endif
