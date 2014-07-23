@@ -69,6 +69,7 @@ public:
 
 Q_SIGNALS:
     void tagAboutToBeRemoved(const QString &name);
+    void invalidateNonEmptyTagModel();
 
 public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);

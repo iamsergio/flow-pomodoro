@@ -61,6 +61,10 @@ Controller::Controller(QuickView *quickView)
 
     m_defaultPomodoroDuration = Settings::instance()->value(QStringLiteral("defaultPomodoroDuration"), /*default=*/QVariant(25)).toInt();
 
+    connect(this, &Controller::invalidateTaskModel,
+            m_taskStorage->taskFilterModel(), &TaskFilterProxyModel::invalidateFilter,
+            Qt::QueuedConnection);
+
     qApp->installEventFilter(this);
 }
 
@@ -111,8 +115,7 @@ void Controller::startPomodoro(Task *t)
     emit firstSecondsAfterAddingChanged();
 
     setTaskStatus(TaskStarted);
-    m_taskStorage->taskFilterModel()->invalidateFilter();
-
+    emit invalidateTaskModel();
 }
 
 void Controller::stopPomodoro()
@@ -124,7 +127,7 @@ void Controller::stopPomodoro()
     m_elapsedMinutes = 0;
     setTaskStatus(TaskStopped);
     m_currentTask.clear();
-    m_taskStorage->taskFilterModel()->invalidateFilter();
+    emit invalidateTaskModel();
 }
 
 void Controller::pausePomodoro()

@@ -174,6 +174,7 @@ Q_SIGNALS:
     void configureTabIndexChanged();
     void selectedTaskChanged();
     void currentTabTagChanged();
+    void invalidateTaskModel();
 
 private:
     int indexOfTaskInCurrentTab(const Task::Ptr &task);

@@ -71,6 +71,10 @@ TagStorage::TagStorage(QObject *parent)
     qRegisterMetaType<Tag::Ptr>("Tag::Ptr");
     m_sortModel = new FunctionalModels::SortModel(m_tags, &tagLessThan, TagPtrRole);
     m_nonEmptyTagModel = new FunctionalModels::Remove_if(m_sortModel, &isNonEmptyTag, TagPtrRole);
+
+    connect(this, &TagStorage::invalidateNonEmptyTagModel,
+            m_nonEmptyTagModel, &FunctionalModels::Remove_if::invalidateFilter,
+            Qt::QueuedConnection);
 }
 
 TagStorage *TagStorage::instance()
@@ -184,7 +188,7 @@ void TagStorage::setTags(const Tag::List &tags)
 void TagStorage::onTaskCountChanged(int oldCount, int newCount)
 {
     if (oldCount == 0 ^ newCount == 0)
-        m_nonEmptyTagModel->invalidateFilter();
+        emit invalidateNonEmptyTagModel();
 }
 
 void TagStorage::saveTags()
