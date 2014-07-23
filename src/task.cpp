@@ -38,7 +38,6 @@ static QVariant data(const QPointer<Task> &task, const QModelIndex &sourceIndex,
 {
     if (role == Qt::CheckStateRole) {
         if (!task) {
-            qWarning() << Q_FUNC_INFO <<"Unexpected null task";
             return false;
         }
 
@@ -76,7 +75,7 @@ Task::Task(const QString &name)
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     auto roleNames = TagStorage::instance()->model()->roleNames();
     roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
-    FunctionalModels::DataFunc dataFunc = std::bind(&data, this, _1, _2);
+    FunctionalModels::DataFunc dataFunc = std::bind(&data, QPointer<Task>(this), _1, _2);
     m_checkableTagModel = new FunctionalModels::Transform(TagStorage::instance()->model(), dataFunc, roleNames, this);
 }
 
