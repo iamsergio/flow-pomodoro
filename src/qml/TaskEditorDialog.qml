@@ -56,7 +56,7 @@ ModalDialog {
                 Binding {
                     // two way binding
                     target: _controller.taskBeingEdited
-                    when: visible && _controller.editMode === Controller.EditModeEditor
+                    when: descriptionTextArea.visible && descriptionTextArea.activeFocus && _controller.editMode === Controller.EditModeEditor
                     property: "description"
                     value: descriptionTextArea.text
                 }
