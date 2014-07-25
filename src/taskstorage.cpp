@@ -56,10 +56,9 @@ TaskStorage *TaskStorage::instance()
 
 void TaskStorage::setTasks(const Task::List &tasks)
 {
-    m_tasks = tasks;
+    m_tasks.clear();
     for (int i = 0; i < tasks.count(); ++i) {
-        connect(tasks.at(i).data(), &Task::changed, this,
-                &TaskStorage::scheduleSaveTasks, Qt::UniqueConnection);
+        addTask(tasks.at(i));
     }
 }
 
@@ -76,6 +75,11 @@ Task::Ptr TaskStorage::at(int proxyIndex) const
 Task::Ptr TaskStorage::addTask(const QString &taskText)
 {
     Task::Ptr task = Task::createTask(taskText);
+    return addTask(task);
+}
+
+Task::Ptr TaskStorage::addTask(const Task::Ptr &task)
+{
     connect(task.data(), &Task::changed, this,
             &TaskStorage::scheduleSaveTasks, Qt::UniqueConnection);
     m_tasks << task;

@@ -78,6 +78,7 @@ private Q_SLOTS:
 
 private:
     int proxyRowToSource(int proxyIndex) const;
+    Task::Ptr addTask(const Task::Ptr &task);
     TaskFilterProxyModel *m_taskFilterModel;
     TaskFilterProxyModel *m_stagedTasksModel;
     TagStorage *m_tagStorage;
