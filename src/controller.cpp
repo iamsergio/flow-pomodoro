@@ -656,6 +656,7 @@ void Controller::addTask(const QString &text, Tag *tag, bool startEditMode)
 
 void Controller::removeTask(Task *task)
 {
+    qDebug() << "Removing task" << task->summary();
     editTask(nullptr, EditModeNone);
     m_taskStorage->removeTask(m_taskStorage->indexOf(task->toStrongRef()));
 }
