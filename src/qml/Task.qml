@@ -150,7 +150,7 @@ Rectangle {
             ClickableImage {
                 id: playImage
                 source: "qrc:/img/play.png"
-                visible: root.buttonsVisible && taskObj.staged
+                visible: root.buttonsVisible && (taskObj !== null && taskObj.staged)
                 onClicked: {
                     _controller.startPomodoro(root.taskObj, _style.defaultPomodoroDuration)
                 }
