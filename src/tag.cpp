@@ -52,7 +52,6 @@ Tag::Tag(const QString &_name)
 
 Tag::~Tag()
 {
-    delete m_taskModel;
 }
 
 int Tag::taskCount() const
