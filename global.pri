@@ -1,6 +1,7 @@
-*-g++* {
-    QMAKE_CXXFLAGS = -Werror -Wall
+*-g++*|*clang* {
+    QMAKE_CXXFLAGS = -Werror -Wall -Wextra
 }
+
 
 INCLUDEPATH += src
 
