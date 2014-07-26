@@ -71,7 +71,11 @@ QuickView::QuickView(QWindow *parent)
 
     qmlRegisterUncreatableType<Task>("Controller",
                                      1, 0, "Task_",
-                                     "Task_ is not creatable");
+                                     "Task is not creatable");
+
+    qmlRegisterUncreatableType<Tag>("Controller",
+                                    1, 0, "Tag_",
+                                    "Tag is not creatable");
 
     if (m_developerMode) {
         // So that F5 reloads QML without having to restart the application

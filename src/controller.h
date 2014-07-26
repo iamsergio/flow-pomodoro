@@ -138,7 +138,7 @@ public:
 
 public Q_SLOTS:
     void setCurrentTabTag(Tag *);
-    void addTask(const QString &text, Tag *tag, bool startEditMode);
+    void addTask(const QString &text, bool startEditMode);
     void removeTask(Task *);
 
     void startPomodoro(Task *);

@@ -52,6 +52,7 @@ TaskStorage::TaskStorage(QObject *parent)
     m_tasks.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tasks.at(i).data()); }, TaskRole);
     m_tasks.insertRole("taskPtr", [&](int i) { return QVariant::fromValue<Task::Ptr>(m_tasks.at(i)); }, TaskPtrRole);
     m_stagedTasksModel->setFilterStaged(true);
+    m_untaggedTasksModel->setFilterArchived(true);
     m_untaggedTasksModel->setFilterUntagged(true);
     m_archivedTasksModel->setFilterArchived(true);
 }

@@ -38,6 +38,6 @@ void Flow::newTask(const QString &text, bool startEditor, bool expand)
 {
     if (m_controller) {
         m_controller->setExpanded(expand);
-        m_controller->addTask(text, nullptr, startEditor);
+        m_controller->addTask(text, startEditor);
     }
 }

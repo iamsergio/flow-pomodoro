@@ -54,6 +54,7 @@ OTHER_FILES += AboutPage.qml      \
                config/Tags.qml    \
                ClickableImage.qml \
                ConfigurePage.qml  \
+               DecentTabView.qml  \
                DefaultStyle.qml   \
                Main.qml           \
                MainPage.qml       \

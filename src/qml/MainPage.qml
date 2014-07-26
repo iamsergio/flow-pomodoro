@@ -6,11 +6,6 @@ import Controller 1.0
 Page {
     id: root
     page: Controller.MainPage
-    property QtObject selectedTagTab: typeof tabView.getTab(tabView.currentIndex) !== "undefined" ? tabView.getTab(tabView.currentIndex).tagObj : null // Compare to "undefined" to fix bogus Qt warning at startup
-
-    onSelectedTagTabChanged: {
-        _controller.setCurrentTabTag(selectedTagTab)
-    }
 
     Rectangle {
         color: _style.queueBackgroundColor
@@ -59,41 +54,24 @@ Page {
             visible: _controller.queueType === Controller.QueueTypeToday
         }
 
-        TabView {
+        DecentTabView {
             id: tabView
             visible: _controller.queueType !== Controller.QueueTypeToday
             anchors.margins: _style.marginSmall
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: headerRectangle.bottom
+            model: _tagStorage.nonEmptyTagModel
+        }
+
+        TaskListView {
+            visible: tabView.visible
+            model: _controller.currentTabTag == null ? _taskStorage.untaggedTasksModel : _controller.currentTabTag.taskModel
+            anchors.topMargin: _style.marginMedium
+            anchors.top: tabView.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
             anchors.bottom: parent.bottom
-            frameVisible: false
-            style: TabViewStyle {
-                tabOverlap: 3
-            }
-            Tab {
-                property QtObject tagObj: null
-                title: qsTr("Misc")
-                sourceComponent:
-                 TaskListView {
-                    model: _taskStorage.untaggedTasksModel
-                    anchors.topMargin: _style.marginMedium
-                    anchors.fill: parent
-                }
-            }
-            Repeater {
-                model: _tagStorage.nonEmptyTagModel
-                Tab {
-                    property QtObject tagObj: tag
-                    title: tag.name + (tag.taskModel.count <= 1 ? "" : " (" + tag.taskModel.count + ")")
-                    sourceComponent:
-                    TaskListView {
-                        model: tag.taskModel
-                        anchors.topMargin: _style.marginMedium
-                        anchors.fill: parent
-                    }
-                }
-            }
         }
     }
 }

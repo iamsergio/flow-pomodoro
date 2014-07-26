@@ -508,7 +508,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
         break;
     case Qt::Key_N:
         setExpanded(true);
-        addTask("New Task", nullptr, /**open editor=*/true); // Detect on which tab we're on and tag it properly
+        addTask("New Task", /**open editor=*/true); // Detect on which tab we're on and tag it properly
         return true;
         break;
     case Qt::Key_Delete:
@@ -637,11 +637,11 @@ void Controller::requestContextMenu(Task *task)
     setRightClickedTask(task);
 }
 
-void Controller::addTask(const QString &text, Tag *tag, bool startEditMode)
+void Controller::addTask(const QString &text, bool startEditMode)
 {
     Task::Ptr task = m_taskStorage->addTask(text);
-    if (tag)
-        task->addTag(tag->name());
+    if (m_currentTabTag)
+        task->addTag(m_currentTabTag->name());
 
     task->setStaged(m_queueType == QueueTypeToday);
     editTask(nullptr, EditModeNone);
