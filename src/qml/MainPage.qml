@@ -79,8 +79,6 @@ Page {
                                                         : qsTr("No archived tasks found with tag %1", _controller.currentTabTag.name )
                 visible: parent.model.count === 0
             }
-
-
         }
     }
 }
