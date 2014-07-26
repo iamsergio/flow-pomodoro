@@ -12,7 +12,7 @@ ListView {
         Rectangle {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            width: root.width / root.model.count
+            width: Math.max(65, root.width / root.model.count)
             color: "black"
             property bool isSelected: tag == _controller.currentTabTag
 
@@ -63,7 +63,4 @@ ListView {
             }
         }
     }
-
-
-    
 }
