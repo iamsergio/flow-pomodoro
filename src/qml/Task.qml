@@ -66,7 +66,7 @@ Rectangle {
         }
 
         onPressAndHold: {
-            _controller.editTask(modelIndex, Controller.EditModeInline)
+            _controller.editTask(task, Controller.EditModeInline)
         }
 
         Text {
