@@ -51,6 +51,7 @@ Controller::Controller(QuickView *quickView)
     , m_tagEditStatus(TagEditStatusNone)
     , m_invalidTask(Task::createTask())
     , m_configureTabIndex(0)
+    , m_queueType(QueueTypeToday)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -359,6 +360,19 @@ Tag *Controller::currentTabTag() const
     return m_currentTabTag;
 }
 
+Controller::QueueType Controller::queueType() const
+{
+    return m_queueType;
+}
+
+void Controller::setQueueType(QueueType type)
+{
+    if (type != m_queueType) {
+        m_queueType = type;
+        emit queueTypeChanged();
+    }
+}
+
 void Controller::setCurrentTabTag(Tag *tag)
 {
     if (m_currentTabTag != tag) {
@@ -626,8 +640,10 @@ void Controller::requestContextMenu(Task *task)
 void Controller::addTask(const QString &text, Tag *tag, bool startEditMode)
 {
     Task::Ptr task = m_taskStorage->addTask(text);
-    if (tag) task->addTag(tag->name());
+    if (tag)
+        task->addTag(tag->name());
 
+    task->setStaged(m_queueType == QueueTypeToday);
     editTask(nullptr, EditModeNone);
 
     if (startEditMode) {

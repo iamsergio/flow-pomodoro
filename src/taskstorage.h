@@ -34,6 +34,7 @@ class TaskStorage : public QObject
 {
     Q_PROPERTY(TaskFilterProxyModel* stagedTasksModel READ stagedTasksModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* taskFilterModel READ taskFilterModel CONSTANT)
+    Q_PROPERTY(TaskFilterProxyModel* untaggedTasksModel READ untaggedTasksModel CONSTANT)
     Q_OBJECT
 public:
     enum ModelRole {
@@ -48,6 +49,7 @@ public:
 
     TaskFilterProxyModel* stagedTasksModel() const;
     TaskFilterProxyModel* taskFilterModel() const;
+    TaskFilterProxyModel* untaggedTasksModel() const;
 
     Task::Ptr at(int proxyIndex) const;
     Task::Ptr addTask(const QString &taskText);
@@ -81,6 +83,7 @@ private:
     Task::Ptr addTask(const Task::Ptr &task);
     TaskFilterProxyModel *m_taskFilterModel;
     TaskFilterProxyModel *m_stagedTasksModel;
+    TaskFilterProxyModel *m_untaggedTasksModel;
     TagStorage *m_tagStorage;
     QTimer m_scheduleTimer;
     bool m_savingDisabled;

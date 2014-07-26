@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
+import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.2
 import Controller 1.0
 
@@ -16,26 +16,71 @@ Page {
         color: _style.queueBackgroundColor
         anchors.fill: parent
         radius: parent.radius
-        TabView {
-            id: tabView
+
+        Item {
+            id: headerRectangle
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
             anchors.margins: _style.marginSmall
-            anchors.fill: parent
-            frameVisible: false
-            style: TabViewStyle {
-                tabOverlap: 6
+            height: 40
+
+            Text {
+                id: textItem
+                anchors.top: parent.top
+                anchors.topMargin: -5
+                font.pointSize: 18
+                font.bold: true
+                color: _style.regularTextColor
+                text: _controller.queueType === Controller.QueueTypeToday ? qsTr("Today's work queue") : qsTr("Tasks for someday")
             }
 
+            Switch {
+                id: switchItem
+                checked: _controller.queueType === Controller.QueueTypeToday
+                anchors.right: parent.right
+                anchors.rightMargin: 2
+                Binding {
+                    target: _controller
+                    property: "queueType"
+                    value: switchItem.checked ? Controller.QueueTypeToday : Controller.QueueTypeArchive
+                }
+            }
+        }
+
+        TaskListView {
+            id: stagedView
+            model: _taskStorage.stagedTasksModel
+            anchors.topMargin: _style.marginSmall
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: headerRectangle.bottom
+            anchors.bottom: parent.bottom
+            visible: _controller.queueType === Controller.QueueTypeToday
+        }
+
+        TabView {
+            id: tabView
+            visible: _controller.queueType !== Controller.QueueTypeToday
+            anchors.margins: _style.marginSmall
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: headerRectangle.bottom
+            anchors.bottom: parent.bottom
+            frameVisible: false
+            style: TabViewStyle {
+                tabOverlap: 3
+            }
             Tab {
                 property QtObject tagObj: null
-                title: "All"
+                title: qsTr("Misc")
                 sourceComponent:
-                TaskListView {
-                    model: _taskStorage.taskFilterModel
-                    anchors.topMargin: _style.marginBig
+                 TaskListView {
+                    model: _taskStorage.untaggedTasksModel
+                    anchors.topMargin: _style.marginMedium
                     anchors.fill: parent
                 }
             }
-
             Repeater {
                 model: _tagStorage.nonEmptyTagModel
                 Tab {
@@ -44,11 +89,12 @@ Page {
                     sourceComponent:
                     TaskListView {
                         model: tag.taskModel
-                        anchors.topMargin: _style.marginBig
+                        anchors.topMargin: _style.marginMedium
                         anchors.fill: parent
                     }
                 }
             }
+
         }
     }
 }

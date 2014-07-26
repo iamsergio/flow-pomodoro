@@ -44,6 +44,7 @@ class Controller : public QObject {
     Q_PROPERTY(Task* rightClickedTask READ rightClickedTask WRITE setRightClickedTask NOTIFY rightClickedTaskChanged)
     Q_PROPERTY(Task *selectedTask READ selectedTask NOTIFY selectedTaskChanged)
     Q_PROPERTY(Tag* currentTabTag READ currentTabTag WRITE setCurrentTabTag NOTIFY currentTabTagChanged)
+    Q_PROPERTY(QueueType queueType READ queueType WRITE setQueueType NOTIFY queueTypeChanged)
     // Editing task properties
     Q_PROPERTY(int indexBeingEdited READ indexBeingEdited NOTIFY indexBeingEditedChanged)
     Q_PROPERTY(QObject* taskBeingEdited READ taskBeingEdited NOTIFY indexBeingEditedChanged)
@@ -84,6 +85,12 @@ public:
         TagEditStatusNew // Tag is being created
     };
     Q_ENUMS(TagEditStatus)
+
+    enum QueueType {
+        QueueTypeToday = 0,
+        QueueTypeArchive
+    };
+    Q_ENUMS(QueueType)
 
     Controller(QuickView *quickView);
     ~Controller();
@@ -126,6 +133,8 @@ public:
 
     Tag *currentTabTag() const;
 
+    Controller::QueueType queueType() const;
+    void setQueueType(QueueType);
 
 public Q_SLOTS:
     void setCurrentTabTag(Tag *);
@@ -175,6 +184,7 @@ Q_SIGNALS:
     void selectedTaskChanged();
     void currentTabTagChanged();
     void invalidateTaskModel();
+    void queueTypeChanged();
 
 private:
     int indexOfTaskInCurrentTab(const Task::Ptr &task);
@@ -210,6 +220,7 @@ private:
     int m_configureTabIndex;
     QPointer<Task> m_selectedTask;
     QPointer<Tag> m_currentTabTag;
+    QueueType m_queueType;
 };
 
 #endif

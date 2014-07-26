@@ -5,6 +5,8 @@
 
 TaskFilterProxyModel::TaskFilterProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
+    , m_filterStaged(false)
+    , m_filterUntagged(false)
 {
     connect(this, &TaskFilterProxyModel::rowsInserted,
             this, &TaskFilterProxyModel::countChanged);
@@ -47,6 +49,12 @@ bool TaskFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &s
     if (task->status() == TaskStarted)
         return false;
 
+    if (m_filterStaged && !task->staged())
+        return false;
+
+    if (m_filterUntagged)
+        return task->tags().isEmpty();
+
     if (m_tagText.isEmpty())
         return true;
 
@@ -61,4 +69,25 @@ void TaskFilterProxyModel::setTagName(const QString &tagText)
         m_tagText = tagText;
         invalidateFilter();
     }
+}
+
+void TaskFilterProxyModel::setFilterStaged(bool filterStaged)
+{
+    if (m_filterStaged != filterStaged) {
+        m_filterStaged = filterStaged;
+        invalidateFilter();
+    }
+}
+
+void TaskFilterProxyModel::setFilterUntagged(bool filter)
+{
+    if (m_filterUntagged != filter) {
+        m_filterUntagged = filter;
+        invalidateFilter();
+    }
+}
+
+void TaskFilterProxyModel::invalidateFilter()
+{
+   QSortFilterProxyModel::invalidateFilter();
 }

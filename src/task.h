@@ -49,7 +49,7 @@ class QAbstractListModel;
 
 class Task : public QObject {
     Q_OBJECT
-    Q_PROPERTY(bool staged READ staged NOTIFY stagedChanged)
+    Q_PROPERTY(bool staged READ staged WRITE setStaged NOTIFY stagedChanged)
     Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(QObject * tagModel READ tagModel CONSTANT)

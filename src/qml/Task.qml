@@ -109,6 +109,18 @@ Rectangle {
         }
 
         ClickableImage {
+            id: archiveImage
+            source: (taskObj !== null && taskObj.staged) ? "qrc:/img/archive.png" : "qrc:/img/stage.png"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: deleteImage.left
+            anchors.rightMargin: _style.buttonsSpacing
+            visible: root.buttonsVisible
+            onClicked: {
+                taskObj.staged = !taskObj.staged
+            }
+        }
+
+        ClickableImage {
             id: deleteImage
             source: "qrc:/img/delete.png"
             anchors.verticalCenter: parent.verticalCenter
