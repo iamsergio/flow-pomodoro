@@ -108,56 +108,52 @@ Rectangle {
             taskIndex: modelIndex
         }
 
-        ClickableImage {
-            id: archiveImage
-            source: (taskObj !== null && taskObj.staged) ? "qrc:/img/archive.png" : "qrc:/img/stage.png"
+        Row {
+            id: buttonRow
+            anchors.right: parent.right
+            anchors.rightMargin: _style.buttonsRightMargin
             anchors.verticalCenter: parent.verticalCenter
-            anchors.right: deleteImage.left
-            anchors.rightMargin: _style.buttonsSpacing
-            visible: root.buttonsVisible
-            onClicked: {
-                taskObj.staged = !taskObj.staged
-            }
-        }
+            spacing: _style.buttonsSpacing
 
-        ClickableImage {
-            id: deleteImage
-            source: "qrc:/img/delete.png"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: editImage.left
-            anchors.rightMargin: _style.buttonsSpacing
-            visible: root.buttonsVisible
-            onClicked: {
-                root.deleteClicked()
+            ClickableImage {
+                id: archiveImage
+                source: (taskObj !== null && taskObj.staged) ? "qrc:/img/archive.png" : "qrc:/img/stage.png"
+                visible: root.buttonsVisible
+                onClicked: {
+                    taskObj.staged = !taskObj.staged
+                }
             }
-        }
 
-        ClickableImage {
-            id: editImage
-            source: "qrc:/img/edit.png"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: playImage.left
-            anchors.rightMargin: _style.buttonsSpacing
-            visible: root.buttonsVisible
-            onClicked: {
-                if (modelIndex !== -1) {
-                    _controller.editTask(root.taskObj, Controller.EditModeEditor)
-                    if (_controller.editMode === Controller.EditModeInline) {
-                        textField.forceActiveFocus()
+            ClickableImage {
+                id: deleteImage
+                source: "qrc:/img/delete.png"
+                visible: root.buttonsVisible
+                onClicked: {
+                    root.deleteClicked()
+                }
+            }
+
+            ClickableImage {
+                id: editImage
+                source: "qrc:/img/edit.png"
+                visible: root.buttonsVisible && false // Disabled for now, not enough space
+                onClicked: {
+                    if (modelIndex !== -1) {
+                        _controller.editTask(root.taskObj, Controller.EditModeEditor)
+                        if (_controller.editMode === Controller.EditModeInline) {
+                            textField.forceActiveFocus()
+                        }
                     }
                 }
             }
-        }
 
-        ClickableImage {
-            id: playImage
-            source: "qrc:/img/play.png"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: _style.buttonsRightMargin
-            visible: root.buttonsVisible
-            onClicked: {
-                _controller.startPomodoro(root.taskObj, _style.defaultPomodoroDuration)
+            ClickableImage {
+                id: playImage
+                source: "qrc:/img/play.png"
+                visible: root.buttonsVisible && taskObj.staged
+                onClicked: {
+                    _controller.startPomodoro(root.taskObj, _style.defaultPomodoroDuration)
+                }
             }
         }
     }

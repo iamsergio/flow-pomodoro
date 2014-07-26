@@ -230,6 +230,14 @@ Rectangle {
             }
         }
 
+        MenuItem {
+            visible: _controller.rightClickedTask !== null
+            text: qsTr("Edit...")
+            onTriggered: {
+                _controller.editTask(_controller.rightClickedTask, Controller.EditModeEditor)
+            }
+        }
+
         TagsMenu {
             task: _controller.rightClickedTask
         }
