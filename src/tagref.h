@@ -37,6 +37,8 @@ public:
 
     Tag::Ptr m_tag;
     QPointer<Task> m_task;
+private:
+    void init();
 
 };
 

@@ -50,6 +50,7 @@ public:
     TaskFilterProxyModel* stagedTasksModel() const;
     TaskFilterProxyModel* taskFilterModel() const;
     TaskFilterProxyModel* untaggedTasksModel() const;
+    TaskFilterProxyModel* archivedTasksModel() const;
 
     Task::Ptr at(int proxyIndex) const;
     Task::Ptr addTask(const QString &taskText);
@@ -84,6 +85,7 @@ private:
     TaskFilterProxyModel *m_taskFilterModel;
     TaskFilterProxyModel *m_stagedTasksModel;
     TaskFilterProxyModel *m_untaggedTasksModel;
+    TaskFilterProxyModel *m_archivedTasksModel;
     TagStorage *m_tagStorage;
     QTimer m_scheduleTimer;
     bool m_savingDisabled;

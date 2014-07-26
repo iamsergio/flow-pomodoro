@@ -41,6 +41,7 @@ Tag::Tag(const QString &_name)
     : QObject()
     , m_name(_name)
     , m_taskCount(0)
+    , m_archivedTaskCount(0)
     , m_beingEdited(false)
     , m_taskModel(0)
 {
@@ -65,6 +66,20 @@ void Tag::setTaskCount(int count)
         int tmp = m_taskCount;
         m_taskCount = count;
         emit taskCountChanged(tmp, m_taskCount);
+    }
+}
+
+int Tag::archivedTaskCount() const
+{
+    return m_archivedTaskCount;
+}
+
+void Tag::setArchivedTaskCount(int count)
+{
+    if (count != m_archivedTaskCount) {
+        int tmp = m_archivedTaskCount;
+        m_archivedTaskCount = count;
+        emit archivedTaskCountChanged(tmp, m_archivedTaskCount);
     }
 }
 
@@ -99,7 +114,7 @@ QAbstractItemModel *Tag::taskModel()
     // Delayed initialization do avoid deadlock accessing TaskStorage::instance() when TaskStorage is being constructed
     if (!m_taskModel) {
         auto filterFunc = std::bind(&taskIsTagged, QPointer<Tag>(this), _1);
-        m_taskModel = new FunctionalModels::Remove_if(TaskStorage::instance()->taskFilterModel(),
+        m_taskModel = new FunctionalModels::Remove_if(TaskStorage::instance()->archivedTasksModel(),
                                                       filterFunc, TaskStorage::TaskPtrRole);
         m_taskModel->setObjectName(m_name);
 
@@ -109,6 +124,13 @@ QAbstractItemModel *Tag::taskModel()
     }
 
     return m_taskModel;
+}
+
+void Tag::onTaskStagedChanged()
+{
+    Task *task = qobject_cast<Task*>(sender());
+    Q_ASSERT(task);
+    setArchivedTaskCount(m_archivedTaskCount + (task->staged() ? -1 : 1));
 }
 
 bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)

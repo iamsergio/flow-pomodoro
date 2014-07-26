@@ -16,6 +16,7 @@ public:
     void setTagName(const QString &);
     void setFilterStaged(bool filter);
     void setFilterUntagged(bool filter);
+    void setFilterArchived(bool filter);
     void invalidateFilter();
 
 Q_SIGNALS:
@@ -25,6 +26,7 @@ private:
     QString m_tagText;
     bool m_filterStaged;
     bool m_filterUntagged;
+    bool m_filterArchived;
     friend class Controller;
 };
 

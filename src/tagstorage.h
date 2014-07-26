@@ -90,7 +90,7 @@ private:
 
     QTimer m_scheduleTimer;
     FunctionalModels::SortModel *m_sortModel;
-    FunctionalModels::Remove_if *m_nonEmptyTagModel;
+    mutable FunctionalModels::Remove_if *m_nonEmptyTagModel;
     QString m_deletedTagName;
 };
 

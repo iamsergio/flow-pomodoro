@@ -25,15 +25,14 @@ TagRef::TagRef(const TagRef &other)
 {
     m_task = other.m_task;
     m_tag = other.m_tag;
-    m_tag->setTaskCount(m_tag->taskCount() + 1);
+    init();
 }
 
 TagRef::TagRef(const QPointer<Task> &task, const QString &tagName)
     : m_tag(TagStorage::instance()->tag(tagName))
     , m_task(task)
 {
-    m_tag->setTaskCount(m_tag->taskCount() + 1);
-    QObject::connect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
+    init();
 }
 
 TagRef::~TagRef()
@@ -41,7 +40,18 @@ TagRef::~TagRef()
     m_tag->setTaskCount(m_tag->taskCount() - 1);
     if (m_task) {
         QObject::disconnect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
+        if (!m_task->staged())
+            m_tag->setArchivedTaskCount(m_tag->archivedTaskCount() - 1);
     }
+}
+
+void TagRef::init()
+{
+    m_tag->setTaskCount(m_tag->taskCount() + 1);
+    QObject::connect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
+
+    if (!m_task->staged())
+        m_tag->setArchivedTaskCount(m_tag->archivedTaskCount() + 1);
 }
 
 bool operator==(const TagRef &tagRef, const QString &name)

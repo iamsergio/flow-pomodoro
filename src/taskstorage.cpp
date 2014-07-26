@@ -28,6 +28,7 @@ TaskStorage::TaskStorage(QObject *parent)
     , m_taskFilterModel(new TaskFilterProxyModel(this))
     , m_stagedTasksModel(new TaskFilterProxyModel(this))
     , m_untaggedTasksModel(new TaskFilterProxyModel(this))
+    , m_archivedTasksModel(new TaskFilterProxyModel(this))
     , m_tagStorage(TagStorage::instance())
     , m_savingDisabled(false)
 {
@@ -38,6 +39,7 @@ TaskStorage::TaskStorage(QObject *parent)
     m_taskFilterModel->setSourceModel(m_tasks);
     m_stagedTasksModel->setSourceModel(m_tasks);
     m_untaggedTasksModel->setSourceModel(m_tasks);
+    m_archivedTasksModel->setSourceModel(m_tasks);
     m_scheduleTimer.setSingleShot(true);
     m_scheduleTimer.setInterval(0);
 
@@ -51,6 +53,7 @@ TaskStorage::TaskStorage(QObject *parent)
     m_tasks.insertRole("taskPtr", [&](int i) { return QVariant::fromValue<Task::Ptr>(m_tasks.at(i)); }, TaskPtrRole);
     m_stagedTasksModel->setFilterStaged(true);
     m_untaggedTasksModel->setFilterUntagged(true);
+    m_archivedTasksModel->setFilterArchived(true);
 }
 
 TaskStorage *TaskStorage::instance()
@@ -77,6 +80,11 @@ TaskFilterProxyModel *TaskStorage::untaggedTasksModel() const
     return m_untaggedTasksModel;
 }
 
+TaskFilterProxyModel *TaskStorage::archivedTasksModel() const
+{
+    return m_archivedTasksModel;
+}
+
 Task::Ptr TaskStorage::at(int proxyIndex) const
 {
     return m_tasks.value(proxyRowToSource(proxyIndex));
@@ -93,6 +101,8 @@ Task::Ptr TaskStorage::addTask(const Task::Ptr &task)
     connect(task.data(), &Task::changed, this,
             &TaskStorage::scheduleSaveTasks, Qt::UniqueConnection);
     connect(task.data(), &Task::stagedChanged, m_stagedTasksModel,
+            &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
+    connect(task.data(), &Task::stagedChanged, m_archivedTasksModel,
             &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
     connect(task.data(), &Task::tagsChanged, m_untaggedTasksModel,
             &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);

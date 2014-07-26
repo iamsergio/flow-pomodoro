@@ -51,11 +51,12 @@ static bool isNonEmptyTag(const QVariant &variant)
         return false;
     }
 
-    return tag->taskCount() > 0;
+    return tag->taskModel()->rowCount() > 0;
 }
 
 TagStorage::TagStorage(QObject *parent)
     : QObject(parent)
+    , m_nonEmptyTagModel(nullptr)
 {
     m_scheduleTimer.setSingleShot(true);
     m_scheduleTimer.setInterval(0);
@@ -70,11 +71,6 @@ TagStorage::TagStorage(QObject *parent)
     connect(m_tags, &QAbstractListModel::modelReset, this, &TagStorage::scheduleSaveTags);
     qRegisterMetaType<Tag::Ptr>("Tag::Ptr");
     m_sortModel = new FunctionalModels::SortModel(m_tags, &tagLessThan, TagPtrRole);
-    m_nonEmptyTagModel = new FunctionalModels::Remove_if(m_sortModel, &isNonEmptyTag, TagPtrRole);
-
-    connect(this, &TagStorage::invalidateNonEmptyTagModel,
-            m_nonEmptyTagModel, &FunctionalModels::Remove_if::invalidateFilter,
-            Qt::QueuedConnection);
 }
 
 TagStorage *TagStorage::instance()
@@ -142,6 +138,15 @@ QAbstractItemModel *TagStorage::model() const
 
 QAbstractItemModel *TagStorage::nonEmptyTagModel() const
 {
+    if (!m_nonEmptyTagModel) {
+        // Delayed loading, due to __cxa_guard_acquire hang
+        m_nonEmptyTagModel = new FunctionalModels::Remove_if(m_sortModel, &isNonEmptyTag, TagPtrRole);
+
+        connect(this, &TagStorage::invalidateNonEmptyTagModel,
+                m_nonEmptyTagModel, &FunctionalModels::Remove_if::invalidateFilter,
+                Qt::QueuedConnection);
+    }
+
     return m_nonEmptyTagModel;
 }
 
@@ -152,8 +157,8 @@ QString TagStorage::deletedTagName() const
 
 void TagStorage::monitorTag(Tag *tag)
 {
-    connect(tag, &Tag::taskCountChanged,
-            this, &TagStorage::onTaskCountChanged);
+    //connect(tag, &Tag::taskCountChanged, this, &TagStorage::onTaskCountChanged);
+    connect(tag, &Tag::archivedTaskCountChanged, this, &TagStorage::onTaskCountChanged);
 }
 
 bool TagStorage::renameTag(const QString &oldName, const QString &newName)

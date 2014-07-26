@@ -96,6 +96,11 @@ void Task::setStaged(bool staged)
     if (m_staged != staged) {
         m_staged = staged;
         emit stagedChanged();
+        for (int i = 0; i < m_tags.count(); ++i) {
+            Tag::Ptr tag = m_tags.at(i).m_tag;
+            int currentCount = tag->archivedTaskCount();
+            tag->setArchivedTaskCount(currentCount + (m_staged ? -1 : 1));
+        }
     }
 }
 

@@ -33,6 +33,7 @@ class Tag : public QObject
 {
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged STORED false)
+    Q_PROPERTY(int archivedTaskCount READ archivedTaskCount NOTIFY archivedTaskCountChanged STORED false)
     Q_PROPERTY(bool beingEdited READ beingEdited NOTIFY beingEditedChanged STORED false)
     Q_PROPERTY(QAbstractItemModel* taskModel READ taskModel CONSTANT)
     Q_OBJECT
@@ -45,6 +46,8 @@ public:
 
     int taskCount() const;
     void setTaskCount(int count);
+    int archivedTaskCount() const;
+    void setArchivedTaskCount(int count);
     QString name() const;
     void setName(const QString &name);
     bool beingEdited() const;
@@ -52,9 +55,13 @@ public:
 
     QAbstractItemModel* taskModel();
 
+public Q_SLOTS:
+    void onTaskStagedChanged();
+
 Q_SIGNALS:
     void nameChanged();
     void taskCountChanged(int oldValue, int newValue);
+    void archivedTaskCountChanged(int oldValue, int newValue);
     void beingEditedChanged();
 
 private:
@@ -62,8 +69,9 @@ private:
     Tag(const Tag &other) = delete;
     QString m_name;
     int m_taskCount;
+    int m_archivedTaskCount;
     bool m_beingEdited;
-    FunctionalModels::Remove_if *m_taskModel; // All tasks with this tag
+    FunctionalModels::Remove_if *m_taskModel; // All unstaged tasks with this tag
 };
 
 #endif
