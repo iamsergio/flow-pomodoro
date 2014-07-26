@@ -187,7 +187,7 @@ void TagStorage::setTags(const Tag::List &tags)
 
 void TagStorage::onTaskCountChanged(int oldCount, int newCount)
 {
-    if (oldCount == 0 ^ newCount == 0)
+    if ((oldCount == 0) ^ (newCount == 0))
         emit invalidateNonEmptyTagModel();
 }
 
