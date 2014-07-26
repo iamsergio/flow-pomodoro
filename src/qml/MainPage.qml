@@ -72,6 +72,15 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
+
+            Text {
+                anchors.centerIn: parent
+                text: _controller.currentTabTag == null ? qsTr("No archived untagged tasks found")
+                                                        : qsTr("No archived tasks found with tag %1", _controller.currentTabTag.name )
+                visible: parent.model.count === 0
+            }
+
+
         }
     }
 }
