@@ -29,10 +29,8 @@ using namespace std::placeholders;
 static bool taskIsTagged(const QPointer<Tag> &tag, const QVariant &variant)
 {
     Task::Ptr task = variant.value<Task::Ptr>();
-    if (!task || !tag) {
-        qWarning() << Q_FUNC_INFO << "Unexpected null task or tag";
+    if (!task || !tag)
         return false;
-    }
 
     return task->containsTag(tag->name());
 }
