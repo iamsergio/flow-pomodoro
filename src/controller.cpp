@@ -377,6 +377,8 @@ void Controller::setCurrentTabTag(Tag *tag)
 {
     if (m_currentTabTag != tag) {
         m_currentTabTag = tag;
+        connect(m_currentTabTag.data(), &Tag::destroyed,
+                this, &Controller::currentTabTagChanged, Qt::UniqueConnection);
         emit currentTabTagChanged();
     }
 }
