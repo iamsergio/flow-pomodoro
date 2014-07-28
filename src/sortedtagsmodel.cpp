@@ -20,10 +20,19 @@
 #include "sortedtagsmodel.h"
 #include "tagstorage.h"
 
-SortedTagsModel::SortedTagsModel(QObject *parent) :
+SortedTagsModel::SortedTagsModel(QAbstractItemModel *source, QObject *parent) :
     QSortFilterProxyModel(parent)
 {
     setObjectName("SortedTagsModel");
+    Q_ASSERT(source);
+    setSourceModel(source);
+
+    sort(Qt::AscendingOrder);
+
+    connect(this, &SortedTagsModel::rowsInserted, this, &SortedTagsModel::countChanged);
+    connect(this, &SortedTagsModel::rowsRemoved, this, &SortedTagsModel::countChanged);
+    connect(this, &SortedTagsModel::modelReset, this, &SortedTagsModel::countChanged);
+    connect(this, &SortedTagsModel::layoutChanged, this, &SortedTagsModel::countChanged);
 }
 
 bool SortedTagsModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
@@ -41,4 +50,9 @@ bool SortedTagsModel::lessThan(const QModelIndex &left, const QModelIndex &right
     } else {
         return leftTag->taskCount() < rightTag->taskCount();
     }
+}
+
+int SortedTagsModel::count() const
+{
+    return rowCount();
 }

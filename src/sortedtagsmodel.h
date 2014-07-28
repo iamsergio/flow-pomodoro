@@ -25,10 +25,14 @@
 class SortedTagsModel : public QSortFilterProxyModel
 {
     Q_OBJECT
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    explicit SortedTagsModel(QObject *parent = 0);
+    explicit SortedTagsModel(QAbstractItemModel *source, QObject *parent = 0);
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
+    int count() const;
 
+Q_SIGNALS:
+    void countChanged();
 };
 
 #endif
