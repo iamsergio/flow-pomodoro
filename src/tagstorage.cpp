@@ -20,28 +20,11 @@
 
 #include "tagstorage.h"
 #include "tagstorageqsettings.h"
-#include "sortmodel.h"
+#include "sortedtagsmodel.h"
 #include "remove_if.h"
 
 #include <QDebug>
 #include <QGuiApplication>
-
-static bool tagLessThan(const QVariant &left, const QVariant &right)
-{
-    Tag::Ptr leftTag = left.value<Tag::Ptr>();
-    Tag::Ptr rightTag = right.value<Tag::Ptr>();
-    Q_ASSERT(leftTag);
-    Q_ASSERT(rightTag);
-
-    if (!leftTag || !rightTag)
-        return false;
-
-    if (leftTag->taskCount() == rightTag->taskCount()) {
-        return QString::compare(leftTag->name(), rightTag->name(), Qt::CaseInsensitive) < 0;
-    } else {
-        return leftTag->taskCount() < rightTag->taskCount();
-    }
-}
 
 static bool isNonEmptyTag(const QVariant &variant)
 {
@@ -71,7 +54,8 @@ TagStorage::TagStorage(QObject *parent)
     connect(m_tags, &QAbstractListModel::rowsRemoved, this, &TagStorage::scheduleSaveTags);
     connect(m_tags, &QAbstractListModel::modelReset, this, &TagStorage::scheduleSaveTags);
     qRegisterMetaType<Tag::Ptr>("Tag::Ptr");
-    m_sortModel = new FunctionalModels::SortModel(m_tags, &tagLessThan, TagPtrRole);
+    m_sortModel = new SortedTagsModel(this);
+    m_sortModel->setSourceModel(m_tags);
 }
 
 TagStorage *TagStorage::instance()

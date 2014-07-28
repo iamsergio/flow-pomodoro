@@ -27,9 +27,10 @@
 #include <QTimer>
 
 namespace FunctionalModels {
-class SortModel;
 class Remove_if;
 }
+
+class SortedTagsModel;
 
 class TagStorage : public QObject
 {
@@ -90,7 +91,7 @@ private:
     void saveTags();
 
     QTimer m_scheduleTimer;
-    FunctionalModels::SortModel *m_sortModel;
+    SortedTagsModel *m_sortModel;
     mutable FunctionalModels::Remove_if *m_nonEmptyTagModel;
     QString m_deletedTagName;
     bool m_savingDisabled;
