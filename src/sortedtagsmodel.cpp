@@ -45,11 +45,13 @@ bool SortedTagsModel::lessThan(const QModelIndex &left, const QModelIndex &right
     if (!leftTag || !rightTag)
         return false;
 
-    if (leftTag->taskCount() == rightTag->taskCount()) {
+    if (leftTag->taskCount() == 0 && rightTag->taskCount() != 0)
+        return false;
+
+    if (leftTag->name() != rightTag->name())
         return QString::compare(leftTag->name(), rightTag->name(), Qt::CaseInsensitive) < 0;
-    } else {
-        return leftTag->taskCount() < rightTag->taskCount();
-    }
+
+    return leftTag->taskCount() < rightTag->taskCount();
 }
 
 int SortedTagsModel::count() const
