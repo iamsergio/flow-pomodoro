@@ -26,20 +26,8 @@
 #include <QDebug>
 #include <QGuiApplication>
 
-static bool isNonEmptyTag(const QVariant &variant)
-{
-    Tag::Ptr tag = variant.value<Tag::Ptr>();
-    if (!tag) {
-        qWarning() << Q_FUNC_INFO << "Unexpected null tag";
-        return false;
-    }
-
-    return tag->taskModel()->rowCount() > 0;
-}
-
 TagStorage::TagStorage(QObject *parent)
     : QObject(parent)
-    , m_nonEmptyTagModel(nullptr)
     , m_savingDisabled(false)
 {
     m_scheduleTimer.setSingleShot(true);
@@ -54,8 +42,7 @@ TagStorage::TagStorage(QObject *parent)
     connect(m_tags, &QAbstractListModel::rowsRemoved, this, &TagStorage::scheduleSaveTags);
     connect(m_tags, &QAbstractListModel::modelReset, this, &TagStorage::scheduleSaveTags);
     qRegisterMetaType<Tag::Ptr>("Tag::Ptr");
-    m_sortModel = new SortedTagsModel(this);
-    m_sortModel->setSourceModel(m_tags);
+    m_sortModel = new SortedTagsModel(m_tags, this);
 }
 
 TagStorage *TagStorage::instance()
@@ -124,29 +111,14 @@ QAbstractItemModel *TagStorage::model() const
     return m_sortModel;
 }
 
-QAbstractItemModel *TagStorage::nonEmptyTagModel() const
-{
-    if (!m_nonEmptyTagModel) {
-        // Delayed loading, due to __cxa_guard_acquire hang
-        m_nonEmptyTagModel = new FunctionalModels::Remove_if(m_sortModel, &isNonEmptyTag, TagPtrRole);
-
-        connect(this, &TagStorage::invalidateNonEmptyTagModel,
-                m_nonEmptyTagModel, &FunctionalModels::Remove_if::invalidateFilter,
-                Qt::QueuedConnection);
-    }
-
-    return m_nonEmptyTagModel;
-}
-
 QString TagStorage::deletedTagName() const
 {
     return m_deletedTagName;
 }
 
-void TagStorage::monitorTag(Tag *tag)
+void TagStorage::monitorTag(Tag *)
 {
-    //connect(tag, &Tag::taskCountChanged, this, &TagStorage::onTaskCountChanged);
-    connect(tag, &Tag::archivedTaskCountChanged, this, &TagStorage::onTaskCountChanged);
+    // TODO: remove?
 }
 
 bool TagStorage::renameTag(const QString &oldName, const QString &newName)
@@ -176,12 +148,6 @@ void TagStorage::setTags(const Tag::List &tags)
     Tag::List sanitizedList = tags;
     sanitizedList.removeAll(Tag::Ptr()); // Remove invalid tags
     m_tags = sanitizedList;
-}
-
-void TagStorage::onTaskCountChanged(int oldCount, int newCount)
-{
-    if ((oldCount == 0) ^ (newCount == 0))
-        emit invalidateNonEmptyTagModel();
 }
 
 void TagStorage::saveTags()

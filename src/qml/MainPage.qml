@@ -61,7 +61,7 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: headerRectangle.bottom
-            model: _tagStorage.nonEmptyTagModel
+            model: _tagStorage.model
         }
 
         TaskListView {

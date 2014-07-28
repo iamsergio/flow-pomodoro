@@ -35,7 +35,6 @@ class SortedTagsModel;
 class TagStorage : public QObject
 {
     Q_PROPERTY(QAbstractItemModel* model READ model CONSTANT)
-    Q_PROPERTY(QAbstractItemModel* nonEmptyTagModel READ nonEmptyTagModel CONSTANT) // Tags with at least one tag
     Q_OBJECT
 public:
     enum {
@@ -63,7 +62,6 @@ public:
     bool contains(const QString &name) const;
 
     QAbstractItemModel *model() const;
-    QAbstractItemModel *nonEmptyTagModel() const;
 
     QString deletedTagName() const;
 
@@ -71,7 +69,6 @@ public:
 
 Q_SIGNALS:
     void tagAboutToBeRemoved(const QString &name);
-    void invalidateNonEmptyTagModel();
 
 public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);
@@ -83,8 +80,6 @@ protected:
 
     virtual void saveTags_impl() = 0;
     virtual void loadTags_impl() = 0;
-private Q_SLOTS:
-    void onTaskCountChanged(int oldCount, int newCount);
 
 private:
     int indexOf(const QString &name) const;
@@ -92,7 +87,6 @@ private:
 
     QTimer m_scheduleTimer;
     SortedTagsModel *m_sortModel;
-    mutable FunctionalModels::Remove_if *m_nonEmptyTagModel;
     QString m_deletedTagName;
     bool m_savingDisabled;
 };
