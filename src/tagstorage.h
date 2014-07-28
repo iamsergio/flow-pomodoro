@@ -92,6 +92,7 @@ private:
     FunctionalModels::SortModel *m_sortModel;
     mutable FunctionalModels::Remove_if *m_nonEmptyTagModel;
     QString m_deletedTagName;
+    bool m_savingDisabled;
 };
 
 #endif

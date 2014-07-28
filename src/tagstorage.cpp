@@ -57,6 +57,7 @@ static bool isNonEmptyTag(const QVariant &variant)
 TagStorage::TagStorage(QObject *parent)
     : QObject(parent)
     , m_nonEmptyTagModel(nullptr)
+    , m_savingDisabled(false)
 {
     m_scheduleTimer.setSingleShot(true);
     m_scheduleTimer.setInterval(0);
@@ -81,7 +82,10 @@ TagStorage *TagStorage::instance()
 
 void TagStorage::scheduleSaveTags()
 {
-    m_scheduleTimer.start();
+    if (!m_savingDisabled) {
+        qDebug() << Q_FUNC_INFO;
+        m_scheduleTimer.start();
+    }
 }
 
 bool TagStorage::removeTag(const QString &tagName)
@@ -204,7 +208,9 @@ void TagStorage::saveTags()
 
 void TagStorage::loadTags()
 {
+    m_savingDisabled = true;
     loadTags_impl();
+    m_savingDisabled = false;
     // qDebug() << Q_FUNC_INFO << "Loaded:" << m_tags.count();
 }
 
