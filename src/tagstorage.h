@@ -39,7 +39,8 @@ class TagStorage : public QObject
 public:
     enum {
         TagRole = Qt::UserRole + 1,
-        TagPtrRole
+        TagPtrRole,
+        LastRole
     };
 
     static TagStorage *instance();

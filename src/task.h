@@ -41,10 +41,7 @@ enum SerializerVersion {
     SerializerVersion2 = 101 // Added Task::description()
 };
 
-namespace FunctionalModels {
-class Transform;
-};
-
+class CheckableTagModel;
 class QAbstractListModel;
 
 class Task : public QObject {
@@ -106,7 +103,7 @@ private:
     QString m_summary;
     QString m_description;
     TagRef::List m_tags;
-    FunctionalModels::Transform *m_checkableTagModel;
+    CheckableTagModel *m_checkableTagModel;
     TaskStatus m_status;
     bool m_staged;
     QWeakPointer<Task> m_this;

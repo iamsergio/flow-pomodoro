@@ -20,7 +20,7 @@
 
 #include "task.h"
 #include "settings.h"
-#include "transform.h"
+#include "checkabletagmodel.h"
 #include "tagstorage.h"
 #include <QQmlEngine>
 
@@ -33,25 +33,6 @@ enum {
     TagRole = Qt::UserRole,
     TaskRole
 };
-
-static QVariant data(const QPointer<Task> &task, const QModelIndex &sourceIndex, int role)
-{
-    if (role == Qt::CheckStateRole) {
-        if (!task) {
-            return false;
-        }
-
-        Tag::Ptr tag = sourceIndex.data(TagStorage::TagPtrRole).value<Tag::Ptr>();
-        if (!tag) {
-            qWarning() << Q_FUNC_INFO <<"Unexpected null tag";
-            return false;
-        }
-
-        return task->containsTag(tag->name());
-    }
-
-    return sourceIndex.data(role);
-}
 
 Task::Task(const QString &name)
     : QObject()
@@ -75,8 +56,8 @@ Task::Task(const QString &name)
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     auto roleNames = TagStorage::instance()->model()->roleNames();
     roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
-    FunctionalModels::DataFunc dataFunc = std::bind(&data, QPointer<Task>(this), _1, _2);
-    m_checkableTagModel = new FunctionalModels::Transform(TagStorage::instance()->model(), dataFunc, roleNames, this);
+    m_checkableTagModel = new CheckableTagModel(this);
+    m_checkableTagModel->setSourceModel(TagStorage::instance()->model());
 }
 
 Task::Ptr Task::createTask(const QString &name)
