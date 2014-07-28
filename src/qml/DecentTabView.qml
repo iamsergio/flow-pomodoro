@@ -25,7 +25,7 @@ ListView {
                     font.bold: true
                 }
                 Text {
-                    text: (tag.taskModel.count <= 1 ? "" : " (" + tag.taskModel.count + ")")
+                    text: tag.taskModel.count > 0 ? " (" + tag.taskModel.count + ")" : ""
                     color:"white"
                     anchors.verticalCenter: tagText.verticalCenter
                     anchors.verticalCenterOffset: -1
