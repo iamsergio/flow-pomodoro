@@ -65,6 +65,10 @@ Rectangle {
             }
         }
 
+        onDoubleClicked: {
+            _controller.editTask(task, Controller.EditModeInline)
+        }
+
         onPressAndHold: {
             _controller.editTask(task, Controller.EditModeInline)
         }
