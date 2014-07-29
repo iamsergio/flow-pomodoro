@@ -26,10 +26,6 @@
 #include <QObject>
 #include <QTimer>
 
-namespace FunctionalModels {
-class Remove_if;
-}
-
 class SortedTagsModel;
 
 class TagStorage : public QObject

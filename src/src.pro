@@ -20,7 +20,8 @@ SOURCES += checkabletagmodel.cpp \
            taskstorage.cpp \
            taskstorageqsettings.cpp \
            task.cpp \
-           taskfilterproxymodel.cpp
+           taskfilterproxymodel.cpp \
+    archivedtasksfiltermodel.cpp
 
 HEADERS += checkabletagmodel.h \
            controller.h      \
@@ -38,7 +39,8 @@ HEADERS += checkabletagmodel.h \
            task.h            \
            taskfilterproxymodel.h \
            taskstorage.h \
-           taskstorageqsettings.h
+           taskstorageqsettings.h \
+    archivedtasksfiltermodel.h
 
 contains(QT_CONFIG, dbus) {
     QT += dbus

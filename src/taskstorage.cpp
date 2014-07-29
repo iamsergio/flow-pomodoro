@@ -19,6 +19,7 @@
 */
 
 #include "taskstorage.h"
+#include "archivedtasksfiltermodel.h"
 #include "taskstorageqsettings.h"
 #include "taskfilterproxymodel.h"
 #include "tagstorage.h"
@@ -26,9 +27,9 @@
 TaskStorage::TaskStorage(QObject *parent)
     : QObject(parent)
     , m_taskFilterModel(new TaskFilterProxyModel(this))
-    , m_stagedTasksModel(new TaskFilterProxyModel(this))
     , m_untaggedTasksModel(new TaskFilterProxyModel(this))
-    , m_archivedTasksModel(new TaskFilterProxyModel(this))
+    , m_stagedTasksModel(new ArchivedTasksFilterModel(m_tasks, this))
+    , m_archivedTasksModel(new ArchivedTasksFilterModel(m_tasks, this))
     , m_tagStorage(TagStorage::instance())
     , m_savingDisabled(false)
 {
@@ -37,9 +38,7 @@ TaskStorage::TaskStorage(QObject *parent)
             this, &TaskStorage::onTagAboutToBeRemoved);
 
     m_taskFilterModel->setSourceModel(m_tasks);
-    m_stagedTasksModel->setSourceModel(m_tasks);
     m_untaggedTasksModel->setSourceModel(m_tasks);
-    m_archivedTasksModel->setSourceModel(m_tasks);
     m_scheduleTimer.setSingleShot(true);
     m_scheduleTimer.setInterval(0);
 
@@ -51,10 +50,9 @@ TaskStorage::TaskStorage(QObject *parent)
 
     m_tasks.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tasks.at(i).data()); }, TaskRole);
     m_tasks.insertRole("taskPtr", [&](int i) { return QVariant::fromValue<Task::Ptr>(m_tasks.at(i)); }, TaskPtrRole);
-    m_stagedTasksModel->setFilterStaged(true);
-    m_untaggedTasksModel->setFilterArchived(true);
+    m_stagedTasksModel->setAcceptArchived(false);
+    m_archivedTasksModel->setAcceptArchived(true);
     m_untaggedTasksModel->setFilterUntagged(true);
-    m_archivedTasksModel->setFilterArchived(true);
 }
 
 TaskStorage *TaskStorage::instance()
@@ -81,7 +79,12 @@ TaskFilterProxyModel *TaskStorage::untaggedTasksModel() const
     return m_untaggedTasksModel;
 }
 
-TaskFilterProxyModel *TaskStorage::archivedTasksModel() const
+ArchivedTasksFilterModel *TaskStorage::stagedTasksModel() const
+{
+    return m_stagedTasksModel;
+}
+
+ArchivedTasksFilterModel *TaskStorage::archivedTasksModel() const
 {
     return m_archivedTasksModel;
 }
@@ -102,9 +105,9 @@ Task::Ptr TaskStorage::addTask(const Task::Ptr &task)
     connect(task.data(), &Task::changed, this,
             &TaskStorage::scheduleSaveTasks, Qt::UniqueConnection);
     connect(task.data(), &Task::stagedChanged, m_stagedTasksModel,
-            &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
+            &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
     connect(task.data(), &Task::stagedChanged, m_archivedTasksModel,
-            &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
+            &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
     connect(task.data(), &Task::tagsChanged, m_untaggedTasksModel,
             &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
 
@@ -171,11 +174,6 @@ void TaskStorage::saveTasks()
     m_savingDisabled = false;
 
     saveTasks_impl();
-}
-
-TaskFilterProxyModel *TaskStorage::stagedTasksModel() const
-{
-    return m_stagedTasksModel;
 }
 
 int TaskStorage::proxyRowToSource(int proxyRow) const

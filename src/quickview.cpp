@@ -26,6 +26,7 @@
 #include "controller.h"
 #include "tagstorage.h"
 #include "taskstorageqsettings.h"
+#include "archivedtasksfiltermodel.h"
 
 #include <QStandardPaths>
 #include <QQmlContext>
@@ -64,6 +65,10 @@ QuickView::QuickView(QWindow *parent)
     qmlRegisterUncreatableType<TaskFilterProxyModel>("Controller",
                                                      1, 0, "TaskFilterProxyModel",
                                                      "TaskFilterProxyModel is not creatable");
+
+    qmlRegisterUncreatableType<ArchivedTasksFilterModel>("Controller",
+                                                         1, 0, "ArchivedTasksFilterModel",
+                                                         "ArchivedTasksFilterModel is not creatable");
 
     qmlRegisterUncreatableType<Controller>("Controller",
                                            1, 0, "Controller",

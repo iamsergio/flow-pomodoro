@@ -22,6 +22,8 @@
 #include "remove_if.h"
 #include "taskstorage.h"
 #include "taskfilterproxymodel.h"
+#include "archivedtasksfiltermodel.h"
+
 #include <QQmlEngine>
 
 using namespace std::placeholders;
