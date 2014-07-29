@@ -22,7 +22,7 @@ SOURCES += archivedtasksfiltermodel.cpp \
            task.cpp \
            taskfilterproxymodel.cpp
 
-HEADERS += archivedtasksfiltermodel.cpp \
+HEADERS += archivedtasksfiltermodel.h \
            checkabletagmodel.h \
            controller.h      \
            genericlistmodel.h \

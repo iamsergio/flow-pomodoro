@@ -21,7 +21,6 @@
 #include "tagstorage.h"
 #include "tagstorageqsettings.h"
 #include "sortedtagsmodel.h"
-#include "remove_if.h"
 
 #include <QDebug>
 #include <QGuiApplication>
