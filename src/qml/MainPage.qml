@@ -43,13 +43,25 @@ Page {
             }
         }
 
+        ClickableImage {
+            id: addIcon
+            source: "qrc:/img/add.png"
+            anchors.top: headerRectangle.bottom
+            anchors.topMargin: _style.marginSmall
+            anchors.right: parent.right
+            anchors.rightMargin: _style.marginSmall
+            onClicked: {
+                _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
+            }
+        }
+
         TaskListView {
             id: stagedView
             model: _taskStorage.stagedTasksModel
             anchors.topMargin: _style.marginSmall
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.top: headerRectangle.bottom
+            anchors.top: addIcon.bottom
             anchors.bottom: parent.bottom
             visible: _controller.queueType === Controller.QueueTypeToday
         }
@@ -60,7 +72,7 @@ Page {
             anchors.margins: _style.marginSmall
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.top: headerRectangle.bottom
+            anchors.top: addIcon.bottom
             model: _tagStorage.model
         }
 
