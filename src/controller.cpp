@@ -466,7 +466,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
 
     QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
-    const bool editing = m_indexBeingEdited != -1;
+    const bool editing = !m_taskBeingEdited.isNull();
 
     if (editing && (keyEvent->key() != Qt::Key_Escape &&
                     keyEvent->key() != Qt::Key_Enter &&
