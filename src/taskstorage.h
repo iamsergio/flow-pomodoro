@@ -90,7 +90,7 @@ private:
     ArchivedTasksFilterModel *m_archivedTasksModel;
     TagStorage *m_tagStorage;
     QTimer m_scheduleTimer;
-    bool m_savingDisabled;
+    int m_savingDisabled;
 };
 
 #endif

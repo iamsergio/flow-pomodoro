@@ -151,6 +151,7 @@ void TagStorage::setTags(const Tag::List &tags)
 
 void TagStorage::saveTags()
 {
+    qDebug() << Q_FUNC_INFO;
     m_deletedTagName = QString();
     saveTags_impl();
 }

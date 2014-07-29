@@ -31,7 +31,7 @@ TaskStorage::TaskStorage(QObject *parent)
     , m_stagedTasksModel(new ArchivedTasksFilterModel(m_tasks, this))
     , m_archivedTasksModel(new ArchivedTasksFilterModel(m_tasks, this))
     , m_tagStorage(TagStorage::instance())
-    , m_savingDisabled(false)
+    , m_savingDisabled(0)
 {
     m_tagStorage->loadTags();
     connect(m_tagStorage, &TagStorage::tagAboutToBeRemoved,
@@ -134,7 +134,7 @@ int TaskStorage::indexOf(const Task::Ptr &task) const
 
 void TaskStorage::setDisableSaving(bool disable)
 {
-    m_savingDisabled = disable;
+    m_savingDisabled += (disable ? 1 : -1);
 }
 
 void TaskStorage::dumpDebugInfo()
@@ -146,9 +146,9 @@ void TaskStorage::dumpDebugInfo()
 
 void TaskStorage::loadTasks()
 {
-    m_savingDisabled = true;
+    m_savingDisabled += 1;
     loadTasks_impl();
-    m_savingDisabled = false;
+    m_savingDisabled -= 1;
 }
 
 void TaskStorage::onTagAboutToBeRemoved(const QString &tagName)
@@ -159,20 +159,21 @@ void TaskStorage::onTagAboutToBeRemoved(const QString &tagName)
 
 void TaskStorage::scheduleSaveTasks()
 {
-    if (!m_savingDisabled)
+    if (m_savingDisabled == 0)
         m_scheduleTimer.start();
 }
 
 void TaskStorage::saveTasks()
 {
-    m_savingDisabled = true;
+    qDebug() << Q_FUNC_INFO;
+    m_savingDisabled += 1;
     for (int i = 0; i < m_tasks.count(); ++i) {
         Task::Ptr task = m_tasks.at(i);
         if (task->summary().isEmpty()) {
             task->setSummary(tr("New Task"));
         }
     }
-    m_savingDisabled = false;
+    m_savingDisabled -= 1;
 
     saveTasks_impl();
 }
