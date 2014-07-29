@@ -5,7 +5,8 @@ TARGET = flow
 
 QT += quick
 
-SOURCES += checkabletagmodel.cpp \
+SOURCES += archivedtasksfiltermodel.cpp \
+           checkabletagmodel.cpp \
            controller.cpp  \
            main.cpp        \
            pluginmodel.cpp \
@@ -19,10 +20,10 @@ SOURCES += checkabletagmodel.cpp \
            taskstorage.cpp \
            taskstorageqsettings.cpp \
            task.cpp \
-           taskfilterproxymodel.cpp \
-    archivedtasksfiltermodel.cpp
+           taskfilterproxymodel.cpp
 
-HEADERS += checkabletagmodel.h \
+HEADERS += archivedtasksfiltermodel.cpp \
+           checkabletagmodel.h \
            controller.h      \
            genericlistmodel.h \
            plugininterface.h \
@@ -37,8 +38,7 @@ HEADERS += checkabletagmodel.h \
            task.h            \
            taskfilterproxymodel.h \
            taskstorage.h \
-           taskstorageqsettings.h \
-    archivedtasksfiltermodel.h
+           taskstorageqsettings.h
 
 contains(QT_CONFIG, dbus) {
     QT += dbus
