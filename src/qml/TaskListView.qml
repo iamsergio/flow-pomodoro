@@ -48,7 +48,7 @@ ListView {
             id: animation
             running: false
             to: root.height
-            duration: 500
+            duration: _style.deleteAnimationDuration
         }
     }
 

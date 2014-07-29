@@ -57,6 +57,7 @@ Item {
     readonly property color queueBackgroundColor : Qt.rgba(0.9, 0.9, 0.5, 1)
 
     readonly property bool deleteAnimationEnabled : true
+    readonly property int deleteAnimationDuration : 350
 
     readonly property int pageHeight : 500 * _controller.dpiFactor
 
