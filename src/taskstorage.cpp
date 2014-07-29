@@ -38,7 +38,7 @@ TaskStorage::TaskStorage(QObject *parent)
             this, &TaskStorage::onTagAboutToBeRemoved);
 
     m_taskFilterModel->setSourceModel(m_tasks);
-    m_untaggedTasksModel->setSourceModel(m_tasks);
+    m_untaggedTasksModel->setSourceModel(m_archivedTasksModel);
     m_scheduleTimer.setSingleShot(true);
     m_scheduleTimer.setInterval(0);
 

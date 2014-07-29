@@ -23,7 +23,6 @@ Q_SIGNALS:
 private:
     QString m_tagText;
     bool m_filterUntagged;
-    friend class Controller;
 };
 
 #endif
