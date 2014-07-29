@@ -10,7 +10,6 @@ SOURCES += checkabletagmodel.cpp \
            main.cpp        \
            pluginmodel.cpp \
            quickview.cpp   \
-           remove_if.cpp   \
            settings.cpp    \
            sortedtagsmodel.cpp \
            tag.cpp \
@@ -29,7 +28,6 @@ HEADERS += checkabletagmodel.h \
            plugininterface.h \
            pluginmodel.h     \
            quickview.h       \
-           remove_if.h       \
            settings.h        \
            sortedtagsmodel.h \
            tag.h \

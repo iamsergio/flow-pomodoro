@@ -19,23 +19,14 @@
 
 #include "tag.h"
 #include "tagstorage.h"
-#include "remove_if.h"
 #include "taskstorage.h"
 #include "taskfilterproxymodel.h"
 #include "archivedtasksfiltermodel.h"
+#include "taskfilterproxymodel.h"
 
 #include <QQmlEngine>
 
 using namespace std::placeholders;
-
-static bool taskIsTagged(const QPointer<Tag> &tag, const QVariant &variant)
-{
-    Task::Ptr task = variant.value<Task::Ptr>();
-    if (!task || !tag)
-        return false;
-
-    return task->containsTag(tag->name());
-}
 
 Tag::Tag(const QString &_name)
     : QObject()
@@ -43,7 +34,7 @@ Tag::Tag(const QString &_name)
     , m_taskCount(0)
     , m_archivedTaskCount(0)
     , m_beingEdited(false)
-    , m_taskModel(0)
+    , m_taskModel(nullptr)
 {
     Q_ASSERT(!m_name.isEmpty());
 
@@ -113,13 +104,13 @@ QAbstractItemModel *Tag::taskModel()
 {
     // Delayed initialization do avoid deadlock accessing TaskStorage::instance() when TaskStorage is being constructed
     if (!m_taskModel) {
-        auto filterFunc = std::bind(&taskIsTagged, QPointer<Tag>(this), _1);
-        m_taskModel = new FunctionalModels::Remove_if(TaskStorage::instance()->archivedTasksModel(),
-                                                      filterFunc, TaskStorage::TaskPtrRole);
-        m_taskModel->setObjectName(m_name);
+        m_taskModel = new TaskFilterProxyModel(this);
+        m_taskModel->setTagName(m_name);
+        m_taskModel->setSourceModel(TaskStorage::instance()->archivedTasksModel());
+        m_taskModel->setObjectName(QString("Tasks with tag %1 model").arg(m_name));
 
         connect(this, &Tag::taskCountChanged,
-                m_taskModel, &FunctionalModels::Remove_if::invalidateFilter,
+                m_taskModel, &TaskFilterProxyModel::invalidateFilter,
                 Qt::QueuedConnection);
     }
 

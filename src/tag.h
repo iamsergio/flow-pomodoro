@@ -25,9 +25,7 @@
 #include <QString>
 #include <QSharedPointer>
 
-namespace FunctionalModels {
-class Remove_if;
-}
+class TaskFilterProxyModel;
 
 class Tag : public QObject
 {
@@ -71,7 +69,7 @@ private:
     int m_taskCount;
     int m_archivedTaskCount;
     bool m_beingEdited;
-    FunctionalModels::Remove_if *m_taskModel; // All unstaged tasks with this tag
+    TaskFilterProxyModel *m_taskModel; // All unstaged tasks with this tag
 };
 
 #endif

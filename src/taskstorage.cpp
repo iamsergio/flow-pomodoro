@@ -53,6 +53,7 @@ TaskStorage::TaskStorage(QObject *parent)
     m_stagedTasksModel->setAcceptArchived(false);
     m_archivedTasksModel->setAcceptArchived(true);
     m_untaggedTasksModel->setFilterUntagged(true);
+    m_untaggedTasksModel->setObjectName("Untagged and archived tasks model");
 }
 
 TaskStorage *TaskStorage::instance()
