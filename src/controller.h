@@ -46,8 +46,7 @@ class Controller : public QObject {
     Q_PROPERTY(Tag* currentTabTag READ currentTabTag WRITE setCurrentTabTag NOTIFY currentTabTagChanged)
     Q_PROPERTY(QueueType queueType READ queueType WRITE setQueueType NOTIFY queueTypeChanged)
     // Editing task properties
-    Q_PROPERTY(int indexBeingEdited READ indexBeingEdited NOTIFY indexBeingEditedChanged)
-    Q_PROPERTY(QObject* taskBeingEdited READ taskBeingEdited NOTIFY indexBeingEditedChanged)
+    Q_PROPERTY(QObject* taskBeingEdited READ taskBeingEdited NOTIFY taskBeingEditedChanged)
     Q_PROPERTY(EditMode editMode READ editMode NOTIFY editModeChanged)
     // Popup properties
     Q_PROPERTY(QString popupText READ popupText NOTIFY popupTextChanged)
@@ -98,7 +97,6 @@ public:
     int remainingMinutes() const;
     int currentTaskDuration() const; // in minutes
     Task *currentTask() const;
-    int indexBeingEdited() const;
     EditMode editMode() const;
 
     bool expanded() const;
@@ -176,7 +174,7 @@ Q_SIGNALS:
     void currentTaskChanged();
     void popupVisibleChanged();
     void popupTextChanged();
-    void indexBeingEditedChanged();
+    void taskBeingEditedChanged();
     void editModeChanged();
     void tagEditStatusChanged();
     void rightClickedTaskChanged();
@@ -185,6 +183,7 @@ Q_SIGNALS:
     void currentTabTagChanged();
     void invalidateTaskModel();
     void queueTypeChanged();
+    void addingNewTask();
 
 private:
     int indexOfTaskInCurrentTab(const Task::Ptr &task);
@@ -201,7 +200,6 @@ private:
     QTimer *m_afterAddingTimer;
     int m_elapsedMinutes;
     bool m_expanded;
-    int m_indexBeingEdited;
     TaskStorage *m_taskStorage;
     Task::Ptr m_currentTask;
     Page m_page;

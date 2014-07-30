@@ -77,6 +77,7 @@ Page {
         }
 
         TaskListView {
+            id: archiveView
             visible: tabView.visible
             model: _controller.currentTabTag == null ? _taskStorage.untaggedTasksModel : _controller.currentTabTag.taskModel
             anchors.topMargin: _style.marginMedium

@@ -7,13 +7,17 @@ ListView {
     id: root
     clip: true
     highlightFollowsCurrentItem: true
-    currentIndex: _controller.indexBeingEdited
     spacing: 3 * _controller.dpiFactor
     visible: _controller.expanded
     onCountChanged: {
         // HACK: For some reason the first inserted element takes more than 1 event loop.
         // It doesn't go immediately into the list view after we insert it into the model in controller.cpp
         // that event loop run breaks focus, so restore it here.
+
+        // Make the newly inserted task visible
+        if (_controller.editMode !== Controller.EditModeNone)
+           currentIndex = root.count - 1
+
         _controller.forceFocus(count-1)
     }
 
@@ -57,7 +61,7 @@ ListView {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            if (_controller.indexBeingEdited !== -1) {
+            if (_controller.taskBeingEdited !== null) {
                 _controller.editTask(null, Controller.EditModeNone)
             } else {
                 _controller.expanded = false

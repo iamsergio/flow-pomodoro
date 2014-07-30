@@ -42,7 +42,6 @@ Controller::Controller(QuickView *quickView)
     , m_afterAddingTimer(new QTimer(this))
     , m_elapsedMinutes(0)
     , m_expanded(false)
-    , m_indexBeingEdited(-1)
     , m_taskStorage(TaskStorage::instance())
     , m_page(MainPage)
     , m_quickView(quickView)
@@ -81,11 +80,6 @@ int Controller::remainingMinutes() const
 int Controller::currentTaskDuration() const
 {
     return m_currentTaskDuration;
-}
-
-int Controller::indexBeingEdited() const
-{
-    return m_indexBeingEdited;
 }
 
 Controller::EditMode Controller::editMode() const
@@ -488,7 +482,6 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     case Qt::Key_Enter:
         if (editing) {
             editTask(nullptr, EditModeNone);
-            setSelectedTask(m_taskStorage->at(m_indexBeingEdited));
         } else {
             if (m_selectedTask == nullptr) {
                 setExpanded(true);
@@ -602,8 +595,6 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
     }
 
     if (m_taskBeingEdited != task.data()) {
-        m_indexBeingEdited = m_taskStorage->indexOf(task);
-
         // Disabling saving when editor is opened, only save when it's closed.
         m_taskStorage->setDisableSaving(!task.isNull());
 
@@ -613,8 +604,10 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
         } else {
             m_taskBeingEdited = task.data();
         }
-        emit indexBeingEditedChanged();
+        emit taskBeingEditedChanged();
     }
+
+    setSelectedTask(Task::Ptr());
 }
 
 void Controller::beginAddingNewTag()
@@ -653,6 +646,7 @@ void Controller::addTask(const QString &text, bool startEditMode)
         int lastIndex = m_taskStorage->taskFilterModel()->rowCount()-1;
         editTask(m_taskStorage->at(lastIndex).data(), EditModeInline);
         emit forceFocus(lastIndex);
+        emit addingNewTask();
     }
 }
 
