@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 MouseArea {
     id: root
-    property int delay: 2000
+    property int delay: 1000
     property string text: ""
 
     hoverEnabled: true
@@ -17,7 +17,7 @@ MouseArea {
 
     Timer {
         id: timer
-        interval: 2000
+        interval: root.delay
         repeat: false
         onTriggered: {
             _toolTipController.showToolTip(root, text)
