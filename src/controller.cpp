@@ -370,9 +370,17 @@ void Controller::setQueueType(QueueType type)
 void Controller::setCurrentTabTag(Tag *tag)
 {
     if (m_currentTabTag != tag) {
+        if (tag) {
+            connect(tag, &Tag::destroyed,
+                    this, &Controller::currentTabTagChanged, Qt::UniqueConnection);
+        }
+
+        if (m_currentTabTag) {
+            disconnect(m_currentTabTag.data(), &Tag::destroyed,
+                       this, &Controller::currentTabTagChanged);
+        }
+
         m_currentTabTag = tag;
-        connect(m_currentTabTag.data(), &Tag::destroyed,
-                this, &Controller::currentTabTagChanged, Qt::UniqueConnection);
         emit currentTabTagChanged();
     }
 }
