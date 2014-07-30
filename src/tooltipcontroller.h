@@ -21,8 +21,8 @@
 #define TOOLTIPCONTROLLER_H
 
 #include <QObject>
+
 class QQuickItem;
-class QQuickWindow;
 
 class ToolTipController : public QObject
 {
@@ -33,10 +33,6 @@ public:
 public Q_SLOTS:
     void showToolTip(QQuickItem *item, const QString &text);
     void hideToolTip();
-
-private:
-    QQuickWindow *m_window;
-
 };
 
 #endif

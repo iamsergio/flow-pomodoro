@@ -3,7 +3,18 @@ include ("../global.pri")
 TEMPLATE = app
 TARGET = flow
 
-QT += quick widgets
+QT += quick
+
+qtHaveModule(widgets) {
+    QT += widgets
+}
+
+contains(QT_CONFIG, dbus) {
+    QT += dbus
+    SOURCES += dbus/flow.cpp
+    HEADERS += dbus/flow.h
+    DEFINES += FLOW_DBUS
+}
 
 SOURCES += archivedtasksfiltermodel.cpp \
            checkabletagmodel.cpp \
@@ -41,13 +52,6 @@ HEADERS += archivedtasksfiltermodel.h \
            taskstorage.h \
            taskstorageqsettings.h \
            tooltipcontroller.h
-
-contains(QT_CONFIG, dbus) {
-    QT += dbus
-    SOURCES += dbus/flow.cpp
-    HEADERS += dbus/flow.h
-    DEFINES += FLOW_DBUS
-}
 
 OTHER_FILES += AboutPage.qml      \
                config/General.qml \

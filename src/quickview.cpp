@@ -33,7 +33,6 @@
 #include <QQmlContext>
 #include <QString>
 #include <QScreen>
-#include <QGuiApplication>
 #include <QDebug>
 #include <QQmlEngine>
 #include <QDir>

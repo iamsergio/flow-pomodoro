@@ -21,8 +21,13 @@
 #include "quickview.h"
 #include "dbus/flow.h"
 
-//#include <QGuiApplication>
-#include <QApplication>
+#ifdef QT_WIDGETS_LIB
+# include <QApplication>
+typedef QApplication Application;
+#else
+# include <QGuiApplication>
+typedef QGuiApplication Application;
+#endif
 
 #include <QDebug>
 
@@ -30,7 +35,6 @@
 # include <QDBusConnection>
 # include <QDBusError>
 #endif
-
 
 void initDBus(Controller *controller)
 {
@@ -52,14 +56,12 @@ void initDBus(Controller *controller)
 #endif
 }
 
-
 int main(int argc, char *argv[])
 {
 #ifdef Q_OS_WIN
     qputenv("QT_QPA_PLATFORM","windows:fontengine=freetype");
 #endif
-    //QGuiApplication app(argc, argv);
-    QApplication app(argc, argv);
+    Application app(argc, argv);
     app.setOrganizationName("KDAB");
     app.setApplicationName("flow");
 

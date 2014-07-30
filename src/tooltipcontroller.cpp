@@ -19,8 +19,10 @@
 
 #include "tooltipcontroller.h"
 
-#include <QToolTip>
-#include <QDebug>
+#ifdef QT_WIDGETS_LIB
+# include <QToolTip>
+#endif
+
 #include <QQuickItem>
 #include <QQuickWindow>
 
@@ -31,12 +33,18 @@ ToolTipController::ToolTipController(QObject *parent)
 
 void ToolTipController::showToolTip(QQuickItem *item, const QString &text)
 {
-
+#ifdef QT_WIDGETS_LIB
     QToolTip::showText(item->mapToScene(item->position()).toPoint() +
                                         item->window()->position(), text);
+#else
+    Q_UNUSED(item);
+    Q_UNUSED(text);
+#endif
 }
 
 void ToolTipController::hideToolTip()
 {
+#ifdef QT_WIDGETS_LIB
     QToolTip::showText(QPoint(), "");
+#endif
 }
