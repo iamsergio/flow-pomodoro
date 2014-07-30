@@ -15,9 +15,10 @@ ListView {
             width: Math.max(65, root.width / root.model.count)
             color: "black"
             property bool isSelected: tag == _controller.currentTabTag
-
             Row {
+                id: textRow
                 anchors.centerIn: parent
+                anchors.horizontalCenterOffset: - Math.ceil(separator.width / 2.0)
                 Text {
                     id: tagText
                     text: tag.name
