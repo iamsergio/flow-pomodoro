@@ -121,6 +121,7 @@ Rectangle {
 
             ClickableImage {
                 id: archiveImage
+                toolTip: qsTr("Archive task")
                 source: (taskObj !== null && taskObj.staged) ? "qrc:/img/archive.png" : "qrc:/img/stage.png"
                 visible: root.buttonsVisible
                 onClicked: {
@@ -130,6 +131,7 @@ Rectangle {
 
             ClickableImage {
                 id: deleteImage
+                toolTip: qsTr("Delete task")
                 source: "qrc:/img/delete.png"
                 visible: root.buttonsVisible
                 onClicked: {
@@ -139,6 +141,7 @@ Rectangle {
 
             ClickableImage {
                 id: editImage
+                toolTip: qsTr("Edit task")
                 source: "qrc:/img/edit.png"
                 visible: root.buttonsVisible && false // Disabled for now, not enough space
                 onClicked: {
@@ -153,6 +156,7 @@ Rectangle {
 
             ClickableImage {
                 id: playImage
+                toolTip: qsTr("Start pomodoro on task")
                 source: "qrc:/img/play.png"
                 visible: root.buttonsVisible && (taskObj !== null && taskObj.staged)
                 onClicked: {

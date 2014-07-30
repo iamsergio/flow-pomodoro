@@ -70,6 +70,7 @@ ModalDialog {
                     ClickableImage {
                         source: "qrc:/img/tag.png"
                         anchors.verticalCenter: parent.verticalCenter
+                        toolTip: qsTr("Configure tags")
                         onClicked: {
                             tagsMenu.popup()
                         }

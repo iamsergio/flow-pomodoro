@@ -94,6 +94,7 @@ Rectangle {
 
             ClickableImage {
                 id: pauseIcon
+                toolTip: qsTr("Pause current task")
                 visible: !_controller.currentTask.stopped && (_controller.expanded || mouseOver() || _controller.currentTask.paused)
                 source: _controller.currentTask.paused ? "qrc:/img/play.png" : "qrc:/img/pause.png"
                 onClicked: {
@@ -103,6 +104,7 @@ Rectangle {
 
             ClickableImage {
                 id: stopIcon
+                toolTip: qsTr("Stop current task")
                 visible: !_controller.currentTask.stopped && (_controller.expanded || mouseOver() || _controller.currentTask.paused)
                 source: "qrc:/img/stop.png"
                 onClicked: {

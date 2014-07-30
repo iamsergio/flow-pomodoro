@@ -3,7 +3,7 @@ include ("../global.pri")
 TEMPLATE = app
 TARGET = flow
 
-QT += quick
+QT += quick widgets
 
 SOURCES += archivedtasksfiltermodel.cpp \
            checkabletagmodel.cpp \
@@ -20,7 +20,8 @@ SOURCES += archivedtasksfiltermodel.cpp \
            taskstorage.cpp \
            taskstorageqsettings.cpp \
            task.cpp \
-           taskfilterproxymodel.cpp
+           taskfilterproxymodel.cpp \
+           tooltipcontroller.cpp
 
 HEADERS += archivedtasksfiltermodel.h \
            checkabletagmodel.h \
@@ -38,7 +39,8 @@ HEADERS += archivedtasksfiltermodel.h \
            task.h            \
            taskfilterproxymodel.h \
            taskstorage.h \
-           taskstorageqsettings.h
+           taskstorageqsettings.h \
+           tooltipcontroller.h
 
 contains(QT_CONFIG, dbus) {
     QT += dbus
@@ -68,7 +70,8 @@ OTHER_FILES += AboutPage.qml      \
                TaskEditorDialog.qml \
                TaskListView.qml \
                TaskTextField.qml \
-               TitleText.qml
+               TitleText.qml     \
+               ToolTip.qml
 
 
 RESOURCES += resources.qrc

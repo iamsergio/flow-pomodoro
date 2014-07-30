@@ -21,7 +21,8 @@
 #include "quickview.h"
 #include "dbus/flow.h"
 
-#include <QGuiApplication>
+//#include <QGuiApplication>
+#include <QApplication>
 
 #include <QDebug>
 
@@ -57,7 +58,8 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_WIN
     qputenv("QT_QPA_PLATFORM","windows:fontengine=freetype");
 #endif
-    QGuiApplication app(argc, argv);
+    //QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     app.setOrganizationName("KDAB");
     app.setApplicationName("flow");
 

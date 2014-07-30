@@ -27,6 +27,7 @@
 #include "tagstorage.h"
 #include "taskstorageqsettings.h"
 #include "archivedtasksfiltermodel.h"
+#include "tooltipcontroller.h"
 
 #include <QStandardPaths>
 #include <QQmlContext>
@@ -47,6 +48,7 @@ QuickView::QuickView(QWindow *parent)
     , m_pluginModel(new PluginModel(this))
     , m_developerMode(qApp->arguments().contains("-d"))
 {
+    rootContext()->setContextProperty("_toolTipController", new ToolTipController(this));
     rootContext()->setContextProperty("_controller", m_controller);
     rootContext()->setContextProperty("_pluginModel", m_pluginModel);
     rootContext()->setContextProperty("_taskStorage", m_taskStorage);

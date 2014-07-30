@@ -66,6 +66,7 @@ Item {
 
     ClickableImage {
         id: addImage
+        toolTip: qsTr("Add new tag")
         source: "qrc:/img/add.png"
         anchors.bottom: parent.bottomight
         enabled: _controller.tagEditStatus !== Controller.TagEditStatusNew

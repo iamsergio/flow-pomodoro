@@ -30,6 +30,7 @@
     <file>qml/TaskListView.qml</file>
     <file>qml/TaskTextField.qml</file>
     <file>qml/TitleText.qml</file>
+    <file>qml/ToolTip.qml</file>
 
     <file>qml/config/General.qml</file>
     <file>qml/config/Plugins.qml</file>

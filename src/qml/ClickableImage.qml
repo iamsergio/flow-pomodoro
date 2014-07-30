@@ -7,32 +7,36 @@ Item {
     signal pressAndHold()
     property alias containsMouse: mouseArea.containsMouse
     property alias source: icon.source
+    property alias toolTip: tooltip.text
     height: icon.height
     width: icon.width
+    ToolTip {
+        id: tooltip
+        anchors.fill: parent
 
-    Image {
-        id: icon
-
-        scale: mouseArea.containsMouse ? mouseArea.pressed ? 1.2
-                                                           : 1.1
-                                       : 1.0
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: {
-                root.clicked()
-            }
-            onPressAndHold: {
-                root.pressAndHold()
+        Image {
+            id: icon
+            scale: mouseArea.containsMouse ? mouseArea.pressed ? 1.2
+                                                               : 1.1
+                                           : 1.0
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked: {
+                    root.clicked()
+                }
+                onPressAndHold: {
+                    root.pressAndHold()
+                }
             }
         }
-    }
 
-    Desaturate {
-        visible: !root.enabled
-        anchors.fill: parent
-        source: icon
-        desaturation: 0.8
+        Desaturate {
+            visible: !root.enabled
+            anchors.fill: parent
+            source: icon
+            desaturation: 0.8
+        }
     }
 }
