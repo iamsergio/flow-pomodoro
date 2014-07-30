@@ -7,6 +7,7 @@ ListView {
     id: root
     clip: true
     highlightFollowsCurrentItem: true
+    highlightMoveVelocity: 20000
     spacing: 3 * _controller.dpiFactor
     visible: _controller.expanded
     onCountChanged: {
