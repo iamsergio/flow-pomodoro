@@ -4,7 +4,7 @@ ListView {
     id: root
     orientation: Qt.Horizontal
     delegate: tabDelegate
-    height: 30
+    height: _style.tagTabHeight
     clip: true
 
     Component {
@@ -21,12 +21,13 @@ ListView {
                 Text {
                     id: tagText
                     text: tag.name
-                    color: "white"
+                    color: _style.tagTabTextColor
                     font.bold: true
+                    font.pointSize: _style.tagTabFontSize
                 }
                 Text {
                     text: tag.taskModel.count > 0 ? " (" + tag.taskModel.count + ")" : ""
-                    color:"white"
+                    color: _style.tagTabTextColor
                     anchors.verticalCenter: tagText.verticalCenter
                     anchors.verticalCenterOffset: -1
                     font.pointSize: tagText.font.pointSize - 1
@@ -40,7 +41,7 @@ ListView {
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 anchors.rightMargin: separator.visible ? -separator.anchors.leftMargin - 1 : 0
-                height: 5
+                height: _style.tagTabSelectionHeight
                 visible: isSelected
                 color: "#43ACE8"
             }
@@ -50,9 +51,9 @@ ListView {
                 anchors.left: parent.right
                 anchors.leftMargin: -3
                 anchors.verticalCenter: parent.verticalCenter
-                width: 1
+                width: _style.tagTabSeparatorWidth
                 height: parent.height - 2*selection.height
-                color: "gray" // TODO style
+                color: _style.tagTabSeparatorColor
                 visible: index != root.model.count - 1 // No separator for last index
             }
             MouseArea {

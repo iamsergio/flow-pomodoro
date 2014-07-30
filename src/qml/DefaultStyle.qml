@@ -47,6 +47,14 @@ Item {
     readonly property int taskEditorFontSize: 14
     readonly property int taskEditorHeight: 250
 
+    // Tag tabs
+    readonly property color tagTabTextColor: "white"
+    readonly property int tagTabFontSize: 9
+    readonly property int tagTabSelectionHeight: 5
+    readonly property color tagTabSeparatorColor: "gray"
+    readonly property int tagTabSeparatorWidth: 1
+    readonly property int tagTabHeight: 30
+
     readonly property int queueRadius            : Math.ceil(5 * _controller.dpiFactor)
     readonly property string taskBackgroundColor : "black"
     readonly property string taskBorderColor     : "gray"

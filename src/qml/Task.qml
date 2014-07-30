@@ -93,7 +93,6 @@ Rectangle {
             id: invisibleHelper
             property bool isOverflowing: contentWidth > width
             visible: false
-            color: "red"
             anchors.fill: textItem
             text: textItem.text
             font.pointSize: _style.taskFontSize

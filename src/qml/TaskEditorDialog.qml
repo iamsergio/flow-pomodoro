@@ -35,6 +35,7 @@ ModalDialog {
 
             Text {
                 text: qsTr("Summary:")
+                color: _style.regularTextColor
             }
 
             TaskTextField {
@@ -45,6 +46,7 @@ ModalDialog {
 
             Text {
                 text: qsTr("Description:")
+                color: _style.regularTextColor
             }
 
             TextArea {
@@ -85,6 +87,7 @@ ModalDialog {
                     Text {
                         id: tagsLabel
                         text: qsTr("Tags:")
+                        color: _style.regularTextColor
                     }
                 }
             }
@@ -103,7 +106,7 @@ ModalDialog {
                         Text {
                             property bool last: _controller.taskBeingEdited.tagModel.count === index + 1
                             text: tag.name + (last ? "" : ", ")
-                            color: "black"
+                            color: _style.regularTextColor
                             elide: Text.ElideRight
                         }
                     }
