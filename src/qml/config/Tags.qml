@@ -19,11 +19,11 @@ Item {
     }
 
     Flow {
-        anchors.top: parent.top
+        anchors.top: addImage.bottom
         anchors.bottom: parent.bottom
         anchors.leftMargin: _style.marginMedium
         anchors.rightMargin: 40 * _controller.dpiFactor
-        anchors.topMargin: _style.marginBig
+        anchors.topMargin: _style.marginSmall
         anchors.left: parent.left
         anchors.right: parent.right
         spacing: 5
@@ -68,7 +68,8 @@ Item {
         id: addImage
         toolTip: qsTr("Add new tag")
         source: "qrc:/img/add.png"
-        anchors.bottom: parent.bottomight
+        anchors.top: parent.top
+        anchors.topMargin: _style.marginSmall
         enabled: _controller.tagEditStatus !== Controller.TagEditStatusNew
         onClicked: {
             newTag.textField.text = ""
