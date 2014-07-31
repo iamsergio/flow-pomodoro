@@ -32,7 +32,6 @@ ListView {
                 visible = false
                 animatedTask.y = y
                 animatedTask.taskSummary = taskObj.summary
-                animatedTask.visible = true
                 animation.running = true
             }
             _controller.removeTask(taskObj)
