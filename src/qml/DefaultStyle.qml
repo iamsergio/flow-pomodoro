@@ -39,21 +39,22 @@ Item {
     readonly property string dialogBorderColor: "darkblue"
     readonly property int dialogBorderWidth: 2 * _controller.dpiFactor
     readonly property int dialogFontSize: 11
-    readonly property int extraMargin: 4
-    readonly property int questionDialogHeight: 75
-    readonly property int dialogButtonsMargin: 6
+    readonly property int extraMargin: 4 * _controller.dpiFactor
+    readonly property int questionDialogHeight: 75 * _controller.dpiFactor
+    readonly property int dialogButtonsMargin: 6 * _controller.dpiFactor
 
     // Task Editor
     readonly property int taskEditorFontSize: 14
-    readonly property int taskEditorHeight: 250
+    readonly property int taskEditorHeight: 250 * _controller.dpiFactor
 
     // Tag tabs
     readonly property color tagTabTextColor: "white"
     readonly property int tagTabFontSize: 9
-    readonly property int tagTabSelectionHeight: 5
+    readonly property int tagTabSelectionHeight: 5 * _controller.dpiFactor
     readonly property color tagTabSeparatorColor: "gray"
-    readonly property int tagTabSeparatorWidth: 1
-    readonly property int tagTabHeight: 30
+    readonly property int tagTabSeparatorWidth: 1 * _controller.dpiFactor
+    readonly property int tagTabHeight: 30 * _controller.dpiFactor
+    readonly property int tagTabWidth: 65 * _controller.dpiFactor
 
     readonly property int queueRadius            : Math.ceil(5 * _controller.dpiFactor)
     readonly property string taskBackgroundColor : "black"
