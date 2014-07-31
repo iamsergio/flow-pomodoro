@@ -48,7 +48,7 @@ ListView {
         id: animatedTask
         width : parent.width
         anchors.left: parent.left
-        visible: false
+        visible: animation.running
         NumberAnimation on y {
             id: animation
             running: false
