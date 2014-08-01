@@ -63,8 +63,8 @@ Q_SIGNALS:
     void beingEditedChanged();
 
 private:
-    Tag() = delete;
-    Tag(const Tag &other) = delete;
+    Tag();
+    Tag(const Tag &other);
     QString m_name;
     int m_taskCount;
     int m_archivedTaskCount;

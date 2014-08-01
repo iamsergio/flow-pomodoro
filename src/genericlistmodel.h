@@ -7,7 +7,10 @@
 #include <QAbstractListModel>
 
 #include <functional>
+#include <QtCore/qcompilerdetection.h>
+#ifdef Q_COMPILER_INITIALIZER_LISTS
 #include <initializer_list>
+#endif
 
 #define ADD_ROLE3(role, list, method) \
     list.insertRole(role, [&](int i) { return list.at(i).method; })
@@ -20,8 +23,8 @@
 
 class _InternalModel;
 
-using GetterFunc = std::function<QVariant(int)>;
-using CountFunc = std::function<int()>;
+typedef std::function<QVariant(int)> GetterFunc;
+typedef std::function<int()> CountFunc;
 
 template <typename T>
 class GenericListModel : public QList<T>
@@ -29,7 +32,9 @@ class GenericListModel : public QList<T>
 public:
     GenericListModel();
     GenericListModel(const GenericListModel &other);
+#ifdef Q_COMPILER_INITIALIZER_LISTS
     GenericListModel(std::initializer_list<T> args);
+#endif
     ~GenericListModel();
 
     operator QAbstractListModel*() const { return m_model; }
@@ -63,21 +68,22 @@ public:
     GenericListModel<T> & operator<<(const QList<T> &);
     GenericListModel<T> & operator+=(const QList<T> &other);
 
-    // deleted from QList<T>, because they return T& and we can't monitor changes on that.
-    T & operator[](int i) = delete;
-    typename QList<T>::iterator erase(typename QList<T>::iterator) = delete;
-    typename QList<T>::iterator erase(typename QList<T>::iterator,
-                                      typename QList<T>::iterator) = delete;
-    typename QList<T>::iterator insert(typename QList<T>::iterator, const T&) = delete;
-
-    typename QList<T>::iterator begin() = delete;
-    typename QList<T>::iterator end() = delete;
-
-    T& first() = delete;
-    T& front() = delete;
-    T& last() = delete;
-    T& back() = delete;
 private:
+    // deleted from QList<T>, because they return T& and we can't monitor changes on that.
+    T & operator[](int i);
+    typename QList<T>::iterator erase(typename QList<T>::iterator);
+    typename QList<T>::iterator erase(typename QList<T>::iterator,
+                                      typename QList<T>::iterator);
+    typename QList<T>::iterator insert(typename QList<T>::iterator, const T&);
+
+    typename QList<T>::iterator begin();
+    typename QList<T>::iterator end();
+
+    T& first();
+    T& front();
+    T& last();
+    T& back();
+
     _InternalModel *const m_model;
 };
 
@@ -162,11 +168,13 @@ GenericListModel<T>::GenericListModel(const GenericListModel &other)
     , m_model(new _InternalModel([this](){ return this->count(); }))
 {}
 
+#ifdef Q_COMPILER_INITIALIZER_LISTS
 template <typename T>
 GenericListModel<T>::GenericListModel(std::initializer_list<T> args)
     : QList<T>(args)
     , m_model(new _InternalModel([this](){ return this->count(); }))
 {}
+#endif
 
 template <typename T>
 GenericListModel<T>::~GenericListModel()

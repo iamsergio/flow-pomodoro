@@ -30,7 +30,6 @@ class TagRef
 public:
     typedef GenericListModel<TagRef> List;
 
-    TagRef() = delete;
     TagRef(const TagRef &other);
     TagRef(const QPointer<Task> &task, const QString &tagName);
     ~TagRef();
@@ -38,6 +37,7 @@ public:
     Tag::Ptr m_tag;
     QPointer<Task> m_task;
 private:
+    TagRef();
     void init();
 
 };

@@ -37,7 +37,7 @@ void TagStorageQSettings::loadTags_impl()
     QStringList tagNames = v.toStringList();
 
     m_tags.clear();
-    for (const QString &name : tagNames)
+    foreach (const QString &name, tagNames)
         m_tags << Tag::Ptr(new Tag(name));
 
     m_settings->endGroup();
