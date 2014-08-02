@@ -22,7 +22,7 @@ Rectangle {
     anchors.right: parent.right
     anchors.leftMargin: _style.marginSmall
     anchors.rightMargin: _style.marginSmall
-    height: 50 * _controller.dpiFactor
+    height: _style.taskHeight
     border.color: _style.taskBorderColor
     border.width: selected ? _style.selectedTaskBorderWidth : 1
     radius: _style.taskBorderRadius

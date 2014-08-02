@@ -12,6 +12,7 @@ Item {
     readonly property int clickHereFontSize     : 10
     readonly property string clickHereFontColor : "lightsteelblue"
     readonly property int remainingFontSize     : 22
+    readonly property int taskHeight            : 50 * _controller.dpiFactor
 
     // progress bar:
     readonly property string progressBarBgColor       : "white"
