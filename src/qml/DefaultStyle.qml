@@ -23,10 +23,13 @@ Item {
     readonly property string tagFontColor: "white"
     readonly property int tagRadius: 5 * _controller.dpiFactor
     readonly property int tagFontSize: 10
+    readonly property int tagCountFontSize: 8
     readonly property string tagBorderColor: "black"
     readonly property int tagBorderWidth: 2 * _controller.dpiFactor
     readonly property bool tagFontBold: true
     readonly property int tagMoveAnimationDuration: 150
+    readonly property int tagTextLeftMargin: 5 * _controller.dpiFactor
+    readonly property int tagExtraWidth: 30
 
     // tags in task list
     readonly property color taskTagFontColor: "lightsteelblue"

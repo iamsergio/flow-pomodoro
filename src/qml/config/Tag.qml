@@ -6,7 +6,7 @@ import ".."
 Item {
     id: root
     height: invisible_helper.height + 2 *  _controller.dpiFactor
-    width: label.contentWidth + taskCountLabel.contentWidth + 30
+    width: label.contentWidth + taskCountLabel.contentWidth + _style.tagExtraWidth
     property QtObject tagObj: null
     property bool beingEdited: false
     property string tagName: ""
@@ -75,7 +75,7 @@ Item {
                 color: _style.tagFontColor
                 font.bold: true
                 anchors.left: parent.left
-                anchors.leftMargin: 5
+                anchors.leftMargin: _style.tagTextLeftMargin
                 anchors.verticalCenter: parent.verticalCenter
                 height: parent.height
                 text: root.beingEdited ? textField.text : root.tagName
@@ -86,8 +86,7 @@ Item {
                 id: taskCountLabel
                 anchors.left: label.right
                 text: (tagObj === null || !tagObj.taskCount) ? "" : " (" + tagObj.taskCount + ")"
-                font.pointSize: _style.tagFontSize - 2
-                anchors.verticalCenterOffset: -1
+                font.pointSize: _style.tagCountFontSize
                 anchors.verticalCenter: parent.verticalCenter
                 color: _style.tagFontColor
                 visible: !root.beingEdited
