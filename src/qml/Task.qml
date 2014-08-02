@@ -32,9 +32,9 @@ Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: textItem.anchors.leftMargin
         anchors.right: parent.right
-        anchors.rightMargin: 6
+        anchors.rightMargin: _style.tagRowRightMargin
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 1
+        anchors.bottomMargin: _style.tagRowBottomMargin
         clip: true
         visible: !root.inlineEditMode
 
