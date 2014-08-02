@@ -36,6 +36,8 @@ typedef QGuiApplication Application;
 # include <QDBusError>
 #endif
 
+#include <QStandardPaths>
+
 void initDBus(Controller *controller)
 {
 #ifdef FLOW_DBUS
@@ -53,13 +55,52 @@ void initDBus(Controller *controller)
 
     Flow *flowDBusInterface = new Flow(controller, qApp);
     QDBusConnection::sessionBus().registerObject("/", flowDBusInterface, QDBusConnection::ExportScriptableSlots);
+#else
+    Q_UNUSED(controller);
 #endif
+}
+
+static QString logFile()
+{
+    static QString filename;
+    if (filename.isEmpty()) {
+        filename = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/flow.log";
+        QFile::remove(filename);
+    }
+
+    return filename;
+}
+
+void windowsMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    QFile file(logFile());
+    file.open(QIODevice::Append | QIODevice::WriteOnly);
+    QTextStream out(&file);
+
+    QString level;
+    switch (type) {
+    case QtDebugMsg:
+        level = "Debug: ";
+        break;
+    case QtWarningMsg:
+        level = "Warning: ";
+        break;
+    case QtCriticalMsg:
+        level = "Critical: ";
+        break;
+    case QtFatalMsg:
+        level = "Fatal: ";
+        abort();
+    }
+
+    out << level << msg << "(" << context.file << ":" << context.line << " " << context.function << ")\r\n";
 }
 
 int main(int argc, char *argv[])
 {
 #ifdef Q_OS_WIN
     qputenv("QT_QPA_PLATFORM","windows:fontengine=freetype");
+    qInstallMessageHandler(windowsMessageHandler);
 #endif
     Application app(argc, argv);
     app.setOrganizationName("KDAB");
