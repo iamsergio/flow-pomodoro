@@ -7,7 +7,7 @@ flow
 qrc*cpp
 *so
 .directory
-
+.qmake.cache
 CMakeFiles
 *.cmake
 *automoc*
