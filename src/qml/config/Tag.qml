@@ -76,7 +76,6 @@ Item {
                 font.bold: true
                 anchors.left: parent.left
                 anchors.leftMargin: 5
-                anchors.verticalCenterOffset: 2
                 anchors.verticalCenter: parent.verticalCenter
                 height: parent.height
                 text: root.beingEdited ? textField.text : root.tagName
