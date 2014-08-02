@@ -77,7 +77,7 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: _style.tagTextLeftMargin
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 1 * _controller.dpiFactor
+                verticalAlignment: Text.AlignVCenter
                 height: parent.height
                 text: root.beingEdited ? textField.text : root.tagName
                 visible: !root.beingEdited
@@ -89,7 +89,7 @@ Item {
                 text: (tagObj === null || !tagObj.taskCount) ? "" : " (" + tagObj.taskCount + ")"
                 font.pointSize: _style.tagCountFontSize
                 anchors.verticalCenter: label.verticalCenter
-                anchors.verticalCenterOffset: -1 * _controller.dpiFactor
+                verticalAlignment: Text.AlignVCenter
                 color: _style.tagFontColor
                 visible: !root.beingEdited
             }
