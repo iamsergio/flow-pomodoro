@@ -22,11 +22,11 @@ Item {
         anchors.top: addImage.bottom
         anchors.bottom: parent.bottom
         anchors.leftMargin: _style.marginMedium
-        anchors.rightMargin: 40 * _controller.dpiFactor
+        anchors.rightMargin:_style.tagsRightMargin
         anchors.topMargin: _style.marginSmall
         anchors.left: parent.left
         anchors.right: parent.right
-        spacing: 5
+        spacing: _style.tagSpacing
 
         move: Transition {
             NumberAnimation { properties: "x"; duration: _style.tagMoveAnimationDuration }
