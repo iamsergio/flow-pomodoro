@@ -5,7 +5,7 @@ import ".."
 
 Item {
     id: root
-    height: invisible_helper.height + 2 *  _controller.dpiFactor
+    height: invisible_helper.childrenRect.height + 2 *  _controller.dpiFactor
     width: label.contentWidth + taskCountLabel.contentWidth + _style.tagExtraWidth
     property QtObject tagObj: null
     property bool beingEdited: false
@@ -71,7 +71,7 @@ Item {
 
             Text {
                 id: label
-                font.pointSize: invisible_helper.font.pointSize
+                font.pointSize: invisible_text.font.pointSize
                 color: _style.tagFontColor
                 font.bold: true
                 anchors.left: parent.left

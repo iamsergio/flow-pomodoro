@@ -32,13 +32,20 @@ Item {
             NumberAnimation { properties: "x"; duration: _style.tagMoveAnimationDuration }
         }
 
-        Text {
+        Item {
             id: invisible_helper
-            text: "Invisible Item"
             visible: false
-            font.pointSize: _style.tagFontSize
-            font.bold: _style.tagFontBold
-            color: _style.tagFontColor
+            Text {
+                id: invisible_text
+                text: "Invisible Item"
+                font.pointSize: _style.tagFontSize
+                font.bold: _style.tagFontBold
+                color: _style.tagFontColor
+            }
+            ClickableImage {
+                id: invisible_image
+                source: "qrc:/img/delete.png"
+            }
         }
 
         Repeater {
