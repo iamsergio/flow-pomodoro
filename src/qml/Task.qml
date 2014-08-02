@@ -47,6 +47,7 @@ Rectangle {
                 text: typeof tag != 'undefined' ? (tag.name + (last ? "" : ", ")) : ""
                 color: root.selected ?  _style.selectedTaskTagFontColor : _style.taskTagFontColor
                 elide: Text.ElideRight
+                font.pixelSize: 12 * _controller.dpiFactor
             }
         }
     }
@@ -84,7 +85,7 @@ Rectangle {
             anchors.leftMargin: 10* _controller.dpiFactor
             anchors.right: parent.right
             anchors.rightMargin: (16*3 + 15) * _controller.dpiFactor // 3 icons, 3 margins
-            font.pointSize: invisibleHelper.isOverflowing ? _style.taskFontSize - 5
+            font.pixelSize: invisibleHelper.isOverflowing ? _style.taskFontSize - (5*_controller.dpiFactor)
                                                           : _style.taskFontSize
             visible: !textField.visible
         }
@@ -95,7 +96,7 @@ Rectangle {
             visible: false
             anchors.fill: textItem
             text: textItem.text
-            font.pointSize: _style.taskFontSize
+            font.pixelSize: _style.taskFontSize
             font.bold: textItem.font.bold
         }
 

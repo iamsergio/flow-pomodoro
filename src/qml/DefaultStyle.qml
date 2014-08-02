@@ -8,10 +8,12 @@ Item {
     readonly property string borderColor        : "gray"
     readonly property int borderWidth           : 1 * _controller.dpiFactor
     readonly property color fontColor           : Qt.rgba(0.9, 0.9, 0.5, 1)
-    readonly property int fontSize              : 20
-    readonly property int clickHereFontSize     : 10
+    readonly property int fontSize              : 29 * _controller.dpiFactor
+    readonly property int currentTaskFontSize   : 23 * _controller.dpiFactor
+
+    readonly property int clickHereFontSize     : 11 * _controller.dpiFactor
     readonly property string clickHereFontColor : "lightsteelblue"
-    readonly property int remainingFontSize     : 22
+    readonly property int remainingFontSize     : 23 * _controller.dpiFactor
     readonly property int taskHeight            : 50 * _controller.dpiFactor
 
     // progress bar:
@@ -23,8 +25,8 @@ Item {
     readonly property string tagBackgroundColor: "blue"
     readonly property string tagFontColor: "white"
     readonly property int tagRadius: 5 * _controller.dpiFactor
-    readonly property int tagFontSize: 10
-    readonly property int tagCountFontSize: 8
+    readonly property int tagFontSize: 11 * _controller.dpiFactor
+    readonly property int tagCountFontSize: 10 * _controller.dpiFactor
     readonly property string tagBorderColor: "black"
     readonly property int tagBorderWidth: 2 * _controller.dpiFactor
     readonly property bool tagFontBold: true
@@ -48,18 +50,18 @@ Item {
     readonly property string dialogColor: "lightgray"
     readonly property string dialogBorderColor: "darkblue"
     readonly property int dialogBorderWidth: 2 * _controller.dpiFactor
-    readonly property int dialogFontSize: 11
+    readonly property int dialogFontSize: 14 * _controller.dpiFactor
     readonly property int extraMargin: 4 * _controller.dpiFactor
     readonly property int questionDialogHeight: 75 * _controller.dpiFactor
     readonly property int dialogButtonsMargin: 6 * _controller.dpiFactor
 
     // Task Editor
-    readonly property int taskEditorFontSize: 14
+    readonly property int taskEditorFontSize: 14 * _controller.dpiFactor
     readonly property int taskEditorHeight: 250 * _controller.dpiFactor
 
     // Tag tabs
     readonly property color tagTabTextColor: "white"
-    readonly property int tagTabFontSize: 9
+    readonly property int tagTabFontSize: 11 * _controller.dpiFactor
     readonly property int tagTabSelectionHeight: 5 * _controller.dpiFactor
     readonly property color tagTabSeparatorColor: "gray"
     readonly property int tagTabSeparatorWidth: 1 * _controller.dpiFactor
@@ -72,7 +74,7 @@ Item {
     readonly property int taskBorderRadius       : Math.ceil(5 * _controller.dpiFactor)
 
     readonly property string taskFontColor       : "white"
-    readonly property int taskFontSize           : 15
+    readonly property int taskFontSize           : 19 * _controller.dpiFactor
     readonly property color queueBackgroundColor : Qt.rgba(0.9, 0.9, 0.5, 1)
 
     readonly property bool deleteAnimationEnabled : true
@@ -89,12 +91,12 @@ Item {
     readonly property int buttonsSpacing : Math.ceil(5 * _controller.dpiFactor)
 
     readonly property int pageMargin : Math.ceil(10 * _controller.dpiFactor)
-    readonly property int titleSize : 22
+    readonly property int titleFontSize : 24 * _controller.dpiFactor
     readonly property string titleColor : "black"
-    readonly property int regularTextSize : 13
+    readonly property int regularTextSize : 14 * _controller.dpiFactor
     readonly property string regularTextColor : "black"
 
-    readonly property int smallTextSize     : 10
+    readonly property int smallTextSize     : 13 * _controller.dpiFactor
     readonly property string smallTextColor : "black"
 
     readonly property int progressBarHeight: 10 * _controller.dpiFactor

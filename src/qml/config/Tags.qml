@@ -38,7 +38,7 @@ Item {
             Text {
                 id: invisible_text
                 text: "Invisible Item"
-                font.pointSize: _style.tagFontSize
+                font.pixelSize: _style.tagFontSize
                 font.bold: _style.tagFontBold
                 color: _style.tagFontColor
             }

@@ -14,7 +14,7 @@ ModalDialog {
             anchors.left: parent.left
             anchors.leftMargin: 7
             anchors.right: parent.right
-            font.pointSize: _style.dialogFontSize
+            font.pixelSize: _style.dialogFontSize
             wrapMode: Text.WordWrap
             text: _controller.popupText
         }

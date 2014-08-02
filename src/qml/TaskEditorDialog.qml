@@ -13,7 +13,7 @@ ModalDialog {
 
         Text {
             id: titleText
-            font.pointSize: _style.taskEditorFontSize
+            font.pixelSize: _style.taskEditorFontSize
             color: _style.regularTextColor
             anchors.top: parent.top
             anchors.topMargin: _style.marginMedium

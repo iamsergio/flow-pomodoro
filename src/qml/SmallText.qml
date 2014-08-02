@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 Text {
-    font.pointSize: _style.smallTextSize
+    font.pixelSize: _style.smallTextSize
     color: _style.smallTextColor
     anchors.leftMargin: _style.marginMedium
     anchors.left: parent.left

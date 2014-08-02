@@ -23,8 +23,8 @@ Page {
             Text {
                 id: textItem
                 anchors.top: parent.top
-                anchors.topMargin: -5
-                font.pointSize: 18
+                anchors.topMargin: -5 * _controller.dpiFactor
+                font.pixelSize: _style.titleFontSize
                 font.bold: true
                 color: _style.regularTextColor
                 text: _controller.queueType === Controller.QueueTypeToday ? qsTr("Today's work queue") : qsTr("Tasks for someday")

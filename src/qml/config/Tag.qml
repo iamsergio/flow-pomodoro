@@ -71,7 +71,7 @@ Item {
 
             Text {
                 id: label
-                font.pointSize: invisible_text.font.pointSize
+                font.pixelSize: invisible_text.font.pixelSize
                 color: _style.tagFontColor
                 font.bold: true
                 anchors.left: parent.left
@@ -87,7 +87,7 @@ Item {
                 id: taskCountLabel
                 anchors.left: label.right
                 text: (tagObj === null || !tagObj.taskCount) ? "" : " (" + tagObj.taskCount + ")"
-                font.pointSize: _style.tagCountFontSize
+                font.pixelSize: _style.tagCountFontSize
                 anchors.verticalCenter: label.verticalCenter
                 verticalAlignment: Text.AlignVCenter
                 color: _style.tagFontColor

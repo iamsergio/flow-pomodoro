@@ -49,7 +49,7 @@ Rectangle {
             id: titleText
             elide: _controller.currentTask.paused ? Text.ElideLeft : Text.ElideRight
             color: _style.fontColor
-            font.pointSize: _style.fontSize
+            font.pixelSize: _controller.currentTask.stopped ? _style.fontSize : _style.currentTaskFontSize
             font.bold: true
             anchors.left: parent.left
             anchors.leftMargin: _style.marginMedium
@@ -63,7 +63,7 @@ Rectangle {
         Text {
             text: qsTr("Click here to start focusing")
             font.bold: false
-            font.pointSize: _style.clickHereFontSize
+            font.pixelSize: _style.clickHereFontSize
             color: _style.clickHereFontColor
             visible: _controller.currentTask.stopped && !_controller.expanded
             anchors.left: titleText.left
@@ -76,7 +76,7 @@ Rectangle {
             id: remainingText
             color: _style.fontColor
             visible: (mouseOver() || _controller.firstSecondsAfterAdding) && _controller.remainingMinutes > 0 && !_controller.currentTask.stopped && !_controller.expanded
-            font.pointSize: _style.remainingFontSize
+            font.pixelSize: _style.remainingFontSize
             font.bold: true
             anchors.left: parent.left
             anchors.leftMargin: _style.marginMedium

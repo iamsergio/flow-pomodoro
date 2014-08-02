@@ -48,65 +48,65 @@ Page {
             columnSpacing: _style.marginMedium
 
             Text  {
-                font.pointSize: _style.smallTextSize
+                font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: "<space>"
             }
 
             Text  {
-                font.pointSize: _style.smallTextSize
+                font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: qsTr("Pauses/Resumes an ongoing pomodoro")
             }
 
             Text  {
-                font.pointSize: _style.smallTextSize
+                font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: "S"
             }
             Text  {
-                font.pointSize: _style.smallTextSize
+                font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: qsTr("Stops an ongoing pomodoro")
             }
 
             Text  {
-                font.pointSize: _style.smallTextSize
+                font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: "Up/Down"
             }
             Text  {
-                font.pointSize: _style.smallTextSize
+                font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: qsTr("Select tasks")
             }
             Text  {
-                font.pointSize: _style.smallTextSize
+                font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: "Del"
             }
             Text  {
-                font.pointSize: _style.smallTextSize
+                font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: qsTr("Deletes a selected task or an ongoing one")
             }
             Text  {
-                font.pointSize: _style.smallTextSize
+                font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: "Enter"
             }
             Text  {
-                font.pointSize: _style.smallTextSize
+                font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: qsTr("Starts a selected task, or expands the window")
             }
             Text  {
-                font.pointSize: _style.smallTextSize
+                font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: "Esc"
             }
             Text  {
-                font.pointSize: _style.smallTextSize
+                font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: qsTr("Collapses the window")
             }

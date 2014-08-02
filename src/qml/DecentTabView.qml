@@ -24,14 +24,14 @@ ListView {
                     text: tag.name
                     color: _style.tagTabTextColor
                     font.bold: true
-                    font.pointSize: _style.tagTabFontSize
+                    font.pixelSize: _style.tagTabFontSize
                 }
                 Text {
                     text: tag.taskModel.count > 0 ? " (" + tag.taskModel.count + ")" : ""
                     color: _style.tagTabTextColor
                     anchors.verticalCenter: tagText.verticalCenter
                     anchors.verticalCenterOffset: -1
-                    font.pointSize: tagText.font.pointSize - 1
+                    font.pixelSize: tagText.font.pixelSize - 1
                 }
             }
 
