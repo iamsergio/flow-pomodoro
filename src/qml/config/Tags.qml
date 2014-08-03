@@ -6,9 +6,14 @@ import QtQuick.Controls.Styles 1.0
 import Controller 1.0
 import ".."
 
-Item {
+MouseArea {
     id: root
     anchors.fill: parent
+    onClicked: {
+        if (_controller.tagEditStatus !== Controller.TagEditStatusNone)
+            _controller.editTag("")
+        mouse.accepted = false
+    }
 
     SmallText {
         id: noTagsText

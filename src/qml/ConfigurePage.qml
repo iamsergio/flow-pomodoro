@@ -10,6 +10,9 @@ Page {
     MouseArea {
         anchors.fill: parent
         onClicked: {
+            if (_controller.tagEditStatus !== Controller.TagEditStatusNone)
+                _controller.editTag("")
+
             // Don't collapse
             mouse.accepted = false
         }
