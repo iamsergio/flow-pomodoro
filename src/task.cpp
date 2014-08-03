@@ -22,12 +22,8 @@
 #include "settings.h"
 #include "checkabletagmodel.h"
 #include "tagstorage.h"
+#include "storage.h"
 #include <QQmlEngine>
-
-#include <functional>
-#include <algorithm>
-
-using namespace std::placeholders;
 
 enum {
     TagRole = Qt::UserRole,
@@ -39,6 +35,7 @@ Task::Task(const QString &name)
     , m_summary(name.isEmpty() ? tr("New Task") : name)
     , m_status(TaskStopped)
     , m_staged(false)
+    , m_tagStorage(Storage::instance()->tagStorage())
 {
     m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); }, TagRole);
     m_tags.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tags.at(i).m_task.data()); }, TaskRole);
@@ -54,10 +51,10 @@ Task::Task(const QString &name)
     connect(m_tags, &QAbstractListModel::dataChanged, this, &Task::tagsChanged);
 
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-    auto roleNames = TagStorage::instance()->model()->roleNames();
+    auto roleNames = m_tagStorage->model()->roleNames();
     roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
     m_checkableTagModel = new CheckableTagModel(this);
-    m_checkableTagModel->setSourceModel(TagStorage::instance()->model());
+    m_checkableTagModel->setSourceModel(m_tagStorage->model());
 }
 
 Task::Ptr Task::createTask(const QString &name)
@@ -240,7 +237,7 @@ QDataStream &operator>>(QDataStream &in, Task::Ptr &task)
         for (int i = 0; i < tagCount; i++) {
             QString name;
             in >> name;
-            if (TagStorage::instance()->deletedTagName() != name) {
+            if (Storage::instance()->tagStorage()->deletedTagName() != name) {
                 // QSettings reads before saving, which invokes this deserializer
                 // Sometimes we're deleted a tag and it would get recreated because
                 // it was loaded when we were saving

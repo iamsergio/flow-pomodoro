@@ -28,6 +28,7 @@
 #include "taskstorageqsettings.h"
 #include "archivedtasksfiltermodel.h"
 #include "tooltipcontroller.h"
+#include "storage.h"
 
 #include <QStandardPaths>
 #include <QQmlContext>
@@ -42,7 +43,7 @@
 
 QuickView::QuickView(QWindow *parent)
     : QQuickView(parent)
-    , m_taskStorage(TaskStorage::instance())
+    , m_taskStorage(Storage::instance()->taskStorage())
     , m_controller(new Controller(this))
     , m_pluginModel(new PluginModel(this))
     , m_developerMode(qApp->arguments().contains("-d"))
@@ -51,7 +52,7 @@ QuickView::QuickView(QWindow *parent)
     rootContext()->setContextProperty("_controller", m_controller);
     rootContext()->setContextProperty("_pluginModel", m_pluginModel);
     rootContext()->setContextProperty("_taskStorage", m_taskStorage);
-    rootContext()->setContextProperty("_tagStorage", TagStorage::instance());
+    rootContext()->setContextProperty("_tagStorage", Storage::instance()->tagStorage());
     rootContext()->setContextProperty("_window", this);
 
     createStyleComponent();

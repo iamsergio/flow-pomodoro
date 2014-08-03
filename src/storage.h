@@ -1,8 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
-  Author: Sérgio Martins <sergio.martins@kdab.com>
+  Copyright (C) 2014 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -18,22 +17,27 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TAGSTORAGEQSETTINGS_H
-#define TAGSTORAGEQSETTINGS_H
+#ifndef FLOW_STORAGE_H
+#define FLOW_STORAGE_H
 
-#include "tagstorage.h"
+#include <QObject>
 
-class QSettings;
+class TagStorage;
+class TaskStorage;
 
-class TagStorageQSettings : public TagStorage
+class Storage : public QObject
 {
-protected:
-    explicit TagStorageQSettings(QObject *parent = 0);
-    void loadTags_impl() Q_DECL_OVERRIDE;
-    void saveTags_impl() Q_DECL_OVERRIDE;
+    Q_OBJECT
+public:
+    static Storage *instance();
+
+    TagStorage *tagStorage();
+    TaskStorage *taskStorage();
+
 private:
-    QSettings *m_settings;
-    friend class Storage;
+    explicit Storage(QObject *parent = 0);
+    TagStorage *m_tagStorage;
+    TaskStorage *m_taskStorage;
 };
 
 #endif

@@ -36,7 +36,7 @@ protected:
     void saveTasks_impl() Q_DECL_OVERRIDE;
 private:
     QSettings *m_settings;
-    friend class TaskStorage;
+    friend class Storage;
 };
 
 #endif

@@ -18,9 +18,9 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "storage.h"
 #include "taskstorage.h"
 #include "archivedtasksfiltermodel.h"
-#include "taskstorageqsettings.h"
 #include "taskfilterproxymodel.h"
 #include "tagstorage.h"
 
@@ -30,7 +30,7 @@ TaskStorage::TaskStorage(QObject *parent)
     , m_untaggedTasksModel(new TaskFilterProxyModel(this))
     , m_stagedTasksModel(new ArchivedTasksFilterModel(m_tasks, this))
     , m_archivedTasksModel(new ArchivedTasksFilterModel(m_tasks, this))
-    , m_tagStorage(TagStorage::instance())
+    , m_tagStorage(Storage::instance()->tagStorage())
     , m_savingDisabled(0)
 {
     m_tagStorage->loadTags();
@@ -54,12 +54,6 @@ TaskStorage::TaskStorage(QObject *parent)
     m_archivedTasksModel->setAcceptArchived(true);
     m_untaggedTasksModel->setFilterUntagged(true);
     m_untaggedTasksModel->setObjectName("Untagged and archived tasks model");
-}
-
-TaskStorage *TaskStorage::instance()
-{
-    static TaskStorage *storage = new TaskStorageQSettings(qApp);
-    return storage;
 }
 
 void TaskStorage::setTasks(const Task::List &tasks)

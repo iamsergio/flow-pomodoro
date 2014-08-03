@@ -24,6 +24,7 @@
 #include "taskstorage.h"
 #include "taskfilterproxymodel.h"
 #include "tagstorage.h"
+#include "storage.h"
 
 #include <QTimer>
 #include <QScreen>
@@ -42,7 +43,7 @@ Controller::Controller(QuickView *quickView)
     , m_afterAddingTimer(new QTimer(this))
     , m_elapsedMinutes(0)
     , m_expanded(false)
-    , m_taskStorage(TaskStorage::instance())
+    , m_taskStorage(Storage::instance()->taskStorage())
     , m_page(MainPage)
     , m_quickView(quickView)
     , m_popupVisible(false)
@@ -51,6 +52,7 @@ Controller::Controller(QuickView *quickView)
     , m_invalidTask(Task::createTask())
     , m_configureTabIndex(0)
     , m_queueType(QueueTypeToday)
+    , m_tagStorage(Storage::instance()->tagStorage())
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -560,7 +562,7 @@ void Controller::editTag(const QString &tagName)
 
     setTagEditStatus(TagEditStatusEdit);
 
-    Tag::Ptr tag = TagStorage::instance()->tag(tagName, /*create=*/false);
+    Tag::Ptr tag = m_tagStorage->tag(tagName, /*create=*/false);
     if (!tag) {
         qWarning() << Q_FUNC_INFO << "Could not find tag to edit:" << tagName;
         return;
@@ -572,7 +574,7 @@ void Controller::editTag(const QString &tagName)
 
 bool Controller::renameTag(const QString &oldName, const QString &newName)
 {
-    bool success = TagStorage::instance()->renameTag(oldName, newName);
+    bool success = m_tagStorage->renameTag(oldName, newName);
     if (success && m_tagBeingEdited) {
         m_tagBeingEdited->setBeingEdited(false);
         m_tagBeingEdited.clear();
@@ -632,7 +634,7 @@ void Controller::endAddingNewTag(const QString &tagName)
         return;
     }
 
-    if (TagStorage::instance()->createTag(tagName))
+    if (m_tagStorage->createTag(tagName))
         setTagEditStatus(TagEditStatusNone);
 }
 

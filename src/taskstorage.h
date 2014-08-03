@@ -43,7 +43,7 @@ public:
         TaskPtrRole
     };
 
-    static TaskStorage *instance();
+    explicit TaskStorage(QObject *parent = 0);
 
     void setTasks(const Task::List &);
     void saveTasks();
@@ -71,7 +71,6 @@ Q_SIGNALS:
     void taskChanged();
 
 protected:
-    explicit TaskStorage(QObject *parent = 0);
     GenericListModel<Task::Ptr> m_tasks;
     void loadTasks();
     virtual void saveTasks_impl() = 0;

@@ -24,6 +24,7 @@ SOURCES += archivedtasksfiltermodel.cpp \
            quickview.cpp   \
            settings.cpp    \
            sortedtagsmodel.cpp \
+           storage.cpp \
            tag.cpp \
            tagref.cpp \
            tagstorage.cpp \
@@ -43,6 +44,7 @@ HEADERS += archivedtasksfiltermodel.h \
            quickview.h       \
            settings.h        \
            sortedtagsmodel.h \
+           storage.h \
            tag.h \
            tagref.h \
            tagstorage.h \

@@ -30,6 +30,7 @@
 class QTimer;
 class TaskStorage;
 class QuickView;
+class TagStorage;
 
 class Controller : public QObject {
     Q_OBJECT
@@ -219,6 +220,7 @@ private:
     QPointer<Task> m_selectedTask;
     QPointer<Tag> m_currentTabTag;
     QueueType m_queueType;
+    TagStorage *m_tagStorage;
 };
 
 #endif

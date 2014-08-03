@@ -19,7 +19,6 @@
 */
 
 #include "tagstorage.h"
-#include "tagstorageqsettings.h"
 #include "sortedtagsmodel.h"
 
 #include <QDebug>
@@ -42,12 +41,6 @@ TagStorage::TagStorage(QObject *parent)
     connect(m_tags, &QAbstractListModel::modelReset, this, &TagStorage::scheduleSaveTags);
     qRegisterMetaType<Tag::Ptr>("Tag::Ptr");
     m_sortModel = new SortedTagsModel(m_tags, this);
-}
-
-TagStorage *TagStorage::instance()
-{
-    static TagStorage *storage = new TagStorageQSettings(qApp);
-    return storage;
 }
 
 void TagStorage::scheduleSaveTags()

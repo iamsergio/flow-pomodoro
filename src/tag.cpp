@@ -23,6 +23,7 @@
 #include "taskfilterproxymodel.h"
 #include "archivedtasksfiltermodel.h"
 #include "taskfilterproxymodel.h"
+#include "storage.h"
 
 #include <QQmlEngine>
 
@@ -39,7 +40,7 @@ Tag::Tag(const QString &_name)
     Q_ASSERT(!m_name.isEmpty());
 
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-    TagStorage::instance()->monitorTag(this);
+    Storage::instance()->tagStorage()->monitorTag(this);
 }
 
 Tag::~Tag()
@@ -106,7 +107,7 @@ QAbstractItemModel *Tag::taskModel()
     if (!m_taskModel) {
         m_taskModel = new TaskFilterProxyModel(this);
         m_taskModel->setTagName(m_name);
-        m_taskModel->setSourceModel(TaskStorage::instance()->archivedTasksModel());
+        m_taskModel->setSourceModel(Storage::instance()->taskStorage()->archivedTasksModel());
         m_taskModel->setObjectName(QString("Tasks with tag %1 model").arg(m_name));
 
         connect(this, &Tag::taskCountChanged,

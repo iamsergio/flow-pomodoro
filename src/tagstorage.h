@@ -39,7 +39,7 @@ public:
         LastRole
     };
 
-    static TagStorage *instance();
+    explicit TagStorage(QObject *parent = 0);
 
     /**
      * Calls saveTags() in the next event loop processing.
@@ -70,7 +70,6 @@ public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);
 
 protected:
-    explicit TagStorage(QObject *parent = 0);
     void setTags(const Tag::List &);
     GenericListModel<Tag::Ptr> m_tags;
 
