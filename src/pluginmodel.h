@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 
 class PluginModel : public QAbstractListModel {
     Q_OBJECT
-
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
 
     enum Roles {
@@ -48,6 +48,8 @@ public:
 
     Q_INVOKABLE void setPluginEnabled(bool enabled, int index);
 
+Q_SIGNALS:
+    void countChanged();
 private:
     PluginInterface::List m_plugins;
 };

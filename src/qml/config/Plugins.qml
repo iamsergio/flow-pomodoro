@@ -14,7 +14,14 @@ Item {
         anchors.topMargin: _style.marginBig
         anchors.top: parent.top
         text: qsTr("Plugins disable certain distractions when a task is running. Distractions are re-enabled when the task stops.") +
-              "\n" + qsTr("The following plugins were found:")
+              "\n" + (_pluginModel.count > 0 ? qsTr("The following plugins were found:") : "")
+    }
+
+    SmallText {
+        visible: _pluginModel.count === 0
+        anchors.centerIn: parent
+        text: qsTr("no plugins were found")
+        horizontalAlignment: Text.AlignHCenter
     }
 
 

@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,10 @@
 
 PluginModel::PluginModel(QObject *parent) : QAbstractListModel(parent)
 {
+    connect(this, &PluginModel::rowsInserted, this, &PluginModel::countChanged);
+    connect(this, &PluginModel::rowsRemoved, this, &PluginModel::countChanged);
+    connect(this, &PluginModel::modelReset, this, &PluginModel::countChanged);
+    connect(this, &PluginModel::layoutChanged, this, &PluginModel::countChanged);
 }
 
 int PluginModel::rowCount(const QModelIndex &parent) const
