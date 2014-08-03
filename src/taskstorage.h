@@ -72,7 +72,6 @@ Q_SIGNALS:
 
 protected:
     GenericListModel<Task::Ptr> m_tasks;
-    void loadTasks();
     virtual void saveTasks_impl() = 0;
     virtual void loadTasks_impl() = 0;
 
@@ -81,6 +80,7 @@ private Q_SLOTS:
     void scheduleSaveTasks();
 
 private:
+    void loadTasks();
     int proxyRowToSource(int proxyIndex) const;
     Task::Ptr addTask(const Task::Ptr &task);
     TaskFilterProxyModel *m_taskFilterModel;
@@ -90,6 +90,7 @@ private:
     TagStorage *m_tagStorage;
     QTimer m_scheduleTimer;
     int m_savingDisabled;
+    friend class Storage;
 };
 
 #endif

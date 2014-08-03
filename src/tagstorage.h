@@ -46,11 +46,6 @@ public:
      */
     void scheduleSaveTags();
 
-    /**
-     * Reads tags from disk.
-     */
-    void loadTags();
-
     Q_INVOKABLE bool removeTag(const QString &tagName);
     Q_INVOKABLE Tag::Ptr createTag(const QString &tagName);
 
@@ -79,11 +74,13 @@ protected:
 private:
     int indexOf(const QString &name) const;
     void saveTags();
+    void loadTags();
 
     QTimer m_scheduleTimer;
     SortedTagsModel *m_sortModel;
     QString m_deletedTagName;
     bool m_savingDisabled;
+    friend class Storage;
 };
 
 #endif

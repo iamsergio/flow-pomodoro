@@ -33,7 +33,6 @@ TaskStorage::TaskStorage(QObject *parent)
     , m_tagStorage(Storage::instance()->tagStorage())
     , m_savingDisabled(0)
 {
-    m_tagStorage->loadTags();
     connect(m_tagStorage, &TagStorage::tagAboutToBeRemoved,
             this, &TaskStorage::onTagAboutToBeRemoved);
 

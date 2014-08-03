@@ -28,7 +28,6 @@ TaskStorageQSettings::TaskStorageQSettings(QObject *parent)
     : TaskStorage(parent)
     , m_settings(Settings::instance())
 {
-    loadTasks();
 }
 
 TaskStorageQSettings::~TaskStorageQSettings()

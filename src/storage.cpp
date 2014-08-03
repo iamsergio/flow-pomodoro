@@ -36,15 +36,29 @@ Storage *Storage::instance()
 
 TagStorage *Storage::tagStorage()
 {
-    if (!m_tagStorage) // due to deadlock in instance()
+    if (!m_tagStorage) { // due to deadlock in instance()
         m_tagStorage = new TagStorageQSettings(this);
+        m_tagStorage->loadTags();
+        if (m_tagStorage->model()->rowCount() == 0) {
+            // Create default tags
+            m_tagStorage->createTag(tr("work"));
+            m_tagStorage->createTag(tr("personal"));
+            m_tagStorage->createTag(tr("family"));
+            m_tagStorage->createTag(tr("bills"));
+            m_tagStorage->createTag(tr("books"));
+            m_tagStorage->createTag(tr("movies"));
+        }
+    }
 
     return m_tagStorage;
 }
 
 TaskStorage *Storage::taskStorage()
 {
-    if (!m_taskStorage)
+    if (!m_taskStorage) {
         m_taskStorage = new TaskStorageQSettings(this);
+        m_taskStorage->loadTasks();
+    }
+
     return m_taskStorage;
 }
