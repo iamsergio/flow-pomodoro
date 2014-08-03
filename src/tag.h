@@ -52,6 +52,7 @@ public:
     void setBeingEdited(bool);
 
     QAbstractItemModel* taskModel();
+    QVariantMap toJson() const;
 
 public Q_SLOTS:
     void onTaskStagedChanged();

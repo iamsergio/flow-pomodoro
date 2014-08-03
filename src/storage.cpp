@@ -20,6 +20,11 @@
 #include "storage.h"
 #include "tagstorageqsettings.h"
 #include "taskstorageqsettings.h"
+#include <QJsonDocument>
+
+enum {
+    JsonSerializerVersion1 = 1
+};
 
 Storage::Storage(QObject *parent)
     : QObject(parent)
@@ -61,4 +66,32 @@ TaskStorage *Storage::taskStorage()
     }
 
     return m_taskStorage;
+}
+
+QVariantMap Storage::toJson() const
+{
+    QVariantMap map;
+    QVariantList tasksVariant;
+    QVariantList tagsVariant;
+    auto tags = m_tagStorage->tags();
+    for (int i = 0; i < tags.count(); ++i) {
+        tagsVariant << tags.at(i)->toJson();
+    }
+
+    auto tasks = m_taskStorage->tasks();
+    for (int i = 0; i < tasks.count(); ++i) {
+        tasksVariant << tasks.at(i)->toJson();
+    }
+
+    map.insert("tags", tagsVariant);
+    map.insert("tasks", tasksVariant);
+    map.insert("JsonSerializerVersion", JsonSerializerVersion1);
+
+    return map;
+}
+
+QString Storage::toJsonString() const
+{
+    QJsonDocument document = QJsonDocument::fromVariant(toJson());
+    return document.toJson();
 }

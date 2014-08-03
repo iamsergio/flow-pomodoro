@@ -85,6 +85,11 @@ Tag::Ptr TagStorage::createTag(const QString &tagName)
     return tag;
 }
 
+GenericListModel<Tag::Ptr> TagStorage::tags() const
+{
+    return m_tags;
+}
+
 Tag::Ptr TagStorage::tag(const QString &name, bool create)
 {
     Tag::Ptr tag = m_tags.value(indexOf(name));

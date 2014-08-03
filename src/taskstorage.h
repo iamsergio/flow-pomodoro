@@ -62,6 +62,8 @@ public:
     // Temporary disable saving. For performance purposes
     void setDisableSaving(bool);
 
+    GenericListModel<Task::Ptr> tasks() const;
+
 public Q_SLOTS:
     void dumpDebugInfo();
 

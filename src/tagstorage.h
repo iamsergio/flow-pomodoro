@@ -49,6 +49,7 @@ public:
     Q_INVOKABLE bool removeTag(const QString &tagName);
     Q_INVOKABLE Tag::Ptr createTag(const QString &tagName);
 
+    GenericListModel<Tag::Ptr> tags() const;
     Tag::Ptr tag(const QString &name, bool create = true);
     bool contains(const QString &name) const;
 

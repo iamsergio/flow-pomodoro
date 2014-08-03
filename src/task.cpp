@@ -201,6 +201,19 @@ void Task::setWeakPointer(const QWeakPointer<Task> &ptr)
     m_this = ptr;
 }
 
+QVariantMap Task::toJson() const
+{
+    QVariantMap map;
+    map.insert("summary", m_summary);
+    map.insert("description", m_description);
+    QVariantList tags;
+    for (int i = 0; i < m_tags.count(); ++i)
+        tags << m_tags.at(i).m_tag->name();
+    map.insert("tags", tags);
+
+    return map;
+}
+
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task)
 {
     Q_ASSERT(task);

@@ -92,6 +92,8 @@ public:
     Task::Ptr toStrongRef() const;
     void setWeakPointer(const QWeakPointer<Task> &);
 
+    QVariantMap toJson() const;
+
 Q_SIGNALS:
     void summaryChanged();
     void descriptionChanged();

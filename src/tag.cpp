@@ -118,6 +118,13 @@ QAbstractItemModel *Tag::taskModel()
     return m_taskModel;
 }
 
+QVariantMap Tag::toJson() const
+{
+    QVariantMap map;
+    map.insert("name", m_name);
+    return map;
+}
+
 void Tag::onTaskStagedChanged()
 {
     Task *task = qobject_cast<Task*>(sender());

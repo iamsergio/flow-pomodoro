@@ -33,6 +33,8 @@ public:
 
     TagStorage *tagStorage();
     TaskStorage *taskStorage();
+    QVariantMap toJson() const;
+    QString toJsonString() const;
 
 private:
     explicit Storage(QObject *parent = 0);

@@ -130,6 +130,11 @@ void TaskStorage::setDisableSaving(bool disable)
     m_savingDisabled += (disable ? 1 : -1);
 }
 
+GenericListModel<Task::Ptr> TaskStorage::tasks() const
+{
+    return m_tasks;
+}
+
 void TaskStorage::dumpDebugInfo()
 {
     qDebug() << Q_FUNC_INFO << "task count:" << m_tasks.count();
