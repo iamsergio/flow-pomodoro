@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.0
+import Controller 1.0
 import ".."
 
 Item {
@@ -43,7 +44,6 @@ Item {
             TextField {
                 id: textField
                 focus: true
-                objectName: "Tag text field"
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 visible: root.beingEdited
@@ -64,6 +64,11 @@ Item {
                 }
                 onActiveFocusChanged: {
                     if (!activeFocus) {
+                        _controller.editTag("")
+                    }
+                }
+                onVisibleChanged: {
+                    if (!visible && _controller.tagEditStatus !== Controller.TagEditStatusNone) {
                         _controller.editTag("")
                     }
                 }
