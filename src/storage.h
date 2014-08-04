@@ -20,6 +20,9 @@
 #ifndef FLOW_STORAGE_H
 #define FLOW_STORAGE_H
 
+#include "task.h"
+#include "tag.h"
+
 #include <QObject>
 
 class TagStorage;
@@ -33,13 +36,22 @@ public:
 
     TagStorage *tagStorage();
     TaskStorage *taskStorage();
-    QVariantMap toJson() const;
-    QString toJsonString() const;
+
+    void load();
+    void save();
+
+protected:
+    GenericListModel<Tag::Ptr> m_tags;
+    GenericListModel<Task::Ptr> m_tags;
+    void load_impl() = 0;
+    void save_impl() = 0;
 
 private:
     explicit Storage(QObject *parent = 0);
     TagStorage *m_tagStorage;
     TaskStorage *m_taskStorage;
+
+
 };
 
 #endif
