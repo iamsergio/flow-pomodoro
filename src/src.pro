@@ -55,32 +55,38 @@ HEADERS += archivedtasksfiltermodel.h \
            taskstorageqsettings.h \
            tooltipcontroller.h
 
-OTHER_FILES += AboutPage.qml      \
-               config/General.qml \
-               config/Plugins.qml \
-               config/Tag.qml     \
-               config/Tags.qml    \
-               ClickableImage.qml \
-               ConfigurePage.qml  \
-               DecentTabView.qml  \
-               DefaultStyle.qml   \
-               Main.qml           \
-               MainPage.qml       \
-               ModalDialog.qml    \
-               Page.qml           \
-               QuestionPopup.qml  \
-               RegularText.qml    \
-               SmallText.qml      \
-               TagsMenu.qml       \
-               Task.qml           \
-               TaskEditorDialog.qml \
-               TaskListView.qml \
-               TaskTextField.qml \
-               TitleText.qml     \
-               ToolTip.qml
+OTHER_FILES += qml/AboutPage.qml      \
+               qml/config/General.qml \
+               qml/config/Plugins.qml \
+               qml/config/Tag.qml     \
+               qml/config/Tags.qml    \
+               qml/ClickableImage.qml \
+               qml/ConfigurePage.qml  \
+               qml/DecentTabView.qml  \
+               qml/DefaultStyle.qml   \
+               qml/Main.qml           \
+               qml/MainPage.qml       \
+               qml/qml/ModalDialog.qml    \
+               qml/Page.qml           \
+               qml/QuestionPopup.qml  \
+               qml/RegularText.qml    \
+               qml/SmallText.qml      \
+               qml/TagsMenu.qml       \
+               qml/Task.qml           \
+               qml/TaskEditorDialog.qml \
+               qml/qml/TaskListView.qml \
+               qml/TaskTextField.qml \
+               qml/TitleText.qml     \
+               qml/ToolTip.qml
 
+
+lupdate_only {
+    SOURCES += $$OTHER_FILES
+}
 
 RESOURCES += resources.qrc
+TRANSLATIONS += translations/flow_pt_PT.ts
+CODECFORSRC  = UTF-8
 
 linux {
     QMAKE_POST_LINK += "runqmllint.sh"
