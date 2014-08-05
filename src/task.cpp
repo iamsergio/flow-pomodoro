@@ -214,6 +214,7 @@ QVariantMap Task::toJson() const
 {
     QVariantMap map;
     map.insert("summary", m_summary);
+    map.insert("staged", m_staged);
     map.insert("description", m_description);
     QVariantList tags;
     for (int i = 0; i < m_tags.count(); ++i)
@@ -236,6 +237,7 @@ Task::Ptr Task::fromJson(const QVariantMap &map)
 
     QString description = map.value("description").toString();
     task->setDescription(description);
+    task->setStaged(map.value("staged", false).toBool());
     QVariantList tagsVariant = map.value("tags").toList();
     TagRef::List tags;
     foreach (const QVariant &tag, tagsVariant) {
