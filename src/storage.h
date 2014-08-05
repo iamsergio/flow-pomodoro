@@ -98,6 +98,7 @@ private Q_SLOTS:
 
 protected:
     explicit Storage(QObject *parent = 0);
+    Task::Ptr addTask(const Task::Ptr &task);
     TagList m_tags;
     TaskList m_tasks;
     virtual void load_impl() = 0;
@@ -106,7 +107,6 @@ protected:
 private:
     int indexOfTag(const QString &name) const;
     int proxyRowToSource(int proxyIndex) const;
-    Task::Ptr addTask(const Task::Ptr &task);
     QTimer m_scheduleTimer;
     SortedTagsModel *m_sortedTagModel;
     QString m_deletedTagName;

@@ -80,7 +80,7 @@ void JsonStorage::load_impl()
     foreach (const QVariant &t, taskList) {
         Task::Ptr task = Task::fromJson(t.toMap());
         if (task)
-            m_tasks << task;
+            addTask(task); // don't add to m_tasks directly. addTask() does some connects
     }
 }
 
