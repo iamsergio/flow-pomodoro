@@ -28,6 +28,7 @@
 
 #include <QString>
 #include <QMetaType>
+#include <QDateTime>
 #include <QDataStream>
 #include <QSharedPointer>
 
@@ -85,6 +86,9 @@ public:
     TaskStatus status() const;
     void setStatus(TaskStatus status);
 
+    void setCreationDate(const QDateTime &);
+    QDateTime creationDate() const;
+
     bool running() const;
     bool stopped() const;
     bool paused() const;
@@ -112,6 +116,7 @@ private:
     bool m_staged;
     QWeakPointer<Task> m_this;
     TagStorage *m_tagStorage;
+    QDateTime m_creationDate;
 };
 
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task);

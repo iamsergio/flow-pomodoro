@@ -175,6 +175,16 @@ void Task::setStatus(TaskStatus status)
     }
 }
 
+void Task::setCreationDate(const QDateTime &date)
+{
+    m_creationDate = date;
+}
+
+QDateTime Task::creationDate() const
+{
+    return m_creationDate;
+}
+
 bool Task::running() const
 {
     return m_status == TaskStarted;
