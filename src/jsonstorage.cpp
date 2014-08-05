@@ -86,7 +86,6 @@ void JsonStorage::load_impl()
 
 void JsonStorage::save_impl()
 {
-    return;
     QByteArray data = toJson();
 
     QFile temporaryFile(tmpDataFileName()); // not using QTemporaryFile so the backup stays next to the main one
