@@ -37,6 +37,7 @@ typedef QGuiApplication Application;
 #endif
 
 #include <QStandardPaths>
+#include <QTranslator>
 
 void initDBus(Controller *controller)
 {
@@ -105,6 +106,10 @@ int main(int argc, char *argv[])
     Application app(argc, argv);
     app.setOrganizationName("KDAB");
     app.setApplicationName("flow");
+
+    QTranslator translator;
+    translator.load(QString(":/translations/flow_%1").arg(QLocale::system().name())); // export LANG="pt_PT" to change
+    app.installTranslator(&translator);
 
     QuickView window;
     initDBus(window.controller());
