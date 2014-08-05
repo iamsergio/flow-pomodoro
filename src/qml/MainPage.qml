@@ -58,7 +58,7 @@ Page {
 
         TaskListView {
             id: stagedView
-            model: _taskStorage.stagedTasksModel
+            model: _storage.stagedTasksModel
             anchors.topMargin: _style.marginSmall
             anchors.left: parent.left
             anchors.right: parent.right
@@ -74,13 +74,13 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: addIcon.bottom
-            model: _tagStorage.model
+            model: _storage.tagsModel
         }
 
         TaskListView {
             id: archiveView
             visible: tabView.visible
-            model: _controller.currentTabTag == null ? _taskStorage.untaggedTasksModel : _controller.currentTabTag.taskModel
+            model: _controller.currentTabTag == null ? _storage.untaggedTasksModel : _controller.currentTabTag.taskModel
             anchors.topMargin: _style.marginMedium
             anchors.top: tabView.bottom
             anchors.left: parent.left
@@ -91,7 +91,7 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 anchors.centerIn: parent
                 anchors.verticalCenterOffset: -height
-                text: _controller.currentTabTag == null ? qsTr("No archived untagged tasks found.") + (_tagStorage.model.count === 0 ? "" : qsTr("\nClick the tag bar above to see tagged tasks.") )
+                text: _controller.currentTabTag == null ? qsTr("No archived untagged tasks found.") + (_storage.tagsModel.count === 0 ? "" : qsTr("\nClick the tag bar above to see tagged tasks.") )
                                                         : qsTr("No archived tasks found with tag %1").arg(_controller.currentTabTag.name)
                 visible: parent.model.count === 0
             }

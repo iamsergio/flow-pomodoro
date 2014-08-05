@@ -24,8 +24,6 @@
 #include "plugininterface.h"
 #include "settings.h"
 #include "controller.h"
-#include "tagstorage.h"
-#include "taskstorageqsettings.h"
 #include "archivedtasksfiltermodel.h"
 #include "tooltipcontroller.h"
 #include "storage.h"
@@ -43,16 +41,16 @@
 
 QuickView::QuickView(QWindow *parent)
     : QQuickView(parent)
-    , m_taskStorage(Storage::instance()->taskStorage())
+    , m_storage(Storage::instance())
     , m_controller(new Controller(this))
     , m_pluginModel(new PluginModel(this))
     , m_developerMode(qApp->arguments().contains("-d"))
 {
+    m_storage->load();
     rootContext()->setContextProperty("_toolTipController", new ToolTipController(this));
     rootContext()->setContextProperty("_controller", m_controller);
     rootContext()->setContextProperty("_pluginModel", m_pluginModel);
-    rootContext()->setContextProperty("_taskStorage", m_taskStorage);
-    rootContext()->setContextProperty("_tagStorage", Storage::instance()->tagStorage());
+    rootContext()->setContextProperty("_storage", Storage::instance());
     rootContext()->setContextProperty("_window", this);
 
     createStyleComponent();
@@ -219,7 +217,7 @@ void QuickView::keyReleaseEvent(QKeyEvent *event)
         event->accept();
         reloadQML();
     } else if (m_developerMode && event->key() == Qt::Key_F4) {
-        m_taskStorage->dumpDebugInfo();
+        m_storage->dumpDebugInfo();
         qDebug() << "Active focus belongs to" << activeFocusItem();
         qDebug() << "TagEditStatus:" << m_controller->tagEditStatus();
     } else {

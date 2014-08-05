@@ -24,7 +24,6 @@
 #include "tag.h"
 #include "tagref.h"
 #include "genericlistmodel.h"
-#include "tagstorage.h"
 
 #include <QString>
 #include <QMetaType>
@@ -43,7 +42,7 @@ enum SerializerVersion {
     SerializerVersion2 = 101 // Added Task::description()
 };
 
-class TagStorage;
+class Storage;
 class CheckableTagModel;
 class QAbstractListModel;
 
@@ -97,6 +96,7 @@ public:
     void setWeakPointer(const QWeakPointer<Task> &);
 
     QVariantMap toJson() const;
+    static Task::Ptr fromJson(const QVariantMap &);
 
 Q_SIGNALS:
     void summaryChanged();
@@ -115,7 +115,7 @@ private:
     TaskStatus m_status;
     bool m_staged;
     QWeakPointer<Task> m_this;
-    TagStorage *m_tagStorage;
+    Storage *m_storage;
     QDateTime m_creationDate;
 };
 

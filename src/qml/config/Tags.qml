@@ -19,7 +19,7 @@ MouseArea {
         id: noTagsText
         anchors.centerIn: parent
         text: qsTr("No tags")
-        visible: _tagStorage.model.count === 0
+        visible: _storage.tagsModel.count === 0
         horizontalAlignment: Text.AlignHCenter
     }
 
@@ -54,7 +54,7 @@ MouseArea {
         }
 
         Repeater {
-            model: _tagStorage.model
+            model: _storage.tagsModel
             delegate:
             Tag {
                 tagObj: tag

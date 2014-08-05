@@ -30,7 +30,7 @@ class Controller;
 class QKeyEvent;
 
 class PluginModel;
-class TaskStorage;
+class Storage;
 
 class QuickView : public QQuickView {
     Q_OBJECT
@@ -51,7 +51,7 @@ private:
     QUrl styleFileName() const;
     void createStyleComponent();
 
-    TaskStorage *m_taskStorage;
+    Storage *m_storage;
     Controller *m_controller;
     PluginModel *m_pluginModel;
     bool m_developerMode;

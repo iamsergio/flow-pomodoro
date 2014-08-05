@@ -21,9 +21,7 @@
 #include "controller.h"
 #include "settings.h"
 #include "quickview.h"
-#include "taskstorage.h"
 #include "taskfilterproxymodel.h"
-#include "tagstorage.h"
 #include "storage.h"
 
 #include <QTimer>
@@ -43,7 +41,6 @@ Controller::Controller(QuickView *quickView)
     , m_afterAddingTimer(new QTimer(this))
     , m_elapsedMinutes(0)
     , m_expanded(false)
-    , m_taskStorage(Storage::instance()->taskStorage())
     , m_page(MainPage)
     , m_quickView(quickView)
     , m_popupVisible(false)
@@ -52,7 +49,7 @@ Controller::Controller(QuickView *quickView)
     , m_invalidTask(Task::createTask())
     , m_configureTabIndex(0)
     , m_queueType(QueueTypeToday)
-    , m_tagStorage(Storage::instance()->tagStorage())
+    , m_storage(Storage::instance())
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -64,7 +61,7 @@ Controller::Controller(QuickView *quickView)
     m_defaultPomodoroDuration = Settings::instance()->value(QStringLiteral("defaultPomodoroDuration"), /*default=*/QVariant(25)).toInt();
 
     connect(this, &Controller::invalidateTaskModel,
-            m_taskStorage->taskFilterModel(), &TaskFilterProxyModel::invalidateFilter,
+            m_storage->taskFilterModel(), &TaskFilterProxyModel::invalidateFilter,
             Qt::QueuedConnection);
 
     qApp->installEventFilter(this);
@@ -437,12 +434,12 @@ Task::Ptr Controller::lastTaskAtCurrentTab() const
 Task::Ptr Controller::taskAtCurrentTab(int taskIndex) const
 {
     QAbstractItemModel *model = currentTabTaskModel();
-    return model->data(model->index(taskIndex, 0), TaskStorage::TaskPtrRole).value<Task::Ptr>();
+    return model->data(model->index(taskIndex, 0), Storage::TaskPtrRole).value<Task::Ptr>();
 }
 
 QAbstractItemModel *Controller::currentTabTaskModel() const
 {
-    return m_currentTabTag ? m_currentTabTag->taskModel() : m_taskStorage->taskFilterModel();
+    return m_currentTabTag ? m_currentTabTag->taskModel() : m_storage->taskFilterModel();
 }
 
 void Controller::setTagEditStatus(TagEditStatus status)
@@ -562,7 +559,7 @@ void Controller::editTag(const QString &tagName)
 
     setTagEditStatus(TagEditStatusEdit);
 
-    Tag::Ptr tag = m_tagStorage->tag(tagName, /*create=*/false);
+    Tag::Ptr tag = m_storage->tag(tagName, /*create=*/false);
     if (!tag) {
         qWarning() << Q_FUNC_INFO << "Could not find tag to edit:" << tagName;
         return;
@@ -574,7 +571,7 @@ void Controller::editTag(const QString &tagName)
 
 bool Controller::renameTag(const QString &oldName, const QString &newName)
 {
-    bool success = m_tagStorage->renameTag(oldName, newName);
+    bool success = m_storage->renameTag(oldName, newName);
     if (success && m_tagBeingEdited) {
         m_tagBeingEdited->setBeingEdited(false);
         m_tagBeingEdited.clear();
@@ -607,11 +604,11 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
 
     if (m_taskBeingEdited != task.data()) {
         // Disabling saving when editor is opened, only save when it's closed.
-        m_taskStorage->setDisableSaving(!task.isNull());
+        m_storage->setDisableSaving(!task.isNull());
 
         if (task.isNull()) {
             m_taskBeingEdited.clear();
-            m_taskStorage->saveTasks(); // Editor closed. Write to disk immediately.
+            m_storage->save(); // Editor closed. Write to disk immediately.
         } else {
             m_taskBeingEdited = task.data();
         }
@@ -634,7 +631,7 @@ void Controller::endAddingNewTag(const QString &tagName)
         return;
     }
 
-    if (m_tagStorage->createTag(tagName))
+    if (m_storage->createTag(tagName))
         setTagEditStatus(TagEditStatusNone);
 }
 
@@ -645,7 +642,10 @@ void Controller::requestContextMenu(Task *task)
 
 void Controller::addTask(const QString &text, bool startEditMode)
 {
-    Task::Ptr task = m_taskStorage->addTask(text);
+    //Storage::instance()->save();
+    Storage::instance()->load();
+
+    Task::Ptr task = m_storage->addTask(text);
     if (m_currentTabTag && queueType() == QueueTypeArchive)
         task->addTag(m_currentTabTag->name());
 
@@ -654,8 +654,8 @@ void Controller::addTask(const QString &text, bool startEditMode)
 
     if (startEditMode) {
         setExpanded(true);
-        int lastIndex = m_taskStorage->taskFilterModel()->rowCount()-1;
-        editTask(m_taskStorage->at(lastIndex).data(), EditModeInline);
+        int lastIndex = m_storage->taskFilterModel()->rowCount()-1;
+        editTask(m_storage->taskAt(lastIndex).data(), EditModeInline);
         emit forceFocus(lastIndex);
         emit addingNewTask();
     }
@@ -665,5 +665,5 @@ void Controller::removeTask(Task *task)
 {
     qDebug() << "Removing task" << task->summary();
     editTask(nullptr, EditModeNone);
-    m_taskStorage->removeTask(m_taskStorage->indexOf(task->toStrongRef()));
+    m_storage->removeTask(m_storage->indexOfTask(task->toStrongRef()));
 }

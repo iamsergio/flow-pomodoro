@@ -21,7 +21,6 @@
 #include "task.h"
 #include "settings.h"
 #include "checkabletagmodel.h"
-#include "tagstorage.h"
 #include "storage.h"
 #include <QQmlEngine>
 
@@ -35,7 +34,7 @@ Task::Task(const QString &name)
     , m_summary(name.isEmpty() ? tr("New Task") : name)
     , m_status(TaskStopped)
     , m_staged(false)
-    , m_tagStorage(Storage::instance()->tagStorage())
+    , m_storage(Storage::instance())
 {
     m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); }, TagRole);
     m_tags.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tags.at(i).m_task.data()); }, TaskRole);
@@ -51,10 +50,10 @@ Task::Task(const QString &name)
     connect(m_tags, &QAbstractListModel::dataChanged, this, &Task::tagsChanged);
 
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-    auto roleNames = m_tagStorage->model()->roleNames();
+    auto roleNames = m_storage->tagsModel()->roleNames();
     roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
     m_checkableTagModel = new CheckableTagModel(this);
-    m_checkableTagModel->setSourceModel(m_tagStorage->model());
+    m_checkableTagModel->setSourceModel(m_storage->tagsModel());
 }
 
 Task::Ptr Task::createTask(const QString &name)
@@ -224,6 +223,28 @@ QVariantMap Task::toJson() const
     return map;
 }
 
+Task::Ptr Task::fromJson(const QVariantMap &map)
+{
+    QString name = map.value("summary").toString();
+    if (name.isEmpty()) {
+        qWarning() << Q_FUNC_INFO << "emptu task summary";
+        return Task::Ptr();
+    }
+
+    Task::Ptr task = Task::Ptr(new Task(name));
+    task->setWeakPointer(task.toWeakRef());
+
+    QString description = map.value("description").toString();
+    task->setDescription(description);
+    QVariantList tagsVariant = map.value("tags").toList();
+    TagRef::List tags;
+    foreach (const QVariant &tag, tagsVariant) {
+        tags << TagRef(task.data(), tag.toString());
+    }
+    task->setTagList(tags);
+    return task;
+}
+
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task)
 {
     Q_ASSERT(task);
@@ -260,10 +281,11 @@ QDataStream &operator>>(QDataStream &in, Task::Ptr &task)
         for (int i = 0; i < tagCount; i++) {
             QString name;
             in >> name;
-            if (Storage::instance()->tagStorage()->deletedTagName() != name) {
+            if (Storage::instance()->deletedTagName() != name) {
                 // QSettings reads before saving, which invokes this deserializer
                 // Sometimes we're deleted a tag and it would get recreated because
                 // it was loaded when we were saving
+                // TODO: We're not using QSettings to save data anymore, remove this
                 tags << TagRef(task.data(), name);
             }
         }

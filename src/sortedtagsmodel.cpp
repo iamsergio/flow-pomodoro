@@ -18,7 +18,7 @@
 */
 
 #include "sortedtagsmodel.h"
-#include "tagstorage.h"
+#include "storage.h"
 
 SortedTagsModel::SortedTagsModel(QAbstractItemModel *source, QObject *parent) :
     QSortFilterProxyModel(parent)
@@ -37,8 +37,8 @@ SortedTagsModel::SortedTagsModel(QAbstractItemModel *source, QObject *parent) :
 
 bool SortedTagsModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    Tag::Ptr leftTag = left.data(TagStorage::TagPtrRole).value<Tag::Ptr>();
-    Tag::Ptr rightTag = right.data(TagStorage::TagPtrRole).value<Tag::Ptr>();
+    Tag::Ptr leftTag = left.data(Storage::TagPtrRole).value<Tag::Ptr>();
+    Tag::Ptr rightTag = right.data(Storage::TagPtrRole).value<Tag::Ptr>();
     Q_ASSERT(leftTag);
     Q_ASSERT(rightTag);
 

@@ -18,8 +18,6 @@
 */
 
 #include "tag.h"
-#include "tagstorage.h"
-#include "taskstorage.h"
 #include "taskfilterproxymodel.h"
 #include "archivedtasksfiltermodel.h"
 #include "taskfilterproxymodel.h"
@@ -40,7 +38,7 @@ Tag::Tag(const QString &_name)
     Q_ASSERT(!m_name.isEmpty());
 
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-    Storage::instance()->tagStorage()->monitorTag(this);
+    //Storage::instance()->monitorTag(this);
 }
 
 Tag::~Tag()
@@ -103,11 +101,12 @@ void Tag::setBeingEdited(bool yes)
 
 QAbstractItemModel *Tag::taskModel()
 {
-    // Delayed initialization do avoid deadlock accessing TaskStorage::instance() when TaskStorage is being constructed
+    // Delayed initialization do avoid deadlock accessing Storage::instance() when TaskStorage is being constructed
+    // TODO: this should be ok now
     if (!m_taskModel) {
         m_taskModel = new TaskFilterProxyModel(this);
         m_taskModel->setTagName(m_name);
-        m_taskModel->setSourceModel(Storage::instance()->taskStorage()->archivedTasksModel());
+        m_taskModel->setSourceModel(Storage::instance()->archivedTasksModel());
         m_taskModel->setObjectName(QString("Tasks with tag %1 model").arg(m_name));
 
         connect(this, &Tag::taskCountChanged,
@@ -123,6 +122,19 @@ QVariantMap Tag::toJson() const
     QVariantMap map;
     map.insert("name", m_name);
     return map;
+}
+
+Tag::Ptr Tag::fromJson(const QVariantMap &map)
+{
+    Tag::Ptr tag;
+    QString name = map.value("name").toString();
+    if (name.isEmpty()) {
+        qWarning() << Q_FUNC_INFO << "empty tag name";
+    } else {
+        tag = Tag::Ptr(new Tag(name));
+    }
+
+    return tag;
 }
 
 void Tag::onTaskStagedChanged()

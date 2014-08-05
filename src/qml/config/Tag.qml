@@ -109,14 +109,14 @@ Item {
 
                 function reallyRemove()
                 {
-                    _tagStorage.removeTag(tagObj.name);
+                    _storage.removeTag(tagObj.name);
                 }
 
                 onClicked: {
                     if (tagObj.taskCount > 0) {
                         _controller.showQuestionPopup(this, qsTr("There are tasks using this tag. Are you sure you want to delete it?"), "reallyRemove()")
                     } else {
-                        _tagStorage.removeTag(root.tagName)
+                        _storage.removeTag(root.tagName)
                     }
                 }
             }

@@ -22,36 +22,99 @@
 
 #include "task.h"
 #include "tag.h"
+#include "genericlistmodel.h"
 
+#include <QTimer>
 #include <QObject>
 
-class TagStorage;
-class TaskStorage;
+class SortedTagsModel;
+class ArchivedTasksFilterModel;
+class TaskFilterProxyModel;
+
+typedef GenericListModel<Tag::Ptr> TagList;
+typedef GenericListModel<Task::Ptr> TaskList;
 
 class Storage : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QAbstractItemModel* tagsModel READ tagsModel CONSTANT)
+    Q_PROPERTY(ArchivedTasksFilterModel* stagedTasksModel READ stagedTasksModel CONSTANT)
+    Q_PROPERTY(TaskFilterProxyModel* taskFilterModel READ taskFilterModel CONSTANT)
+    Q_PROPERTY(TaskFilterProxyModel* untaggedTasksModel READ untaggedTasksModel CONSTANT)
 public:
+    enum TagModelRole {
+        TagRole = Qt::UserRole + 1,
+        TagPtrRole,
+        LastRole
+    };
+
+    enum TaskModelRole {
+        TaskRole = Qt::UserRole + 1,
+        TaskPtrRole
+    };
+
     static Storage *instance();
 
-    TagStorage *tagStorage();
-    TaskStorage *taskStorage();
+    TagList tags() const;
+    TaskList tasks() const;
 
     void load();
     void save();
 
+    void scheduleSave();
+    // Temporary disable saving. For performance purposes
+    void setDisableSaving(bool);
+//------------------------------------------------------------------------------
+//Stuff fot tasks
+    TaskFilterProxyModel* taskFilterModel() const;
+    TaskFilterProxyModel* untaggedTasksModel() const;
+    ArchivedTasksFilterModel* stagedTasksModel() const;
+    ArchivedTasksFilterModel* archivedTasksModel() const;
+    Task::Ptr taskAt(int proxyIndex) const;
+    Task::Ptr addTask(const QString &taskText);
+    void removeTask(int proxyIndex);
+    int indexOfTask(const Task::Ptr &) const;
+//------------------------------------------------------------------------------
+// Stuff for tags
+    Q_INVOKABLE bool removeTag(const QString &tagName);
+    Q_INVOKABLE Tag::Ptr createTag(const QString &tagName);
+    Tag::Ptr tag(const QString &name, bool create = true);
+    QAbstractItemModel *tagsModel() const;
+    QString deletedTagName() const;
+    bool containsTag(const QString &name) const;
+//------------------------------------------------------------------------------
+
+public Q_SLOTS:
+    bool renameTag(const QString &oldName, const QString &newName);
+    void dumpDebugInfo();
+
+Q_SIGNALS:
+    void tagAboutToBeRemoved(const QString &name);
+    void taskRemoved();
+    void taskAdded();
+    void taskChanged();
+private Q_SLOTS:
+    void onTagAboutToBeRemoved(const QString &tagName);
+
 protected:
-    GenericListModel<Tag::Ptr> m_tags;
-    GenericListModel<Task::Ptr> m_tags;
-    void load_impl() = 0;
-    void save_impl() = 0;
+    explicit Storage(QObject *parent = 0);
+    TagList m_tags;
+    TaskList m_tasks;
+    virtual void load_impl() = 0;
+    virtual void save_impl() = 0;
 
 private:
-    explicit Storage(QObject *parent = 0);
-    TagStorage *m_tagStorage;
-    TaskStorage *m_taskStorage;
-
-
+    int indexOfTag(const QString &name) const;
+    int proxyRowToSource(int proxyIndex) const;
+    Task::Ptr addTask(const Task::Ptr &task);
+    QTimer m_scheduleTimer;
+    SortedTagsModel *m_sortedTagModel;
+    QString m_deletedTagName;
+    int m_savingDisabled;
+    TaskFilterProxyModel *m_taskFilterModel;
+    TaskFilterProxyModel *m_untaggedTasksModel;
+    ArchivedTasksFilterModel *m_stagedTasksModel;
+    ArchivedTasksFilterModel *m_archivedTasksModel;
 };
 
 #endif

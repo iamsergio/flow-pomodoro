@@ -53,6 +53,7 @@ public:
 
     QAbstractItemModel* taskModel();
     QVariantMap toJson() const;
+    static Tag::Ptr fromJson(const QVariantMap &);
 
 public Q_SLOTS:
     void onTaskStagedChanged();

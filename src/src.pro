@@ -28,10 +28,6 @@ SOURCES += archivedtasksfiltermodel.cpp \
            storage.cpp \
            tag.cpp \
            tagref.cpp \
-           tagstorage.cpp \
-           tagstorageqsettings.cpp \
-           taskstorage.cpp \
-           taskstorageqsettings.cpp \
            task.cpp \
            taskfilterproxymodel.cpp \
            tooltipcontroller.cpp
@@ -49,12 +45,8 @@ HEADERS += archivedtasksfiltermodel.h \
            storage.h \
            tag.h \
            tagref.h \
-           tagstorage.h \
-           tagstorageqsettings.h \
            task.h            \
            taskfilterproxymodel.h \
-           taskstorage.h \
-           taskstorageqsettings.h \
            tooltipcontroller.h
 
 OTHER_FILES += qml/AboutPage.qml      \

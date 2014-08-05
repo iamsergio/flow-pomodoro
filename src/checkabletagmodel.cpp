@@ -18,7 +18,7 @@
 */
 
 #include "checkabletagmodel.h"
-#include "tagstorage.h"
+#include "storage.h"
 #include "task.h"
 
 CheckableTagModel::CheckableTagModel(Task *parent)
@@ -39,7 +39,7 @@ QVariant CheckableTagModel::data(const QModelIndex &proxyIndex, int role) const
         return QVariant();
 
     if (role == Qt::CheckStateRole) {
-        Tag::Ptr tag = sourceIndex.data(TagStorage::TagPtrRole).value<Tag::Ptr>();
+        Tag::Ptr tag = sourceIndex.data(Storage::TagPtrRole).value<Tag::Ptr>();
         if (!tag) {
             qWarning() << Q_FUNC_INFO <<"Unexpected null tag";
             return false;

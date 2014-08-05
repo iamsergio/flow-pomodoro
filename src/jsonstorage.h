@@ -13,8 +13,8 @@ protected:
     void save_impl() override;
 
 private:
-    QVariantMap toJson() const;
-    QString toJsonString() const;
+    QVariantMap toJsonVariantMap() const;
+    QByteArray toJson() const;
 };
 
 #endif

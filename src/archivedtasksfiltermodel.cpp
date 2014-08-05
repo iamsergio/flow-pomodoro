@@ -18,7 +18,7 @@
 */
 
 #include "archivedtasksfiltermodel.h"
-#include "taskstorage.h"
+#include "storage.h"
 
 ArchivedTasksFilterModel::ArchivedTasksFilterModel(QAbstractItemModel *source,
                                                    QObject *parent)
@@ -58,7 +58,7 @@ bool ArchivedTasksFilterModel::filterAcceptsRow(int source_row,
     if (!sourceModel() || source_parent.isValid())
         return false;
 
-    Task::Ptr task = sourceModel()->index(source_row, 0).data(TaskStorage::TaskPtrRole).value<Task::Ptr>();
+    Task::Ptr task = sourceModel()->index(source_row, 0).data(Storage::TaskPtrRole).value<Task::Ptr>();
     if (!task)
         return false;
 

@@ -28,9 +28,8 @@
 #include <QPointer>
 
 class QTimer;
-class TaskStorage;
+class Storage;
 class QuickView;
-class TagStorage;
 
 class Controller : public QObject {
     Q_OBJECT
@@ -201,7 +200,6 @@ private:
     QTimer *m_afterAddingTimer;
     int m_elapsedMinutes;
     bool m_expanded;
-    TaskStorage *m_taskStorage;
     Task::Ptr m_currentTask;
     Page m_page;
     int m_defaultPomodoroDuration;
@@ -220,7 +218,7 @@ private:
     QPointer<Task> m_selectedTask;
     QPointer<Tag> m_currentTabTag;
     QueueType m_queueType;
-    TagStorage *m_tagStorage;
+    Storage *m_storage;
 };
 
 #endif

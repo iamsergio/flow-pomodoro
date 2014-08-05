@@ -18,7 +18,6 @@
 */
 
 #include "tagref.h"
-#include "tagstorage.h"
 #include "storage.h"
 #include "task.h"
 
@@ -30,7 +29,7 @@ TagRef::TagRef(const TagRef &other)
 }
 
 TagRef::TagRef(const QPointer<Task> &task, const QString &tagName)
-    : m_tag(Storage::instance()->tagStorage()->tag(tagName))
+    : m_tag(Storage::instance()->tag(tagName))
     , m_task(task)
 {
     init();

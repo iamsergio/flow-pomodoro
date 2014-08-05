@@ -18,61 +18,279 @@
 */
 
 #include "storage.h"
-#include "tagstorageqsettings.h"
-#include "taskstorageqsettings.h"
-
-enum {
-    JsonSerializerVersion1 = 1
-};
+#include "tag.h"
+#include "task.h"
+#include "jsonstorage.h"
+#include "sortedtagsmodel.h"
+#include "archivedtasksfiltermodel.h"
+#include "taskfilterproxymodel.h"
 
 Storage::Storage(QObject *parent)
     : QObject(parent)
-    , m_tagStorage(nullptr)
-    , m_taskStorage(nullptr)
+    , m_savingDisabled(0)
+    , m_taskFilterModel(new TaskFilterProxyModel(this))
+    , m_untaggedTasksModel(new TaskFilterProxyModel(this))
+    , m_stagedTasksModel(new ArchivedTasksFilterModel(m_tasks, this))
+    , m_archivedTasksModel(new ArchivedTasksFilterModel(m_tasks, this))
 {
+    m_scheduleTimer.setSingleShot(true);
+    m_scheduleTimer.setInterval(0);
+    connect(&m_scheduleTimer, &QTimer::timeout, this, &Storage::save);
+
+    m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).data()); }, TagRole);
+    m_tags.insertRole("tagPtr", [&](int i) { return QVariant::fromValue<Tag::Ptr>(m_tags.at(i)); }, TagPtrRole);
+
+    connect(m_tags, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
+    connect(m_tags, &QAbstractListModel::rowsInserted, this, &Storage::scheduleSave);
+    connect(m_tags, &QAbstractListModel::rowsRemoved, this, &Storage::scheduleSave);
+    connect(m_tags, &QAbstractListModel::modelReset, this, &Storage::scheduleSave);
+    qRegisterMetaType<Tag::Ptr>("Tag::Ptr");
+    m_sortedTagModel = new SortedTagsModel(m_tags, this);
+
+    connect(this, &Storage::tagAboutToBeRemoved,
+            this, &Storage::onTagAboutToBeRemoved);
+
+    m_taskFilterModel->setSourceModel(m_tasks);
+    m_untaggedTasksModel->setSourceModel(m_archivedTasksModel);
+    m_scheduleTimer.setSingleShot(true);
+    m_scheduleTimer.setInterval(0);
+
+    connect(&m_scheduleTimer, &QTimer::timeout, this, &Storage::save);
+    connect(m_tasks, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
+    connect(m_tasks, &QAbstractListModel::rowsInserted, this, &Storage::scheduleSave);
+    connect(m_tasks, &QAbstractListModel::rowsRemoved, this, &Storage::scheduleSave);
+    connect(m_tasks, &QAbstractListModel::modelReset, this, &Storage::scheduleSave);
+
+    m_tasks.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tasks.at(i).data()); }, TaskRole);
+    m_tasks.insertRole("taskPtr", [&](int i) { return QVariant::fromValue<Task::Ptr>(m_tasks.at(i)); }, TaskPtrRole);
+    m_stagedTasksModel->setAcceptArchived(false);
+    m_archivedTasksModel->setAcceptArchived(true);
+    m_untaggedTasksModel->setFilterUntagged(true);
+    m_untaggedTasksModel->setObjectName("Untagged and archived tasks model");
 }
 
 Storage *Storage::instance()
 {
-    static Storage *storage = new Storage(qApp);
+    static Storage *storage = new JsonStorage(qApp);
     return storage;
 }
 
-TagStorage *Storage::tagStorage()
+TagList Storage::tags() const
 {
-    if (!m_tagStorage) { // due to deadlock in instance()
-        m_tagStorage = new TagStorageQSettings(this);
-        m_tagStorage->loadTags();
-        if (m_tagStorage->model()->rowCount() == 0) {
-            // Create default tags
-            m_tagStorage->createTag(tr("work"));
-            m_tagStorage->createTag(tr("personal"));
-            m_tagStorage->createTag(tr("family"));
-            m_tagStorage->createTag(tr("bills"));
-            m_tagStorage->createTag(tr("books"));
-            m_tagStorage->createTag(tr("movies"));
-        }
-    }
-
-    return m_tagStorage;
+    return m_tags;
 }
 
-TaskStorage *Storage::taskStorage()
+TaskList Storage::tasks() const
 {
-    if (!m_taskStorage) {
-        m_taskStorage = new TaskStorageQSettings(this);
-        m_taskStorage->loadTasks();
-    }
-
-    return m_taskStorage;
+    return m_tasks;
 }
 
 void Storage::load()
 {
+    m_savingDisabled += 1;
     load_impl();
+    m_savingDisabled += -1;
+
+    if (m_tags.isEmpty()) {
+        // Create default tags
+        createTag(tr("work"));
+        createTag(tr("personal"));
+        createTag(tr("family"));
+        createTag(tr("bills"));
+        createTag(tr("books"));
+        createTag(tr("movies"));
+    }
 }
 
 void Storage::save()
 {
+    m_savingDisabled += 1;
     save_impl();
+    m_savingDisabled += -1;
+}
+
+void Storage::scheduleSave()
+{
+    if (m_savingDisabled == 0) {
+        qDebug() << Q_FUNC_INFO;
+        m_scheduleTimer.start();
+    }
+}
+
+bool Storage::removeTag(const QString &tagName)
+{
+    int index = indexOfTag(tagName);
+    if (index == -1) {
+        qWarning() << Q_FUNC_INFO << "Non existant tag" << tagName;
+        Q_ASSERT(false);
+        return false;
+    }
+
+    emit tagAboutToBeRemoved(tagName);
+    m_tags.removeAt(index);
+    m_deletedTagName = tagName;
+    return true;
+}
+
+Tag::Ptr Storage::tag(const QString &name, bool create)
+{
+    Tag::Ptr tag = m_tags.value(indexOfTag(name));
+    return (tag || !create) ? tag : createTag(name);
+}
+
+Tag::Ptr Storage::createTag(const QString &tagName)
+{
+    QString trimmedName = tagName.trimmed();
+    if (trimmedName.isEmpty()) {
+        qWarning() << Q_FUNC_INFO << "Will not add empty tag";
+        return Tag::Ptr();
+    }
+
+    if (indexOfTag(trimmedName) != -1) {
+        qDebug() << Q_FUNC_INFO << "Refusing to add duplicate tag " << tagName;
+        return Tag::Ptr();
+    }
+
+    Tag::Ptr tag = Tag::Ptr(new Tag(trimmedName));
+    m_tags << tag;
+
+    return tag;
+}
+
+int Storage::indexOfTag(const QString &name) const
+{
+    QString normalizedName = name.toLower().trimmed();
+    for (int i = 0; i < m_tags.count(); ++i) {
+        if (m_tags.at(i)->name().toLower() == normalizedName)
+            return i;
+    }
+
+    return -1;
+}
+
+QAbstractItemModel *Storage::tagsModel() const
+{
+    return m_sortedTagModel;
+}
+
+QString Storage::deletedTagName() const
+{
+    return m_deletedTagName;
+}
+
+bool Storage::containsTag(const QString &name) const
+{
+    QString normalizedName = name.toLower().trimmed();
+    return std::find_if(m_tags.cbegin(), m_tags.cend(),
+                        [&](const Tag::Ptr &tag) { return tag->name().toLower() == normalizedName; }) != m_tags.cend();
+}
+
+bool Storage::renameTag(const QString &oldName, const QString &newName)
+{
+    QString trimmedNewName = newName.trimmed();
+    if (oldName == newName || trimmedNewName.isEmpty())
+        return true;
+
+    if (indexOfTag(trimmedNewName) != -1)
+        return false; // New name already exists
+
+    Tag::Ptr tag = m_tags.value(indexOfTag(oldName));
+    if (!tag) {
+        qWarning() << "Could not find tag with name" << oldName;
+        Q_ASSERT(false);
+        return false;
+    }
+
+    tag->setName(trimmedNewName);
+    scheduleSave();
+
+    return true;
+}
+
+void Storage::onTagAboutToBeRemoved(const QString &tagName)
+{
+    for (int i = 0; i < m_tasks.count(); ++i)
+        m_tasks.at(i)->removeTag(tagName);
+}
+
+TaskFilterProxyModel *Storage::taskFilterModel() const
+{
+    return m_taskFilterModel;
+}
+
+TaskFilterProxyModel *Storage::untaggedTasksModel() const
+{
+    return m_untaggedTasksModel;
+}
+
+ArchivedTasksFilterModel *Storage::stagedTasksModel() const
+{
+    return m_stagedTasksModel;
+}
+
+ArchivedTasksFilterModel *Storage::archivedTasksModel() const
+{
+    return m_archivedTasksModel;
+}
+
+void Storage::dumpDebugInfo()
+{
+    qDebug() << Q_FUNC_INFO << "task count:" << m_tasks.count();
+    for (int i = 0; i < m_tasks.count(); ++i)
+        qDebug() << Q_FUNC_INFO << i << m_tasks.at(i)->summary();
+}
+
+int Storage::proxyRowToSource(int proxyRow) const
+{
+    QModelIndex proxyIndex = m_taskFilterModel->index(proxyRow, 0);
+    QModelIndex index = m_taskFilterModel->mapToSource(proxyIndex);
+
+    return index.isValid() ? index.row() : -1;
+}
+
+int Storage::indexOfTask(const Task::Ptr &task) const
+{
+    for (int i = 0; i < m_tasks.count(); ++i) {
+        if (m_tasks.at(i) == task)
+            return i;
+    }
+
+    return -1;
+}
+
+void Storage::setDisableSaving(bool disable)
+{
+    m_savingDisabled += (disable ? 1 : -1);
+}
+
+Task::Ptr Storage::taskAt(int proxyIndex) const
+{
+    return m_tasks.value(proxyRowToSource(proxyIndex));
+}
+
+Task::Ptr Storage::addTask(const QString &taskText)
+{
+    Task::Ptr task = Task::createTask(taskText);
+    return addTask(task);
+}
+
+Task::Ptr Storage::addTask(const Task::Ptr &task)
+{
+    connect(task.data(), &Task::changed, this,
+            &Storage::scheduleSave, Qt::UniqueConnection);
+    connect(task.data(), &Task::stagedChanged, m_stagedTasksModel,
+            &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
+    connect(task.data(), &Task::stagedChanged, m_archivedTasksModel,
+            &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
+    connect(task.data(), &Task::tagsChanged, m_untaggedTasksModel,
+            &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
+
+    m_tasks << task;
+
+    return task;
+}
+
+void Storage::removeTask(int proxyIndex)
+{
+    m_tasks.removeAt(proxyRowToSource(proxyIndex));
 }
