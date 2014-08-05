@@ -642,10 +642,8 @@ void Controller::requestContextMenu(Task *task)
 
 void Controller::addTask(const QString &text, bool startEditMode)
 {
-    //Storage::instance()->save();
-    Storage::instance()->load();
-
     Task::Ptr task = m_storage->addTask(text);
+
     if (m_currentTabTag && queueType() == QueueTypeArchive)
         task->addTag(m_currentTabTag->name());
 
