@@ -43,11 +43,12 @@ Task::Task(const QString &name)
     connect(this, &Task::tagsChanged, &Task::changed);
     connect(this, &Task::descriptionChanged, &Task::changed);
     connect(this, &Task::statusChanged, &Task::changed);
-    connect(m_tags, &QAbstractListModel::modelReset, this, &Task::tagsChanged);
-    connect(m_tags, &QAbstractListModel::rowsInserted, this, &Task::tagsChanged);
-    connect(m_tags, &QAbstractListModel::rowsRemoved, this, &Task::tagsChanged);
-    connect(m_tags, &QAbstractListModel::layoutChanged, this, &Task::tagsChanged);
-    connect(m_tags, &QAbstractListModel::dataChanged, this, &Task::tagsChanged);
+    QAbstractItemModel *tagsModel = m_tags; // android doesn't build if you use m_tags directly in the connect statement
+    connect(tagsModel, &QAbstractListModel::modelReset, this, &Task::tagsChanged);
+    connect(tagsModel, &QAbstractListModel::rowsInserted, this, &Task::tagsChanged);
+    connect(tagsModel, &QAbstractListModel::rowsRemoved, this, &Task::tagsChanged);
+    connect(tagsModel, &QAbstractListModel::layoutChanged, this, &Task::tagsChanged);
+    connect(tagsModel, &QAbstractListModel::dataChanged, this, &Task::tagsChanged);
 
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     auto roleNames = m_storage->tagsModel()->roleNames();

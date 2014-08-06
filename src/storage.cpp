@@ -39,11 +39,11 @@ Storage::Storage(QObject *parent)
 
     m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).data()); }, TagRole);
     m_tags.insertRole("tagPtr", [&](int i) { return QVariant::fromValue<Tag::Ptr>(m_tags.at(i)); }, TagPtrRole);
-
-    connect(m_tags, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
-    connect(m_tags, &QAbstractListModel::rowsInserted, this, &Storage::scheduleSave);
-    connect(m_tags, &QAbstractListModel::rowsRemoved, this, &Storage::scheduleSave);
-    connect(m_tags, &QAbstractListModel::modelReset, this, &Storage::scheduleSave);
+    QAbstractItemModel *tagsModel = m_tags; // android doesn't build if you use m_tags directly in the connect statement
+    connect(tagsModel, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
+    connect(tagsModel, &QAbstractListModel::rowsInserted, this, &Storage::scheduleSave);
+    connect(tagsModel, &QAbstractListModel::rowsRemoved, this, &Storage::scheduleSave);
+    connect(tagsModel, &QAbstractListModel::modelReset, this, &Storage::scheduleSave);
     qRegisterMetaType<Tag::Ptr>("Tag::Ptr");
     m_sortedTagModel = new SortedTagsModel(m_tags, this);
 
@@ -56,10 +56,11 @@ Storage::Storage(QObject *parent)
     m_scheduleTimer.setInterval(0);
 
     connect(&m_scheduleTimer, &QTimer::timeout, this, &Storage::save);
-    connect(m_tasks, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
-    connect(m_tasks, &QAbstractListModel::rowsInserted, this, &Storage::scheduleSave);
-    connect(m_tasks, &QAbstractListModel::rowsRemoved, this, &Storage::scheduleSave);
-    connect(m_tasks, &QAbstractListModel::modelReset, this, &Storage::scheduleSave);
+    QAbstractItemModel *tasksModel = m_tags; // android doesn't build if you use m_tasks directly in the connect statement
+    connect(tasksModel, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
+    connect(tasksModel, &QAbstractListModel::rowsInserted, this, &Storage::scheduleSave);
+    connect(tasksModel, &QAbstractListModel::rowsRemoved, this, &Storage::scheduleSave);
+    connect(tasksModel, &QAbstractListModel::modelReset, this, &Storage::scheduleSave);
 
     m_tasks.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tasks.at(i).data()); }, TaskRole);
     m_tasks.insertRole("taskPtr", [&](int i) { return QVariant::fromValue<Task::Ptr>(m_tasks.at(i)); }, TaskPtrRole);
