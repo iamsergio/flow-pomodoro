@@ -43,9 +43,13 @@ JsonStorage::JsonStorage(QObject *parent)
 
 void JsonStorage::load_impl()
 {
+    if (!QFile::exists(dataFileName())) // Nothing to load
+        return;
+
     QFile file(dataFileName());
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Could not open data file" << dataFileName();
+        qWarning() << "Could not open data file" << dataFileName()
+                   << "; error=" << file.errorString() << file.error();
         qFatal("Bailing out");
         return;
     }
