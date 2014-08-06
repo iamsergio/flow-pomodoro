@@ -115,6 +115,16 @@ Rectangle {
                     _controller.stopPomodoro(false)
                 }
             }
+
+            ClickableImage {
+                id: configureIcon
+                toolTip: qsTr("Configure")
+                visible: _controller.expanded
+                source: "qrc:/img/configure.png"
+                onClicked: {
+                    _controller.currentPage = Controller.ConfigurePage
+                }
+            }
         }
 
         MainPage {
@@ -236,14 +246,6 @@ Rectangle {
         }
 
         MenuSeparator { }
-
-        MenuItem {
-            text: qsTr("Configure...")
-            onTriggered: {
-                _controller.currentPage = Controller.ConfigurePage
-                _controller.expanded = true
-            }
-        }
 
         MenuItem {
             text: qsTr("About...")

@@ -2,6 +2,7 @@
 <qresource prefix="/">
     <file>img/add.png</file>
     <file>img/completed.png</file>
+    <file>img/configure.png</file>
     <file>img/delete.png</file>
     <file>img/edit.png</file>
     <file>img/pause.png</file>
