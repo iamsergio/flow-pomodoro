@@ -14,8 +14,3 @@
 INCLUDEPATH += src
 
 CONFIG += debug c++11
-
-android {
-    # Android needs a little help. Set it explicitly
-    QMAKE_CXXFLAGS += -std=c++11
-}
