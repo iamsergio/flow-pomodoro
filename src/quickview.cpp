@@ -89,8 +89,6 @@ QuickView::QuickView(QWindow *parent)
         setSource(QUrl("qrc:/qml/Main.qml"));
     }
 
-    setResizeMode(QQuickView::SizeViewToRootObject);
-
     setFlags(flags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Tool);
 
 #ifdef Q_OS_WIN
@@ -103,11 +101,13 @@ QuickView::QuickView(QWindow *parent)
 #else
     setColor(Qt::transparent);
 #endif
-
-    const int width = 400; // TODO: it's hardcoded
-
     QSize screenSize = qApp->primaryScreen()->size();
-    setGeometry(screenSize.width()/2 - width/2, 0, width, height());
+    if (controller()->isMobile()) {
+        setResizeMode(QQuickView::SizeRootObjectToView);
+    } else {
+        setResizeMode(QQuickView::SizeViewToRootObject);
+        setPosition(screenSize.width()/2 - width()/2, 0);
+    }
 
     connect(m_controller, &Controller::currentTaskChanged, this, &QuickView::onTaskStatusChanged);
     connect(engine(), &QQmlEngine::quit, qApp, &QGuiApplication::quit);

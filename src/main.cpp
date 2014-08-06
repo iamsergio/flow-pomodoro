@@ -19,6 +19,7 @@
 */
 
 #include "quickview.h"
+#include "controller.h"
 #include "dbus/flow.h"
 
 #ifdef QT_WIDGETS_LIB
@@ -113,7 +114,11 @@ int main(int argc, char *argv[])
 
     QuickView window;
     initDBus(window.controller());
-    window.show();
+
+    if (window.controller()->isMobile())
+        window.showFullScreen();
+    else
+        window.show();
 
     return app.exec();
 }

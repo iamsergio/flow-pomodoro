@@ -55,6 +55,7 @@ class Controller : public QObject {
     Q_PROPERTY(TagEditStatus tagEditStatus READ tagEditStatus NOTIFY tagEditStatusChanged)
     // Other properties
     Q_PROPERTY(qreal dpiFactor READ dpiFactor CONSTANT)
+    Q_PROPERTY(bool isMobile READ isMobile CONSTANT)
 public:
     enum Page {
         InvalidPage = 0,
