@@ -45,7 +45,7 @@ Page {
 
         ClickableImage {
             id: addIcon
-            source: "qrc:/img/add.png"
+            source: "image://icons/add.png"
             anchors.top: headerRectangle.bottom
             anchors.topMargin: _style.marginSmall
             anchors.right: parent.right

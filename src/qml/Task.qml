@@ -122,7 +122,7 @@ Rectangle {
             ClickableImage {
                 id: archiveImage
                 toolTip: (taskObj !== null && taskObj.staged) ? qsTr("Archive task") : qsTr("Queue for today")
-                source: (taskObj !== null && taskObj.staged) ? "qrc:/img/archive.png" : "qrc:/img/stage.png"
+                source: (taskObj !== null && taskObj.staged) ? "image://icons/archive.png" : "image://icons/stage.png"
                 visible: root.buttonsVisible
                 onClicked: {
                     taskObj.staged = !taskObj.staged
@@ -132,7 +132,7 @@ Rectangle {
             ClickableImage {
                 id: deleteImage
                 toolTip: qsTr("Delete task")
-                source: "qrc:/img/delete.png"
+                source: "image://icons/delete.png"
                 visible: root.buttonsVisible
                 onClicked: {
                     root.deleteClicked()
@@ -142,7 +142,7 @@ Rectangle {
             ClickableImage {
                 id: editImage
                 toolTip: qsTr("Edit task")
-                source: "qrc:/img/edit.png"
+                source: "image://icons/edit.png"
                 visible: root.buttonsVisible && false // Disabled for now, not enough space
                 onClicked: {
                     if (modelIndex !== -1) {
@@ -157,7 +157,7 @@ Rectangle {
             ClickableImage {
                 id: playImage
                 toolTip: qsTr("Start pomodoro on task")
-                source: "qrc:/img/play.png"
+                source: "image://icons/play.png"
                 visible: root.buttonsVisible && (taskObj !== null && taskObj.staged)
                 onClicked: {
                     _controller.startPomodoro(root.taskObj, _style.defaultPomodoroDuration)

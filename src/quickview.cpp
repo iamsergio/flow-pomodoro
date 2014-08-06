@@ -27,6 +27,7 @@
 #include "archivedtasksfiltermodel.h"
 #include "tooltipcontroller.h"
 #include "storage.h"
+#include "imageprovider.h"
 
 #include <QStandardPaths>
 #include <QQmlContext>
@@ -81,6 +82,8 @@ QuickView::QuickView(QWindow *parent)
     qmlRegisterUncreatableType<Tag>("Controller",
                                     1, 0, "Tag_",
                                     "Tag is not creatable");
+
+    engine()->addImageProvider("icons", new ImageProvider());
 
     if (m_developerMode) {
         // So that F5 reloads QML without having to restart the application

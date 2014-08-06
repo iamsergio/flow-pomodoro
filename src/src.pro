@@ -19,6 +19,7 @@ contains(QT_CONFIG, dbus) {
 SOURCES += archivedtasksfiltermodel.cpp \
            checkabletagmodel.cpp \
            controller.cpp  \
+           imageprovider.cpp \
            jsonstorage.cpp \
            main.cpp        \
            pluginmodel.cpp \
@@ -35,6 +36,7 @@ SOURCES += archivedtasksfiltermodel.cpp \
 HEADERS += archivedtasksfiltermodel.h \
            checkabletagmodel.h \
            controller.h      \
+           imageprovider.h \
            jsonstorage.h      \
            genericlistmodel.h \
            plugininterface.h \

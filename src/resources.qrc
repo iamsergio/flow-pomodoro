@@ -1,17 +1,17 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="/">
-    <file>img/add.png</file>
-    <file>img/completed.png</file>
-    <file>img/configure.png</file>
-    <file>img/delete.png</file>
-    <file>img/edit.png</file>
-    <file>img/pause.png</file>
-    <file>img/play.png</file>
-    <file>img/archive.png</file>
-    <file>img/stage.png</file>
-    <file>img/stop.png</file>
-    <file>img/tag.png</file>
-    <file>img/window-close.png</file>
+    <file>img/16x16/add.png</file>
+    <file>img/16x16/completed.png</file>
+    <file>img/16x16/configure.png</file>
+    <file>img/16x16/delete.png</file>
+    <file>img/16x16/edit.png</file>
+    <file>img/16x16/pause.png</file>
+    <file>img/16x16/play.png</file>
+    <file>img/16x16/archive.png</file>
+    <file>img/16x16/stage.png</file>
+    <file>img/16x16/stop.png</file>
+    <file>img/16x16/tag.png</file>
+    <file>img/16x16/window-close.png</file>
 
     <file>translations/flow_pt_PT.qm</file>
 

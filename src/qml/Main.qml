@@ -96,7 +96,7 @@ Rectangle {
                 id: pauseIcon
                 toolTip: qsTr("Pause current task")
                 visible: !_controller.currentTask.stopped && (_controller.expanded || mouseOver() || _controller.currentTask.paused)
-                source: _controller.currentTask.paused ? "qrc:/img/play.png" : "qrc:/img/pause.png"
+                source: _controller.currentTask.paused ? "image://icons/play.png" : "image://icons/pause.png"
                 onClicked: {
                     _controller.pausePomodoro()
                 }
@@ -106,7 +106,7 @@ Rectangle {
                 id: stopIcon
                 toolTip: qsTr("Stop current task")
                 visible: !_controller.currentTask.stopped && (_controller.expanded || mouseOver() || _controller.currentTask.paused)
-                source: "qrc:/img/stop.png"
+                source: "image://icons/stop.png"
                 onClicked: {
                     _controller.stopPomodoro(true)
                 }
@@ -120,7 +120,7 @@ Rectangle {
                 id: configureIcon
                 toolTip: qsTr("Configure")
                 visible: _controller.expanded
-                source: "qrc:/img/configure.png"
+                source: "image://icons/configure.png"
                 onClicked: {
                     _controller.currentPage = Controller.ConfigurePage
                 }

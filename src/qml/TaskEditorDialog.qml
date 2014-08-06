@@ -70,7 +70,7 @@ ModalDialog {
                 Row {
                     spacing: 3
                     ClickableImage {
-                        source: "qrc:/img/tag.png"
+                        source: "image://icons/tag.png"
                         anchors.verticalCenter: parent.verticalCenter
                         toolTip: qsTr("Configure tags")
                         onClicked: {
