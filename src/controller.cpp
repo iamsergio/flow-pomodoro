@@ -28,6 +28,7 @@
 #include <QScreen>
 #include <QGuiApplication>
 #include <QQmlExpression>
+#include <qcompilerdetection.h>
 
 enum {
     AfterAddingTimeout = 1000,
@@ -40,7 +41,7 @@ Controller::Controller(QuickView *quickView)
     , m_tickTimer(new QTimer(this))
     , m_afterAddingTimer(new QTimer(this))
     , m_elapsedMinutes(0)
-    , m_expanded(false)
+    , m_expanded(isMobile()) // Mobile is always expanded
     , m_page(MainPage)
     , m_quickView(quickView)
     , m_popupVisible(false)
@@ -219,6 +220,9 @@ bool Controller::expanded() const
 
 void Controller::setExpanded(bool expanded)
 {
+    if (isMobile())
+        return;
+
     if (expanded != m_expanded) {
         m_expanded = expanded;
         if (expanded) {
@@ -365,6 +369,15 @@ void Controller::setQueueType(QueueType type)
         m_queueType = type;
         emit queueTypeChanged();
     }
+}
+
+bool Controller::isMobile() const
+{
+#if defined(Q_OS_ANDROID) || defined(Q_OS_BLACKBERRY) || defined(Q_OS_IOS) || defined(Q_OS_WINRT)
+    return true;
+#else
+    return false;
+#endif
 }
 
 void Controller::setCurrentTabTag(Tag *tag)

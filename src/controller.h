@@ -134,6 +134,8 @@ public:
     Controller::QueueType queueType() const;
     void setQueueType(QueueType);
 
+    bool isMobile() const;
+
 public Q_SLOTS:
     void setCurrentTabTag(Tag *);
     void addTask(const QString &text, bool startEditMode);
