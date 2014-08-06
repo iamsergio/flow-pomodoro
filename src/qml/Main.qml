@@ -86,15 +86,19 @@ Rectangle {
 
         Row {
             z: 2
+            id: buttonRow
             anchors.right: parent.right
             anchors.bottomMargin: 5
-            anchors.bottom: titleText.bottom
+            anchors.top: parent.top
+            anchors.bottom: mainPage.top
             anchors.rightMargin: progressBar.anchors.rightMargin + 2
             spacing: _style.buttonsSpacing
+            width: childrenRect.width + (pauseIcon.visible ? spacing : 0)
 
             ClickableImage {
                 id: pauseIcon
                 toolTip: qsTr("Pause current task")
+                anchors.verticalCenter: parent.verticalCenter
                 visible: !_controller.currentTask.stopped && (_controller.expanded || mouseOver() || _controller.currentTask.paused)
                 source: _controller.currentTask.paused ? "image://icons/play.png" : "image://icons/pause.png"
                 onClicked: {
@@ -104,6 +108,7 @@ Rectangle {
 
             ClickableImage {
                 id: stopIcon
+                anchors.verticalCenter: parent.verticalCenter
                 toolTip: qsTr("Stop current task")
                 visible: !_controller.currentTask.stopped && (_controller.expanded || mouseOver() || _controller.currentTask.paused)
                 source: "image://icons/stop.png"
@@ -118,6 +123,7 @@ Rectangle {
 
             ClickableImage {
                 id: configureIcon
+                anchors.verticalCenter: buttonRow.verticalCenter
                 toolTip: qsTr("Configure")
                 visible: _controller.expanded
                 source: "image://icons/configure.png"
