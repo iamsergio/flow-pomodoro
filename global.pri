@@ -1,5 +1,5 @@
 *-g++*|*clang* {
-    QMAKE_CXXFLAGS = -Werror -Wall -Wextra
+    QMAKE_CXXFLAGS += -Werror -Wall -Wextra
 }
 
 # qtHaveModule() does work with qml only modules

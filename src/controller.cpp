@@ -28,7 +28,7 @@
 #include <QScreen>
 #include <QGuiApplication>
 #include <QQmlExpression>
-#include <qcompilerdetection.h>
+#include <qglobal.h>
 
 enum {
     AfterAddingTimeout = 1000,
