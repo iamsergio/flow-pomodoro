@@ -18,7 +18,7 @@ Page {
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.margins: _style.marginSmall
-            height: 40
+            height: childrenRect.height
 
             Text {
                 id: textItem
