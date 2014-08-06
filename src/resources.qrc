@@ -1,7 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="/">
     <file>img/16x16/add.png</file>
-    <file>img/16x16/completed.png</file>
     <file>img/16x16/configure.png</file>
     <file>img/16x16/delete.png</file>
     <file>img/16x16/edit.png</file>
