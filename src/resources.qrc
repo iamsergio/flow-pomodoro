@@ -12,6 +12,17 @@
     <file>img/16x16/stop.png</file>
     <file>img/16x16/tag.png</file>
     <file>img/16x16/window-close.png</file>
+    <file>img/48x48/add.png</file>
+    <file>img/48x48/configure.png</file>
+    <file>img/48x48/delete.png</file>
+    <file>img/48x48/edit.png</file>
+    <file>img/48x48/pause.png</file>
+    <file>img/48x48/play.png</file>
+    <file>img/48x48/archive.png</file>
+    <file>img/48x48/stage.png</file>
+    <file>img/48x48/stop.png</file>
+    <file>img/48x48/tag.png</file>
+    <file>img/48x48/window-close.png</file>
 
     <file>translations/flow_pt_PT.qm</file>
 
