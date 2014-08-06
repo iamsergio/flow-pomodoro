@@ -121,7 +121,7 @@ Rectangle {
 
             ClickableImage {
                 id: archiveImage
-                toolTip: qsTr("Archive task")
+                toolTip: (taskObj !== null && taskObj.staged) ? qsTr("Archive task") : qsTr("Queue for today")
                 source: (taskObj !== null && taskObj.staged) ? "qrc:/img/archive.png" : "qrc:/img/stage.png"
                 visible: root.buttonsVisible
                 onClicked: {
