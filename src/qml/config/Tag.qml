@@ -101,7 +101,7 @@ Item {
 
             ClickableImage {
                 id: deleteImage
-                source: "qrc:/img/delete.png"
+                source: "image://icons/delete.png"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: _style.buttonsSpacing

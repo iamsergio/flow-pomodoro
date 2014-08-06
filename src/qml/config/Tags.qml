@@ -49,7 +49,7 @@ MouseArea {
             }
             ClickableImage {
                 id: invisible_image
-                source: "qrc:/img/delete.png"
+                source: "image://icons/delete.png"
             }
         }
 
@@ -79,7 +79,7 @@ MouseArea {
     ClickableImage {
         id: addImage
         toolTip: qsTr("Add new tag")
-        source: "qrc:/img/add.png"
+        source: "image://icons/add.png"
         anchors.top: parent.top
         anchors.topMargin: _style.marginSmall
         enabled: _controller.tagEditStatus !== Controller.TagEditStatusNew
