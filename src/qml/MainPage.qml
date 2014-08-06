@@ -48,8 +48,8 @@ Page {
             source: "image://icons/add.png"
             anchors.top: headerRectangle.bottom
             anchors.topMargin: _style.marginSmall
-            anchors.right: parent.right
-            anchors.rightMargin: _style.marginSmall
+            anchors.left: parent.left
+            anchors.leftMargin: _style.marginSmall
             toolTip: qsTr("Add new task")
             onClicked: {
                 _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
