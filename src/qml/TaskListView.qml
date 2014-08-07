@@ -24,7 +24,7 @@ ListView {
 
     delegate: Task {
         taskObj: task
-        buttonsVisible: _controller.editMode === Controller.EditModeNone && hasMouseOver
+        buttonsVisible: _controller.editMode === Controller.EditModeNone && (hasMouseOver || _controller.isMobile)
         modelIndex: index
 
         onDeleteClicked: {
