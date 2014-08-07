@@ -56,7 +56,7 @@ Storage::Storage(QObject *parent)
     m_scheduleTimer.setInterval(0);
 
     connect(&m_scheduleTimer, &QTimer::timeout, this, &Storage::save);
-    QAbstractItemModel *tasksModel = m_tags; // android doesn't build if you use m_tasks directly in the connect statement
+    QAbstractItemModel *tasksModel = m_tasks; // android doesn't build if you use m_tasks directly in the connect statement
     connect(tasksModel, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
     connect(tasksModel, &QAbstractListModel::rowsInserted, this, &Storage::scheduleSave);
     connect(tasksModel, &QAbstractListModel::rowsRemoved, this, &Storage::scheduleSave);
