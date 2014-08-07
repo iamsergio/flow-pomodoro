@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
     initDBus(window.controller());
 
     if (window.controller()->isMobile())
-        window.showFullScreen();
+        window.showMaximized(); // Don't use fullscreen on android
     else
         window.show();
 
