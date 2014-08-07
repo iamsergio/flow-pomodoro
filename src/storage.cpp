@@ -76,6 +76,12 @@ Storage *Storage::instance()
     return storage;
 }
 
+Storage::~Storage()
+{
+    if (m_scheduleTimer.isActive())
+        save();
+}
+
 TagList Storage::tags() const
 {
     return m_tags;

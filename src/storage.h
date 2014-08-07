@@ -54,6 +54,7 @@ public:
     };
 
     static Storage *instance();
+    ~Storage();
 
     TagList tags() const;
     TaskList tasks() const;
