@@ -53,8 +53,8 @@ Item {
                      textColor: "black"
                      background: Rectangle {
                          radius: 6
-                         implicitWidth: 100
-                         implicitHeight: 24
+                         implicitWidth: 100 * _controller.dpiFactor
+                         implicitHeight: 24 * _controller.dpiFactor
                          border.color: "#333"
                          border.width: 1
                      }
