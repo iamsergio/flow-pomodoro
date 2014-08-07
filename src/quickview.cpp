@@ -92,7 +92,6 @@ QuickView::QuickView(QWindow *parent)
         setSource(QUrl("qrc:/qml/Main.qml"));
     }
 
-    setFlags(flags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Tool);
 
 #ifdef Q_OS_WIN
 
@@ -108,6 +107,7 @@ QuickView::QuickView(QWindow *parent)
     if (controller()->isMobile()) {
         setResizeMode(QQuickView::SizeRootObjectToView);
     } else {
+        setFlags(flags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Tool);
         setResizeMode(QQuickView::SizeViewToRootObject);
         setPosition(screenSize.width()/2 - width()/2, 0);
     }
