@@ -7,7 +7,7 @@ import ".."
 Item {
     id: root
     height: invisible_helper.childrenRect.height + 2 *  _controller.dpiFactor
-    width: label.contentWidth + taskCountLabel.contentWidth + _style.tagExtraWidth
+    width: label.contentWidth + taskCountLabel.contentWidth + _style.tagExtraWidth + deleteImage.width
     property QtObject tagObj: null
     property bool beingEdited: false
     property string tagName: ""
