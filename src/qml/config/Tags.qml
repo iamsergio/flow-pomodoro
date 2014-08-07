@@ -23,6 +23,22 @@ MouseArea {
         horizontalAlignment: Text.AlignHCenter
     }
 
+    Item {
+        id: invisible_helper
+        visible: false
+        Text {
+            id: invisible_text
+            text: "Invisible Item"
+            font.pixelSize: _style.tagFontSize
+            font.bold: _style.tagFontBold
+            color: _style.tagFontColor
+        }
+        ClickableImage {
+            id: invisible_image
+            source: "image://icons/delete.png"
+        }
+    }
+
     Flow {
         anchors.top: addImage.bottom
         anchors.bottom: parent.bottom
@@ -35,22 +51,6 @@ MouseArea {
 
         move: Transition {
             NumberAnimation { properties: "x"; duration: _style.tagMoveAnimationDuration }
-        }
-
-        Item {
-            id: invisible_helper
-            visible: false
-            Text {
-                id: invisible_text
-                text: "Invisible Item"
-                font.pixelSize: _style.tagFontSize
-                font.bold: _style.tagFontBold
-                color: _style.tagFontColor
-            }
-            ClickableImage {
-                id: invisible_image
-                source: "image://icons/delete.png"
-            }
         }
 
         Repeater {
