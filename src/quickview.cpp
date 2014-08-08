@@ -110,12 +110,11 @@ QuickView::QuickView(QWindow *parent)
         setFlags(flags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Tool);
         setResizeMode(QQuickView::SizeViewToRootObject);
         setPosition(screenSize.width()/2 - width()/2, 0);
+        loadPlugins();
     }
 
     connect(m_controller, &Controller::currentTaskChanged, this, &QuickView::onTaskStatusChanged);
     connect(engine(), &QQmlEngine::quit, qApp, &QGuiApplication::quit);
-
-    loadPlugins();
 }
 
 Controller *QuickView::controller() const

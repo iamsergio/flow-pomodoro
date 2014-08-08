@@ -40,13 +40,14 @@ Page {
             }
 
             Tab {
-                title: qsTr("Plugins")
-                source: "config/Plugins.qml"
+                title: qsTr("Tags")
+                source: "config/Tags.qml"
             }
 
             Tab {
-                title: qsTr("Tags")
-                source: "config/Tags.qml"
+                enabled: !_controller.isMobile
+                title: qsTr("Plugins")
+                source: "config/Plugins.qml"
             }
         }
 
