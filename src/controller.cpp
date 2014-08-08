@@ -282,8 +282,11 @@ qreal Controller::dpiFactor() const
     QScreen *screen = QGuiApplication::primaryScreen();
     Q_ASSERT(screen);
 
-    //return screen->logicalDotsPerInch() / 96.0;
-    return 1; // FIX when porting to mobile
+    if (isMobile()) {
+        return screen->logicalDotsPerInch() / 72.0;
+    }
+
+    return 1;
 }
 
 bool Controller::popupVisible() const
