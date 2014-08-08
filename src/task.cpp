@@ -43,6 +43,7 @@ Task::Task(const QString &name)
     connect(this, &Task::tagsChanged, &Task::changed);
     connect(this, &Task::descriptionChanged, &Task::changed);
     connect(this, &Task::statusChanged, &Task::changed);
+    connect(this, &Task::stagedChanged, &Task::changed);
     QAbstractItemModel *tagsModel = m_tags; // android doesn't build if you use m_tags directly in the connect statement
     connect(tagsModel, &QAbstractListModel::modelReset, this, &Task::tagsChanged);
     connect(tagsModel, &QAbstractListModel::rowsInserted, this, &Task::tagsChanged);
