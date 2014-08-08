@@ -27,7 +27,7 @@ class ArchivedTasksFilterModel : public QSortFilterProxyModel
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    explicit ArchivedTasksFilterModel(QAbstractItemModel *source, QObject *parent = 0);
+    explicit ArchivedTasksFilterModel(QObject *parent = 0);
     QVariant data(const QModelIndex &index, int role) const override;
 
     /**

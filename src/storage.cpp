@@ -30,8 +30,8 @@ Storage::Storage(QObject *parent)
     , m_savingDisabled(0)
     , m_taskFilterModel(new TaskFilterProxyModel(this))
     , m_untaggedTasksModel(new TaskFilterProxyModel(this))
-    , m_stagedTasksModel(new ArchivedTasksFilterModel(m_tasks, this))
-    , m_archivedTasksModel(new ArchivedTasksFilterModel(m_tasks, this))
+    , m_stagedTasksModel(new ArchivedTasksFilterModel(this))
+    , m_archivedTasksModel(new ArchivedTasksFilterModel(this))
 {
     m_scheduleTimer.setSingleShot(true);
     m_scheduleTimer.setInterval(0);
@@ -64,7 +64,10 @@ Storage::Storage(QObject *parent)
 
     m_tasks.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tasks.at(i).data()); }, TaskRole);
     m_tasks.insertRole("taskPtr", [&](int i) { return QVariant::fromValue<Task::Ptr>(m_tasks.at(i)); }, TaskPtrRole);
+    m_stagedTasksModel->setSourceModel(m_tasks);
     m_stagedTasksModel->setAcceptArchived(false);
+
+    m_archivedTasksModel->setSourceModel(m_tasks);
     m_archivedTasksModel->setAcceptArchived(true);
     m_untaggedTasksModel->setFilterUntagged(true);
     m_untaggedTasksModel->setObjectName("Untagged and archived tasks model");

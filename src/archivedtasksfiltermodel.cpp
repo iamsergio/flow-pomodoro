@@ -20,13 +20,10 @@
 #include "archivedtasksfiltermodel.h"
 #include "storage.h"
 
-ArchivedTasksFilterModel::ArchivedTasksFilterModel(QAbstractItemModel *source,
-                                                   QObject *parent)
+ArchivedTasksFilterModel::ArchivedTasksFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent)
     , m_archived(false)
 {
-    Q_ASSERT(source);
-    setSourceModel(source);
     setAcceptArchived(true);
     connect(this, &ArchivedTasksFilterModel::rowsInserted,
             this, &ArchivedTasksFilterModel::countChanged);
