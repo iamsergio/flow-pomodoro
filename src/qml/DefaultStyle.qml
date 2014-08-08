@@ -32,8 +32,8 @@ Item {
     readonly property bool tagFontBold: true
     readonly property int tagMoveAnimationDuration: 150
     readonly property int tagTextLeftMargin: 5 * _controller.dpiFactor
-    readonly property int tagExtraWidth: 14
-    readonly property int tagSpacing: 5 * _controller.dpiFactor
+    readonly property int tagExtraWidth: 14 * _controller.dpiFactor
+    readonly property int tagSpacing: 8 * _controller.dpiFactor
     readonly property int tagsRightMargin: 40 * _controller.dpiFactor
 
 

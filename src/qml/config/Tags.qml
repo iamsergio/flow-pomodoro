@@ -35,7 +35,7 @@ MouseArea {
         }
         ClickableImage {
             id: invisible_image
-            source: "image://icons/delete.png"
+            source: "image://icons/delete-tag.png"
         }
     }
 
@@ -56,7 +56,7 @@ MouseArea {
         ClickableImage {
             id: addImage
             toolTip: qsTr("Add new tag")
-            source: "image://icons/add.png"
+            source: "image://icons/add-tag.png"
             enabled: _controller.tagEditStatus !== Controller.TagEditStatusNew
             onClicked: {
                 newTag.textField.text = ""
