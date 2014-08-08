@@ -17,7 +17,9 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
-            anchors.margins: _style.marginSmall
+            anchors.topMargin: _style.marginMedium
+            anchors.rightMargin: _style.marginSmall
+            anchors.leftMargin: _style.marginMedium
             height: childrenRect.height
 
             Text {

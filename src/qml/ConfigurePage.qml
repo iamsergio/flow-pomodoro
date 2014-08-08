@@ -57,7 +57,7 @@ Page {
             text: qsTr("OK")
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: _style.marginSmall
+            anchors.bottomMargin: _style.marginMedium
 
             onClicked: {
                 _controller.currentPage = Controller.MainPage
