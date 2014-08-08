@@ -122,7 +122,8 @@ void Storage::save()
 void Storage::scheduleSave()
 {
     if (m_savingDisabled == 0) {
-        qDebug() << Q_FUNC_INFO;
+        if (!m_scheduleTimer.isActive())
+            qDebug() << Q_FUNC_INFO;
         m_scheduleTimer.start();
     }
 }
