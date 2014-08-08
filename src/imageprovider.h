@@ -30,7 +30,8 @@ class ImageProvider : public QQuickImageProvider
 public:
     ImageProvider();
 
-    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize) override;
+    QPixmap requestPixmap(const QString &id, QSize *size,
+                          const QSize &requestedSize) override;
 
 };
 

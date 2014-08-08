@@ -18,7 +18,9 @@
 */
 
 #include "imageprovider.h"
+#include <QScreen>
 #include <QQuickItem>
+#include <QGuiApplication>
 
 ImageProvider::ImageProvider()
     : QQuickImageProvider(QQuickImageProvider::Pixmap)
@@ -27,5 +29,20 @@ ImageProvider::ImageProvider()
 
 QPixmap ImageProvider::requestPixmap(const QString &id, QSize *, const QSize &)
 {
-    return QPixmap(QString(":/img/16x16/%1").arg(id));
+    QScreen *screen = QGuiApplication::primaryScreen();
+
+    // For touch related we're interested in physical DPI
+    qreal dpi = screen->physicalDotsPerInch();
+
+    // 0.30 inches seem decent for human fingers
+    const qreal hitWidthInInches = 0.25;
+    const qreal pixelWidth = hitWidthInInches * dpi;
+
+    int iconSize = ceil(pixelWidth / 16) * 16;
+    if (iconSize == 16 || iconSize == 32 || iconSize == 48) {
+        return QPixmap(QString(":/img/%1x%2/%3").arg(iconSize).arg(iconSize).arg(id));
+    } else {
+        // we don't have higher resolution assets, so scale:
+        return QPixmap(QString(":/img/48x48/%1").arg(id)).scaled(pixelWidth, pixelWidth);
+    }
 }
