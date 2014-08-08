@@ -28,6 +28,7 @@ class ArchivedTasksFilterModel : public QSortFilterProxyModel
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     explicit ArchivedTasksFilterModel(QAbstractItemModel *source, QObject *parent = 0);
+    QVariant data(const QModelIndex &index, int role) const override;
 
     /**
      * Sets whether we accept archived or staged tasks.

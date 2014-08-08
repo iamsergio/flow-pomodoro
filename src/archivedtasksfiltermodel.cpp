@@ -38,6 +38,15 @@ ArchivedTasksFilterModel::ArchivedTasksFilterModel(QAbstractItemModel *source,
             this, &ArchivedTasksFilterModel::countChanged);
 }
 
+QVariant ArchivedTasksFilterModel::data(const QModelIndex &index, int role) const
+{
+    QVariant variant = QSortFilterProxyModel::data(index, role);
+    if (!variant.isValid() && role >= Qt::UserRole)
+        qDebug() << Q_FUNC_INFO << "Invalid variant for role=" << role << index.row();
+
+    return variant;
+}
+
 void ArchivedTasksFilterModel::setAcceptArchived(bool accept)
 {
     if (accept != m_archived) {
