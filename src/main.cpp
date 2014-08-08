@@ -39,6 +39,7 @@ typedef QGuiApplication Application;
 
 #include <QStandardPaths>
 #include <QTranslator>
+#include <QScreen>
 
 void initDBus(Controller *controller)
 {
@@ -115,10 +116,20 @@ int main(int argc, char *argv[])
     QuickView window;
     initDBus(window.controller());
 
-    if (window.controller()->isMobile())
+    if (window.controller()->isMobile()) {
         window.showMaximized(); // Don't use fullscreen on android
-    else
+
+        QScreen *screen = QGuiApplication::primaryScreen();
+        if (screen) {
+            qDebug() << "Logical DPI=" << screen->logicalDotsPerInch()
+                     << "; Physical DPI=" << screen->physicalDotsPerInch()
+                     << "; Resolution=" << screen->size();
+        } else {
+            qWarning() << "Null screen";
+        }
+    } else {
         window.show();
+    }
 
     return app.exec();
 }
