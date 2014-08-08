@@ -40,17 +40,29 @@ MouseArea {
     }
 
     Flow {
-        anchors.top: addImage.bottom
+        anchors.top: parent.top
+        anchors.topMargin: _style.marginBig
         anchors.bottom: parent.bottom
         anchors.leftMargin: _style.marginMedium
         anchors.rightMargin:_style.tagsRightMargin
-        anchors.topMargin: _style.marginSmall
         anchors.left: parent.left
         anchors.right: parent.right
         spacing: _style.tagSpacing
 
         move: Transition {
             NumberAnimation { properties: "x"; duration: _style.tagMoveAnimationDuration }
+        }
+
+        ClickableImage {
+            id: addImage
+            toolTip: qsTr("Add new tag")
+            source: "image://icons/add.png"
+            enabled: _controller.tagEditStatus !== Controller.TagEditStatusNew
+            onClicked: {
+                newTag.textField.text = ""
+                _controller.beginAddingNewTag()
+                newTag.textField.forceActiveFocus()
+            }
         }
 
         Repeater {
@@ -73,20 +85,6 @@ MouseArea {
             onEdited: {
                 _controller.endAddingNewTag(newTagName)
             }
-        }
-    }
-
-    ClickableImage {
-        id: addImage
-        toolTip: qsTr("Add new tag")
-        source: "image://icons/add.png"
-        anchors.top: parent.top
-        anchors.topMargin: _style.marginSmall
-        enabled: _controller.tagEditStatus !== Controller.TagEditStatusNew
-        onClicked: {
-            newTag.textField.text = ""
-            _controller.beginAddingNewTag()
-            newTag.textField.forceActiveFocus()
         }
     }
 }
