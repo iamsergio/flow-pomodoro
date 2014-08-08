@@ -65,6 +65,7 @@ Page {
             anchors.top: addIcon.bottom
             anchors.bottom: parent.bottom
             visible: _controller.queueType === Controller.QueueTypeToday
+            emptyText: qsTr("No queued tasks for today.") + "\n"+ qsTr("Please create new ones or pick some from your archive.")
         }
 
         DecentTabView {
@@ -86,20 +87,8 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-
-            Text {
-                horizontalAlignment: Text.AlignHCenter
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -height
-                text: _controller.currentTabTag == null ? qsTr("No archived untagged tasks found.") + (_storage.tagsModel.count === 0 ? "" : qsTr("\nClick the tag bar above to see tagged tasks.") )
-                                                        : qsTr("No archived tasks found with tag %1").arg(_controller.currentTabTag.name)
-                visible: parent.model.count === 0
-                wrapMode: Text.WordWrap
-                anchors.leftMargin: _style.marginSmall
-                anchors.rightMargin: _style.marginSmall
-            }
+            emptyText: _controller.currentTabTag == null ? qsTr("No archived untagged tasks found.") + (_storage.tagsModel.count === 0 ? "" : qsTr("\nClick the tag bar above to see tagged tasks.") )
+                                                         : qsTr("No archived tasks found with tag %1").arg(_controller.currentTabTag.name)
         }
     }
 }
