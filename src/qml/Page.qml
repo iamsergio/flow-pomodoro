@@ -10,7 +10,6 @@ Rectangle {
 
     color: _style.queueBackgroundColor
     radius: _style.queueRadius
-    height: _style.pageHeight
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.leftMargin: _style.pageMargin

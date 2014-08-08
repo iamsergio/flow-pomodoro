@@ -81,6 +81,7 @@ Item {
     readonly property int deleteAnimationDuration : 350
 
     readonly property int pageHeight : 500 * _controller.dpiFactor
+    readonly property int contractedHeight: 50 * _controller.dpiFactor
 
     readonly property int selectedTaskBorderWidth    : Math.ceil(1 * _controller.dpiFactor)
     readonly property string selectedTaskBorderColor : "black"
