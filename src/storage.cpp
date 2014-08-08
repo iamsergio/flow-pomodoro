@@ -295,6 +295,8 @@ Task::Ptr Storage::addTask(const Task::Ptr &task)
             &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
     connect(task.data(), &Task::tagsChanged, m_untaggedTasksModel,
             &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
+    connect(task.data(), &Task::statusChanged, m_stagedTasksModel,
+            &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
 
     m_tasks << task;
 
