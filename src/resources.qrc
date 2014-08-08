@@ -11,6 +11,17 @@
     <file>img/16x16/stop.png</file>
     <file>img/16x16/tag.png</file>
     <file>img/16x16/window-close.png</file>
+    <file>img/32x32/add.png</file>
+    <file>img/32x32/configure.png</file>
+    <file>img/32x32/delete.png</file>
+    <file>img/32x32/edit.png</file>
+    <file>img/32x32/pause.png</file>
+    <file>img/32x32/play.png</file>
+    <file>img/32x32/archive.png</file>
+    <file>img/32x32/stage.png</file>
+    <file>img/32x32/stop.png</file>
+    <file>img/32x32/tag.png</file>
+    <file>img/32x32/window-close.png</file>
     <file>img/48x48/add.png</file>
     <file>img/48x48/configure.png</file>
     <file>img/48x48/delete.png</file>
