@@ -20,7 +20,7 @@ Item {
         anchors.rightMargin: 40 * _controller.dpiFactor
         columnSpacing: _style.marginBig
 
-        RegularText {
+        Text {
             text: qsTr("Pomodoro duration")
         }
 
