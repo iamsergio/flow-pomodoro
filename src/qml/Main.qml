@@ -93,16 +93,16 @@ Rectangle {
             anchors.bottom: mainPage.top
             anchors.rightMargin: progressBar.anchors.rightMargin + 2
             spacing: _style.buttonsSpacing
-            width: childrenRect.width + (pauseIcon.visible ? spacing : 0)
+            layoutDirection: "RightToLeft" // Right to left so configure always sticks to right margin, otherwise will stick to left margin when row grows. Because row doesn't shrink back when pause/stop become invisible.
 
             ClickableImage {
-                id: pauseIcon
-                toolTip: qsTr("Pause current task")
-                anchors.verticalCenter: parent.verticalCenter
-                visible: !_controller.currentTask.stopped && (_controller.expanded || mouseOver() || _controller.currentTask.paused)
-                source: _controller.currentTask.paused ? "image://icons/play.png" : "image://icons/pause.png"
+                id: configureIcon
+                anchors.verticalCenter: buttonRow.verticalCenter
+                toolTip: qsTr("Configure")
+                visible: _controller.expanded
+                source: "image://icons/configure.png"
                 onClicked: {
-                    _controller.pausePomodoro()
+                    _controller.currentPage = Controller.ConfigurePage
                 }
             }
 
@@ -122,13 +122,13 @@ Rectangle {
             }
 
             ClickableImage {
-                id: configureIcon
-                anchors.verticalCenter: buttonRow.verticalCenter
-                toolTip: qsTr("Configure")
-                visible: _controller.expanded
-                source: "image://icons/configure.png"
+                id: pauseIcon
+                toolTip: qsTr("Pause current task")
+                anchors.verticalCenter: parent.verticalCenter
+                visible: !_controller.currentTask.stopped && (_controller.expanded || mouseOver() || _controller.currentTask.paused)
+                source: _controller.currentTask.paused ? "image://icons/play.png" : "image://icons/pause.png"
                 onClicked: {
-                    _controller.currentPage = Controller.ConfigurePage
+                    _controller.pausePomodoro()
                 }
             }
         }
