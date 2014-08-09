@@ -22,9 +22,9 @@ Item {
     readonly property int progressBarBorderRadius     : Math.ceil(3 * _controller.dpiFactor)
 
     // tags
-    readonly property string tagBackgroundColor: "blue"
+    readonly property string tagBackgroundColor: "black"
     readonly property string tagFontColor: "white"
-    readonly property int tagRadius: 5 * _controller.dpiFactor
+    readonly property int tagRadius: 3 * _controller.dpiFactor
     readonly property int tagFontSize: 11 * _controller.dpiFactor
     readonly property int tagCountFontSize: 10 * _controller.dpiFactor
     readonly property string tagBorderColor: "black"
@@ -33,7 +33,7 @@ Item {
     readonly property int tagMoveAnimationDuration: 150
     readonly property int tagTextLeftMargin: 5 * _controller.dpiFactor
     readonly property int tagExtraWidth: 14 * _controller.dpiFactor
-    readonly property int tagSpacing: 8 * _controller.dpiFactor
+    readonly property int tagSpacing: 5 * _controller.dpiFactor
     readonly property int tagsRightMargin: 40 * _controller.dpiFactor
 
 
