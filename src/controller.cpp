@@ -152,7 +152,7 @@ void Controller::cycleSelectionUp()
     if (!firstTask)
         return;
 
-    if (m_currentTabTag && !m_selectedTask->containsTag(m_currentTabTag->name()))
+    if (m_currentTabTag && m_selectedTask && !m_selectedTask->containsTag(m_currentTabTag->name()))
         m_selectedTask.clear();
 
     if (!m_selectedTask) {
@@ -170,7 +170,7 @@ void Controller::cycleSelectionDown()
     if (!lastTask || m_selectedTask == lastTask.data())
         return;
 
-    if (m_currentTabTag && !m_selectedTask->containsTag(m_currentTabTag->name()))
+    if (m_currentTabTag && m_selectedTask && !m_selectedTask->containsTag(m_currentTabTag->name()))
         m_selectedTask.clear();
 
     if (!m_selectedTask) {
