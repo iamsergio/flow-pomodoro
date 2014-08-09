@@ -85,10 +85,7 @@ public:
     TaskStatus status() const;
     void setStatus(TaskStatus status);
 
-    void setCreationDate(const QDateTime &);
     QDateTime creationDate() const;
-
-    void setModificationDate(const QDateTime &);
     QDateTime modificationDate() const;
 
     bool running() const;
@@ -101,6 +98,8 @@ public:
     QVariantMap toJson() const;
     static Task::Ptr fromJson(const QVariantMap &);
 
+    int revision() const;
+
 Q_SIGNALS:
     void summaryChanged();
     void descriptionChanged();
@@ -110,10 +109,14 @@ Q_SIGNALS:
     void changed();
 
 private Q_SLOTS:
-    void updateModifiedTimestamp();
+    void onEdited();
 
 private:
     explicit Task(const QString &name = QString());
+    void setRevision(int);
+    void setModificationDate(const QDateTime &);
+    void setCreationDate(const QDateTime &);
+
     QString m_summary;
     QString m_description;
     TagRef::List m_tags;
@@ -124,6 +127,7 @@ private:
     Storage *m_storage;
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
+    int m_revision;
 };
 
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task);

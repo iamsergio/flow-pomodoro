@@ -37,23 +37,22 @@ Task::Task(const QString &name)
     , m_storage(Storage::instance())
     , m_creationDate(QDateTime::currentDateTimeUtc())
     , m_modificationDate(m_creationDate)
+    , m_revision(0)
 {
     m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); }, TagRole);
     m_tags.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tags.at(i).m_task.data()); }, TaskRole);
 
-    connect(this, &Task::summaryChanged, &Task::changed);
-    connect(this, &Task::tagsChanged, &Task::changed);
-    connect(this, &Task::descriptionChanged, &Task::changed);
-    connect(this, &Task::statusChanged, &Task::changed);
-    connect(this, &Task::stagedChanged, &Task::changed);
+    connect(this, &Task::summaryChanged, &Task::onEdited);
+    connect(this, &Task::tagsChanged, &Task::onEdited);
+    connect(this, &Task::descriptionChanged, &Task::onEdited);
+    connect(this, &Task::statusChanged, &Task::onEdited);
+    connect(this, &Task::stagedChanged, &Task::onEdited);
     QAbstractItemModel *tagsModel = m_tags; // android doesn't build if you use m_tags directly in the connect statement
     connect(tagsModel, &QAbstractListModel::modelReset, this, &Task::tagsChanged);
     connect(tagsModel, &QAbstractListModel::rowsInserted, this, &Task::tagsChanged);
     connect(tagsModel, &QAbstractListModel::rowsRemoved, this, &Task::tagsChanged);
     connect(tagsModel, &QAbstractListModel::layoutChanged, this, &Task::tagsChanged);
     connect(tagsModel, &QAbstractListModel::dataChanged, this, &Task::tagsChanged);
-
-    connect(this, &Task::changed, this, &Task::updateModifiedTimestamp);
 
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     auto roleNames = m_storage->tagsModel()->roleNames();
@@ -241,6 +240,8 @@ QVariantMap Task::toJson() const
     if (m_modificationDate.isValid())
         map.insert("modificationTimestamp", m_modificationDate.toMSecsSinceEpoch());
 
+    map.insert("revision", m_revision);
+
     return map;
 }
 
@@ -252,8 +253,8 @@ Task::Ptr Task::fromJson(const QVariantMap &map)
         name = tr("New Task");
     }
 
-    Task::Ptr task = Task::Ptr(new Task(name));
-    task->setWeakPointer(task.toWeakRef());
+    Task::Ptr task = createTask(name);
+    task->blockSignals(true); // so we don't increment revision while calling setters
 
     QString description = map.value("description").toString();
     task->setDescription(description);
@@ -267,18 +268,34 @@ Task::Ptr Task::fromJson(const QVariantMap &map)
     if (modificationDate.isValid())
         task->setModificationDate(modificationDate);
 
+    task->setRevision(map.value("revision", 0).toInt());
+
     QVariantList tagsVariant = map.value("tags").toList();
     TagRef::List tags;
     foreach (const QVariant &tag, tagsVariant) {
         tags << TagRef(task.data(), tag.toString());
     }
     task->setTagList(tags);
+
+    task->blockSignals(false);
     return task;
 }
 
-void Task::updateModifiedTimestamp()
+int Task::revision() const
+{
+    return m_revision;
+}
+
+void Task::setRevision(int revision)
+{
+    m_revision = revision;
+}
+
+void Task::onEdited()
 {
     m_modificationDate = QDateTime::currentDateTimeUtc();
+    m_revision++;
+    emit changed();
 }
 
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task)
