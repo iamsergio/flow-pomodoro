@@ -13,4 +13,5 @@ CMakeFiles
 *automoc*
 CMakeCache.txt
 install.sh
-
+config.log
+config.tests/qwebdavlib/qwebdavlib
