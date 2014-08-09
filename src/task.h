@@ -88,6 +88,9 @@ public:
     void setCreationDate(const QDateTime &);
     QDateTime creationDate() const;
 
+    void setModificationDate(const QDateTime &);
+    QDateTime modificationDate() const;
+
     bool running() const;
     bool stopped() const;
     bool paused() const;
@@ -106,6 +109,9 @@ Q_SIGNALS:
     void stagedChanged();
     void changed();
 
+private Q_SLOTS:
+    void updateModifiedTimestamp();
+
 private:
     explicit Task(const QString &name = QString());
     QString m_summary;
@@ -117,6 +123,7 @@ private:
     QWeakPointer<Task> m_this;
     Storage *m_storage;
     QDateTime m_creationDate;
+    QDateTime m_modificationDate;
 };
 
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task);

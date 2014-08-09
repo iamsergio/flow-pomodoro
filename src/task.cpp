@@ -35,6 +35,8 @@ Task::Task(const QString &name)
     , m_status(TaskStopped)
     , m_staged(false)
     , m_storage(Storage::instance())
+    , m_creationDate(QDateTime::currentDateTimeUtc())
+    , m_modificationDate(m_creationDate)
 {
     m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); }, TagRole);
     m_tags.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tags.at(i).m_task.data()); }, TaskRole);
@@ -51,6 +53,8 @@ Task::Task(const QString &name)
     connect(tagsModel, &QAbstractListModel::layoutChanged, this, &Task::tagsChanged);
     connect(tagsModel, &QAbstractListModel::dataChanged, this, &Task::tagsChanged);
 
+    connect(this, &Task::changed, this, &Task::updateModifiedTimestamp);
+
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     auto roleNames = m_storage->tagsModel()->roleNames();
     roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
@@ -62,7 +66,6 @@ Task::Ptr Task::createTask(const QString &name)
 {
     Task::Ptr task = Task::Ptr(new Task(name));
     task->setWeakPointer(task);
-    task->setCreationDate(QDateTime::currentDateTimeUtc());
     return task;
 }
 
@@ -187,6 +190,16 @@ QDateTime Task::creationDate() const
     return m_creationDate;
 }
 
+void Task::setModificationDate(const QDateTime &date)
+{
+    m_modificationDate = date;
+}
+
+QDateTime Task::modificationDate() const
+{
+    return m_modificationDate;
+}
+
 bool Task::running() const
 {
     return m_status == TaskStarted;
@@ -225,6 +238,9 @@ QVariantMap Task::toJson() const
     map.insert("tags", tags);
     map.insert("creationTimestamp", m_creationDate.toMSecsSinceEpoch());
 
+    if (m_modificationDate.isValid())
+        map.insert("modificationTimestamp", m_modificationDate.toMSecsSinceEpoch());
+
     return map;
 }
 
@@ -243,8 +259,13 @@ Task::Ptr Task::fromJson(const QVariantMap &map)
     task->setDescription(description);
     task->setStaged(map.value("staged", false).toBool());
 
-    QDateTime creationDate = QDateTime::fromMSecsSinceEpoch(map.value("creationTimestamp", QDateTime::currentMSecsSinceEpoch()).toLongLong());
-    task->setCreationDate(creationDate.isValid() ? creationDate : QDateTime::currentDateTimeUtc());
+    QDateTime creationDate = QDateTime::fromMSecsSinceEpoch(map.value("creationTimestamp", QDateTime()).toLongLong());
+    if (creationDate.isValid()) // If invalid it uses the ones set in CTOR
+        task->setCreationDate(creationDate);
+
+    QDateTime modificationDate = QDateTime::fromMSecsSinceEpoch(map.value("modificationTimestamp", QDateTime()).toLongLong());
+    if (modificationDate.isValid())
+        task->setModificationDate(modificationDate);
 
     QVariantList tagsVariant = map.value("tags").toList();
     TagRef::List tags;
@@ -253,6 +274,11 @@ Task::Ptr Task::fromJson(const QVariantMap &map)
     }
     task->setTagList(tags);
     return task;
+}
+
+void Task::updateModifiedTimestamp()
+{
+    m_modificationDate = QDateTime::currentDateTimeUtc();
 }
 
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task)
