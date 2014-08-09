@@ -619,6 +619,11 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
     }
 
     if (m_taskBeingEdited != task.data()) {
+        if (m_taskBeingEdited && m_taskBeingEdited->summary().isEmpty()) {
+            // Empty summaries are not allowed !
+            m_taskBeingEdited->setSummary(tr("New Task"));
+        }
+
         // Disabling saving when editor is opened, only save when it's closed.
         m_storage->setDisableSaving(!task.isNull());
 

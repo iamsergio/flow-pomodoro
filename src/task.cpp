@@ -230,8 +230,8 @@ Task::Ptr Task::fromJson(const QVariantMap &map)
 {
     QString name = map.value("summary").toString();
     if (name.isEmpty()) {
-        qWarning() << Q_FUNC_INFO << "emptu task summary";
-        return Task::Ptr();
+        qWarning() << Q_FUNC_INFO << "empty task summary";
+        name = tr("New Task");
     }
 
     Task::Ptr task = Task::Ptr(new Task(name));
