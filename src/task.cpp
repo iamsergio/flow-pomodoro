@@ -62,6 +62,7 @@ Task::Ptr Task::createTask(const QString &name)
 {
     Task::Ptr task = Task::Ptr(new Task(name));
     task->setWeakPointer(task);
+    task->setCreationDate(QDateTime::currentDateTimeUtc());
     return task;
 }
 
@@ -222,6 +223,7 @@ QVariantMap Task::toJson() const
     for (int i = 0; i < m_tags.count(); ++i)
         tags << m_tags.at(i).m_tag->name();
     map.insert("tags", tags);
+    map.insert("creationTimestamp", m_creationDate.toMSecsSinceEpoch());
 
     return map;
 }
@@ -240,6 +242,10 @@ Task::Ptr Task::fromJson(const QVariantMap &map)
     QString description = map.value("description").toString();
     task->setDescription(description);
     task->setStaged(map.value("staged", false).toBool());
+
+    QDateTime creationDate = QDateTime::fromMSecsSinceEpoch(map.value("creationTimestamp", QDateTime::currentMSecsSinceEpoch()).toLongLong());
+    task->setCreationDate(creationDate.isValid() ? creationDate : QDateTime::currentDateTimeUtc());
+
     QVariantList tagsVariant = map.value("tags").toList();
     TagRef::List tags;
     foreach (const QVariant &tag, tagsVariant) {
