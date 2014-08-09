@@ -5,7 +5,7 @@ TARGET = flow
 
 QT += quick
 
-qtHaveModule(widgets) {
+qtHaveModule(widgets):!android {
     QT += widgets
 }
 
