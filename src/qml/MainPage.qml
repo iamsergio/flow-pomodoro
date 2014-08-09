@@ -37,6 +37,7 @@ Page {
                 checked: _controller.queueType === Controller.QueueTypeToday
                 anchors.right: parent.right
                 anchors.rightMargin: 2
+                anchors.verticalCenter: textItem.verticalCenter
                 Binding {
                     target: _controller
                     property: "queueType"
