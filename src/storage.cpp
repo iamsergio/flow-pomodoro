@@ -303,7 +303,7 @@ Task::Ptr Storage::addTask(const Task::Ptr &task)
     return task;
 }
 
-void Storage::removeTask(int proxyIndex)
+void Storage::removeTask(const Task::Ptr &task)
 {
-    m_tasks.removeAt(proxyRowToSource(proxyIndex));
+    m_tasks.removeAll(task);
 }

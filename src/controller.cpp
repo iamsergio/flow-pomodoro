@@ -679,5 +679,5 @@ void Controller::removeTask(Task *task)
 {
     qDebug() << "Removing task" << task->summary();
     editTask(nullptr, EditModeNone);
-    m_storage->removeTask(m_storage->indexOfTask(task->toStrongRef()));
+    m_storage->removeTask(task->toStrongRef());
 }

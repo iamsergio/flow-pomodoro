@@ -73,7 +73,7 @@ public:
     ArchivedTasksFilterModel* archivedTasksModel() const;
     Task::Ptr taskAt(int proxyIndex) const;
     Task::Ptr addTask(const QString &taskText);
-    void removeTask(int proxyIndex);
+    void removeTask(const Task::Ptr &task);
     int indexOfTask(const Task::Ptr &) const;
 //------------------------------------------------------------------------------
 // Stuff for tags
