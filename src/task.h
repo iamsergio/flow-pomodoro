@@ -130,7 +130,7 @@ private:
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
     int m_revision;
-    QString m_uuid;
+    mutable QString m_uuid;
 };
 
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task);

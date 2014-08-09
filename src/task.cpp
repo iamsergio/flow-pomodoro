@@ -39,7 +39,6 @@ Task::Task(const QString &name)
     , m_creationDate(QDateTime::currentDateTimeUtc())
     , m_modificationDate(m_creationDate)
     , m_revision(0)
-    , m_uuid(QUuid::createUuid().toString())
 {
     m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); }, TagRole);
     m_tags.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tags.at(i).m_task.data()); }, TaskRole);
@@ -248,7 +247,7 @@ QVariantMap Task::toJson() const
         map.insert("modificationTimestamp", m_modificationDate.toMSecsSinceEpoch());
 
     map.insert("revision", m_revision);
-    map.insert("uuid", m_uuid);
+    map.insert("uuid", uuid());
 
     return map;
 }
@@ -301,6 +300,9 @@ int Task::revision() const
 
 QString Task::uuid() const
 {
+    if (m_uuid.isEmpty()) // Delayed creation, since it can be expensive and we don't need to create it in CTOR because it's going to be set when loading
+        m_uuid = QUuid::createUuid().toString();
+
     return m_uuid;
 }
 
