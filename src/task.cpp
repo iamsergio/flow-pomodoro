@@ -23,6 +23,7 @@
 #include "checkabletagmodel.h"
 #include "storage.h"
 #include <QQmlEngine>
+#include <QUuid>
 
 enum {
     TagRole = Qt::UserRole,
@@ -38,6 +39,7 @@ Task::Task(const QString &name)
     , m_creationDate(QDateTime::currentDateTimeUtc())
     , m_modificationDate(m_creationDate)
     , m_revision(0)
+    , m_uuid(QUuid::createUuid().toString())
 {
     m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); }, TagRole);
     m_tags.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tags.at(i).m_task.data()); }, TaskRole);
@@ -184,6 +186,11 @@ void Task::setCreationDate(const QDateTime &date)
     m_creationDate = date;
 }
 
+void Task::setUuid(const QString &uuid)
+{
+    m_uuid = uuid;
+}
+
 QDateTime Task::creationDate() const
 {
     return m_creationDate;
@@ -241,6 +248,7 @@ QVariantMap Task::toJson() const
         map.insert("modificationTimestamp", m_modificationDate.toMSecsSinceEpoch());
 
     map.insert("revision", m_revision);
+    map.insert("uuid", m_uuid);
 
     return map;
 }
@@ -255,6 +263,11 @@ Task::Ptr Task::fromJson(const QVariantMap &map)
 
     Task::Ptr task = createTask(name);
     task->blockSignals(true); // so we don't increment revision while calling setters
+
+    QString uuid = map.value("uuid").toString();
+    if (uuid.isEmpty())
+        uuid = QUuid::createUuid().toString();
+    task->setUuid(uuid);
 
     QString description = map.value("description").toString();
     task->setDescription(description);
@@ -284,6 +297,11 @@ Task::Ptr Task::fromJson(const QVariantMap &map)
 int Task::revision() const
 {
     return m_revision;
+}
+
+QString Task::uuid() const
+{
+    return m_uuid;
 }
 
 void Task::setRevision(int revision)

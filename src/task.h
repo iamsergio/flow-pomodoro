@@ -99,6 +99,7 @@ public:
     static Task::Ptr fromJson(const QVariantMap &);
 
     int revision() const;
+    QString uuid() const;
 
 Q_SIGNALS:
     void summaryChanged();
@@ -116,6 +117,7 @@ private:
     void setRevision(int);
     void setModificationDate(const QDateTime &);
     void setCreationDate(const QDateTime &);
+    void setUuid(const QString &uuid);
 
     QString m_summary;
     QString m_description;
@@ -128,6 +130,7 @@ private:
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
     int m_revision;
+    QString m_uuid;
 };
 
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task);
