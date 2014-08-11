@@ -122,6 +122,7 @@ private:
     TaskFilterProxyModel *m_untaggedTasksModel;
     ArchivedTasksFilterModel *m_stagedTasksModel;
     ArchivedTasksFilterModel *m_archivedTasksModel;
+    bool m_createNonExistentTags;
 };
 
 #endif

@@ -32,6 +32,7 @@ Storage::Storage(QObject *parent)
     , m_untaggedTasksModel(new TaskFilterProxyModel(this))
     , m_stagedTasksModel(new ArchivedTasksFilterModel(this))
     , m_archivedTasksModel(new ArchivedTasksFilterModel(this))
+    , m_createNonExistentTags(false)
 {
     m_scheduleTimer.setSingleShot(true);
     m_scheduleTimer.setInterval(0);
@@ -98,8 +99,10 @@ TaskList Storage::tasks() const
 void Storage::load()
 {
     m_savingDisabled += 1;
+    m_createNonExistentTags = true;
     load_impl();
     m_savingDisabled += -1;
+    m_createNonExistentTags = false;
 
     if (m_tags.isEmpty()) {
         // Create default tags
@@ -151,6 +154,8 @@ bool Storage::removeTag(const QString &tagName)
 Tag::Ptr Storage::tag(const QString &name, bool create)
 {
     Tag::Ptr tag = m_tags.value(indexOfTag(name));
+
+    create = create && m_createNonExistentTags;
     return (tag || !create) ? tag : createTag(name);
 }
 
