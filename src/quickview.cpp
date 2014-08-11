@@ -170,6 +170,7 @@ void QuickView::createStyleComponent()
         QQuickItem *item = qobject_cast<QQuickItem*>(styleObject);
         Q_ASSERT(item);
         rootContext()->setContextProperty("_style", styleObject);
+        item->setParent(this);
     } else {
         qWarning() << styleComponent->errorString();
         Q_ASSERT(false);
