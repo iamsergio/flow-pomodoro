@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 
 ListView {
     id: root
@@ -7,13 +8,39 @@ ListView {
     height: _style.tagTabHeight
     clip: true
 
+    LinearGradient {
+        id: rightScrollIndicator
+        anchors.fill: parent
+        visible: !root.atXEnd
+        start: Qt.point(root.width - _style.tagScrollIndicatorFadeWidth, 0)
+        end: Qt.point(root.width, 0)
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: "transparent" }
+            GradientStop { position: 1.0; color: _style.queueBackgroundColor }
+        }
+    }
+
+    LinearGradient {
+        id: leftScrollIndicator
+        visible: !root.atXBeginning
+        anchors.fill: parent
+        start: Qt.point(0, 0)
+        end: Qt.point(_style.tagScrollIndicatorFadeWidth, 0)
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: _style.queueBackgroundColor }
+            GradientStop { position: 1.0; color: "transparent" }
+        }
+    }
+
     Component {
         id: tabDelegate
         Rectangle {
+            id: background
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: Math.max(_style.tagTabWidth, root.width / root.model.count)
-            color: "black"
+            color: _style.tagBackground
+
             property bool isSelected: tag == _controller.currentTabTag
             Row {
                 id: textRow

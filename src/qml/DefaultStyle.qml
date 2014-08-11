@@ -40,8 +40,10 @@ Item {
     // tags in task list
     readonly property color taskTagFontColor: "lightsteelblue"
     readonly property color selectedTaskTagFontColor: "black"
+    readonly property color tagBackground: "black"
     readonly property int tagRowBottomMargin: 1 * _controller.dpiFactor
     readonly property int tagRowRightMargin: 6 * _controller.dpiFactor
+    readonly property int tagScrollIndicatorFadeWidth: 25 * _controller.dpiFactor
 
 
     // ModalDialog
