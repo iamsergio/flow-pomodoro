@@ -119,6 +119,11 @@ void Storage::save()
     m_savingDisabled += -1;
 }
 
+int Storage::serializerVersion() const
+{
+    return JsonSerializerVersion1;
+}
+
 void Storage::scheduleSave()
 {
     if (m_savingDisabled == 0) {

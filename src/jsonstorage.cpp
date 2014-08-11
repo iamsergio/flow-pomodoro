@@ -26,10 +26,6 @@
 #include <QStandardPaths>
 #include <QTemporaryFile>
 
-enum {
-    JsonSerializerVersion1 = 1
-};
-
 static QString dataFileName()
 {
     static QString filename;

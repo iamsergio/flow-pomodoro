@@ -34,6 +34,10 @@ class TaskFilterProxyModel;
 typedef GenericListModel<Tag::Ptr> TagList;
 typedef GenericListModel<Task::Ptr> TaskList;
 
+enum {
+    JsonSerializerVersion1 = 1
+};
+
 class Storage : public QObject
 {
     Q_OBJECT
@@ -61,6 +65,8 @@ public:
 
     void load();
     void save();
+
+    int serializerVersion() const;
 
     void scheduleSave();
     // Temporary disable saving. For performance purposes
