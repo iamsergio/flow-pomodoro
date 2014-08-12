@@ -99,6 +99,9 @@ public:
     static Task::Ptr fromJson(const QVariantMap &);
 
     int revision() const;
+    int revisionOnWebDAVServer() const;
+    void setRevisionOnWebDAVServer(int);
+
     QString uuid() const;
 
 Q_SIGNALS:
@@ -130,6 +133,7 @@ private:
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
     int m_revision;
+    int m_revisionOnWebDAVServer;
     mutable QString m_uuid;
 };
 

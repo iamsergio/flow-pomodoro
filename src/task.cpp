@@ -39,6 +39,7 @@ Task::Task(const QString &name)
     , m_creationDate(QDateTime::currentDateTimeUtc())
     , m_modificationDate(m_creationDate)
     , m_revision(0)
+    , m_revisionOnWebDAVServer(-1)
 {
     m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); }, TagRole);
     m_tags.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tags.at(i).m_task.data()); }, TaskRole);
@@ -247,6 +248,7 @@ QVariantMap Task::toJson() const
         map.insert("modificationTimestamp", m_modificationDate.toMSecsSinceEpoch());
 
     map.insert("revision", m_revision);
+    map.insert("revisionOnWebDAVServer", m_revisionOnWebDAVServer);
     map.insert("uuid", uuid());
 
     return map;
@@ -281,6 +283,7 @@ Task::Ptr Task::fromJson(const QVariantMap &map)
         task->setModificationDate(modificationDate);
 
     task->setRevision(map.value("revision", 0).toInt());
+    task->setRevisionOnWebDAVServer(map.value("revisionOnWebDAVServer", -1).toInt());
 
     QVariantList tagsVariant = map.value("tags").toList();
     TagRef::List tags;
@@ -296,6 +299,16 @@ Task::Ptr Task::fromJson(const QVariantMap &map)
 int Task::revision() const
 {
     return m_revision;
+}
+
+int Task::revisionOnWebDAVServer() const
+{
+    return m_revisionOnWebDAVServer;
+}
+
+void Task::setRevisionOnWebDAVServer(int revision)
+{
+    m_revisionOnWebDAVServer = revision;
 }
 
 QString Task::uuid() const
