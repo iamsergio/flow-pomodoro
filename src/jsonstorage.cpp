@@ -73,7 +73,10 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
     QVariantList taskList = rootMap.value("tasks").toList();
 
     int serializerVersion = rootMap.value("JsonSerializerVersion", JsonSerializerVersion1).toInt();
-    Q_UNUSED(serializerVersion);
+    if (serializerVersion > result.serializerVersion) {
+        errorMsg = QString("Found serializer version %1 which is bigger than %2. Update your application").arg(serializerVersion).arg(result.serializerVersion);
+        return result;
+    }
 
     foreach (const QVariant &t, tagList) {
         Tag::Ptr tag = Tag::fromJson(t.toMap());
