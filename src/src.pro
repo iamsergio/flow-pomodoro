@@ -3,8 +3,6 @@ include ("../global.pri")
 TEMPLATE = app
 TARGET = flow
 
-QT += quick
-
 qtHaveModule(widgets):!android {
     QT += widgets
 }
@@ -16,40 +14,10 @@ contains(QT_CONFIG, dbus) {
     DEFINES += FLOW_DBUS
 }
 
-SOURCES += archivedtasksfiltermodel.cpp \
-           checkabletagmodel.cpp \
-           controller.cpp  \
-           imageprovider.cpp \
-           jsonstorage.cpp \
-           main.cpp        \
-           pluginmodel.cpp \
-           quickview.cpp   \
-           settings.cpp    \
-           sortedtagsmodel.cpp \
-           storage.cpp \
-           tag.cpp \
-           tagref.cpp \
-           task.cpp \
-           taskfilterproxymodel.cpp \
-           tooltipcontroller.cpp
+LIBS += -lqwebdav
 
-HEADERS += archivedtasksfiltermodel.h \
-           checkabletagmodel.h \
-           controller.h      \
-           imageprovider.h \
-           jsonstorage.h      \
-           genericlistmodel.h \
-           plugininterface.h \
-           pluginmodel.h     \
-           quickview.h       \
-           settings.h        \
-           sortedtagsmodel.h \
-           storage.h \
-           tag.h \
-           tagref.h \
-           task.h            \
-           taskfilterproxymodel.h \
-           tooltipcontroller.h
+include("src.pri")
+SOURCES += main.cpp
 
 OTHER_FILES += qml/AboutPage.qml      \
                qml/config/General.qml \
