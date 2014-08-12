@@ -57,6 +57,13 @@ public:
         TaskPtrRole
     };
 
+    struct Data {
+        Data() : serializerVersion(JsonSerializerVersion1) {}
+        TaskList tasks;
+        TagList tags;
+        int serializerVersion;
+    };
+
     static Storage *instance();
     ~Storage();
 
@@ -106,8 +113,7 @@ private Q_SLOTS:
 protected:
     explicit Storage(QObject *parent = 0);
     Task::Ptr addTask(const Task::Ptr &task);
-    TagList m_tags;
-    TaskList m_tasks;
+    Data m_data;
     virtual void load_impl() = 0;
     virtual void save_impl() = 0;
 

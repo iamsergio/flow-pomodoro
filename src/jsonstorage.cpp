@@ -56,14 +56,17 @@ JsonStorage::JsonStorage(QObject *parent)
 {
 }
 
-QPair<TagList, TaskList> JsonStorage::deserializeJsonData(const QByteArray &data)
+Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
+                                               QString &errorMsg)
 {
-    QPair<TagList, TaskList> result;
+    Data result;
+    errorMsg.clear();
     QJsonParseError jsonError;
-    QJsonDocument document = QJsonDocument::fromJson(data, &jsonError);
+    QJsonDocument document = QJsonDocument::fromJson(serializedData, &jsonError);
     if (jsonError.error != QJsonParseError::NoError) {
+        errorMsg = jsonError.errorString();
         qWarning() << "Error parsing json file" << dataFileName();
-        qWarning() << "Error was" << jsonError.errorString();
+        qWarning() << "Error was" << errorMsg;
         qFatal("Bailing out");
         return result;
     }
@@ -75,23 +78,18 @@ QPair<TagList, TaskList> JsonStorage::deserializeJsonData(const QByteArray &data
     int serializerVersion = rootMap.value("JsonSerializerVersion", JsonSerializerVersion1).toInt();
     Q_UNUSED(serializerVersion);
 
-    TaskList tasks;
-    TagList tags;
-
     foreach (const QVariant &t, tagList) {
         Tag::Ptr tag = Tag::fromJson(t.toMap());
         if (tag)
-            tags << tag;
+            result.tags << tag;
     }
 
     foreach (const QVariant &t, taskList) {
         Task::Ptr task = Task::fromJson(t.toMap());
         if (task)
-            tasks << task;
+            result.tasks << task;
     }
 
-    result.first = tags;
-    result.second = tasks;
     return result;
 }
 
@@ -108,21 +106,22 @@ void JsonStorage::load_impl()
         return;
     }
 
-    QByteArray data = file.readAll();
+    QByteArray serializedData = file.readAll();
     file.close();
 
-    QPair<TagList, TaskList> deserializedData = deserializeJsonData(data);
-    m_tags = deserializedData.first;
+    QString errorMsg;
+    Data data = deserializeJsonData(serializedData, errorMsg);
+    m_data.tags = data.tags;
 
-    m_tasks.clear();
-    for (int i = 0; i < deserializedData.second.count(); ++i) {
-        addTask(deserializedData.second.at(i)); // don't add to m_tasks directly. addTask() does some connects
+    m_data.tasks.clear();
+    for (int i = 0; i < data.tasks.count(); ++i) {
+        addTask(data.tasks.at(i)); // don't add to m_tasks directly. addTask() does some connects
     }
 }
 
 void JsonStorage::save_impl()
 {
-    QByteArray data = serializeToJsonData(QPair<TagList,TaskList>(m_tags, m_tasks));
+    QByteArray serializedData = serializeToJsonData(m_data);
 
     QFile temporaryFile(tmpDataFileName()); // not using QTemporaryFile so the backup stays next to the main one
     if (!temporaryFile.open(QIODevice::WriteOnly)) {
@@ -132,7 +131,7 @@ void JsonStorage::save_impl()
     }
 
     QTextStream out(&temporaryFile);
-    out << data;
+    out << serializedData;
     if (QFile::exists(dataFileName()) && !QFile::remove(dataFileName())) {
         qWarning() << "Could not update (remove error)" << dataFileName()
                    << "backup file is at" << tmpDataFileName();
@@ -146,28 +145,28 @@ void JsonStorage::save_impl()
     }
 }
 
-QVariantMap JsonStorage::toJsonVariantMap(const QPair<TagList,TaskList> &list)
+QVariantMap JsonStorage::toJsonVariantMap(const Data &data)
 {
     QVariantMap map;
     QVariantList tasksVariant;
     QVariantList tagsVariant;
-    for (int i = 0; i < list.first.count(); ++i) {
-        tagsVariant << list.first.at(i)->toJson();
+    for (int i = 0; i < data.tags.count(); ++i) {
+        tagsVariant << data.tags.at(i)->toJson();
     }
 
-    for (int i = 0; i < list.second.count(); ++i) {
-        tasksVariant << list.second.at(i)->toJson();
+    for (int i = 0; i < data.tasks.count(); ++i) {
+        tasksVariant << data.tasks.at(i)->toJson();
     }
 
     map.insert("tags", tagsVariant);
     map.insert("tasks", tasksVariant);
-    map.insert("JsonSerializerVersion", JsonSerializerVersion1);
+    map.insert("JsonSerializerVersion", data.serializerVersion);
 
     return map;
 }
 
-QByteArray JsonStorage::serializeToJsonData(const QPair<TagList,TaskList> &dataPair)
+QByteArray JsonStorage::serializeToJsonData(const Data &data)
 {
-    QJsonDocument document = QJsonDocument::fromVariant(toJsonVariantMap(dataPair));
+    QJsonDocument document = QJsonDocument::fromVariant(toJsonVariantMap(data));
     return document.toJson();
 }

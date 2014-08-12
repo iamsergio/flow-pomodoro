@@ -28,15 +28,15 @@ class JsonStorage : public Storage
 public:
     explicit JsonStorage(QObject *parent);
 
-    static QPair<TagList,TaskList> deserializeJsonData(const QByteArray &data);
-    static QByteArray serializeToJsonData(const QPair<TagList,TaskList> &);
+    static Data deserializeJsonData(const QByteArray &serializedData, QString &error);
+    static QByteArray serializeToJsonData(const Storage::Data &);
 
 protected:
     void load_impl() override;
     void save_impl() override;
 
 private:
-    static QVariantMap toJsonVariantMap(const QPair<TagList,TaskList> &);
+    static QVariantMap toJsonVariantMap(const Storage::Data &);
 };
 
 #endif

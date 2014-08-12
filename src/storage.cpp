@@ -38,37 +38,37 @@ Storage::Storage(QObject *parent)
     m_scheduleTimer.setInterval(0);
     connect(&m_scheduleTimer, &QTimer::timeout, this, &Storage::save);
 
-    m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).data()); }, TagRole);
-    m_tags.insertRole("tagPtr", [&](int i) { return QVariant::fromValue<Tag::Ptr>(m_tags.at(i)); }, TagPtrRole);
-    QAbstractItemModel *tagsModel = m_tags; // android doesn't build if you use m_tags directly in the connect statement
+    m_data.tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_data.tags.at(i).data()); }, TagRole);
+    m_data.tags.insertRole("tagPtr", [&](int i) { return QVariant::fromValue<Tag::Ptr>(m_data.tags.at(i)); }, TagPtrRole);
+    QAbstractItemModel *tagsModel = m_data.tags; // android doesn't build if you use m_data.tags directly in the connect statement
     connect(tagsModel, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
     connect(tagsModel, &QAbstractListModel::rowsInserted, this, &Storage::scheduleSave);
     connect(tagsModel, &QAbstractListModel::rowsRemoved, this, &Storage::scheduleSave);
     connect(tagsModel, &QAbstractListModel::modelReset, this, &Storage::scheduleSave);
     qRegisterMetaType<Tag::Ptr>("Tag::Ptr");
-    m_sortedTagModel = new SortedTagsModel(m_tags, this);
+    m_sortedTagModel = new SortedTagsModel(m_data.tags, this);
 
     connect(this, &Storage::tagAboutToBeRemoved,
             this, &Storage::onTagAboutToBeRemoved);
 
-    m_taskFilterModel->setSourceModel(m_tasks);
+    m_taskFilterModel->setSourceModel(m_data.tasks);
     m_untaggedTasksModel->setSourceModel(m_archivedTasksModel);
     m_scheduleTimer.setSingleShot(true);
     m_scheduleTimer.setInterval(0);
 
     connect(&m_scheduleTimer, &QTimer::timeout, this, &Storage::save);
-    QAbstractItemModel *tasksModel = m_tasks; // android doesn't build if you use m_tasks directly in the connect statement
+    QAbstractItemModel *tasksModel = m_data.tasks; // android doesn't build if you use m_data.tasks directly in the connect statement
     connect(tasksModel, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
     connect(tasksModel, &QAbstractListModel::rowsInserted, this, &Storage::scheduleSave);
     connect(tasksModel, &QAbstractListModel::rowsRemoved, this, &Storage::scheduleSave);
     connect(tasksModel, &QAbstractListModel::modelReset, this, &Storage::scheduleSave);
 
-    m_tasks.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tasks.at(i).data()); }, TaskRole);
-    m_tasks.insertRole("taskPtr", [&](int i) { return QVariant::fromValue<Task::Ptr>(m_tasks.at(i)); }, TaskPtrRole);
-    m_stagedTasksModel->setSourceModel(m_tasks);
+    m_data.tasks.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_data.tasks.at(i).data()); }, TaskRole);
+    m_data.tasks.insertRole("taskPtr", [&](int i) { return QVariant::fromValue<Task::Ptr>(m_data.tasks.at(i)); }, TaskPtrRole);
+    m_stagedTasksModel->setSourceModel(m_data.tasks);
     m_stagedTasksModel->setAcceptArchived(false);
 
-    m_archivedTasksModel->setSourceModel(m_tasks);
+    m_archivedTasksModel->setSourceModel(m_data.tasks);
     m_archivedTasksModel->setAcceptArchived(true);
     m_untaggedTasksModel->setFilterUntagged(true);
     m_untaggedTasksModel->setObjectName("Untagged and archived tasks model");
@@ -88,12 +88,12 @@ Storage::~Storage()
 
 TagList Storage::tags() const
 {
-    return m_tags;
+    return m_data.tags;
 }
 
 TaskList Storage::tasks() const
 {
-    return m_tasks;
+    return m_data.tasks;
 }
 
 void Storage::load()
@@ -104,7 +104,7 @@ void Storage::load()
     m_savingDisabled += -1;
     m_createNonExistentTags = false;
 
-    if (m_tags.isEmpty()) {
+    if (m_data.tags.isEmpty()) {
         // Create default tags
         createTag(tr("work"));
         createTag(tr("personal"));
@@ -146,14 +146,14 @@ bool Storage::removeTag(const QString &tagName)
     }
 
     emit tagAboutToBeRemoved(tagName);
-    m_tags.removeAt(index);
+    m_data.tags.removeAt(index);
     m_deletedTagName = tagName;
     return true;
 }
 
 Tag::Ptr Storage::tag(const QString &name, bool create)
 {
-    Tag::Ptr tag = m_tags.value(indexOfTag(name));
+    Tag::Ptr tag = m_data.tags.value(indexOfTag(name));
 
     create = create && m_createNonExistentTags;
     return (tag || !create) ? tag : createTag(name);
@@ -173,7 +173,7 @@ Tag::Ptr Storage::createTag(const QString &tagName)
     }
 
     Tag::Ptr tag = Tag::Ptr(new Tag(trimmedName));
-    m_tags << tag;
+    m_data.tags << tag;
 
     return tag;
 }
@@ -181,8 +181,8 @@ Tag::Ptr Storage::createTag(const QString &tagName)
 int Storage::indexOfTag(const QString &name) const
 {
     QString normalizedName = name.toLower().trimmed();
-    for (int i = 0; i < m_tags.count(); ++i) {
-        if (m_tags.at(i)->name().toLower() == normalizedName)
+    for (int i = 0; i < m_data.tags.count(); ++i) {
+        if (m_data.tags.at(i)->name().toLower() == normalizedName)
             return i;
     }
 
@@ -202,8 +202,8 @@ QString Storage::deletedTagName() const
 bool Storage::containsTag(const QString &name) const
 {
     QString normalizedName = name.toLower().trimmed();
-    return std::find_if(m_tags.cbegin(), m_tags.cend(),
-                        [&](const Tag::Ptr &tag) { return tag->name().toLower() == normalizedName; }) != m_tags.cend();
+    return std::find_if(m_data.tags.cbegin(), m_data.tags.cend(),
+                        [&](const Tag::Ptr &tag) { return tag->name().toLower() == normalizedName; }) != m_data.tags.cend();
 }
 
 bool Storage::renameTag(const QString &oldName, const QString &newName)
@@ -215,7 +215,7 @@ bool Storage::renameTag(const QString &oldName, const QString &newName)
     if (indexOfTag(trimmedNewName) != -1)
         return false; // New name already exists
 
-    Tag::Ptr tag = m_tags.value(indexOfTag(oldName));
+    Tag::Ptr tag = m_data.tags.value(indexOfTag(oldName));
     if (!tag) {
         qWarning() << "Could not find tag with name" << oldName;
         Q_ASSERT(false);
@@ -230,8 +230,8 @@ bool Storage::renameTag(const QString &oldName, const QString &newName)
 
 void Storage::onTagAboutToBeRemoved(const QString &tagName)
 {
-    for (int i = 0; i < m_tasks.count(); ++i)
-        m_tasks.at(i)->removeTag(tagName);
+    for (int i = 0; i < m_data.tasks.count(); ++i)
+        m_data.tasks.at(i)->removeTag(tagName);
 }
 
 TaskFilterProxyModel *Storage::taskFilterModel() const
@@ -256,9 +256,9 @@ ArchivedTasksFilterModel *Storage::archivedTasksModel() const
 
 void Storage::dumpDebugInfo()
 {
-    qDebug() << Q_FUNC_INFO << "task count:" << m_tasks.count();
-    for (int i = 0; i < m_tasks.count(); ++i)
-        qDebug() << Q_FUNC_INFO << i << m_tasks.at(i)->summary();
+    qDebug() << Q_FUNC_INFO << "task count:" << m_data.tasks.count();
+    for (int i = 0; i < m_data.tasks.count(); ++i)
+        qDebug() << Q_FUNC_INFO << i << m_data.tasks.at(i)->summary();
 }
 
 int Storage::proxyRowToSource(int proxyRow) const
@@ -271,8 +271,8 @@ int Storage::proxyRowToSource(int proxyRow) const
 
 int Storage::indexOfTask(const Task::Ptr &task) const
 {
-    for (int i = 0; i < m_tasks.count(); ++i) {
-        if (m_tasks.at(i) == task)
+    for (int i = 0; i < m_data.tasks.count(); ++i) {
+        if (m_data.tasks.at(i) == task)
             return i;
     }
 
@@ -286,7 +286,7 @@ void Storage::setDisableSaving(bool disable)
 
 Task::Ptr Storage::taskAt(int proxyIndex) const
 {
-    return m_tasks.value(proxyRowToSource(proxyIndex));
+    return m_data.tasks.value(proxyRowToSource(proxyIndex));
 }
 
 Task::Ptr Storage::addTask(const QString &taskText)
@@ -308,12 +308,12 @@ Task::Ptr Storage::addTask(const Task::Ptr &task)
     connect(task.data(), &Task::statusChanged, m_stagedTasksModel,
             &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
 
-    m_tasks << task;
+    m_data.tasks << task;
 
     return task;
 }
 
 void Storage::removeTask(const Task::Ptr &task)
 {
-    m_tasks.removeAll(task);
+    m_data.tasks.removeAll(task);
 }
