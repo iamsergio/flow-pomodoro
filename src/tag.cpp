@@ -137,14 +137,19 @@ Tag::Ptr Tag::fromJson(const QVariantMap &map)
     return tag;
 }
 
+bool Tag::operator==(const Tag &other) const
+{
+    return other.m_name.toLower().trimmed() == m_name.toLower().trimmed();
+}
+
+bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
+{
+    return (!tag1 && !tag2) || (tag1 && tag2 && *tag1 == *tag2);
+}
+
 void Tag::onTaskStagedChanged()
 {
     Task *task = qobject_cast<Task*>(sender());
     Q_ASSERT(task);
     setArchivedTaskCount(m_archivedTaskCount + (task->staged() ? -1 : 1));
-}
-
-bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
-{
-    return tag1 && tag2 && tag1->name() == tag2->name();
 }

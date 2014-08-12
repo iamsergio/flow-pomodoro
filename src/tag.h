@@ -55,6 +55,8 @@ public:
     QVariantMap toJson() const;
     static Tag::Ptr fromJson(const QVariantMap &);
 
+    bool operator==(const Tag &other) const;
+
 public Q_SLOTS:
     void onTaskStagedChanged();
 
@@ -73,5 +75,7 @@ private:
     bool m_beingEdited;
     TaskFilterProxyModel *m_taskModel; // All unstaged tasks with this tag
 };
+
+bool operator==(const Tag::Ptr &, const Tag::Ptr &);
 
 #endif
