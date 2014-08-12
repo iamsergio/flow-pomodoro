@@ -15,8 +15,7 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/tagref.cpp \
            $$PWD/task.cpp \
            $$PWD/taskfilterproxymodel.cpp \
-           $$PWD/tooltipcontroller.cpp #\
-           #$$PWD/webdavsyncer.cpp
+           $$PWD/tooltipcontroller.cpp
 
 HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/checkabletagmodel.h \
@@ -35,5 +34,12 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/tagref.h \
            $$PWD/task.h            \
            $$PWD/taskfilterproxymodel.h \
-           $$PWD/tooltipcontroller.h #\
-           #$$PWD/webdavsyncer.h
+           $$PWD/tooltipcontroller.h
+
+contains(CONFIG, config_qwebdavlib) {
+    SOURCES += $$PWD/webdavsyncer.cpp
+    HEADERS += $$PWD/webdavsyncer.h
+    LIBS += -lqwebdav
+} else {
+    DEFINES += NO_WEBDAV
+}

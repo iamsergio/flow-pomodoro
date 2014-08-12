@@ -24,6 +24,7 @@
 #include "sortedtagsmodel.h"
 #include "archivedtasksfiltermodel.h"
 #include "taskfilterproxymodel.h"
+#include "webdavsyncer.h"
 
 Storage::Storage(QObject *parent)
     : QObject(parent)
@@ -33,6 +34,11 @@ Storage::Storage(QObject *parent)
     , m_stagedTasksModel(new ArchivedTasksFilterModel(this))
     , m_archivedTasksModel(new ArchivedTasksFilterModel(this))
     , m_createNonExistentTags(false)
+    , m_savingInProgress(false)
+    , m_loadingInProgress(false)
+#ifndef NO_WEBDAV
+    , m_webDavSyncer(new WebDAVSyncer(this))
+#endif
 {
     m_scheduleTimer.setSingleShot(true);
     m_scheduleTimer.setInterval(0);
@@ -72,6 +78,10 @@ Storage::Storage(QObject *parent)
     m_archivedTasksModel->setAcceptArchived(true);
     m_untaggedTasksModel->setFilterUntagged(true);
     m_untaggedTasksModel->setObjectName("Untagged and archived tasks model");
+#ifndef NO_WEBDAV
+    connect(m_webDavSyncer, &WebDAVSyncer::syncInProgressChanged,
+            this, &Storage::webDAVSyncInProgressChanged);
+#endif
 }
 
 Storage *Storage::instance()
@@ -108,6 +118,7 @@ void Storage::setData(const Storage::Data &data)
 
 void Storage::load()
 {
+    m_loadingInProgress = true;
     m_savingDisabled += 1;
     m_createNonExistentTags = true;
     load_impl();
@@ -123,13 +134,25 @@ void Storage::load()
         createTag(tr("books"));
         createTag(tr("movies"));
     }
+    m_loadingInProgress = false;
 }
 
 void Storage::save()
 {
+    m_savingInProgress = true;
     m_savingDisabled += 1;
     save_impl();
     m_savingDisabled += -1;
+    m_savingInProgress = false;
+}
+
+void Storage::webDavSync()
+{
+#ifndef NO_WEBDAV
+    m_webDavSyncer->sync();
+#else
+    qDebug() << "WebDAV sync not supported";
+#endif
 }
 
 int Storage::serializerVersion() const
@@ -293,6 +316,37 @@ int Storage::indexOfTask(const Task::Ptr &task) const
 void Storage::setDisableSaving(bool disable)
 {
     m_savingDisabled += (disable ? 1 : -1);
+}
+
+void Storage::setCreateNonExistentTags(bool enable)
+{
+    m_createNonExistentTags = enable;
+}
+
+bool Storage::savingInProgress() const
+{
+    return m_savingInProgress;
+}
+
+bool Storage::loadingInProgress() const
+{
+    return m_loadingInProgress;
+}
+
+bool Storage::webDAVSyncSupported() const
+{
+#ifndef NO_WEBDAV
+    return true;
+#endif
+    return false;
+}
+
+bool Storage::webDAVSyncInProgress() const
+{
+#ifndef NO_WEBDAV
+    return m_webDavSyncer->syncInProgress();
+#endif
+    return false;
 }
 
 Task::Ptr Storage::taskAt(int proxyIndex) const

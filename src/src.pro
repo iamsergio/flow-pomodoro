@@ -14,8 +14,6 @@ contains(QT_CONFIG, dbus) {
     DEFINES += FLOW_DBUS
 }
 
-#LIBS += -lqwebdav
-
 include("src.pri")
 SOURCES += main.cpp
 
@@ -24,6 +22,7 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/config/Plugins.qml \
                qml/config/Tag.qml     \
                qml/config/Tags.qml    \
+               qml/config/WebDavSync.qml \
                qml/ClickableImage.qml \
                qml/ConfigurePage.qml  \
                qml/DecentTabView.qml  \

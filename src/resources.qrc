@@ -70,5 +70,6 @@
     <file>qml/config/Plugins.qml</file>
     <file>qml/config/Tag.qml</file>
     <file>qml/config/Tags.qml</file>
+    <file>qml/config/WebDavSync.qml</file>
 </qresource>
 </RCC>

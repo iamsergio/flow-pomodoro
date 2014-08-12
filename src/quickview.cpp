@@ -29,6 +29,7 @@
 #include "storage.h"
 #include "imageprovider.h"
 #include "circularprogressindicator.h"
+#include "webdavsyncer.h"
 
 #include <QStandardPaths>
 #include <QQmlContext>

@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 import Controller 1.0
-import QtQuick.Controls 1.0
+import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.0
 
 Page {
@@ -32,12 +32,13 @@ Page {
                 MobileTabView {
                     anchors.fill: parent
                     selectedIndex: 1
-                    count: 3
+                    count: model.count
                     anchors.horizontalCenter: parent.horizontalCenter
                     model: ListModel { // TODO: ListElement doesn't accept qsTr
                         ListElement { text: "General" ; source: "config/General.qml"}
                         ListElement { text: "Tags"    ; source: "config/Tags.qml" }
                         ListElement { text: "Plugins" ; source: "config/Plugins.qml" }
+                        //ListElement { text: "WebDAV"  ; source: "config/WebDavSync.qml";} // TODO: hide if not supported
                     }
                 }
             }
@@ -64,6 +65,11 @@ Page {
                     title: qsTr("Plugins")
                     source: "config/Plugins.qml"
                 }
+
+                //Tab {
+                  //  title: qsTr("WebDAV")
+                    //source: "config/WebDavSync.qml"
+                //}
             }
         }
 

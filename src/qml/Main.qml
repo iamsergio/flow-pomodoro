@@ -163,6 +163,17 @@ Rectangle {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: _style.marginMedium
             }
+
+            BusyIndicator {
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+                width: 20 * _controller.dpiFactor
+                anchors.bottomMargin: _style.marginMedium + 2 * _controller.dpiFactor
+                anchors.leftMargin: _style.pageMargin + 2 * _controller.dpiFactor
+                height: width
+                running: _storage.webDAVSyncInProgress
+                z: 3
+            }
         }
     }
 

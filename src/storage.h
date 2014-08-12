@@ -30,6 +30,7 @@
 class SortedTagsModel;
 class ArchivedTasksFilterModel;
 class TaskFilterProxyModel;
+class WebDAVSyncer;
 
 typedef GenericListModel<Tag::Ptr> TagList;
 typedef GenericListModel<Task::Ptr> TaskList;
@@ -45,6 +46,9 @@ class Storage : public QObject
     Q_PROPERTY(ArchivedTasksFilterModel* stagedTasksModel READ stagedTasksModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* taskFilterModel READ taskFilterModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* untaggedTasksModel READ untaggedTasksModel CONSTANT)
+    Q_PROPERTY(bool webDAVSyncSupported READ webDAVSyncSupported CONSTANT)
+    Q_PROPERTY(bool webDAVSyncInProgress READ webDAVSyncInProgress NOTIFY webDAVSyncInProgressChanged)
+
 public:
     enum TagModelRole {
         TagRole = Qt::UserRole + 1,
@@ -80,6 +84,14 @@ public:
     void scheduleSave();
     // Temporary disable saving. For performance purposes
     void setDisableSaving(bool);
+
+    void setCreateNonExistentTags(bool);
+
+    bool savingInProgress() const;
+    bool loadingInProgress() const;
+
+    bool webDAVSyncSupported() const;
+    bool webDAVSyncInProgress() const;
 //------------------------------------------------------------------------------
 //Stuff fot tasks
     TaskFilterProxyModel* taskFilterModel() const;
@@ -104,12 +116,15 @@ public:
 public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);
     void dumpDebugInfo();
+    void webDavSync();
 
 Q_SIGNALS:
     void tagAboutToBeRemoved(const QString &name);
     void taskRemoved();
     void taskAdded();
     void taskChanged();
+    void webDAVSyncInProgressChanged();
+
 private Q_SLOTS:
     void onTagAboutToBeRemoved(const QString &tagName);
 
@@ -133,6 +148,11 @@ private:
     ArchivedTasksFilterModel *m_stagedTasksModel;
     ArchivedTasksFilterModel *m_archivedTasksModel;
     bool m_createNonExistentTags;
+    bool m_savingInProgress;
+    bool m_loadingInProgress;
+#ifndef NO_WEBDAV
+    WebDAVSyncer *m_webDavSyncer;
+#endif
 };
 
 #endif
