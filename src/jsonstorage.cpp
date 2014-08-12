@@ -65,9 +65,6 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
     QJsonDocument document = QJsonDocument::fromJson(serializedData, &jsonError);
     if (jsonError.error != QJsonParseError::NoError) {
         errorMsg = jsonError.errorString();
-        qWarning() << "Error parsing json file" << dataFileName();
-        qWarning() << "Error was" << errorMsg;
-        qFatal("Bailing out");
         return result;
     }
 
@@ -111,6 +108,14 @@ void JsonStorage::load_impl()
 
     QString errorMsg;
     Data data = deserializeJsonData(serializedData, errorMsg);
+
+    if (!errorMsg.isEmpty()) {
+        qWarning() << "Error parsing json file" << dataFileName();
+        qWarning() << "Error was" << errorMsg;
+        qFatal("Bailing out");
+        return;
+    }
+
     m_data.tags = data.tags;
 
     m_data.tasks.clear();
