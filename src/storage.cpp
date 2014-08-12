@@ -96,6 +96,16 @@ TaskList Storage::tasks() const
     return m_data.tasks;
 }
 
+Storage::Data Storage::data() const
+{
+    return m_data;
+}
+
+void Storage::setData(const Storage::Data &data)
+{
+    m_data = data;
+}
+
 void Storage::load()
 {
     m_savingDisabled += 1;

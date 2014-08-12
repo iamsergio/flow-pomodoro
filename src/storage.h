@@ -69,6 +69,8 @@ public:
 
     TagList tags() const;
     TaskList tasks() const;
+    Storage::Data data() const;
+    void setData(const Storage::Data &data);
 
     void load();
     void save();
