@@ -53,7 +53,7 @@ TRANSLATIONS += translations/flow_pt_PT.ts
 CODECFORSRC  = UTF-8
 
 linux:!android {
-    QMAKE_POST_LINK += $$PWD/"runqmllint.sh"
+    QMAKE_POST_LINK += "$$PWD/runqmllint.sh $$PWD/qml"
 }
 
 DESTDIR = ../
