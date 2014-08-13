@@ -1,0 +1,22 @@
+
+1.0 TODOs:
+----------
+- Create a TODO file ( done I guess )
+- WebDav sync
+- Unit-tests
+- Android: keyboard doesn't go down when on spinbox
+- Android: Fix editors and modal dialogs
+- Android: Rethink the design of pomodoro functionality
+- Android: Add tasks at the beginning of model instead of end, so keyboard doesn't overlap them
+- Konversation plugin
+- 
+- 
+- 
+- 
+- 
+
+Future TODOs:
+-------------
+- Akonadi support
+- Support for Android Menu
+
