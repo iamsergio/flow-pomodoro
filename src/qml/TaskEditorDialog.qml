@@ -4,6 +4,7 @@ import QtQuick.Controls 1.0
 import Controller 1.0
 
 ModalDialog {
+    id: root
     enabled: _controller.editMode === Controller.EditModeEditor
     dialogHeight: _style.taskEditorHeight
 
@@ -29,9 +30,9 @@ ModalDialog {
 
             columns: 2
             rows: 3
-            rowSpacing: 4
+            rowSpacing: 4 * _controller.dpiFactor
             horizontalItemAlignment: Grid.AlignRight
-            columnSpacing: 4
+            columnSpacing: 4 * _controller.dpiFactor
 
             Text {
                 text: qsTr("Summary:")
@@ -53,8 +54,9 @@ ModalDialog {
                 id: descriptionTextArea
                 objectName: "Task editor text area"
                 focus: false
-                height: 100
+                height: 100 * _controller.dpiFactor
                 text: _controller.taskBeingEdited.description
+                width: root.width / 2.0
                 Binding {
                     // two way binding
                     target: _controller.taskBeingEdited
@@ -65,10 +67,10 @@ ModalDialog {
             }
 
             Item {
-                height: 16
+                height: 16 * _controller.dpiFactor
                 width: childrenRect.width
                 Row {
-                    spacing: 3
+                    spacing: 3 * _controller.dpiFactor
                     ClickableImage {
                         source: "image://icons/tag.png"
                         anchors.verticalCenter: parent.verticalCenter
@@ -95,12 +97,12 @@ ModalDialog {
             Item {
                 id: tagItem
                 width: descriptionTextArea.width
-                height: 70
+                height: 70 * _controller.dpiFactor
 
                 Flow {
                     id: flow
                     anchors.fill: parent
-                    anchors.leftMargin: 3
+                    anchors.leftMargin: 3 * _controller.dpiFactor
                     Repeater {
                         model: _controller.taskBeingEdited.tagModel
                         Text {

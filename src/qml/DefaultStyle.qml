@@ -58,7 +58,7 @@ Item {
     readonly property int dialogButtonsMargin: 6 * _controller.dpiFactor
 
     // Task Editor
-    readonly property int taskEditorFontSize: 14 * _controller.dpiFactor
+    readonly property int taskEditorFontSize: 19 * _controller.dpiFactor
     readonly property int taskEditorHeight: 250 * _controller.dpiFactor
 
     // Tag tabs
