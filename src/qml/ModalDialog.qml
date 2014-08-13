@@ -29,11 +29,11 @@ Item {
         border.color: _style.dialogBorderColor
         border.width:  _style.dialogBorderWidth
         radius: _style.queueRadius
-        anchors.bottom: parent.bottom
+        anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.leftMargin: _style.pageMargin + _style.extraMargin
         anchors.rightMargin: anchors.leftMargin
-        anchors.bottomMargin: (!_controller.currentTask.stopped ? _style.marginSmall : _style.marginMedium) + _style.extraMargin
+        anchors.topMargin: _style.contractedHeight + _style.marginSmall
     }
 }
