@@ -14,7 +14,7 @@ contains(QT_CONFIG, dbus) {
     DEFINES += FLOW_DBUS
 }
 
-LIBS += -lqwebdav
+#LIBS += -lqwebdav
 
 include("src.pri")
 SOURCES += main.cpp
