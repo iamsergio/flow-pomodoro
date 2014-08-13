@@ -125,7 +125,8 @@ Rectangle {
                         visible: _controller.expanded
                         source: "image://icons/configure.png"
                         onClicked: {
-                            _controller.currentPage = Controller.ConfigurePage
+                            _controller.currentPage = _controller.currentPage == Controller.ConfigurePage ? Controller.MainPage
+                                                                                                          : Controller.ConfigurePage
                         }
                     }
 
