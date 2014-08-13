@@ -241,7 +241,7 @@ void GenericListModel<T>::insert(int i, const T &value)
     }
 
     m_model->beginInsertRows(QModelIndex(), i, i);
-    insert(i, value);
+    QList<T>::insert(i, value);
     m_model->endInsertRows();
 }
 
