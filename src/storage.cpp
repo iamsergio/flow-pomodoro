@@ -305,7 +305,22 @@ Task::Ptr Storage::addTask(const QString &taskText)
     return addTask(task);
 }
 
+Task::Ptr Storage::prependTask(const QString &taskText)
+{
+    Task::Ptr task = Task::createTask(taskText);
+    connectTask(task);
+    m_data.tasks.prepend(task);
+    return task;
+}
+
 Task::Ptr Storage::addTask(const Task::Ptr &task)
+{
+    connectTask(task);
+    m_data.tasks << task;
+    return task;
+}
+
+void Storage::connectTask(const Task::Ptr &task)
 {
     connect(task.data(), &Task::changed, this,
             &Storage::scheduleSave, Qt::UniqueConnection);
@@ -317,10 +332,6 @@ Task::Ptr Storage::addTask(const Task::Ptr &task)
             &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
     connect(task.data(), &Task::statusChanged, m_stagedTasksModel,
             &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
-
-    m_data.tasks << task;
-
-    return task;
 }
 
 void Storage::removeTask(const Task::Ptr &task)

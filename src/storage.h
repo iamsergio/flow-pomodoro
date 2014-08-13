@@ -88,6 +88,7 @@ public:
     ArchivedTasksFilterModel* archivedTasksModel() const;
     Task::Ptr taskAt(int proxyIndex) const;
     Task::Ptr addTask(const QString &taskText);
+    Task::Ptr prependTask(const QString &taskText);
     void removeTask(const Task::Ptr &task);
     int indexOfTask(const Task::Ptr &) const;
 //------------------------------------------------------------------------------
@@ -120,6 +121,7 @@ protected:
     virtual void save_impl() = 0;
 
 private:
+    void connectTask(const Task::Ptr &);
     int indexOfTag(const QString &name) const;
     int proxyRowToSource(int proxyIndex) const;
     QTimer m_scheduleTimer;

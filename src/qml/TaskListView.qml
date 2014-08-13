@@ -17,10 +17,11 @@ ListView {
         // that event loop run breaks focus, so restore it here.
 
         // Make the newly inserted task visible
+        var indexToFocus = 0 // root.count - 1
         if (_controller.editMode !== Controller.EditModeNone)
-           currentIndex = root.count - 1
+           currentIndex = indexToFocus
 
-        _controller.forceFocus(count-1)
+        _controller.forceFocus(indexToFocus)
     }
 
     delegate: Task {

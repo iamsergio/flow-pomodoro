@@ -663,7 +663,7 @@ void Controller::requestContextMenu(Task *task)
 
 void Controller::addTask(const QString &text, bool startEditMode)
 {
-    Task::Ptr task = m_storage->addTask(text);
+    Task::Ptr task = m_storage->prependTask(text);
 
     if (m_currentTabTag && queueType() == QueueTypeArchive)
         task->addTag(m_currentTabTag->name());
@@ -673,7 +673,8 @@ void Controller::addTask(const QString &text, bool startEditMode)
 
     if (startEditMode) {
         setExpanded(true);
-        int lastIndex = m_storage->taskFilterModel()->rowCount()-1;
+        //int lastIndex = m_storage->taskFilterModel()->rowCount()-1;
+        int lastIndex = 0;
         editTask(m_storage->taskAt(lastIndex).data(), EditModeInline);
         emit forceFocus(lastIndex);
         emit addingNewTask();
