@@ -71,7 +71,7 @@ Rectangle {
         }
 
         onPressAndHold: {
-            _controller.editTask(task, Controller.EditModeInline)
+            _controller.editTask(task, Controller.EditModeEditor)
         }
 
         Text {
