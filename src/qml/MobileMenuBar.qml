@@ -69,4 +69,19 @@ Rectangle {
             }
         }
     }
+    Rectangle {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 1 * _controller.dpiFactor
+        anchors.top: parent.top
+        color: "#393939"
+    }
+
+    Rectangle {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 2 * _controller.dpiFactor
+        anchors.bottom: parent.bottom
+        color: "#1B1B1B"
+    }
 }

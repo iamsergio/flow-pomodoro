@@ -1,5 +1,8 @@
 import QtQuick 2.0
 
 DefaultStyle {
-    menuBarHeight: 24 * _controller.dpiFactor
+    borderWidth: 0
+    queueRadius: 0
+    pageMargin: 0
+    fontColor: "#F3F3F3"
 }
