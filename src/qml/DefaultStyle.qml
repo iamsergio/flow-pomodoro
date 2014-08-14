@@ -83,7 +83,7 @@ Item {
     readonly property int deleteAnimationDuration : 350
 
     readonly property int pageHeight : 500 * _controller.dpiFactor
-    readonly property int contractedHeight: 50 * _controller.dpiFactor
+    readonly property int contractedHeight: menuBarHeight * _controller.dpiFactor
 
     readonly property int selectedTaskBorderWidth    : Math.ceil(1 * _controller.dpiFactor)
     readonly property string selectedTaskBorderColor : "black"
@@ -107,4 +107,18 @@ Item {
     readonly property int marginSmall: Math.ceil(5 * _controller.dpiFactor)
     readonly property int marginMedium: Math.ceil(10 * _controller.dpiFactor)
     readonly property int marginBig: Math.ceil(20 * _controller.dpiFactor)
+
+    // Mobile Menu Bar
+    readonly property color menuBarFontColor: "white"
+    readonly property color menuBarBackgroundColor: "black"
+    readonly property color menuBarButtonPressedColor: "gray"
+    readonly property color menuBarDotColor: "lightgray"
+    readonly property int menuBarHeight: 50 * _controller.dpiFactor
+    readonly property int menuBarFontSize: 23 * _controller.dpiFactor
+    readonly property int menuBarButtonWidth: 50 * _controller.dpiFactor
+    readonly property int menuBarButtonDotWidth: 5 * _controller.dpiFactor
+    readonly property int menuBarButtonDotSpacing: 5 * _controller.dpiFactor
+    readonly property int menuBarIconMargin: 5 * _controller.dpiFactor
+
+
 }

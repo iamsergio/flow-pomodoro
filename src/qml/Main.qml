@@ -61,8 +61,19 @@ Rectangle {
                 }
             }
 
+            MobileMenuBar {
+                visible: _controller.isMobile
+                anchors.leftMargin: 1 * _controller.dpiFactor
+                anchors.rightMargin: 1 * _controller.dpiFactor
+                onButtonClicked: {
+                    _controller.currentPage = _controller.currentPage == Controller.ConfigurePage ? Controller.MainPage
+                                                                                                  : Controller.ConfigurePage
+                }
+            }
+
             Item {
                 id: header
+                visible: !_controller.isMobile
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
