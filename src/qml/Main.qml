@@ -7,6 +7,9 @@ import Controller 1.0
 
 Rectangle {
     id: root
+
+    property string titleText: _controller.currentTask.stopped ? qsTr("You're slacking") : _controller.currentTask.summary
+
     radius: 4
     color: "transparent"
     width: 400 * _controller.dpiFactor
@@ -62,9 +65,10 @@ Rectangle {
             }
 
             MobileMenuBar {
+                titleText: root.titleText
                 visible: _controller.isMobile
-                anchors.leftMargin: 1 * _controller.dpiFactor
-                anchors.rightMargin: 1 * _controller.dpiFactor
+                anchors.leftMargin: _style.menuBarMargin
+                anchors.rightMargin: _style.menuBarMargin
                 onButtonClicked: {
                     _controller.currentPage = _controller.currentPage == Controller.ConfigurePage ? Controller.MainPage
                                                                                                   : Controller.ConfigurePage
@@ -90,7 +94,7 @@ Rectangle {
                     anchors.right: parent.right
                     anchors.rightMargin: (16*2 + 15) * _controller.dpiFactor // ( two icons, 3 margins)
                     anchors.top: parent.top
-                    text: _controller.currentTask.stopped ? qsTr("You're slacking") : _controller.currentTask.summary
+                    text: root.titleText
                     visible: !remainingText.visible
                 }
 
