@@ -152,9 +152,10 @@ QUrl QuickView::styleFileName() const
         // User can override the default style by creating a Style.qml file in /home/<user>/.local/share/KDAB/flow/
         return QUrl::fromLocalFile(fileName);
     } else {
+        const QString filename = controller()->isMobile() ? "MobileStyle.qml" : "DefaultStyle.qml";
         // Developer mode doesn't use qrc:, so we can reload with F5
-        return m_developerMode ? QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/DefaultStyle.qml")
-                               : QUrl("qrc:/qml/DefaultStyle.qml");
+        return m_developerMode ? QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/" + filename)
+                               : QUrl("qrc:/qml/" + filename);
     }
 }
 

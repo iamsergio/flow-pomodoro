@@ -50,6 +50,7 @@
     <file>qml/QuestionPopup.qml</file>
     <file>qml/Main.qml</file>
     <file>qml/MainPage.qml</file>
+    <file>qml/MobileStyle.qml</file>
     <file>qml/MobileMenuBar.qml</file>
     <file>qml/ModalDialog.qml</file>
     <file>qml/Page.qml</file>
