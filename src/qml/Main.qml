@@ -280,7 +280,7 @@ Rectangle {
 
         MenuItem {
             text: qsTr("Configure...")
-            visible: _controller.isMobile
+            visible: _controller.isMobile && _controller.currentPage != Controller.ConfigurePage
             onTriggered: {
                 _controller.currentPage = _controller.currentPage == Controller.ConfigurePage ? Controller.MainPage
                                                                                               : Controller.ConfigurePage
@@ -289,6 +289,7 @@ Rectangle {
 
         MenuItem {
             text: qsTr("About...")
+            visible: _controller.currentPage != Controller.AboutPage
             onTriggered: {
                 _controller.currentPage = Controller.AboutPage
                 _controller.expanded = true
