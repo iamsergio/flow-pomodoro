@@ -70,8 +70,8 @@ Rectangle {
                 anchors.leftMargin: _style.menuBarMargin
                 anchors.rightMargin: _style.menuBarMargin
                 onButtonClicked: {
-                    _controller.currentPage = _controller.currentPage == Controller.ConfigurePage ? Controller.MainPage
-                                                                                                  : Controller.ConfigurePage
+                    _controller.requestContextMenu(null) // reset task
+                    contextMenu.popup()
                 }
             }
 
@@ -277,6 +277,15 @@ Rectangle {
         }
 
         MenuSeparator { }
+
+        MenuItem {
+            text: qsTr("Configure...")
+            visible: _controller.isMobile
+            onTriggered: {
+                _controller.currentPage = _controller.currentPage == Controller.ConfigurePage ? Controller.MainPage
+                                                                                              : Controller.ConfigurePage
+            }
+        }
 
         MenuItem {
             text: qsTr("About...")
