@@ -9,8 +9,11 @@ TextField {
     text: _controller.taskBeingEdited.summary
     focus: true
     onVisibleChanged: {
-        if (visible)
+        if (visible) {
             forceActiveFocus()
+        } else if (_controller.isMobile) {
+            Qt.inputMethod.hide()
+        }
     }
 
     Binding {

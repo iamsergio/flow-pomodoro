@@ -33,6 +33,16 @@ Item {
                 // The binding gets broken when user edits, not sure how to fix it.. so hack it:
                 _controller.defaultPomodoroDuration = value
             }
+            onVisibleChanged: {
+                if (!visible && _controller.isMobile) {
+                    Qt.inputMethod.hide(); // hide keyboard
+                }
+            }
+
+            onEditingFinished: {
+                if (_controller.isMobile)
+                    Qt.inputMethod.hide(); // hide keyboard
+            }
         }
     }
 }
