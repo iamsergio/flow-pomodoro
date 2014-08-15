@@ -4,7 +4,6 @@
 - Create a TODO file ( done I guess )
 - WebDav sync
 - Unit-tests
-- Android: keyboard doesn't go down when on spinbox
 - Android: Rethink the design of pomodoro functionality
 - Konversation plugin
 - Show tag menu on long press, with an "Edit" option
@@ -12,5 +11,3 @@
 Future TODOs:
 -------------
 - Akonadi support
-- Support for Android Menu
-
