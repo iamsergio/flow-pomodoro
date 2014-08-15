@@ -28,6 +28,7 @@
 #include "tooltipcontroller.h"
 #include "storage.h"
 #include "imageprovider.h"
+#include "circularprogressindicator.h"
 
 #include <QStandardPaths>
 #include <QQmlContext>
@@ -82,6 +83,8 @@ QuickView::QuickView(QWindow *parent)
     qmlRegisterUncreatableType<Tag>("Controller",
                                     1, 0, "Tag_",
                                     "Tag is not creatable");
+
+    qmlRegisterType<CircularProgressIndicator>("com.kdab.flowpomodoro", 1, 0, "CircularProgressIndicator");
 
     engine()->addImageProvider("icons", new ImageProvider());
 

@@ -2,6 +2,7 @@ QT += quick
 
 SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/checkabletagmodel.cpp \
+           $$PWD/circularprogressindicator.cpp \
            $$PWD/controller.cpp  \
            $$PWD/imageprovider.cpp \
            $$PWD/jsonstorage.cpp \
@@ -19,6 +20,7 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
 
 HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/checkabletagmodel.h \
+           $$PWD/circularprogressindicator.h \
            $$PWD/controller.h      \
            $$PWD/imageprovider.h \
            $$PWD/jsonstorage.h      \
