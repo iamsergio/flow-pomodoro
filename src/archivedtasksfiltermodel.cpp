@@ -68,7 +68,7 @@ bool ArchivedTasksFilterModel::filterAcceptsRow(int source_row,
     if (!task)
         return false;
 
-    return (m_archived && !task->staged()) || (!m_archived && task->staged() && !task->running());
+    return (m_archived && !task->staged()) || (!m_archived && task->staged() && task->stopped());
 }
 
 int ArchivedTasksFilterModel::count() const
