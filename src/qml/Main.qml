@@ -238,8 +238,7 @@ Rectangle {
         enabled: !_controller.popupVisible
 
         MenuItem {
-            enabled: !_controller.currentTask.stopped
-            visible: _controller.rightClickedTask === null
+            visible: _controller.rightClickedTask === null && !_controller.currentTask.stopped
             text: _controller.currentTask.running ? qsTr("Pause") : qsTr("Resume")
             onTriggered: {
                 _controller.pausePomodoro()
@@ -247,8 +246,7 @@ Rectangle {
         }
 
         MenuItem {
-            enabled: !_controller.currentTask.stopped
-            visible: _controller.rightClickedTask === null
+            visible: _controller.rightClickedTask === null && !_controller.currentTask.stopped
             text: qsTr("Stop")
             onTriggered: {
                 _controller.stopPomodoro(true)
@@ -256,8 +254,7 @@ Rectangle {
         }
 
         MenuItem {
-            enabled: !_controller.currentTask.stopped
-            visible: _controller.rightClickedTask === null
+            visible: _controller.rightClickedTask === null && !_controller.currentTask.stopped
             text: qsTr("Delete")
             onTriggered: {
                 _controller.stopPomodoro(false)
@@ -280,7 +277,7 @@ Rectangle {
 
         MenuItem {
             text: qsTr("Configure...")
-            visible: _controller.isMobile && _controller.currentPage != Controller.ConfigurePage
+            visible: _controller.currentPage != Controller.ConfigurePage
             onTriggered: {
                 _controller.currentPage = _controller.currentPage == Controller.ConfigurePage ? Controller.MainPage
                                                                                               : Controller.ConfigurePage
