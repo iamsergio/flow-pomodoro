@@ -95,6 +95,7 @@ void Controller::startPomodoro(Task *t)
     }
 
     Task::Ptr task = t->toStrongRef();
+    setSelectedTask(Task::Ptr());
 
     stopPomodoro(); // Stop previous one, if any
 
