@@ -4,6 +4,7 @@ import Controller 1.0
 
 CircularProgressIndicator {
     id: root
+    property alias containsMouse: mouseArea.containsMouse
     signal clicked()
     width: height
     foregroundColor: _style.circularIndicatorForegroundColor
