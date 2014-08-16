@@ -34,6 +34,7 @@ class CircularProgressIndicator : public QQuickPaintedItem
     Q_PROPERTY(int value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(int minimumValue READ minimumValue WRITE setMinimumValue NOTIFY minimumValueChanged)
     Q_PROPERTY(int maximumValue READ maximumValue WRITE setMaximumValue NOTIFY maximumValueChanged)
+    Q_PROPERTY(bool showStopIcon READ showStopIcon WRITE setShowStopIcon NOTIFY showStopIconChanged)
 
 public:
     explicit CircularProgressIndicator(QQuickItem *parent = 0);
@@ -60,6 +61,9 @@ public:
     int minimumValue() const;
     void setMinimumValue(int);
 
+    void setShowStopIcon(bool);
+    bool showStopIcon() const;
+
 Q_SIGNALS:
     void dpiFactorChanged();
     void foregroundColorChanged();
@@ -70,6 +74,7 @@ Q_SIGNALS:
     void minimumValueChanged();
     void maximumValueChanged();
     void outterBorderWidthChanged();
+    void showStopIconChanged();
 
 private:
     int m_dpiFactor;
@@ -80,6 +85,7 @@ private:
     int m_minimumValue;
     int m_maximumValue;
     int m_outterBorderWidth;
+    bool m_showStopIcon;
 };
 
 #endif

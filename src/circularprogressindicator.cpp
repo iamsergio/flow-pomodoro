@@ -30,6 +30,7 @@ CircularProgressIndicator::CircularProgressIndicator(QQuickItem *parent)
     , m_minimumValue(0)
     , m_maximumValue(100)
     , m_outterBorderWidth(3)
+    , m_showStopIcon(false)
 {
 }
 
@@ -70,17 +71,25 @@ void CircularProgressIndicator::paint(QPainter *painter)
     painter->setBrush(backgroundBrush);
     painter->drawEllipse(rect);
 
-    // Draw text. We draw a count-down.
-    int remainingValue = m_maximumValue - m_value;
-    QString text = QString::number(remainingValue);
-    painter->setPen(m_foregroundColor);
-    QFont font = painter->font();
-    font.setBold(true);
-    font.setPixelSize(12 * m_dpiFactor);
-    painter->setFont(font);
-    a = -2 * m_dpiFactor; // Make rect bigger
-    rect.adjust(a, a, -a, -a);
-    painter->drawText(rect, Qt::AlignCenter, text);
+    if (m_showStopIcon) {
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(foregroundBrush);
+        QPointF center = boundingRect().center();
+        qreal length = boundingRect().width() / 3.4; //  3.4 because it looks nice, no particular reason
+        painter->drawRect(QRectF(center.x() - (length / 2), center.y() - (length / 2), length, length));
+    } else {
+        // Draw text. We draw a count-down.
+        int remainingValue = m_maximumValue - m_value;
+        QString text = QString::number(remainingValue);
+        painter->setPen(m_foregroundColor);
+        QFont font = painter->font();
+        font.setBold(true);
+        font.setPixelSize(12 * m_dpiFactor);
+        painter->setFont(font);
+        a = -2 * m_dpiFactor; // Make rect bigger
+        rect.adjust(a, a, -a, -a);
+        painter->drawText(rect, Qt::AlignCenter, text);
+    }
 }
 
 int CircularProgressIndicator::dpiFactor() const
@@ -193,4 +202,18 @@ void CircularProgressIndicator::setMinimumValue(int value)
         update();
         emit maximumValue();
     }
+}
+
+void CircularProgressIndicator::setShowStopIcon(bool show)
+{
+    if (show != m_showStopIcon) {
+        m_showStopIcon = show;
+        update();
+        emit showStopIconChanged();
+    }
+}
+
+bool CircularProgressIndicator::showStopIcon() const
+{
+    return m_showStopIcon;
 }
