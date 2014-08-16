@@ -25,12 +25,19 @@ CircularProgressIndicator::CircularProgressIndicator(QQuickItem *parent)
     , m_dpiFactor(1)
     , m_backgroundColor(Qt::black)
     , m_foregroundColor(Qt::white)
-    , m_progress(0)
+    , m_value(0)
+    , m_minimumValue(0)
+    , m_maximumValue(100)
 {
 }
 
 void CircularProgressIndicator::paint(QPainter *painter)
 {
+    if (m_value < m_minimumValue || m_value > m_maximumValue) {
+        // Ignore, the object is being setup and max/mim will be setup and call update() again
+        return;
+    }
+
     painter->setRenderHints(QPainter::Antialiasing, true);
     int outterPenWidth = 3 * m_dpiFactor;
     QRectF rect = boundingRect().adjusted(outterPenWidth, outterPenWidth, -outterPenWidth, -outterPenWidth);
@@ -49,7 +56,8 @@ void CircularProgressIndicator::paint(QPainter *painter)
     rect.adjust(a, a, -a, -a);
     painter->setBrush(foregroundBrush);
     int zeroHours = 90 * 16;
-    painter->drawPie(rect, zeroHours, -(360*m_progress/100.0) * 16);
+    qreal currentPercentage = (1.0 * m_value - m_minimumValue) / (m_maximumValue - m_minimumValue);
+    painter->drawPie(rect, zeroHours, -360 * currentPercentage * 16);
 
     a = 2 * m_dpiFactor;
     rect.adjust(a, a, -a, -a);
@@ -57,6 +65,18 @@ void CircularProgressIndicator::paint(QPainter *painter)
     painter->setPen(m_backgroundColor);
     painter->setBrush(backgroundBrush);
     painter->drawEllipse(rect);
+
+    // Draw text. We draw a count-down.
+    int remainingValue = m_maximumValue - m_value;
+    QString text = QString::number(remainingValue);
+    painter->setPen(m_foregroundColor);
+    QFont font = painter->font();
+    font.setBold(true);
+    font.setPixelSize(12 * m_dpiFactor);
+    painter->setFont(font);
+    a = -2 * m_dpiFactor; // Make rect bigger
+    rect.adjust(a, a, -a, -a);
+    painter->drawText(rect, Qt::AlignCenter, text);
 }
 
 int CircularProgressIndicator::dpiFactor() const
@@ -115,22 +135,45 @@ bool CircularProgressIndicator::drawOutterBorder() const
     return m_drawOutterBorder;
 }
 
-void CircularProgressIndicator::setProgress(int progress)
+void CircularProgressIndicator::setValue(int value)
 {
-    if (progress < 0 || progress > 100) {
-        qWarning() << "Invalid progress value" << progress;
-        Q_ASSERT(false);
-        return;
-    }
 
-    if (m_progress != progress) {
-        m_progress = progress;
+    if (m_value != value) {
+        m_value = value;
         update();
-        emit progressChanged();
+        emit valueChanged();
     }
 }
 
-int CircularProgressIndicator::progress() const
+int CircularProgressIndicator::value() const
 {
-    return m_progress;
+    return m_value;
+}
+
+int CircularProgressIndicator::maximumValue() const
+{
+    return maximumValue();
+}
+
+int CircularProgressIndicator::minimumValue() const
+{
+    return m_minimumValue;
+}
+
+void CircularProgressIndicator::setMaximumValue(int value)
+{
+    if (value != m_maximumValue) {
+        m_maximumValue = value;
+        update();
+        emit maximumValue();
+    }
+}
+
+void CircularProgressIndicator::setMinimumValue(int value)
+{
+    if (value != m_minimumValue) {
+        m_minimumValue = value;
+        update();
+        emit maximumValue();
+    }
 }
