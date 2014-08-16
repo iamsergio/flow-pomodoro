@@ -85,7 +85,7 @@ void CircularProgressIndicator::paint(QPainter *painter)
 
 int CircularProgressIndicator::dpiFactor() const
 {
-    return 1;
+    return m_dpiFactor;
 }
 
 void CircularProgressIndicator::setDpiFactor(int dpiFactor)
