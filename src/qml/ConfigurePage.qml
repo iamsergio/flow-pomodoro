@@ -7,6 +7,7 @@ import QtQuick.Layouts 1.0
 Page {
     id: root
     page: Controller.ConfigurePage
+
     MouseArea {
         anchors.fill: parent
         onClicked: {
@@ -22,32 +23,63 @@ Page {
             text: qsTr("Configuration")
             anchors.top: parent.top
             anchors.topMargin: _style.marginSmall
-            height: 50 * _controller.dpiFactor
         }
 
-        TabView {
+        Component {
+            id: mobileTabBarComponent
+            Item {
+                anchors.fill: parent
+                MobileTabView {
+                    anchors.fill: parent
+                    selectedIndex: 1
+                    count: 3
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    model: ListModel { // TODO: ListElement doesn't accept qsTr
+                        ListElement { text: "General" ; source: "config/General.qml"}
+                        ListElement { text: "Tags"    ; source: "config/Tags.qml" }
+                        ListElement { text: "Plugins" ; source: "config/Plugins.qml" }
+                    }
+                }
+            }
+        }
+
+        Component {
+            id: desktopTabBarComponent
+            TabView {
+                frameVisible: false
+                currentIndex: _controller.configureTabIndex
+                anchors.fill: parent
+
+                Tab {
+                    title: qsTr("General")
+                    source: "config/General.qml"
+                }
+
+                Tab {
+                    title: qsTr("Tags")
+                    source: "config/Tags.qml"
+                }
+
+                Tab {
+                    title: qsTr("Plugins")
+                    source: "config/Plugins.qml"
+                }
+            }
+        }
+
+        Item {
+            id: tabView
             anchors.top: titleText.bottom
-            anchors.bottom: okButton.top
+            anchors.topMargin: _style.marginMedium
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.margins: _style.marginSmall
-            frameVisible: false
-            currentIndex: _controller.configureTabIndex
+            anchors.bottom: okButton.top
 
-            Tab {
-                title: qsTr("General")
-                source: "config/General.qml"
-            }
-
-            Tab {
-                title: qsTr("Tags")
-                source: "config/Tags.qml"
-            }
-
-            Tab {
-                enabled: !_controller.isMobile
-                title: qsTr("Plugins")
-                source: "config/Plugins.qml"
+            Loader {
+                anchors.fill: parent
+                sourceComponent: _controller.isMobile ? mobileTabBarComponent
+                                                      : desktopTabBarComponent
             }
         }
 

@@ -119,4 +119,20 @@ Item {
     property int menuBarButtonDotSpacing: 5 * _controller.dpiFactor
     property int menuBarIconMargin: 5 * _controller.dpiFactor
     property int menuBarMargin: borderWidth
+
+    // Config tab bar
+    property color configTabBarFontColor: "white"
+    property color configTabBarSelectedFontColor: "black"
+    property int configTabBarFontSize: 13 * _controller.dpiFactor
+    property int configTabBarSeparatorWidth: 2 * _controller.dpiFactor
+    property int configTabBarBorderWidth: 2 * _controller.dpiFactor
+    property int configTabBarBorderRadius: 8 * _controller.dpiFactor
+    property int configTabBarHeight: 30 * _controller.dpiFactor
+    property color configTabBarBorderColor:  "black"
+    property color configTabBarSelectedColor: "#CECCCB"
+
+    property bool configTabBarEnableGradient: true
+    property color configTabBarLightGradientColor: "#454C54"
+    property color configTabBarDarkerGradientColor: "#222222"
+    property int configTabBarWidth: 250 * _controller.dpiFactor
 }

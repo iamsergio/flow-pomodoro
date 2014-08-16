@@ -30,7 +30,8 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/DefaultStyle.qml   \
                qml/Main.qml           \
                qml/MainPage.qml       \
-               qml/qml/ModalDialog.qml    \
+               qml/ModalDialog.qml    \
+               qml/MobileTabView.qml  \
                qml/Page.qml           \
                qml/QuestionPopup.qml  \
                qml/RegularText.qml    \
