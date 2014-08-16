@@ -30,6 +30,7 @@ class CircularProgressIndicator : public QQuickPaintedItem
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
     Q_PROPERTY(bool drawOutterBorder READ drawOutterBorder WRITE setDrawOutterBorder NOTIFY drawOutterBorderChanged)
+    Q_PROPERTY(int outterBorderWidth READ outterBorderWidth WRITE setOutterBorderWidth NOTIFY outterBorderWidthChanged)
     Q_PROPERTY(int value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(int minimumValue READ minimumValue WRITE setMinimumValue NOTIFY minimumValueChanged)
     Q_PROPERTY(int maximumValue READ maximumValue WRITE setMaximumValue NOTIFY maximumValueChanged)
@@ -49,6 +50,8 @@ public:
 
     void setDrawOutterBorder(bool);
     bool drawOutterBorder() const;
+    void setOutterBorderWidth(int);
+    int outterBorderWidth() const;
 
     void setValue(int);
     int value() const;
@@ -66,6 +69,7 @@ Q_SIGNALS:
     void valueChanged();
     void minimumValueChanged();
     void maximumValueChanged();
+    void outterBorderWidthChanged();
 
 private:
     int m_dpiFactor;
@@ -75,6 +79,7 @@ private:
     int m_value;
     int m_minimumValue;
     int m_maximumValue;
+    int m_outterBorderWidth;
 };
 
 #endif

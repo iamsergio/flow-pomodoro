@@ -15,11 +15,6 @@ Item {
     property int remainingFontSize     : 23 * _controller.dpiFactor
     property int taskHeight            : 50 * _controller.dpiFactor
 
-    // progress bar:
-    property string progressBarBgColor       : "white"
-    property string progressBarFgBorderColor : "darkgray"
-    property int progressBarBorderRadius     : Math.ceil(3 * _controller.dpiFactor)
-
     // tags
     property string tagBackgroundColor: "black"
     property string tagFontColor: "white"
@@ -101,8 +96,6 @@ Item {
     property int smallTextSize     : 13 * _controller.dpiFactor
     property string smallTextColor : "black"
 
-    property int progressBarHeight: 10 * _controller.dpiFactor
-
     property int marginSmall: Math.ceil(5 * _controller.dpiFactor)
     property int marginMedium: Math.ceil(10 * _controller.dpiFactor)
     property int marginBig: Math.ceil(20 * _controller.dpiFactor)
@@ -135,4 +128,10 @@ Item {
     property color configTabBarLightGradientColor: "#454C54"
     property color configTabBarDarkerGradientColor: "#222222"
     property int configTabBarWidth: 250 * _controller.dpiFactor
+
+    // Circular Progress Indicator
+    property int circularIndicatorBorderWidth: 3 * _controller.dpiFactor
+    property color circularIndicatorForegroundColor: "#FFEC03"
+    property color circularIndicatorBackgroundColor: "#222222"
+    property color circularIndicatorSelectedBackgroundColor: "#222222"
 }

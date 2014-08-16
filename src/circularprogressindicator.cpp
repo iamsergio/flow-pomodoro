@@ -28,6 +28,7 @@ CircularProgressIndicator::CircularProgressIndicator(QQuickItem *parent)
     , m_value(0)
     , m_minimumValue(0)
     , m_maximumValue(100)
+    , m_outterBorderWidth(3)
 {
 }
 
@@ -39,16 +40,16 @@ void CircularProgressIndicator::paint(QPainter *painter)
     }
 
     painter->setRenderHints(QPainter::Antialiasing, true);
-    int outterPenWidth = 3 * m_dpiFactor;
-    QRectF rect = boundingRect().adjusted(outterPenWidth, outterPenWidth, -outterPenWidth, -outterPenWidth);
+    QRectF rect = boundingRect().adjusted(m_outterBorderWidth, m_outterBorderWidth, -m_outterBorderWidth, -m_outterBorderWidth);
     QBrush foregroundBrush(m_foregroundColor);
     QBrush backgroundBrush(m_backgroundColor);
     painter->setBrush(backgroundBrush);
     painter->drawEllipse(rect);
 
-    QPen foregroundPen(m_foregroundColor);
-    foregroundPen.setWidth(3 * m_dpiFactor);
-    painter->setPen(m_foregroundColor);
+    // Outter border:
+    QPen borderPen(m_foregroundColor);
+    borderPen.setWidth(m_outterBorderWidth);
+    painter->setPen(borderPen);
     painter->setBrush(QBrush());
     painter->drawEllipse(rect);
 
@@ -133,6 +134,20 @@ void CircularProgressIndicator::setDrawOutterBorder(bool enable)
 bool CircularProgressIndicator::drawOutterBorder() const
 {
     return m_drawOutterBorder;
+}
+
+void CircularProgressIndicator::setOutterBorderWidth(int width)
+{
+    if (width != m_outterBorderWidth) {
+        m_outterBorderWidth = width;
+        update();
+        emit outterBorderWidth();
+    }
+}
+
+int CircularProgressIndicator::outterBorderWidth() const
+{
+    return m_outterBorderWidth;
 }
 
 void CircularProgressIndicator::setValue(int value)

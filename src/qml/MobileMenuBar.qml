@@ -1,5 +1,5 @@
 import QtQuick 2.1
-
+import com.kdab.flowpomodoro 1.0
 
 Rectangle {
     id: root
@@ -32,6 +32,13 @@ Rectangle {
         anchors.left: image.right
         anchors.verticalCenter: image.verticalCenter
         font.pixelSize: _style.menuBarFontSize
+    }
+
+    FlowCircularProgressIndicator {
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: button.left
+        anchors.margins: 7 * _controller.dpiFactor
     }
 
     Rectangle {

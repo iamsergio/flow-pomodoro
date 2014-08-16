@@ -3,6 +3,7 @@ import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.0
 
 import Controller 1.0
+import com.kdab.flowpomodoro 1.0
 
 
 Rectangle {
@@ -14,11 +15,6 @@ Rectangle {
     color: "transparent"
     width: 400 * _controller.dpiFactor
     height: _style.contractedHeight + (_controller.expanded ? _style.pageHeight + 10* _controller.dpiFactor : 0)
-
-    function mouseOver()
-    {
-        return globalMouseArea.containsMouse || stopIcon.containsMouse || pauseIcon.containsMouse
-    }
 
     Connections {
         target: _controller
@@ -95,7 +91,6 @@ Rectangle {
                     anchors.rightMargin: (16*2 + 15) * _controller.dpiFactor // ( two icons, 3 margins)
                     anchors.top: parent.top
                     text: root.titleText
-                    visible: !remainingText.visible
                 }
 
                 Text {
@@ -110,28 +105,21 @@ Rectangle {
                     anchors.bottomMargin: _style.marginSmall
                 }
 
-                Text {
-                    id: remainingText
-                    color: _style.fontColor
-                    visible: (mouseOver() || _controller.firstSecondsAfterAdding) && _controller.remainingMinutes > 0 && !_controller.currentTask.stopped && !_controller.expanded
-                    font.pixelSize: _style.remainingFontSize
-                    font.bold: true
-                    anchors.left: parent.left
-                    anchors.leftMargin: _style.marginMedium
-                    anchors.top: parent.top
-                    text: _controller.currentTask.paused ? qsTr("Paused (%1m)").arg(_controller.remainingMinutes) : (_controller.remainingMinutes + "m " + qsTr("remaining ..."))
-                }
-
                 Row {
                     z: 2
                     id: buttonRow
                     anchors.right: parent.right
-                    anchors.bottomMargin: 5
+                    anchors.bottomMargin: 5 * _controller.dpiFactor
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    anchors.rightMargin: progressBar.anchors.rightMargin + 2
+                    anchors.rightMargin: _style.marginMedium
                     spacing: _style.buttonsSpacing
-                    layoutDirection: "RightToLeft" // Right to left so configure always sticks to right margin, otherwise will stick to left margin when row grows. Because row doesn't shrink back when pause/stop become invisible.
+
+                    FlowCircularProgressIndicator {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        anchors.margins: 5 * _controller.dpiFactor
+                    }
 
                     ClickableImage {
                         id: configureIcon
@@ -144,32 +132,6 @@ Rectangle {
                                                                                                           : Controller.ConfigurePage
                         }
                     }
-
-                    ClickableImage {
-                        id: stopIcon
-                        anchors.verticalCenter: parent.verticalCenter
-                        toolTip: qsTr("Stop current task")
-                        visible: !_controller.currentTask.stopped && (_controller.expanded || mouseOver() || _controller.currentTask.paused)
-                        source: "image://icons/stop.png"
-                        onClicked: {
-                            _controller.stopPomodoro(true)
-                        }
-
-                        onPressAndHold: {
-                            _controller.stopPomodoro(false)
-                        }
-                    }
-
-                    ClickableImage {
-                        id: pauseIcon
-                        toolTip: qsTr("Pause current task")
-                        anchors.verticalCenter: parent.verticalCenter
-                        visible: !_controller.currentTask.stopped && (_controller.expanded || mouseOver() || _controller.currentTask.paused)
-                        source: _controller.currentTask.paused ? "image://icons/play.png" : "image://icons/pause.png"
-                        onClicked: {
-                            _controller.pausePomodoro()
-                        }
-                    }
                 }
             }
 
@@ -177,50 +139,24 @@ Rectangle {
                 z: 2
                 id: mainPage
                 anchors.top: header.bottom
-                anchors.bottom:  progressBar.visible ? progressBar.top : parent.bottom
-                anchors.bottomMargin: progressBar.visible ? _style.marginSmall : _style.marginMedium
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: _style.marginMedium
             }
 
             ConfigurePage {
                 z: 2
                 id: configurePage
                 anchors.top: header.bottom
-                anchors.bottom:  progressBar.visible ? progressBar.top : parent.bottom
-                anchors.bottomMargin: progressBar.visible ? _style.marginSmall : _style.marginMedium
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: _style.marginMedium
             }
 
             AboutPage {
                 z: 2
                 id: aboutPage
                 anchors.top: header.bottom
-                anchors.bottom:  progressBar.visible ? progressBar.top : parent.bottom
-                anchors.bottomMargin: progressBar.visible ? _style.marginSmall : _style.marginMedium
-            }
-
-            ProgressBar
-            {
-                id: progressBar
-                anchors.left: parent.left
-                anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: _style.marginSmall
-                anchors.leftMargin: _style.marginMedium
-                anchors.rightMargin: _style.marginMedium
-
-                height: _style.progressBarHeight
-                visible: !_controller.currentTask.stopped
-
-                minimumValue: 0
-                maximumValue: _controller.currentTaskDuration
-                value: _controller.currentTaskDuration - _controller.remainingMinutes
-                style: ProgressBarStyle {
-                    background: Rectangle {
-                        radius: _style.progressBarBorderRadius
-                        color: _style.progressBarBgColor
-                        border.color: _style.borderColor
-                        border.width: _style.borderWidth
-                    }
-                }
+                anchors.bottomMargin: _style.marginMedium
             }
         }
     }
