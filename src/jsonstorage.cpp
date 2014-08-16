@@ -21,7 +21,6 @@
 
 #include <QDir>
 #include <QFile>
-#include <QTextStream>
 #include <QJsonDocument>
 #include <QStandardPaths>
 #include <QTemporaryFile>
@@ -138,8 +137,7 @@ void JsonStorage::save_impl()
         return;
     }
 
-    QTextStream out(&temporaryFile);
-    out << serializedData;
+    temporaryFile.write(serializedData, serializedData.count());
     if (QFile::exists(dataFileName()) && !QFile::remove(dataFileName())) {
         qWarning() << "Could not update (remove error)" << dataFileName()
                    << "backup file is at" << tmpDataFileName();
