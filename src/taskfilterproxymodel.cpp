@@ -74,8 +74,18 @@ bool TaskFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &s
         return true;
 
     TagRef::List tags = task->tags();
-    return std::find_if(tags.cbegin(), tags.cend(),
-                        [&](const TagRef &tag) { return tag.m_tag->name() == m_tagText; }) != tags.cend();
+    for (int i = 0; i < tags.count(); ++i) {
+        const TagRef &tagref = tags.at(i);
+        if (tagref.m_tag) {
+            if (tagref.m_tag->name() == m_tagText)
+                return true;
+        } else {
+            qWarning() << Q_FUNC_INFO << "ignoring null tag";
+            Q_ASSERT(false);
+        }
+    }
+
+    return false;
 }
 
 void TaskFilterProxyModel::setTagName(const QString &tagText)

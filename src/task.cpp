@@ -283,7 +283,8 @@ Task::Ptr Task::fromJson(const QVariantMap &map)
     QVariantList tagsVariant = map.value("tags").toList();
     TagRef::List tags;
     foreach (const QVariant &tag, tagsVariant) {
-        tags << TagRef(task.data(), tag.toString());
+        if (!tag.toString().isEmpty())
+            tags << TagRef(task.data(), tag.toString());
     }
     task->setTagList(tags);
 
