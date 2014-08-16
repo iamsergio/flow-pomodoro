@@ -314,6 +314,11 @@ QString Task::uuid() const
     return m_uuid;
 }
 
+bool Task::operator==(const Task::Ptr &other) const
+{
+    return other && m_uuid == other->uuid();
+}
+
 void Task::setRevision(int revision)
 {
     m_revision = revision;

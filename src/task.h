@@ -104,6 +104,8 @@ public:
 
     QString uuid() const;
 
+    bool operator==(const Task::Ptr &other) const;
+
 Q_SIGNALS:
     void summaryChanged();
     void descriptionChanged();
