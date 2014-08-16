@@ -83,8 +83,8 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10* _controller.dpiFactor
-            anchors.right: parent.right
-            anchors.rightMargin: (16*3 + 15) * _controller.dpiFactor // 3 icons, 3 margins
+            anchors.right: buttonRow.left
+            anchors.rightMargin: 2
             font.pixelSize: invisibleHelper.isOverflowing ? _style.taskFontSize - (5*_controller.dpiFactor)
                                                           : _style.taskFontSize
             visible: !textField.visible
