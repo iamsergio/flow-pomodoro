@@ -30,14 +30,12 @@ TagRef::TagRef(const TagRef &other)
 
 TagRef TagRef::operator=(const TagRef &other)
 {
-    if (m_tag)
-        decrementCount();
+    decrementCount();
 
     m_task = other.m_task;
     m_tag = other.m_tag;
 
-    if (m_tag)
-        incrementCount();
+    incrementCount();
 
     return *this;
 }
@@ -56,14 +54,18 @@ TagRef::~TagRef()
 
 void TagRef::incrementCount()
 {
-    m_tag->incrementTaskCount(1);
+    if (m_tag)
+        m_tag->incrementTaskCount(1);
+
     if (m_task)
         QObject::connect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
 }
 
 void TagRef::decrementCount()
 {
-    m_tag->incrementTaskCount(-1);
+    if (m_tag)
+        m_tag->incrementTaskCount(-1);
+
     if (m_task)
         QObject::disconnect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
 }
