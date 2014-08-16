@@ -137,7 +137,6 @@ bool CircularProgressIndicator::drawOutterBorder() const
 
 void CircularProgressIndicator::setValue(int value)
 {
-
     if (m_value != value) {
         m_value = value;
         update();
@@ -152,7 +151,7 @@ int CircularProgressIndicator::value() const
 
 int CircularProgressIndicator::maximumValue() const
 {
-    return maximumValue();
+    return m_maximumValue;
 }
 
 int CircularProgressIndicator::minimumValue() const
