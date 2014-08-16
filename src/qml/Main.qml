@@ -14,7 +14,7 @@ Rectangle {
     radius: 4
     color: "transparent"
     width: 400 * _controller.dpiFactor
-    height: _style.contractedHeight + (_controller.expanded ? _style.pageHeight + 10* _controller.dpiFactor : 0)
+    height: _style.contractedHeight + (_controller.expanded ? _style.pageHeight : 0)
 
     Connections {
         target: _controller
@@ -89,11 +89,13 @@ Rectangle {
                     anchors.leftMargin: _style.marginMedium
                     anchors.right: parent.right
                     anchors.rightMargin: (16*2 + 15) * _controller.dpiFactor // ( two icons, 3 margins)
-                    anchors.top: parent.top
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: -5 * _controller.dpiFactor
                     text: root.titleText
                 }
 
                 Text {
+                    id: focusText
                     text: qsTr("Click here to start focusing")
                     font.bold: false
                     font.pixelSize: _style.clickHereFontSize
@@ -109,7 +111,8 @@ Rectangle {
                     z: 2
                     id: buttonRow
                     anchors.right: parent.right
-                    anchors.bottomMargin: 5 * _controller.dpiFactor
+                    anchors.topMargin: 4 * _controller.dpiFactor
+                    anchors.bottomMargin: 4 * _controller.dpiFactor
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     anchors.rightMargin: _style.marginMedium
