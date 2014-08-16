@@ -87,8 +87,8 @@ Rectangle {
                     font.bold: true
                     anchors.left: parent.left
                     anchors.leftMargin: _style.marginMedium
-                    anchors.right: parent.right
-                    anchors.rightMargin: (16*2 + 15) * _controller.dpiFactor // ( two icons, 3 margins)
+                    anchors.right: buttonRow.left
+                    anchors.rightMargin: 2 * _controller.dpiFactor
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset: -5 * _controller.dpiFactor
                     text: root.titleText
