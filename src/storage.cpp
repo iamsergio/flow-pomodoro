@@ -177,9 +177,10 @@ Tag::Ptr Storage::createTag(const QString &tagName)
         return Tag::Ptr();
     }
 
-    if (indexOfTag(trimmedName) != -1) {
+    const int index = indexOfTag(trimmedName);
+    if (index != -1) {
         qDebug() << Q_FUNC_INFO << "Refusing to add duplicate tag " << tagName;
-        return Tag::Ptr();
+        return m_data.tags.at(index);
     }
 
     Tag::Ptr tag = Tag::Ptr(new Tag(trimmedName));
