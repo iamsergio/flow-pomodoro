@@ -31,7 +31,6 @@ Tag::Tag(const QString &_name)
     : QObject()
     , m_name(_name)
     , m_taskCount(0)
-    , m_archivedTaskCount(0)
     , m_beingEdited(false)
     , m_taskModel(nullptr)
 {
@@ -50,26 +49,13 @@ int Tag::taskCount() const
     return m_taskCount;
 }
 
-void Tag::setTaskCount(int count)
+void Tag::incrementTaskCount(int increment)
 {
-    if (count != m_taskCount) {
-        int tmp = m_taskCount;
-        m_taskCount = count;
-        emit taskCountChanged(tmp, m_taskCount);
-    }
-}
-
-int Tag::archivedTaskCount() const
-{
-    return m_archivedTaskCount;
-}
-
-void Tag::setArchivedTaskCount(int count)
-{
-    if (count != m_archivedTaskCount) {
-        int tmp = m_archivedTaskCount;
-        m_archivedTaskCount = count;
-        emit archivedTaskCountChanged(tmp, m_archivedTaskCount);
+    if (m_taskCount + increment >= 0) {
+        m_taskCount += increment;
+        emit taskCountChanged(m_taskCount - increment, m_taskCount);
+    } else {
+        Q_ASSERT(false);
     }
 }
 
@@ -149,7 +135,6 @@ bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
 
 void Tag::onTaskStagedChanged()
 {
-    Task *task = qobject_cast<Task*>(sender());
-    Q_ASSERT(task);
-    setArchivedTaskCount(m_archivedTaskCount + (task->staged() ? -1 : 1));
+    //Task *task = qobject_cast<Task*>(sender());
+    //Q_ASSERT(task);
 }

@@ -37,21 +37,15 @@ TagRef::TagRef(const QPointer<Task> &task, const QString &tagName)
 
 TagRef::~TagRef()
 {
-    m_tag->setTaskCount(m_tag->taskCount() - 1);
-    if (m_task) {
+    m_tag->incrementTaskCount(-1);
+    if (m_task)
         QObject::disconnect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
-        if (!m_task->staged())
-            m_tag->setArchivedTaskCount(m_tag->archivedTaskCount() - 1);
-    }
 }
 
 void TagRef::init()
 {
-    m_tag->setTaskCount(m_tag->taskCount() + 1);
+    m_tag->incrementTaskCount(1);
     QObject::connect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
-
-    if (!m_task->staged())
-        m_tag->setArchivedTaskCount(m_tag->archivedTaskCount() + 1);
 }
 
 bool operator==(const TagRef &tagRef, const QString &name)

@@ -31,7 +31,6 @@ class Tag : public QObject
 {
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged STORED false)
-    Q_PROPERTY(int archivedTaskCount READ archivedTaskCount NOTIFY archivedTaskCountChanged STORED false)
     Q_PROPERTY(bool beingEdited READ beingEdited NOTIFY beingEditedChanged STORED false)
     Q_PROPERTY(QAbstractItemModel* taskModel READ taskModel CONSTANT)
     Q_OBJECT
@@ -43,9 +42,7 @@ public:
     ~Tag();
 
     int taskCount() const;
-    void setTaskCount(int count);
-    int archivedTaskCount() const;
-    void setArchivedTaskCount(int count);
+    void incrementTaskCount(int increment);
     QString name() const;
     void setName(const QString &name);
     bool beingEdited() const;
@@ -63,7 +60,6 @@ public Q_SLOTS:
 Q_SIGNALS:
     void nameChanged();
     void taskCountChanged(int oldValue, int newValue);
-    void archivedTaskCountChanged(int oldValue, int newValue);
     void beingEditedChanged();
 
 private:
@@ -71,7 +67,6 @@ private:
     Tag(const Tag &other);
     QString m_name;
     int m_taskCount;
-    int m_archivedTaskCount;
     bool m_beingEdited;
     TaskFilterProxyModel *m_taskModel; // All unstaged tasks with this tag
 };
