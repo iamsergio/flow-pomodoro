@@ -477,13 +477,21 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     if (event->type() != QEvent::KeyRelease)
         return false;
 
+    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+    if (keyEvent->key() == Qt::Key_Back) {
+        setCurrentPage(MainPage);
+        setSelectedTask(Task::Ptr());
+        editTask(nullptr, EditModeNone);
+        return true;
+    } else {
+        return false;
+    }
+
     if (m_page != MainPage)
         return false;
 
     if (m_editMode == EditModeEditor)
         return false;
-
-    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
     const bool editing = !m_taskBeingEdited.isNull();
 
