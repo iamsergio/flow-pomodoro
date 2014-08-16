@@ -25,6 +25,7 @@ TagRef::TagRef(const TagRef &other)
 {
     m_task = other.m_task;
     m_tag = other.m_tag;
+    Q_ASSERT(m_tag);
     incrementCount();
 }
 
@@ -44,6 +45,7 @@ TagRef::TagRef(const QPointer<Task> &task, const QString &tagName)
     : m_tag(Storage::instance()->tag(tagName))
     , m_task(task)
 {
+    Q_ASSERT(m_tag);
     incrementCount();
 }
 
@@ -54,8 +56,7 @@ TagRef::~TagRef()
 
 void TagRef::incrementCount()
 {
-    if (m_tag)
-        m_tag->incrementTaskCount(1);
+    m_tag->incrementTaskCount(1);
 
     if (m_task)
         QObject::connect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
@@ -63,8 +64,7 @@ void TagRef::incrementCount()
 
 void TagRef::decrementCount()
 {
-    if (m_tag)
-        m_tag->incrementTaskCount(-1);
+    m_tag->incrementTaskCount(-1);
 
     if (m_task)
         QObject::disconnect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
