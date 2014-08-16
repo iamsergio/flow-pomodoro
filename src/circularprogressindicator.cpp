@@ -25,6 +25,7 @@ CircularProgressIndicator::CircularProgressIndicator(QQuickItem *parent)
     , m_dpiFactor(1)
     , m_backgroundColor(Qt::black)
     , m_foregroundColor(Qt::white)
+    , m_drawOutterBorder(true)
     , m_value(0)
     , m_minimumValue(0)
     , m_maximumValue(100)
@@ -47,11 +48,13 @@ void CircularProgressIndicator::paint(QPainter *painter)
     painter->drawEllipse(rect);
 
     // Outter border:
-    QPen borderPen(m_foregroundColor);
-    borderPen.setWidth(m_outterBorderWidth);
-    painter->setPen(borderPen);
-    painter->setBrush(QBrush());
-    painter->drawEllipse(rect);
+    if (m_drawOutterBorder) {
+        QPen borderPen(m_foregroundColor);
+        borderPen.setWidth(m_outterBorderWidth);
+        painter->setPen(borderPen);
+        painter->setBrush(QBrush());
+        painter->drawEllipse(rect);
+    }
 
     int a = 4 * m_dpiFactor;
     rect.adjust(a, a, -a, -a);

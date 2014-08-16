@@ -4,10 +4,8 @@
 - Create a TODO file ( done I guess )
 - WebDav sync
 - Unit-tests
-- Android: Rethink the design of pomodoro functionality
 - Konversation plugin
 - Show tag menu on long press, with an "Edit" option
-- Circular progress bar instead of progress bar from QtQuickControls
 
 Future TODOs:
 -------------
