@@ -33,4 +33,8 @@ TextField {
             }
         }
     }
+
+    onAccepted: {
+        _controller.editTask(null, Controller.EditModeNone)
+    }
 }
