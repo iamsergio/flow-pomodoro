@@ -25,27 +25,47 @@ TagRef::TagRef(const TagRef &other)
 {
     m_task = other.m_task;
     m_tag = other.m_tag;
-    init();
+    incrementCount();
+}
+
+TagRef TagRef::operator=(const TagRef &other)
+{
+    if (m_tag)
+        decrementCount();
+
+    m_task = other.m_task;
+    m_tag = other.m_tag;
+
+    if (m_tag)
+        incrementCount();
+
+    return *this;
 }
 
 TagRef::TagRef(const QPointer<Task> &task, const QString &tagName)
     : m_tag(Storage::instance()->tag(tagName))
     , m_task(task)
 {
-    init();
+    incrementCount();
 }
 
 TagRef::~TagRef()
 {
+    decrementCount();
+}
+
+void TagRef::incrementCount()
+{
+    m_tag->incrementTaskCount(1);
+    if (m_task)
+        QObject::connect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
+}
+
+void TagRef::decrementCount()
+{
     m_tag->incrementTaskCount(-1);
     if (m_task)
         QObject::disconnect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
-}
-
-void TagRef::init()
-{
-    m_tag->incrementTaskCount(1);
-    QObject::connect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
 }
 
 bool operator==(const TagRef &tagRef, const QString &name)

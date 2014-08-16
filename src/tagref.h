@@ -31,6 +31,7 @@ public:
     typedef GenericListModel<TagRef> List;
 
     TagRef(const TagRef &other);
+    TagRef operator=(const TagRef &);
     TagRef(const QPointer<Task> &task, const QString &tagName);
     ~TagRef();
 
@@ -38,7 +39,8 @@ public:
     QPointer<Task> m_task;
 private:
     TagRef();
-    void init();
+    void incrementCount();
+    void decrementCount();
 
 };
 
