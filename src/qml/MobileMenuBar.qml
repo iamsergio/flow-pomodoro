@@ -38,7 +38,7 @@ Rectangle {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: button.left
-        anchors.margins: 7 * _controller.dpiFactor
+        anchors.margins: (mousePressed ? 5 : 7) * _controller.dpiFactor
     }
 
     Rectangle {

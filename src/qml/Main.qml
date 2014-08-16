@@ -115,13 +115,15 @@ Rectangle {
                     anchors.bottomMargin: 4 * _controller.dpiFactor
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    anchors.rightMargin: _style.marginMedium
+                    anchors.rightMargin: circularIndicator.mousePressed ? _style.marginMedium - 2 * _controller.dpiFactor
+                                                                        :  _style.marginMedium
                     spacing: _style.buttonsSpacing
 
                     FlowCircularProgressIndicator {
+                        id: circularIndicator
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        anchors.margins: 5 * _controller.dpiFactor
+                        anchors.margins: (mousePressed ? 3 : 5) * _controller.dpiFactor
                     }
 
                     ClickableImage {
