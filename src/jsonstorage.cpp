@@ -56,7 +56,7 @@ JsonStorage::JsonStorage(QObject *parent)
 }
 
 Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
-                                               QString &errorMsg)
+                                               QString &errorMsg, bool reuseTags)
 {
     Data result;
     errorMsg.clear();
@@ -79,8 +79,11 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
 
     foreach (const QVariant &t, tagList) {
         Tag::Ptr tag = Tag::fromJson(t.toMap());
-        if (tag)
+        if (tag) {
+            if (reuseTags)
+                tag = Storage::instance()->tag(tag->name());
             result.tags << tag;
+        }
     }
 
     foreach (const QVariant &t, taskList) {
@@ -109,7 +112,7 @@ void JsonStorage::load_impl()
     file.close();
 
     QString errorMsg;
-    Data data = deserializeJsonData(serializedData, errorMsg);
+    Data data = deserializeJsonData(serializedData, errorMsg, /*reuseTags=*/ true);
 
     if (!errorMsg.isEmpty()) {
         qWarning() << "Error parsing json file" << dataFileName();

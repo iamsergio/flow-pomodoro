@@ -28,7 +28,7 @@ class JsonStorage : public Storage
 public:
     explicit JsonStorage(QObject *parent);
 
-    static Data deserializeJsonData(const QByteArray &serializedData, QString &error);
+    static Data deserializeJsonData(const QByteArray &serializedData, QString &error, bool reuseTags = false);
     static QByteArray serializeToJsonData(const Storage::Data &);
 
 protected:

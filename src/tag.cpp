@@ -26,6 +26,7 @@
 #include <QQmlEngine>
 
 using namespace std::placeholders;
+//static int s_tagCount = 0;
 
 Tag::Tag(const QString &_name)
     : QObject()
@@ -38,10 +39,14 @@ Tag::Tag(const QString &_name)
 
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     //Storage::instance()->monitorTag(this);
+    //s_tagCount++;
+    //qDebug() << Q_FUNC_INFO << s_tagCount;
 }
 
 Tag::~Tag()
 {
+    //s_tagCount--;
+    //qDebug() << Q_FUNC_INFO << s_tagCount;
 }
 
 int Tag::taskCount() const
