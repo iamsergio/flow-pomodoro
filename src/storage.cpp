@@ -392,6 +392,8 @@ void Storage::connectTask(const Task::Ptr &task)
 void Storage::removeTask(const Task::Ptr &task)
 {
     m_data.tasks.removeAll(task);
+    if (webDAVSyncSupported())
+        m_data.deletedTasksUids << task->uuid(); // TODO: Make this persistent
 }
 
 #ifndef NO_HACKING_MENU

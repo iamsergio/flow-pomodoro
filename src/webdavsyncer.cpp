@@ -212,8 +212,11 @@ private:
         // New tasks on server, not locally
         for (int i = 0; i < serverData.tasks.count(); ++i) {
             Task::Ptr serverTask = serverData.tasks.at(i);
-            // TODO: See if it was removed locally
-            finalData.tasks << serverTask;
+            if (storage->data().deletedTasksUids.contains(serverTask->uuid())) {
+                storage->data().deletedTasksUids.removeAll(serverTask->uuid());
+            } else {
+                finalData.tasks << serverTask;
+            }
         }
 
         storage->setData(finalData);
