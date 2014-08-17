@@ -65,7 +65,9 @@ QWebdav::QWebdav (QObject *parent) : QNetworkAccessManager(parent)
 
     connect(this, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
     connect(this, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(provideAuthenication(QNetworkReply*,QAuthenticator*)));
+#ifndef QT_NO_OPENSSL
     connect(this, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)), this, SLOT(sslErrors(QNetworkReply*,QList<QSslError>)));
+#endif
 }
 
 QWebdav::~QWebdav()
