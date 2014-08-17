@@ -22,6 +22,8 @@
 #include <QQuickItem>
 #include <QGuiApplication>
 
+#include <math.h>
+
 ImageProvider::ImageProvider()
     : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {

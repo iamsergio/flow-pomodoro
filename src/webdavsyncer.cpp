@@ -19,12 +19,14 @@
 
 #include "webdavsyncer.h"
 #include "jsonstorage.h"
+#ifndef NO_WEBDAV
+#include "qwebdav.h"
+#endif
 #include <QState>
 #include <QStateMachine>
 #include <QSignalTransition>
 #include <QNetworkReply>
 #include <QBuffer>
-#include <qwebdav.h>
 
 class SyncState : public QState
 {
