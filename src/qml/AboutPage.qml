@@ -43,6 +43,7 @@ Page {
         }
 
         GridLayout {
+            id: keyGrid
             visible: root.showKeyboardBindings
             anchors.top: keysText.bottom
             anchors.topMargin: _style.marginSmall
@@ -114,6 +115,18 @@ Page {
                 color: _style.smallTextColor
                 text: qsTr("Collapses the window")
             }
+        }
+
+        Text {
+            anchors.top: keyGrid.bottom
+            font.pixelSize: _style.smallTextSize
+            anchors.left: parent.left
+            anchors.topMargin: _style.marginMedium
+            anchors.leftMargin: _style.marginMedium
+            color: _style.smallTextColor
+            text: "Build options: " + (_controller.isMobile ? "mobile, " : "desktop, ")
+                                    + (_storage.webDAVSyncSupported ? "webdav, " : "no-webdav, ")
+                                    + (_controller.openSSLSupported ? "openssl" : "no-openssl")
         }
 
         Button {
