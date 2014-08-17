@@ -397,33 +397,42 @@ void Storage::removeTask(const Task::Ptr &task)
 #ifndef NO_HACKING_MENU
 void Storage::removeDuplicateData()
 {
+    Data newData;
     foreach (const Task::Ptr &task, m_data.tasks) {
-        foreach (const Task::Ptr &task2, m_data.tasks) {
-            if (task == task2)
+        bool found = false;
+        foreach (const Task::Ptr &task2, newData.tasks) {
+            if (task->uuid() != task2->uuid())
                 continue;
 
-            if (task->uuid() == task2->uuid()) {
-                qDebug() << "Found task with duplicate uuid, removing " << task->summary();
-                m_data.tasks.removeAll(task2);
-            } else if (task->summary() == task2->summary()) {
-                qDebug() << "Found task with duplicate summary but different uid, removing " << task->summary();
-                m_data.tasks.removeAll(task2);
-            }
+            found = true;
+            break;
+        }
+
+        if (found) {
+            qDebug() << "Task " << task->summary() << task->uuid() << "is a duplicate";
+        } else {
+            newData.tasks << task;
         }
     }
 
     foreach (const Tag::Ptr &tag, m_data.tags) {
-        foreach (const Tag::Ptr &tag2, m_data.tags) {
-            if (tag == tag2)
+        bool found = false;
+        foreach (const Tag::Ptr &tag2, newData.tags) {
+            if (tag->name() != tag2->name())
                 continue;
 
-            if (tag->name() == tag2->name()) {
-                qDebug() << "Found task with duplicate name, removing " << tag->name();
-                m_data.tags.removeAll(tag2);
-            }
+            found = true;
+            break;
+        }
+
+        if (found) {
+            qDebug() << "Tag " << tag->name() << "is a duplicate";
+        } else {
+            newData.tags << tag;
         }
     }
 
+    setData(newData);
     qDebug() << Q_FUNC_INFO << "done";
 }
 #endif
