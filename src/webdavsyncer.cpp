@@ -136,6 +136,30 @@ public:
     }
 
 private:
+    static bool taskListContains(const TaskList &tasks, const Task::Ptr &task)
+    {
+        return indexOfTask(tasks, task) != -1;
+    }
+
+    static bool tagListContains(const TagList &tags, const Tag::Ptr &tag)
+    {
+        foreach (const Tag::Ptr &t, tags) {
+            if (t->name() == tag->name())
+                return true;
+        }
+
+        return false;
+    }
+
+    static int indexOfTask(const TaskList &tasks, const Task::Ptr &task)
+    {
+        for (int i = 0; i < tasks.count(); i++)
+            if (tasks.at(i)->uuid() == task->uuid())
+                return i;
+
+        return -1;
+    }
+
     void onDataDownloadFinished()
     {
         QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
@@ -181,14 +205,15 @@ private:
                 //localTask->setRevisionOnWebDAVServer(0); // TODO: Set only after successfull upload
                 finalData.tasks << localTask;
                 localTasks.removeAll(localTask);
-                serverData.tasks.removeAll(localTask); // Shouldn't be necessary, but just in case
-            } else if (!serverData.tasks.contains(localTask)) {
+                int index = indexOfTask(serverData.tasks, localTask);
+                serverData.tasks.removeAt(index); // Shouldn't be necessary, but just in case
+            } else if (!taskListContains(serverData.tasks, localTask)) {
                 // This task was deleted on server, should be deleted here.
                 // It has revisionOnWebDAVServer != -1, so it was known by the server at some point
                 localTasks.removeAll(localTask);
             } else {
                 // In this case task is present in both server and local
-                int index = serverData.tasks.indexOf(localTask);
+                int index = indexOfTask(serverData.tasks, localTask);
                 Q_ASSERT(index != -1);
                 int localRevision = localTask->revision();
                 Task::Ptr serverTask = serverData.tasks.at(index);
@@ -203,7 +228,11 @@ private:
                 }
 
                 localTasks.removeAll(localTask);
-                serverData.tasks.removeAt(index);
+                while (index != -1) {
+                    // Server can have duplicates
+                    serverData.tasks.removeAt(index);
+                    index = indexOfTask(serverData.tasks, localTask);
+                }
             }
         }
 
