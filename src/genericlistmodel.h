@@ -378,8 +378,13 @@ T GenericListModel<T>::takeLast()
 template <typename T>
 bool GenericListModel<T>::removeOne(const T &value)
 {
-    int index = indexOf(value);
-    return index == -1 ? false : removeAt(index);
+    const int index = this->indexOf(value);
+    if (index == -1) {
+        return false;
+    } else {
+        removeAt(index);
+        return true;
+    }
 }
 
 template <typename T>
