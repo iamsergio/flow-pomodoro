@@ -393,3 +393,37 @@ void Storage::removeTask(const Task::Ptr &task)
 {
     m_data.tasks.removeAll(task);
 }
+
+#ifndef NO_HACKING_MENU
+void Storage::removeDuplicateData()
+{
+    foreach (const Task::Ptr &task, m_data.tasks) {
+        foreach (const Task::Ptr &task2, m_data.tasks) {
+            if (task == task2)
+                continue;
+
+            if (task->uuid() == task2->uuid()) {
+                qDebug() << "Found task with duplicate uuid, removing " << task->summary();
+                m_data.tasks.removeAll(task2);
+            } else if (task->summary() == task2->summary()) {
+                qDebug() << "Found task with duplicate summary but different uid, removing " << task->summary();
+                m_data.tasks.removeAll(task2);
+            }
+        }
+    }
+
+    foreach (const Tag::Ptr &tag, m_data.tags) {
+        foreach (const Tag::Ptr &tag2, m_data.tags) {
+            if (tag == tag2)
+                continue;
+
+            if (tag->name() == tag2->name()) {
+                qDebug() << "Found task with duplicate name, removing " << tag->name();
+                m_data.tags.removeAll(tag2);
+            }
+        }
+    }
+
+    qDebug() << Q_FUNC_INFO << "done";
+}
+#endif

@@ -15,6 +15,9 @@ Item {
         spacing: 2 * _controller.dpiFactor
         Button {
             text: qsTr("Remove duplicate tasks")
+            onClicked: {
+                _storage.removeDuplicateData()
+            }
         }
         Button {
             text: qsTr("WebDAV Sync")

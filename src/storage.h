@@ -92,6 +92,10 @@ public:
 
     bool webDAVSyncSupported() const;
     bool webDAVSyncInProgress() const;
+
+#ifndef NO_HACKING_MENU
+    Q_INVOKABLE void Storage::removeDuplicateData()
+#endif
 //------------------------------------------------------------------------------
 //Stuff fot tasks
     TaskFilterProxyModel* taskFilterModel() const;
