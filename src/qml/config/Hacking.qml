@@ -20,7 +20,11 @@ Item {
             }
         }
         Button {
+            visible: _storage.webDAVSyncSupported
             text: qsTr("WebDAV Sync")
+            onClicked: {
+                _storage.webDavSync()
+            }
         }
     }
 }
