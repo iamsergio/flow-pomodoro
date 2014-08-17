@@ -94,7 +94,7 @@ public:
     bool webDAVSyncInProgress() const;
 
 #ifndef NO_HACKING_MENU
-    Q_INVOKABLE void Storage::removeDuplicateData()
+    Q_INVOKABLE void removeDuplicateData();
 #endif
 //------------------------------------------------------------------------------
 //Stuff fot tasks
