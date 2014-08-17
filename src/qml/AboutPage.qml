@@ -127,6 +127,7 @@ Page {
             text: "Build options: " + (_controller.isMobile ? "mobile, " : "desktop, ")
                                     + (_storage.webDAVSyncSupported ? "webdav, " : "no-webdav, ")
                                     + (_controller.openSSLSupported ? "openssl" : "no-openssl")
+                                    + (_controller.hackingMenuSupported ? ", hacking" : "")
         }
 
         Button {

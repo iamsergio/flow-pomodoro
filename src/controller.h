@@ -57,6 +57,7 @@ class Controller : public QObject {
     Q_PROPERTY(qreal dpiFactor READ dpiFactor CONSTANT)
     Q_PROPERTY(bool isMobile READ isMobile CONSTANT)
     Q_PROPERTY(bool openSSLSupported READ openSSLSupported CONSTANT)
+    Q_PROPERTY(bool hackingMenuSupported READ hackingMenuSupported CONSTANT)
 public:
     enum Page {
         InvalidPage = 0,
@@ -138,6 +139,7 @@ public:
 
     bool isMobile() const;
     bool openSSLSupported() const;
+    bool hackingMenuSupported() const;
 
 public Q_SLOTS:
     void setCurrentTabTag(Tag *);

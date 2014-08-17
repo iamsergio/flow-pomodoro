@@ -38,7 +38,8 @@ Page {
                         ListElement { text: "General" ; source: "config/General.qml"}
                         ListElement { text: "Tags"    ; source: "config/Tags.qml" }
                         ListElement { text: "Plugins" ; source: "config/Plugins.qml" }
-                        //ListElement { text: "WebDAV"  ; source: "config/WebDavSync.qml";} // TODO: hide if not supported
+                        // ListElement { text: "WebDAV"  ; source: "config/WebDavSync.qml";} // TODO: hide if not supported
+                        // ListElement { text: "Hacking"  ; source: "config/Hacking.qml";}
                     }
                 }
             }
@@ -65,11 +66,16 @@ Page {
                     title: qsTr("Plugins")
                     source: "config/Plugins.qml"
                 }
+/*
+                Tab {
+                    title: qsTr("WebDAV")
+                    source: "config/WebDavSync.qml"
+                }
 
-                //Tab {
-                  //  title: qsTr("WebDAV")
-                    //source: "config/WebDavSync.qml"
-                //}
+                Tab {
+                    title: qsTr("Hacking")
+                    source: "config/Hacking.qml"
+                } */
             }
         }
 

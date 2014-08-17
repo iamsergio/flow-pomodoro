@@ -37,6 +37,7 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/tooltipcontroller.h
 
 #DEFINES += NO_WEBDAV
+DEFINES += NO_HACKING_MENU
 
 !contains(DEFINES, NO_WEBDAV) {
     include("$$PWD/../3rdparty/qwebdav/qwebdav.pri")

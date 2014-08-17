@@ -18,6 +18,7 @@ include("src.pri")
 SOURCES += main.cpp
 
 OTHER_FILES += qml/AboutPage.qml      \
+               qml/config/Hacking.qml \
                qml/config/General.qml \
                qml/config/Plugins.qml \
                qml/config/Tag.qml     \

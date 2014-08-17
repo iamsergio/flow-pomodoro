@@ -392,6 +392,14 @@ bool Controller::openSSLSupported() const
     return false;
 }
 
+bool Controller::hackingMenuSupported() const
+{
+#ifndef NO_HACKING_MENU
+return true;
+#endif
+return false;
+}
+
 void Controller::setCurrentTabTag(Tag *tag)
 {
     if (m_currentTabTag != tag) {
