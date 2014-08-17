@@ -76,8 +76,8 @@ private:
                                       typename QList<T>::iterator);
     typename QList<T>::iterator insert(typename QList<T>::iterator, const T&);
 
-    typename QList<T>::iterator begin();
-    typename QList<T>::iterator end();
+    //typename QList<T>::iterator begin();
+    //typename QList<T>::iterator end();
 
     T& first();
     T& front();
