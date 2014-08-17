@@ -36,7 +36,7 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/taskfilterproxymodel.h \
            $$PWD/tooltipcontroller.h
 
-#DEFINES += NO_WEBDAV
+DEFINES += NO_WEBDAV # Will uncomment when UI is ready
 DEFINES += NO_HACKING_MENU
 
 !contains(DEFINES, NO_WEBDAV) {
