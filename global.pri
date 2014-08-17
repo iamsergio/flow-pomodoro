@@ -14,3 +14,7 @@
 INCLUDEPATH += src
 
 CONFIG += debug c++11
+
+# Features:
+DEFINES += NO_WEBDAV # Will uncomment when UI is ready
+DEFINES += NO_HACKING_MENU
