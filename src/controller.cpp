@@ -384,6 +384,14 @@ bool Controller::isMobile() const
 #endif
 }
 
+bool Controller::openSSLSupported() const
+{
+#ifndef QT_NO_OPENSSL
+    return true;
+#endif
+    return false;
+}
+
 void Controller::setCurrentTabTag(Tag *tag)
 {
     if (m_currentTabTag != tag) {

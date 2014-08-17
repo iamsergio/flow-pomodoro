@@ -56,6 +56,7 @@ class Controller : public QObject {
     // Other properties
     Q_PROPERTY(qreal dpiFactor READ dpiFactor CONSTANT)
     Q_PROPERTY(bool isMobile READ isMobile CONSTANT)
+    Q_PROPERTY(bool openSSLSupported READ openSSLSupported CONSTANT)
 public:
     enum Page {
         InvalidPage = 0,
@@ -136,6 +137,7 @@ public:
     void setQueueType(QueueType);
 
     bool isMobile() const;
+    bool openSSLSupported() const;
 
 public Q_SLOTS:
     void setCurrentTabTag(Tag *);
