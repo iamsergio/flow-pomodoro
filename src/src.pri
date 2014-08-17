@@ -36,10 +36,10 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/taskfilterproxymodel.h \
            $$PWD/tooltipcontroller.h
 
-contains(CONFIG, config_qwebdavlib) {
+#DEFINES += NO_WEBDAV
+
+!contains(DEFINES, NO_WEBDAV) {
+    include("$$PWD/../3rdparty/qwebdav/qwebdav.pri")
     SOURCES += $$PWD/webdavsyncer.cpp
     HEADERS += $$PWD/webdavsyncer.h
-    LIBS += -lqwebdav
-} else {
-    DEFINES += NO_WEBDAV
 }

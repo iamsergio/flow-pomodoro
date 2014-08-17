@@ -6,6 +6,7 @@
 - Unit-tests
 - Konversation plugin
 - Show tag menu on long press, with an "Edit" option
+- Bring back -Werror
 
 Future TODOs:
 -------------

@@ -5,7 +5,3 @@ include ("global.pri")
 
 OTHER_FILES += android/AndroidManifest.xml
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-
-load(configure)
-qtCompileTest(qwebdavlib)
-#CONFIG += recheck
