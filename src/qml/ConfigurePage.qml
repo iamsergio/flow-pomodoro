@@ -66,16 +66,24 @@ Page {
                     title: qsTr("Plugins")
                     source: "config/Plugins.qml"
                 }
-/*
-                Tab {
-                    title: qsTr("WebDAV")
-                    source: "config/WebDavSync.qml"
+
+                Repeater {
+                    // Apparently the only way to hide a tab is through a repeater hack
+                    model: _storage.webDAVSyncSupported ? 1 : 0
+                    Tab {
+                        title: qsTr("WebDAV")
+                        source: "config/WebDavSync.qml"
+                    }
                 }
 
-                Tab {
-                    title: qsTr("Hacking")
-                    source: "config/Hacking.qml"
-                } */
+                Repeater {
+                    // Apparently the only way to hide a tab is through a repeater hack
+                    model: _controller.hackingMenuSupported ? 1 : 0
+                    Tab {
+                        title: qsTr("Hacking")
+                        source: "config/Hacking.qml"
+                    }
+                }
             }
         }
 
