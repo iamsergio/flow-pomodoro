@@ -51,6 +51,7 @@ Controller::Controller(QuickView *quickView)
     , m_configureTabIndex(0)
     , m_queueType(QueueTypeToday)
     , m_storage(Storage::instance())
+    , m_pomodoroFunctionalityDisabled(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -59,8 +60,8 @@ Controller::Controller(QuickView *quickView)
     m_afterAddingTimer->setSingleShot(true);
     m_afterAddingTimer->setInterval(AfterAddingTimeout);
 
-    m_defaultPomodoroDuration = Settings::instance()->value(QStringLiteral("defaultPomodoroDuration"), /*default=*/QVariant(25)).toInt();
-
+    m_defaultPomodoroDuration = Settings::instance()->value("defaultPomodoroDuration", /*default=*/QVariant(25)).toInt();
+    m_pomodoroFunctionalityDisabled = Settings::instance()->value("pomodoroFunctionalityDisabled", /*default=*/ false).toBool();
     connect(this, &Controller::invalidateTaskModel,
             m_storage->taskFilterModel(), &TaskFilterProxyModel::invalidateFilter,
             Qt::QueuedConnection);
@@ -269,6 +270,7 @@ void Controller::setDefaultPomodoroDuration(int duration)
     if (m_defaultPomodoroDuration != duration && duration > 0 && duration < 59) {
         m_defaultPomodoroDuration = duration;
         Settings::instance()->setValue("defaultPomodoroDuration", QVariant(duration));
+        Settings::instance()->sync();
         emit defaultPomodoroDurationChanged();
     }
 }
@@ -276,6 +278,22 @@ void Controller::setDefaultPomodoroDuration(int duration)
 int Controller::defaultPomodoroDuration() const
 {
     return m_defaultPomodoroDuration;
+}
+
+void Controller::setPomodoroFunctionalityDisabled(bool disable)
+{
+    if (disable != m_pomodoroFunctionalityDisabled) {
+        m_pomodoroFunctionalityDisabled = disable;
+        Settings::instance()->setValue("pomodoroFunctionalityDisabled", QVariant(disable));
+        Settings::instance()->sync();
+        stopPomodoro();
+        emit pomodoroFunctionalityDisabledChanged();
+    }
+}
+
+bool Controller::pomodoroFunctionalityDisabled() const
+{
+    return m_pomodoroFunctionalityDisabled;
 }
 
 qreal Controller::dpiFactor() const

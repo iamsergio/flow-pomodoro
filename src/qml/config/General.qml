@@ -26,6 +26,7 @@ Item {
 
         SpinBox {
             id: spinBox
+            enabled: !_controller.pomodoroFunctionalityDisabled
             minimumValue: 0
             maximumValue: 59
             value: _controller.defaultPomodoroDuration
@@ -42,6 +43,20 @@ Item {
             onEditingFinished: {
                 if (_controller.isMobile)
                     Qt.inputMethod.hide(); // hide keyboard
+            }
+        }
+
+        Text {
+            text: qsTr("Disable pomodoro functionality")
+        }
+
+        CheckBox {
+            id: disablePomodoroCheckBox
+            checked: _controller.pomodoroFunctionalityDisabled
+            Binding {
+                target: _controller
+                property: "pomodoroFunctionalityDisabled"
+                value: disablePomodoroCheckBox.checked
             }
         }
     }

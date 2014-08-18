@@ -40,6 +40,7 @@ class Controller : public QObject {
     Q_PROPERTY(Page currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged)
     Q_PROPERTY(int configureTabIndex READ configureTabIndex WRITE setConfigureTabIndex NOTIFY configureTabIndexChanged)
     Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
+    Q_PROPERTY(bool pomodoroFunctionalityDisabled READ pomodoroFunctionalityDisabled WRITE setPomodoroFunctionalityDisabled NOTIFY pomodoroFunctionalityDisabledChanged)
     Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged) // Task being played
     Q_PROPERTY(Task* rightClickedTask READ rightClickedTask WRITE setRightClickedTask NOTIFY rightClickedTaskChanged)
     Q_PROPERTY(Task *selectedTask READ selectedTask NOTIFY selectedTaskChanged)
@@ -113,6 +114,9 @@ public:
     void setDefaultPomodoroDuration(int duration);
     int defaultPomodoroDuration() const;
 
+    void setPomodoroFunctionalityDisabled(bool);
+    bool pomodoroFunctionalityDisabled() const;
+
     qreal dpiFactor() const;
 
     bool popupVisible() const;
@@ -170,6 +174,7 @@ private Q_SLOTS:
     void onTimerTick();
 
 Q_SIGNALS:
+    void pomodoroFunctionalityDisabledChanged();
     void remainingMinutesChanged();
     void currentTaskDurationChanged();
     void taskFinished();
@@ -226,6 +231,7 @@ private:
     QPointer<Tag> m_currentTabTag;
     QueueType m_queueType;
     Storage *m_storage;
+    bool m_pomodoroFunctionalityDisabled;
 };
 
 #endif

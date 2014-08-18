@@ -158,7 +158,7 @@ Rectangle {
                 id: playImage
                 toolTip: qsTr("Start pomodoro on task")
                 source: "image://icons/play.png"
-                visible: root.buttonsVisible && (taskObj !== null && taskObj.staged)
+                visible: root.buttonsVisible && (taskObj !== null && taskObj.staged) && !_controller.pomodoroFunctionalityDisabled
                 onClicked: {
                     _controller.startPomodoro(root.taskObj, _style.defaultPomodoroDuration)
                 }
