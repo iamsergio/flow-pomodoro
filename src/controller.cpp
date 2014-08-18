@@ -513,7 +513,11 @@ bool Controller::eventFilter(QObject *, QEvent *event)
 
     QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
     if (keyEvent->key() == Qt::Key_Back) {
-        setCurrentPage(MainPage);
+        if (m_page == MainPage) {
+            setQueueType(QueueTypeToday);
+        } else {
+            setCurrentPage(MainPage);
+        }
         setSelectedTask(Task::Ptr());
         editTask(nullptr, EditModeNone);
         return true;
