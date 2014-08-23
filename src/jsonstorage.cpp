@@ -29,6 +29,9 @@ static QString dataFileName()
 {
     static QString filename;
     if (filename.isEmpty()) {
+#if defined(Q_OS_ANDROID) && defined(DEVELOPER_MODE)
+        return "/storage/sdcard0/flow.dat";
+#endif
         QString directory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
         if (!QFile::exists(directory)) {
             QDir dir(directory);
