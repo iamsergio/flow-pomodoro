@@ -38,7 +38,8 @@ ListView {
             id: background
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            width: Math.max(_style.tagTabWidth, root.width / root.model.count)
+            width: Math.max(Math.max(_style.tagTabWidth, root.width / root.model.count),
+                            tagText.contentWidth + countText.contentWidth + textRow.spacing + 12 * _controller.dpiFactor)
             color: _style.tagBackground
 
             property bool isSelected: tag == _controller.currentTabTag
@@ -54,6 +55,7 @@ ListView {
                     font.pixelSize: _style.tagTabFontSize
                 }
                 Text {
+                    id: countText
                     text: tag.taskModel.count > 0 ? " (" + tag.taskModel.count + ")" : ""
                     color: _style.tagTabTextColor
                     anchors.verticalCenter: tagText.verticalCenter
