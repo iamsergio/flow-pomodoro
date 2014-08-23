@@ -65,6 +65,15 @@ MouseArea {
             }
         }
 
+        Tag {
+            id: newTag
+            visible: _controller.tagEditStatus === Controller.TagEditStatusNew
+            beingEdited: true
+            onEdited: {
+                _controller.endAddingNewTag(newTagName)
+            }
+        }
+
         Repeater {
             model: _storage.tagsModel
             delegate:
@@ -75,15 +84,6 @@ MouseArea {
                 onEdited: {
                     _controller.renameTag(tag.name, newTagName)
                 }
-            }
-        }
-
-        Tag {
-            id: newTag
-            visible: _controller.tagEditStatus === Controller.TagEditStatusNew
-            beingEdited: true
-            onEdited: {
-                _controller.endAddingNewTag(newTagName)
             }
         }
     }
