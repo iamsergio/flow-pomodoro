@@ -205,7 +205,8 @@ private:
                 finalData.tasks << localTask;
                 localTasks.removeAll(localTask);
                 int index = indexOfTask(serverData.tasks, localTask);
-                serverData.tasks.removeAt(index); // Shouldn't be necessary, but just in case
+                if (index != -1)
+                    serverData.tasks.removeAt(index); // Shouldn't be necessary, but just in case
             } else if (!taskListContains(serverData.tasks, localTask)) {
                 // This task was deleted on server, should be deleted here.
                 // It has revisionOnWebDAVServer != -1, so it was known by the server at some point
