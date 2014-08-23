@@ -94,7 +94,7 @@ public:
     bool webDAVSyncSupported() const;
     bool webDAVSyncInProgress() const;
 
-#ifndef NO_HACKING_MENU
+#ifdef DEVELOPER_MODE
     Q_INVOKABLE void removeDuplicateData();
 #endif
 //------------------------------------------------------------------------------

@@ -412,7 +412,7 @@ bool Controller::openSSLSupported() const
 
 bool Controller::hackingMenuSupported() const
 {
-#ifndef NO_HACKING_MENU
+#ifdef DEVELOPER_MODE
 return true;
 #endif
 return false;

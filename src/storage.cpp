@@ -396,7 +396,7 @@ void Storage::removeTask(const Task::Ptr &task)
         m_data.deletedTasksUids << task->uuid(); // TODO: Make this persistent
 }
 
-#ifndef NO_HACKING_MENU
+#ifdef DEVELOPER_MODE
 void Storage::removeDuplicateData()
 {
     Data newData;
