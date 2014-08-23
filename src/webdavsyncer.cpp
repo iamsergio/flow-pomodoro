@@ -201,8 +201,7 @@ private:
         for (int i = 0; i < localTasksCopy.count(); ++i) {
             Task::Ptr localTask = localTasksCopy.at(i);
             if (localTask->revisionOnWebDAVServer() == -1) {
-                // This is a new local task that should be created on srever
-                //localTask->setRevisionOnWebDAVServer(0); // TODO: Set only after successfull upload
+                // This is a new local task that should be created on server
                 finalData.tasks << localTask;
                 localTasks.removeAll(localTask);
                 int index = indexOfTask(serverData.tasks, localTask);
