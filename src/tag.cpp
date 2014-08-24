@@ -34,7 +34,7 @@ Tag::Tag(const QString &_name)
     , m_name(_name)
     , m_taskCount(0)
     , m_beingEdited(false)
-    , m_taskModel(nullptr)
+    , m_taskModel(Q_NULLPTR)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     //Storage::instance()->monitorTag(this);

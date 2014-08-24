@@ -230,7 +230,7 @@ void Controller::setExpanded(bool expanded)
         if (expanded) {
             m_quickView->requestActivate();
         } else {
-            editTask(nullptr, EditModeNone);
+            editTask(Q_NULLPTR, EditModeNone);
         }
         setSelectedTask(Task::Ptr());
         emit expandedChanged();
@@ -519,7 +519,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
             setCurrentPage(MainPage);
         }
         setSelectedTask(Task::Ptr());
-        editTask(nullptr, EditModeNone);
+        editTask(Q_NULLPTR, EditModeNone);
         return true;
     } else {
         return false;
@@ -542,7 +542,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     switch (keyEvent->key()) {
     case Qt::Key_Escape:
         if (editing) {
-            editTask(nullptr, EditModeNone);
+            editTask(Q_NULLPTR, EditModeNone);
         } else {
             setExpanded(false);
         }
@@ -552,9 +552,9 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     case Qt::Key_Return:
     case Qt::Key_Enter:
         if (editing) {
-            editTask(nullptr, EditModeNone);
+            editTask(Q_NULLPTR, EditModeNone);
         } else {
-            if (m_selectedTask == nullptr) {
+            if (m_selectedTask == Q_NULLPTR) {
                 setExpanded(true);
             } else {
                 startPomodoro(m_selectedTask);
@@ -578,7 +578,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
         return true;
         break;
     case Qt::Key_Delete:
-        if (m_selectedTask == nullptr) {
+        if (m_selectedTask == Q_NULLPTR) {
             stopPomodoro();
         } else {
             removeTask(m_selectedTask);
@@ -716,7 +716,7 @@ void Controller::addTask(const QString &text, bool startEditMode)
         task->addTag(m_currentTabTag->name());
 
     task->setStaged(m_queueType == QueueTypeToday);
-    editTask(nullptr, EditModeNone);
+    editTask(Q_NULLPTR, EditModeNone);
 
     if (startEditMode) {
         setExpanded(true);
@@ -731,6 +731,6 @@ void Controller::addTask(const QString &text, bool startEditMode)
 void Controller::removeTask(Task *task)
 {
     qDebug() << "Removing task" << task->summary();
-    editTask(nullptr, EditModeNone);
+    editTask(Q_NULLPTR, EditModeNone);
     m_storage->removeTask(task->toStrongRef());
 }
