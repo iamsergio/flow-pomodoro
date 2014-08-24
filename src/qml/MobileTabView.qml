@@ -3,7 +3,7 @@ import QtGraphicalEffects 1.0
 
 Item {
     id: root
-    property int count: 0
+    property int count: model.count
     property variant model: null
     property int selectedIndex: -1
 

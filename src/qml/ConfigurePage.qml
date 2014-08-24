@@ -32,7 +32,6 @@ Page {
                 MobileTabView {
                     anchors.fill: parent
                     selectedIndex: 1
-                    count: model.count
                     anchors.horizontalCenter: parent.horizontalCenter
                     model: ListModel { // TODO: ListElement doesn't accept qsTr
                         ListElement { text: "General" ; source: "config/General.qml"}
