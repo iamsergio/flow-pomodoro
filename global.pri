@@ -13,6 +13,8 @@
 
 INCLUDEPATH += src
 
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
 CONFIG += debug c++11
 
 # Features:
