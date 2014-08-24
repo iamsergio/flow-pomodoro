@@ -26,5 +26,11 @@ Item {
                 _storage.webDavSync()
             }
         }
+        Button {
+            text: qsTr("Dump debug info")
+            onClicked: {
+                _storage.dumpDebugInfo()
+            }
+        }
     }
 }

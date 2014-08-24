@@ -294,9 +294,16 @@ ArchivedTasksFilterModel *Storage::archivedTasksModel() const
 
 void Storage::dumpDebugInfo()
 {
-    qDebug() << Q_FUNC_INFO << "task count:" << m_data.tasks.count();
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "task count:" << m_data.tasks.count();
     for (int i = 0; i < m_data.tasks.count(); ++i)
-        qDebug() << Q_FUNC_INFO << i << m_data.tasks.at(i)->summary();
+        qDebug() << i << m_data.tasks.at(i)->summary();
+
+    if (!m_data.deletedItemUids.isEmpty()) {
+        qDebug() << "Items pending deletion on webdav:";
+        foreach (const QString &uid, m_data.deletedItemUids)
+            qDebug() << uid;
+    }
 }
 
 int Storage::proxyRowToSource(int proxyRow) const
