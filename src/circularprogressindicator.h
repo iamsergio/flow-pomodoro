@@ -38,7 +38,7 @@ class CircularProgressIndicator : public QQuickPaintedItem
 
 public:
     explicit CircularProgressIndicator(QQuickItem *parent = 0);
-    void paint(QPainter *painter) override;
+    void paint(QPainter *painter) Q_DECL_OVERRIDE;
 
     int dpiFactor() const;
     void setDpiFactor(int);

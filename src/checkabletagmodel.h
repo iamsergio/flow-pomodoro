@@ -29,8 +29,8 @@ class CheckableTagModel : public QIdentityProxyModel
     Q_OBJECT
 public:
     explicit CheckableTagModel(Task *parent);
-    QVariant data(const QModelIndex &proxyIndex, int role) const override;
-    QHash<int, QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &proxyIndex, int role) const Q_DECL_OVERRIDE;
+    QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
 private:
     Task *m_parentTask;
 

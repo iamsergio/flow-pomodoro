@@ -28,13 +28,13 @@ class ArchivedTasksFilterModel : public QSortFilterProxyModel
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     explicit ArchivedTasksFilterModel(QObject *parent = 0);
-    QVariant data(const QModelIndex &index, int role) const override;
+    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
 
     /**
      * Sets whether we accept archived or staged tasks.
      */
     void setAcceptArchived(bool accept);
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const Q_DECL_OVERRIDE;
     int count() const;
     void invalidateFilter();
 Q_SIGNALS:

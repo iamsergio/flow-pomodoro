@@ -31,7 +31,7 @@ public:
     ImageProvider();
 
     QPixmap requestPixmap(const QString &id, QSize *size,
-                          const QSize &requestedSize) override;
+                          const QSize &requestedSize) Q_DECL_OVERRIDE;
 
 };
 
