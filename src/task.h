@@ -99,7 +99,7 @@ public:
     QVariantMap toJson() const Q_DECL_OVERRIDE;
     void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
 
-    bool operator==(const Task::Ptr &other) const;
+    bool operator==(const Task &other) const;
 
 Q_SIGNALS:
     void summaryChanged();

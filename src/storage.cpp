@@ -180,6 +180,9 @@ bool Storage::removeTag(const QString &tagName)
     }
 
     emit tagAboutToBeRemoved(tagName);
+
+    if (webDAVSyncSupported())
+        m_data.deletedItemUids << m_data.tags.at(index)->uuid(); // TODO: Make this persistent
     m_data.tags.removeAt(index);
     m_deletedTagName = tagName;
     return true;
@@ -402,7 +405,7 @@ void Storage::removeTask(const Task::Ptr &task)
 {
     m_data.tasks.removeAll(task);
     if (webDAVSyncSupported())
-        m_data.deletedTasksUids << task->uuid(); // TODO: Make this persistent
+        m_data.deletedItemUids << task->uuid(); // TODO: Make this persistent
 }
 
 #ifdef DEVELOPER_MODE

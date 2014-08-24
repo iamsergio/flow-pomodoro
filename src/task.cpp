@@ -275,9 +275,9 @@ void Task::fromJson(const QVariantMap &map)
     blockSignals(false);
 }
 
-bool Task::operator==(const Task::Ptr &other) const
+bool Task::operator==(const Task &other) const
 {
-    return other && m_uuid == other->uuid();
+    return m_uuid == other.uuid();
 }
 
 void Task::onEdited()

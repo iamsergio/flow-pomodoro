@@ -66,7 +66,7 @@ public:
         Data() : serializerVersion(JsonSerializerVersion1) {}
         TaskList tasks;
         TagList tags;
-        QStringList deletedTasksUids; // so we can sync to server
+        QStringList deletedItemUids; // so we can sync to server
         int serializerVersion;
         QByteArray instanceId;
     };

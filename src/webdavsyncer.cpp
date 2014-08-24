@@ -150,28 +150,82 @@ public:
     }
 
 private:
-    static bool taskListContains(const TaskList &tasks, const Task::Ptr &task)
+    template <typename T>
+    static bool itemListContains(const GenericListModel<T> &list, const T &item)
     {
-        return indexOfTask(tasks, task) != -1;
+        return indexOfItem(list, item) != -1;
     }
 
-    static bool tagListContains(const TagList &tags, const Tag::Ptr &tag)
+    template <typename T>
+    static int indexOfItem(const GenericListModel<T> &list, const T &item)
     {
-        foreach (const Tag::Ptr &t, tags) {
-            if (t->name() == tag->name())
-                return true;
-        }
-
-        return false;
-    }
-
-    static int indexOfTask(const TaskList &tasks, const Task::Ptr &task)
-    {
-        for (int i = 0; i < tasks.count(); i++)
-            if (tasks.at(i)->uuid() == task->uuid())
+        for (int i = 0; i < list.count(); i++)
+            if (*list.at(i).data() == *item.data())
                 return i;
 
         return -1;
+    }
+
+    template <typename T>
+    static GenericListModel<T> merge(GenericListModel<T> &localList,
+                                     GenericListModel<T> &serverList)
+    {
+        GenericListModel<T> finalList;
+        Storage *storage = Storage::instance();
+
+        // Case 1: Present locally, not present on server
+        const GenericListModel<T> localTasksCopy = localList; // GenericListModel doesn't let use use iterators
+        for (int i = 0; i < localTasksCopy.count(); ++i) {
+            T localItem = localTasksCopy.at(i);
+            if (localItem->revisionOnWebDAVServer() == -1) {
+                // This is a new local task/tag that should be created on server
+                finalList << localItem;
+                localList.removeAll(localItem);
+                int index = indexOfItem(serverList, localItem);
+                if (index != -1)
+                    serverList.removeAt(index); // Shouldn't be necessary, but just in case
+            } else if (!itemListContains(serverList, localItem)) {
+                // This task/tag was deleted on server, should be deleted here.
+                // It has revisionOnWebDAVServer != -1, so it was known by the server at some point
+                localList.removeAll(localItem);
+            } else {
+                // In this case task/tag is present in both server and local
+                int index = indexOfItem(serverList, localItem);
+                Q_ASSERT(index != -1);
+                int localRevision = localItem->revision();
+                T serverItem = serverList.at(index);
+                int serverRevision = serverItem->revision();
+
+                if (localRevision == serverRevision) {
+                    finalList << localItem;
+                } else if (localRevision > serverRevision) {
+                    finalList << localItem;
+                } else {
+                    finalList << serverItem;
+                }
+
+                localList.removeAll(localItem);
+                while (index != -1) {
+                    // Server can have duplicates
+                    serverList.removeAt(index);
+                    index = indexOfItem(serverList, localItem);
+                }
+            }
+        }
+
+        Q_ASSERT(localList.isEmpty());
+
+        // New tasks/tags on server, not locally
+        for (int i = 0; i < serverList.count(); ++i) {
+            T serverItem = serverList.at(i);
+            if (storage->data().deletedItemUids.contains(serverItem->uuid())) {
+                storage->data().deletedItemUids.removeAll(serverItem->uuid());
+            } else if (!itemListContains(finalList, serverItem)) {
+                finalList << serverItem;
+            }
+        }
+
+        return finalList;
     }
 
     void onDataDownloadFinished()
@@ -198,73 +252,16 @@ private:
 
         qDebug() << Q_FUNC_INFO << "Merging";
         Storage::Data finalData;
-        Storage *storage = m_syncer->m_storage;
-        TaskList localTasks = storage->tasks();
-        TagList localTags = storage->tags();
 
-        // TODO: Sync tags. For now copy all
-        finalData.tags = localTags;
-        for (int i = 0; i < serverData.tags.count(); ++i) {
-            Tag::Ptr serverTag = serverData.tags.at(i);
-            if (!finalData.tags.contains(serverTag))
-                finalData.tags << serverTag;
-        }
+        TagList localTags = m_syncer->m_storage->tags();
+        TaskList localTasks = m_syncer->m_storage->tasks();
 
-        // Case 1: Present locally, not present on server
-        const TaskList localTasksCopy = localTasks; // GenericListModel doesn't let use use iterators
-        for (int i = 0; i < localTasksCopy.count(); ++i) {
-            Task::Ptr localTask = localTasksCopy.at(i);
-            if (localTask->revisionOnWebDAVServer() == -1) {
-                // This is a new local task that should be created on server
-                finalData.tasks << localTask;
-                localTasks.removeAll(localTask);
-                int index = indexOfTask(serverData.tasks, localTask);
-                if (index != -1)
-                    serverData.tasks.removeAt(index); // Shouldn't be necessary, but just in case
-            } else if (!taskListContains(serverData.tasks, localTask)) {
-                // This task was deleted on server, should be deleted here.
-                // It has revisionOnWebDAVServer != -1, so it was known by the server at some point
-                localTasks.removeAll(localTask);
-            } else {
-                // In this case task is present in both server and local
-                int index = indexOfTask(serverData.tasks, localTask);
-                Q_ASSERT(index != -1);
-                int localRevision = localTask->revision();
-                Task::Ptr serverTask = serverData.tasks.at(index);
-                int serverRevision = serverTask->revision();
+        finalData.tags = merge<Tag::Ptr>(localTags, serverData.tags);
+        finalData.tasks = merge<Task::Ptr>(localTasks, serverData.tasks);
+        finalData.instanceId = m_syncer->m_storage->data().instanceId;
 
-                if (localRevision == serverRevision) {
-                    finalData.tasks << localTask;
-                } else if (localRevision > serverRevision) {
-                    finalData.tasks << localTask;
-                } else {
-                    finalData.tasks << serverTask;
-                }
-
-                localTasks.removeAll(localTask);
-                while (index != -1) {
-                    // Server can have duplicates
-                    serverData.tasks.removeAt(index);
-                    index = indexOfTask(serverData.tasks, localTask);
-                }
-            }
-        }
-
-        Q_ASSERT(localTasks.isEmpty());
-
-        // New tasks on server, not locally
-        for (int i = 0; i < serverData.tasks.count(); ++i) {
-            Task::Ptr serverTask = serverData.tasks.at(i);
-            if (storage->data().deletedTasksUids.contains(serverTask->uuid())) {
-                storage->data().deletedTasksUids.removeAll(serverTask->uuid());
-            } else {
-                finalData.tasks << serverTask;
-            }
-        }
-
-        finalData.instanceId = storage->data().instanceId;
-        storage->setData(finalData);
-        QByteArray newData = JsonStorage::serializeToJsonData(storage->data()); // should be the same as finalData
+        m_syncer->m_storage->setData(finalData);
+        QByteArray newData = JsonStorage::serializeToJsonData(m_syncer->m_storage->data()); // should be the same as finalData
         QNetworkReply *reply2 = m_syncer->m_webdav->put("/flow.dat", newData);
         connect(reply2, &QNetworkReply::finished, this, &DownloadDataState::onUploadFinished);
     }
