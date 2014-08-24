@@ -100,6 +100,22 @@ public:
 #ifdef DEVELOPER_MODE
     Q_INVOKABLE void removeDuplicateData();
 #endif
+
+    template <typename T>
+    static inline bool itemListContains(const GenericListModel<T> &list, const T &item)
+    {
+        return Storage::indexOfItem(list, item) != -1;
+    }
+
+    template <typename T>
+    static inline int indexOfItem(const GenericListModel<T> &list, const T &item)
+    {
+        for (int i = 0; i < list.count(); i++)
+            if (*list.at(i).data() == *item.data())
+                return i;
+
+        return -1;
+    }
 //------------------------------------------------------------------------------
 //Stuff fot tasks
     TaskFilterProxyModel* taskFilterModel() const;

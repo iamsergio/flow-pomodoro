@@ -151,22 +151,6 @@ public:
 
 private:
     template <typename T>
-    static bool itemListContains(const GenericListModel<T> &list, const T &item)
-    {
-        return indexOfItem(list, item) != -1;
-    }
-
-    template <typename T>
-    static int indexOfItem(const GenericListModel<T> &list, const T &item)
-    {
-        for (int i = 0; i < list.count(); i++)
-            if (*list.at(i).data() == *item.data())
-                return i;
-
-        return -1;
-    }
-
-    template <typename T>
     static GenericListModel<T> merge(GenericListModel<T> &localList,
                                      GenericListModel<T> &serverList)
     {
@@ -181,16 +165,16 @@ private:
                 // This is a new local task/tag that should be created on server
                 finalList << localItem;
                 localList.removeAll(localItem);
-                int index = indexOfItem(serverList, localItem);
+                int index = Storage::indexOfItem(serverList, localItem);
                 if (index != -1)
                     serverList.removeAt(index); // Shouldn't be necessary, but just in case
-            } else if (!itemListContains(serverList, localItem)) {
+            } else if (!Storage::itemListContains(serverList, localItem)) {
                 // This task/tag was deleted on server, should be deleted here.
                 // It has revisionOnWebDAVServer != -1, so it was known by the server at some point
                 localList.removeAll(localItem);
             } else {
                 // In this case task/tag is present in both server and local
-                int index = indexOfItem(serverList, localItem);
+                int index = Storage::indexOfItem(serverList, localItem);
                 Q_ASSERT(index != -1);
                 int localRevision = localItem->revision();
                 T serverItem = serverList.at(index);
@@ -208,7 +192,7 @@ private:
                 while (index != -1) {
                     // Server can have duplicates
                     serverList.removeAt(index);
-                    index = indexOfItem(serverList, localItem);
+                    index = Storage::indexOfItem(serverList, localItem);
                 }
             }
         }
@@ -220,7 +204,7 @@ private:
             T serverItem = serverList.at(i);
             if (storage->data().deletedItemUids.contains(serverItem->uuid())) {
                 storage->data().deletedItemUids.removeAll(serverItem->uuid());
-            } else if (!itemListContains(finalList, serverItem)) {
+            } else if (!Storage::itemListContains(finalList, serverItem)) {
                 finalList << serverItem;
             }
         }

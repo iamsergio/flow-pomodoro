@@ -449,4 +449,5 @@ void Storage::removeDuplicateData()
     setData(newData);
     qDebug() << Q_FUNC_INFO << "done";
 }
+
 #endif
