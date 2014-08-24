@@ -18,7 +18,3 @@ HEADERS += $$PWD/qwebdav.h \
            $$PWD/qwebdav_global.h
 
 INCLUDEPATH += $$PWD
-
-*gcc*|*clang* {
-    QMAKE_CXXFLAGS -= -Werror
-}

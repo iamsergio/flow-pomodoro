@@ -144,6 +144,8 @@ protected slots:
 #endif
 
 protected:
+    QNetworkReply* createRequest(Operation op, const QNetworkRequest &req, QIODevice *outgoingData = 0); // Just to fix warning about overloaded virtual
+
     QNetworkReply* createRequest(const QString& method, QNetworkRequest& req, QIODevice* outgoingData = 0 );
     QNetworkReply* createRequest(const QString& method, QNetworkRequest& req, const QByteArray& outgoingData);
 

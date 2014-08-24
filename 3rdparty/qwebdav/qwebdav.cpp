@@ -275,6 +275,11 @@ void QWebdav::sslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
 }
 #endif
 
+QNetworkReply *QWebdav::createRequest(QNetworkAccessManager::Operation op, const QNetworkRequest &req, QIODevice *outgoingData)
+{
+    return QNetworkAccessManager::createRequest(op, req, outgoingData);
+}
+
 QString QWebdav::digestToHex(const QByteArray &input)
 {
     QByteArray inputHex = input.toHex();
