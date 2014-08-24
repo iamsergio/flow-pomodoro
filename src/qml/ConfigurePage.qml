@@ -37,8 +37,18 @@ Page {
                         ListElement { text: "General" ; source: "config/General.qml"}
                         ListElement { text: "Tags"    ; source: "config/Tags.qml" }
                         ListElement { text: "Plugins" ; source: "config/Plugins.qml" }
-                        // ListElement { text: "WebDAV"  ; source: "config/WebDavSync.qml";} // TODO: hide if not supported
-                        // ListElement { text: "Hacking"  ; source: "config/Hacking.qml";}
+                        ListElement { text: "WebDAV"  ; source: "config/WebDavSync.qml";}
+                        ListElement { text: "Hacking" ; source: "config/Hacking.qml";}
+
+                        Component.onCompleted: {
+                            if (!_controller.hackingMenuSupported) {
+                                remove(4)
+                            }
+
+                            if (!_storage.webDAVSyncSupported) {
+                                remove(3)
+                            }
+                        }
                     }
                 }
             }
