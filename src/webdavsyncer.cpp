@@ -256,11 +256,12 @@ private:
         reply->deleteLater();
         qDebug() << Q_FUNC_INFO;
         if (reply->error() == 0) {
-
-            TaskList tasks = m_syncer->m_storage->tasks();
-            for (int i = 0; i < tasks.count(); ++i) {
-                Task::Ptr task = tasks.at(i);
+            foreach (const Task::Ptr &task, m_syncer->m_storage->tasks()) {
                 task->setRevisionOnWebDAVServer(task->revision());
+            }
+
+            foreach (const Tag::Ptr &tag, m_syncer->m_storage->tags()) {
+                tag->setRevisionOnWebDAVServer(tag->revision());
             }
 
             m_syncer->m_storage->scheduleSave();
