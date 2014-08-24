@@ -38,11 +38,15 @@ QPixmap ImageProvider::requestPixmap(const QString &id, QSize *, const QSize &)
     qreal dpi = m_isMobile ? screen->physicalDotsPerInch()
                            : screen->logicalDotsPerInch();
 
-    // 0.30 inches seem decent for human fingers
-    const qreal hitWidthInInches = id.endsWith("-tag.png") ? 0.19 : 0.25;
+    // 0.25 inches seem decent for human fingers
+    bool isTagIcon = id.endsWith("-tag.png");
+    const qreal hitWidthInInches = isTagIcon ? 0.19 : 0.25;
     const qreal pixelWidth = hitWidthInInches * dpi;
 
-    int iconSize = ceil(pixelWidth / 16) * 16;
+    int iconSize = (isTagIcon && !m_isMobile) ? floor(pixelWidth / 16) * 16
+                                              : ceil(pixelWidth / 16) * 16;
+
+    iconSize = qMax(16, iconSize);
 
     if (iconSize == 16 || iconSize == 32 || iconSize == 48) {
         return QPixmap(QString(":/img/%1x%2/%3").arg(iconSize).arg(iconSize).arg(id));
