@@ -19,6 +19,7 @@
 
 #include "sortedtagsmodel.h"
 #include "storage.h"
+#include "tag.h"
 
 SortedTagsModel::SortedTagsModel(QAbstractItemModel *source, QObject *parent) :
     QSortFilterProxyModel(parent)
@@ -57,4 +58,10 @@ bool SortedTagsModel::lessThan(const QModelIndex &left, const QModelIndex &right
 int SortedTagsModel::count() const
 {
     return rowCount();
+}
+
+Tag* SortedTagsModel::at(int idx) const
+{
+    QVariant variant = data(index(idx, 0), Storage::TagPtrRole);
+    return variant.value<Tag::Ptr>().data();
 }

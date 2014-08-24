@@ -94,4 +94,10 @@ ListView {
             }
         }
     }
+
+    Component.onCompleted: {
+        if (_storage.tagsModel.count > 0) {
+            _controller.setCurrentTabTag(model.at(0))
+        }
+    }
 }

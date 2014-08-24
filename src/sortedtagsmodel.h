@@ -21,6 +21,7 @@
 #define SORTEDTAGSMODEL_H
 
 #include <QSortFilterProxyModel>
+class Tag;
 
 class SortedTagsModel : public QSortFilterProxyModel
 {
@@ -30,6 +31,7 @@ public:
     explicit SortedTagsModel(QAbstractItemModel *source, QObject *parent = 0);
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
     int count() const;
+    Q_INVOKABLE Tag* at(int index) const; // qml convinience
 
 Q_SIGNALS:
     void countChanged();
