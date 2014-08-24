@@ -114,6 +114,7 @@ Storage::Data Storage::data() const
 void Storage::setData(const Storage::Data &data)
 {
     m_data = data;
+    Q_ASSERT(!m_data.instanceId.isNull());
 }
 
 void Storage::load()
@@ -347,6 +348,14 @@ bool Storage::webDAVSyncInProgress() const
     return m_webDavSyncer->syncInProgress();
 #endif
     return false;
+}
+
+QByteArray Storage::instanceId()
+{
+    if (m_data.instanceId.isEmpty())
+        m_data.instanceId = QUuid::createUuid().toByteArray();
+
+    return m_data.instanceId;
 }
 
 Task::Ptr Storage::taskAt(int proxyIndex) const

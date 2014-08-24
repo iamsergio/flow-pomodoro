@@ -77,27 +77,38 @@ public:
     {
         SyncState::onEntry(event);
         qDebug() << "Entered AcquireLockState";
-        QNetworkReply *reply = m_syncer->m_webdav->get("/flow.lock");
+        m_buffer = new QBuffer(&m_lockFileContents);
+        m_buffer->open(QIODevice::WriteOnly);
+        QNetworkReply *reply = m_syncer->m_webdav->get("/flow.lock", m_buffer);
         connect(reply, &QNetworkReply::finished, this, &AcquireLockState::onDownloadLockFileFinished);
     }
 private:
     void onDownloadLockFileFinished()
     {
         QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+        QByteArray ourInstanceId = Storage::instance()->instanceId();
 
         if (reply->error() == QNetworkReply::ContentNotFoundError) {
-            QNetworkReply *reply2 = m_syncer->m_webdav->put("/flow.lock", QByteArray("empty"));
+            QNetworkReply *reply2 = m_syncer->m_webdav->put("/flow.lock", ourInstanceId);
             connect(reply2, &QNetworkReply::finished, this, &AcquireLockState::onLockAcquired);
         } else if (reply->error() == 0) {
-            qDebug() << Q_FUNC_INFO << "Lock already present, bailing out";
-            emit m_syncer->webdavAlreadyLocked();
+            // Lock file already present. Check if it's ours:
+            if (m_lockFileContents == ourInstanceId) {
+                // It's locked by us, for some reason lock wasn't removed. ( crash, network error..), so reuse it.
+                qDebug() << Q_FUNC_INFO << "Reusing lock";
+                emit m_syncer->lockAcquired();
+            } else {
+                qDebug() << Q_FUNC_INFO << "Lock already present, bailing out";
+                emit m_syncer->webdavAlreadyLocked();
+            }
         } else {
-            // TODO Change state
             qWarning() << Q_FUNC_INFO << reply->error() << reply->errorString();
             emit m_syncer->webdavAlreadyLocked();
         }
 
         reply->deleteLater();
+        m_buffer->deleteLater();
+        m_buffer = 0;
     }
 
     void onLockAcquired()
@@ -112,6 +123,9 @@ private:
 
         reply->deleteLater();
     }
+private:
+    QByteArray m_lockFileContents;
+    QBuffer *m_buffer;
 };
 
 class DownloadDataState : public SyncState
@@ -248,6 +262,7 @@ private:
             }
         }
 
+        finalData.instanceId = storage->data().instanceId;
         storage->setData(finalData);
         QByteArray newData = JsonStorage::serializeToJsonData(storage->data()); // should be the same as finalData
         QNetworkReply *reply2 = m_syncer->m_webdav->put("/flow.dat", newData);
@@ -301,7 +316,6 @@ public:
         QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
         reply->deleteLater();
         qDebug() << Q_FUNC_INFO;
-        // TODO: Error removing lock ? and lock with our id
         emit m_syncer->cleanupFinished();
     }
 };

@@ -26,6 +26,7 @@
 
 #include <QTimer>
 #include <QObject>
+#include <QUuid>
 
 class SortedTagsModel;
 class ArchivedTasksFilterModel;
@@ -67,6 +68,7 @@ public:
         TagList tags;
         QStringList deletedTasksUids; // so we can sync to server
         int serializerVersion;
+        QByteArray instanceId;
     };
 
     static Storage *instance();
@@ -94,6 +96,7 @@ public:
     bool webDAVSyncSupported() const;
     bool webDAVSyncInProgress() const;
 
+    QByteArray instanceId();
 #ifdef DEVELOPER_MODE
     Q_INVOKABLE void removeDuplicateData();
 #endif

@@ -73,6 +73,9 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
     QVariantMap rootMap = document.toVariant().toMap();
     QVariantList tagList = rootMap.value("tags").toList();
     QVariantList taskList = rootMap.value("tasks").toList();
+    result.instanceId = rootMap.value("instanceId").toByteArray();
+    if (result.instanceId.isEmpty())
+        result.instanceId = QUuid::createUuid().toByteArray();
 
     int serializerVersion = rootMap.value("JsonSerializerVersion", JsonSerializerVersion1).toInt();
     if (serializerVersion > result.serializerVersion) {
@@ -125,6 +128,7 @@ void JsonStorage::load_impl()
     }
 
     m_data.tags = data.tags;
+    m_data.instanceId = data.instanceId;
 
     m_data.tasks.clear();
     for (int i = 0; i < data.tasks.count(); ++i) {
@@ -170,6 +174,7 @@ QVariantMap JsonStorage::toJsonVariantMap(const Data &data)
         tasksVariant << data.tasks.at(i)->toJson();
     }
 
+    map.insert("instanceId", data.instanceId);
     map.insert("tags", tagsVariant);
     map.insert("tasks", tasksVariant);
     map.insert("JsonSerializerVersion", data.serializerVersion);
