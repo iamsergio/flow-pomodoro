@@ -86,7 +86,7 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
     foreach (const QVariant &t, tagList) {
         Tag::Ptr tag = Tag::Ptr(new Tag(QString()));
         tag->fromJson(t.toMap());
-        if (!tag->name().isEmpty()) {
+        if (!tag->name().isEmpty() && !Storage::itemListContains<Tag::Ptr>(result.tags, tag)) {
             if (reuseTags)
                 tag = Storage::instance()->tag(tag->name());
             result.tags << tag;
