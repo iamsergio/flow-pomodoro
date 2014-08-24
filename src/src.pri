@@ -11,6 +11,7 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/settings.cpp    \
            $$PWD/sortedtagsmodel.cpp \
            $$PWD/storage.cpp \
+           $$PWD/syncable.cpp \
            $$PWD/tag.cpp \
            $$PWD/tagref.cpp \
            $$PWD/task.cpp \
@@ -30,6 +31,7 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/settings.h        \
            $$PWD/sortedtagsmodel.h \
            $$PWD/storage.h \
+           $$PWD/syncable.h \
            $$PWD/tag.h \
            $$PWD/tagref.h \
            $$PWD/task.h            \

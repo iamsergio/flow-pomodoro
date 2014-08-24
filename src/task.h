@@ -23,6 +23,7 @@
 
 #include "tag.h"
 #include "tagref.h"
+#include "syncable.h"
 #include "genericlistmodel.h"
 
 #include <QString>
@@ -46,7 +47,7 @@ class Storage;
 class CheckableTagModel;
 class QAbstractListModel;
 
-class Task : public QObject {
+class Task : public QObject, public Syncable {
     Q_OBJECT
     Q_PROPERTY(bool staged READ staged WRITE setStaged NOTIFY stagedChanged)
     Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
@@ -95,14 +96,8 @@ public:
     Task::Ptr toStrongRef() const;
     void setWeakPointer(const QWeakPointer<Task> &);
 
-    QVariantMap toJson() const;
-    static Task::Ptr fromJson(const QVariantMap &);
-
-    int revision() const;
-    int revisionOnWebDAVServer() const;
-    void setRevisionOnWebDAVServer(int);
-
-    QString uuid() const;
+    QVariantMap toJson() const Q_DECL_OVERRIDE;
+    void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
 
     bool operator==(const Task::Ptr &other) const;
 
@@ -119,10 +114,8 @@ private Q_SLOTS:
 
 private:
     explicit Task(const QString &name = QString());
-    void setRevision(int);
     void setModificationDate(const QDateTime &);
     void setCreationDate(const QDateTime &);
-    void setUuid(const QString &uuid);
 
     QString m_summary;
     QString m_description;
@@ -134,9 +127,6 @@ private:
     Storage *m_storage;
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
-    int m_revision;
-    int m_revisionOnWebDAVServer;
-    mutable QString m_uuid;
 };
 
 QDataStream &operator<<(QDataStream &out, const Task::Ptr &task);

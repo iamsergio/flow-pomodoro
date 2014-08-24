@@ -84,8 +84,9 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
     }
 
     foreach (const QVariant &t, tagList) {
-        Tag::Ptr tag = Tag::fromJson(t.toMap());
-        if (tag) {
+        Tag::Ptr tag = Tag::Ptr(new Tag(QString()));
+        tag->fromJson(t.toMap());
+        if (!tag->name().isEmpty()) {
             if (reuseTags)
                 tag = Storage::instance()->tag(tag->name());
             result.tags << tag;
@@ -93,7 +94,8 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
     }
 
     foreach (const QVariant &t, taskList) {
-        Task::Ptr task = Task::fromJson(t.toMap());
+        Task::Ptr task = Task::createTask();
+        task->fromJson(t.toMap());
         if (task)
             result.tasks << task;
     }

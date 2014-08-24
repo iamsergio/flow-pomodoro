@@ -30,13 +30,12 @@ using namespace std::placeholders;
 
 Tag::Tag(const QString &_name)
     : QObject()
+    , Syncable()
     , m_name(_name)
     , m_taskCount(0)
     , m_beingEdited(false)
     , m_taskModel(nullptr)
 {
-    Q_ASSERT(!m_name.isEmpty());
-
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     //Storage::instance()->monitorTag(this);
     //s_tagCount++;
@@ -110,22 +109,20 @@ QAbstractItemModel *Tag::taskModel()
 
 QVariantMap Tag::toJson() const
 {
-    QVariantMap map;
+    QVariantMap map = Syncable::toJson();
     map.insert("name", m_name);
     return map;
 }
 
-Tag::Ptr Tag::fromJson(const QVariantMap &map)
+void Tag::fromJson(const QVariantMap &map)
 {
-    Tag::Ptr tag;
+    Syncable::fromJson(map);
     QString name = map.value("name").toString();
     if (name.isEmpty()) {
         qWarning() << Q_FUNC_INFO << "empty tag name";
     } else {
-        tag = Tag::Ptr(new Tag(name));
+        setName(name);
     }
-
-    return tag;
 }
 
 bool Tag::operator==(const Tag &other) const

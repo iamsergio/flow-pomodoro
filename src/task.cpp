@@ -30,16 +30,15 @@ enum {
     TaskRole
 };
 
-Task::Task(const QString &name)
+Task::Task(const QString &summary)
     : QObject()
-    , m_summary(name.isEmpty() ? tr("New Task") : name)
+    , Syncable()
+    , m_summary(summary.isEmpty() ? tr("New Task") : summary)
     , m_status(TaskStopped)
     , m_staged(false)
     , m_storage(Storage::instance())
     , m_creationDate(QDateTime::currentDateTimeUtc())
     , m_modificationDate(m_creationDate)
-    , m_revision(0)
-    , m_revisionOnWebDAVServer(-1)
 {
     m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); }, TagRole);
     m_tags.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tags.at(i).m_task.data()); }, TaskRole);
@@ -63,9 +62,9 @@ Task::Task(const QString &name)
     m_checkableTagModel->setSourceModel(m_storage->tagsModel());
 }
 
-Task::Ptr Task::createTask(const QString &name)
+Task::Ptr Task::createTask(const QString &summary)
 {
-    Task::Ptr task = Task::Ptr(new Task(name));
+    Task::Ptr task = Task::Ptr(new Task(summary));
     task->setWeakPointer(task);
     return task;
 }
@@ -181,11 +180,6 @@ void Task::setCreationDate(const QDateTime &date)
     m_creationDate = date;
 }
 
-void Task::setUuid(const QString &uuid)
-{
-    m_uuid = uuid;
-}
-
 QDateTime Task::creationDate() const
 {
     return m_creationDate;
@@ -229,7 +223,7 @@ void Task::setWeakPointer(const QWeakPointer<Task> &ptr)
 
 QVariantMap Task::toJson() const
 {
-    QVariantMap map;
+    QVariantMap map = Syncable::toJson();
     map.insert("summary", m_summary);
     map.insert("staged", m_staged);
     map.insert("description", m_description);
@@ -242,87 +236,48 @@ QVariantMap Task::toJson() const
     if (m_modificationDate.isValid())
         map.insert("modificationTimestamp", m_modificationDate.toMSecsSinceEpoch());
 
-    map.insert("revision", m_revision);
-    map.insert("revisionOnWebDAVServer", m_revisionOnWebDAVServer);
-    map.insert("uuid", uuid());
-
     return map;
 }
 
-Task::Ptr Task::fromJson(const QVariantMap &map)
+void Task::fromJson(const QVariantMap &map)
 {
-    QString name = map.value("summary").toString();
-    if (name.isEmpty()) {
+    Syncable::fromJson(map);
+
+    QString summary = map.value("summary").toString();
+    if (summary.isEmpty()) {
         qWarning() << Q_FUNC_INFO << "empty task summary";
-        name = tr("New Task");
+        summary = tr("New Task");
     }
 
-    Task::Ptr task = createTask(name);
-    task->blockSignals(true); // so we don't increment revision while calling setters
-
-    QString uuid = map.value("uuid").toString();
-    if (uuid.isEmpty())
-        uuid = QUuid::createUuid().toString();
-    task->setUuid(uuid);
+    blockSignals(true); // so we don't increment revision while calling setters
+    setSummary(summary);
 
     QString description = map.value("description").toString();
-    task->setDescription(description);
-    task->setStaged(map.value("staged", false).toBool());
+    setDescription(description);
+    setStaged(map.value("staged", false).toBool());
 
     QDateTime creationDate = QDateTime::fromMSecsSinceEpoch(map.value("creationTimestamp", QDateTime()).toLongLong());
     if (creationDate.isValid()) // If invalid it uses the ones set in CTOR
-        task->setCreationDate(creationDate);
+        setCreationDate(creationDate);
 
     QDateTime modificationDate = QDateTime::fromMSecsSinceEpoch(map.value("modificationTimestamp", QDateTime()).toLongLong());
     if (modificationDate.isValid())
-        task->setModificationDate(modificationDate);
-
-    task->setRevision(map.value("revision", 0).toInt());
-    task->setRevisionOnWebDAVServer(map.value("revisionOnWebDAVServer", -1).toInt());
+        setModificationDate(modificationDate);
 
     QVariantList tagsVariant = map.value("tags").toList();
     TagRef::List tags;
     foreach (const QVariant &tag, tagsVariant) {
         if (!tag.toString().isEmpty())
-            tags << TagRef(task.data(), tag.toString());
+            tags << TagRef(this, tag.toString());
     }
-    task->setTagList(tags);
 
-    task->blockSignals(false);
-    return task;
-}
-
-int Task::revision() const
-{
-    return m_revision;
-}
-
-int Task::revisionOnWebDAVServer() const
-{
-    return m_revisionOnWebDAVServer;
-}
-
-void Task::setRevisionOnWebDAVServer(int revision)
-{
-    m_revisionOnWebDAVServer = revision;
-}
-
-QString Task::uuid() const
-{
-    if (m_uuid.isEmpty()) // Delayed creation, since it can be expensive and we don't need to create it in CTOR because it's going to be set when loading
-        m_uuid = QUuid::createUuid().toString();
-
-    return m_uuid;
+    setTagList(tags);
+    blockSignals(false);
 }
 
 bool Task::operator==(const Task::Ptr &other) const
 {
     return other && m_uuid == other->uuid();
-}
-
-void Task::setRevision(int revision)
-{
-    m_revision = revision;
 }
 
 void Task::onEdited()

@@ -21,13 +21,14 @@
 #define FLOW_TAG_H
 
 #include "genericlistmodel.h"
+#include "syncable.h"
 
 #include <QString>
 #include <QSharedPointer>
 
 class TaskFilterProxyModel;
 
-class Tag : public QObject
+class Tag : public QObject, public Syncable
 {
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged STORED false)
@@ -50,7 +51,7 @@ public:
 
     QAbstractItemModel* taskModel();
     QVariantMap toJson() const;
-    static Tag::Ptr fromJson(const QVariantMap &);
+    void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
 
     bool operator==(const Tag &other) const;
 
