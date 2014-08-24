@@ -28,11 +28,12 @@ class ImageProvider : public QQuickImageProvider
 {
 
 public:
-    ImageProvider();
+    ImageProvider(bool isMobile);
 
     QPixmap requestPixmap(const QString &id, QSize *size,
                           const QSize &requestedSize) Q_DECL_OVERRIDE;
-
+private:
+    bool m_isMobile;
 };
 
 #endif

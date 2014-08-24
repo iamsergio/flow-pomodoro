@@ -24,8 +24,9 @@
 
 #include <math.h>
 
-ImageProvider::ImageProvider()
+ImageProvider::ImageProvider(bool isMobile)
     : QQuickImageProvider(QQuickImageProvider::Pixmap)
+    , m_isMobile(isMobile)
 {
 }
 
@@ -34,7 +35,8 @@ QPixmap ImageProvider::requestPixmap(const QString &id, QSize *, const QSize &)
     QScreen *screen = QGuiApplication::primaryScreen();
 
     // For touch related we're interested in physical DPI
-    qreal dpi = screen->physicalDotsPerInch();
+    qreal dpi = m_isMobile ? screen->physicalDotsPerInch()
+                           : screen->logicalDotsPerInch();
 
     // 0.30 inches seem decent for human fingers
     const qreal hitWidthInInches = id.endsWith("-tag.png") ? 0.19 : 0.25;

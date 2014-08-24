@@ -87,7 +87,7 @@ QuickView::QuickView(QWindow *parent)
 
     qmlRegisterType<CircularProgressIndicator>("com.kdab.flowpomodoro", 1, 0, "CircularProgressIndicator");
 
-    engine()->addImageProvider("icons", new ImageProvider());
+    engine()->addImageProvider("icons", new ImageProvider(controller()->isMobile()));
 
     if (m_developerMode) {
         // So that F5 reloads QML without having to restart the application
