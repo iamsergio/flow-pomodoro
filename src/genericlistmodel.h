@@ -75,14 +75,14 @@ private:
     typename QList<T>::iterator erase(typename QList<T>::iterator,
                                       typename QList<T>::iterator);
     typename QList<T>::iterator insert(typename QList<T>::iterator, const T&);
-
-    //typename QList<T>::iterator begin();
-    //typename QList<T>::iterator end();
-
     T& first();
     T& front();
     T& last();
     T& back();
+
+    // Not deleted because foreach needs them.
+    //typename QList<T>::iterator begin();
+    //typename QList<T>::iterator end();
 
     _InternalModel *const m_model;
 };
@@ -144,7 +144,7 @@ public:
         return rowCount();
     }
 
-signals:
+Q_SIGNALS:
     void countChanged();
 
 private:
