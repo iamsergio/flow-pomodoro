@@ -70,7 +70,7 @@ Item {
     property int taskBorderRadius       : Math.ceil(5 * _controller.dpiFactor)
 
     property string taskFontColor       : "white"
-    property int taskFontSize           : 19 * _controller.dpiFactor
+    property int taskFontSize           : 14 * _controller.dpiFactor
     property color queueBackgroundColor : Qt.rgba(0.9, 0.9, 0.5, 1)
 
     property bool deleteAnimationEnabled : true

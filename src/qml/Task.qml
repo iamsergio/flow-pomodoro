@@ -85,19 +85,8 @@ Rectangle {
             anchors.leftMargin: 10* _controller.dpiFactor
             anchors.right: buttonRow.left
             anchors.rightMargin: 2
-            font.pixelSize: invisibleHelper.isOverflowing ? _style.taskFontSize - (5*_controller.dpiFactor)
-                                                          : _style.taskFontSize
-            visible: !textField.visible
-        }
-
-        Text {
-            id: invisibleHelper
-            property bool isOverflowing: contentWidth > width
-            visible: false
-            anchors.fill: textItem
-            text: textItem.text
             font.pixelSize: _style.taskFontSize
-            font.bold: textItem.font.bold
+            visible: !textField.visible
         }
 
         TaskTextField {
