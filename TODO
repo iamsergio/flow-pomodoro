@@ -4,6 +4,7 @@
 - WebDav sync
   . Add timestamp to lock file
   . Warning when SSL isn't available
+  . Enable it by default
 - Unit-tests
 - Konversation plugin
 - Show tag menu on long press, with an "Edit" option
@@ -12,6 +13,10 @@
 - Decent editors
 - Tab with untagged tasks
 - git link in about page
+- Better icons for stage/archive
+- Blackberry build
+- iPhone build
+- Put on playstores
 
 Future TODOs:
 -------------
