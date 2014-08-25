@@ -25,7 +25,6 @@
 
 #include <QQmlEngine>
 
-using namespace std::placeholders;
 //static int s_tagCount = 0;
 
 Tag::Tag(const QString &_name)
