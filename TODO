@@ -1,13 +1,21 @@
 
 1.0 TODOs:
 ----------
-- Create a TODO file ( done I guess )
 - WebDav sync
+  . Add timestamp to lock file
+  . Warning when SSL isn't available
 - Unit-tests
 - Konversation plugin
 - Show tag menu on long press, with an "Edit" option
-- Bring back -Werror
+- Fullscreen pomodoro indicator on mobile
+- Screen Always on during pomodoro option for mobile
+- Decent editors
+- Tab with untagged tasks
+- git link in about page
 
 Future TODOs:
 -------------
 - Akonadi support
+- Translations
+- Import from flat-file
+- Better design
