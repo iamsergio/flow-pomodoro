@@ -21,10 +21,13 @@
 #define GET_MACRO(_1,_2,_3,_4,NAME,...) NAME
 #define ADD_ROLE(...) GET_MACRO(__VA_ARGS__, ADD_ROLE4, ADD_ROLE3)(__VA_ARGS__)
 
+template <typename T>
 class _InternalModel;
 
-typedef std::function<QVariant(int)> GetterFunc;
-typedef std::function<int()> CountFunc;
+template <typename T>
+class GenericListModel;
+
+typedef QVariant (*GetterFunc)(int);
 
 template <typename T>
 class GenericListModel : public QList<T>
@@ -39,6 +42,7 @@ public:
 
     operator QAbstractListModel*() const { return m_model; }
     void insertRole(const QByteArray &name, GetterFunc getter, int role = -1);
+    void setDataFunction(QVariant (*)(const GenericListModel<T> &list, int role, int index));
 
     // Reimplemented from QList
     void append(const T&);
@@ -84,19 +88,36 @@ private:
     //typename QList<T>::iterator begin();
     //typename QList<T>::iterator end();
 
-    _InternalModel *const m_model;
+    _InternalModel<T> *const m_model;
 };
 
 //------------------------------------------------------------------------------
 // Implementation detail.
 
-class _InternalModel : public QAbstractListModel {
+class _InternalModelBase : public QAbstractListModel
+{
     Q_PROPERTY(int count READ count NOTIFY countChanged)
     Q_OBJECT
 public:
-    _InternalModel(CountFunc func)
-        : QAbstractListModel(qApp) // So it has cpp ownership
-        , m_countFunc(func)
+    explicit _InternalModelBase(QObject *parent = 0) : QAbstractListModel(parent) {}
+
+    int count() const
+    {
+        return rowCount();
+    }
+
+Q_SIGNALS:
+    void countChanged();
+
+};
+
+template <typename T>
+class _InternalModel : public _InternalModelBase {
+public:
+    _InternalModel(GenericListModel<T> &list)
+        : _InternalModelBase(qApp) // So it has cpp ownership
+        , m_list(list)
+        , m_dataFunction(Q_NULLPTR)
     {
         connect(this, &_InternalModel::rowsInserted,
                 this, &_InternalModel::countChanged);
@@ -110,7 +131,7 @@ public:
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE
     {
-        return parent.isValid() ? 0 : m_countFunc();
+        return parent.isValid() ? 0 : m_list.count();
     }
 
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE
@@ -126,7 +147,10 @@ public:
         for (auto it = m_roles.cbegin(); it != m_roles.cend(); ++it) {
             if (it.key() == role) {
                 GetterFunc func = m_getters.value(it.key());
-                return func(index.row());
+                return func ? func(index.row())
+                            : m_dataFunction ? m_dataFunction(m_list, index.row(), role)
+                                             : QVariant();
+
             }
         }
 
@@ -139,18 +163,16 @@ public:
         m_getters.insert(role, getter);
     }
 
-    int count() const
+    void setDataFunction(QVariant (*function)(const GenericListModel<T> &, int index, int role))
     {
-        return rowCount();
+        m_dataFunction = function;
     }
-
-Q_SIGNALS:
-    void countChanged();
 
 private:
     QHash<int, QByteArray> m_roles;
     QHash<int, GetterFunc> m_getters;
-    CountFunc m_countFunc;
+    GenericListModel<T> &m_list;
+    QVariant (*m_dataFunction)(const GenericListModel<T> &, int index, int role);
 
     template <class U>
     friend class ::GenericListModel;
@@ -159,20 +181,20 @@ private:
 template <typename T>
 GenericListModel<T>::GenericListModel()
     : QList<T>()
-    , m_model(new _InternalModel([this](){ return this->count(); }))
+    , m_model(new _InternalModel<T>(*this))
 {}
 
 template <typename T>
 GenericListModel<T>::GenericListModel(const GenericListModel &other)
     : QList<T>(other)
-    , m_model(new _InternalModel([this](){ return this->count(); }))
+    , m_model(new _InternalModel<T>(*this))
 {}
 
 #ifdef Q_COMPILER_INITIALIZER_LISTS
 template <typename T>
 GenericListModel<T>::GenericListModel(std::initializer_list<T> args)
     : QList<T>(args)
-    , m_model(new _InternalModel([this](){ return this->count(); }))
+    , m_model(new _InternalModel<T>(*this))
 {}
 #endif
 
@@ -252,6 +274,12 @@ void GenericListModel<T>::insertRole(const QByteArray &name, GetterFunc getter, 
         role = Qt::UserRole + m_model->roleNames().count() + 1;
     Q_ASSERT(!m_model->roleNames().contains(role));
     m_model->insertRole(name, getter, role);
+}
+
+template <typename T>
+void GenericListModel<T>::setDataFunction(QVariant (*function)(const GenericListModel<T> &list, int, int))
+{
+    m_model->setDataFunction(function);
 }
 
 template <typename T>

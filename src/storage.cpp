@@ -26,6 +26,31 @@
 #include "taskfilterproxymodel.h"
 #include "webdavsyncer.h"
 
+static QVariant tagsDataFunction(const TagList &list, int index, int role)
+{
+    switch (role) {
+    case Storage::TagRole:
+        return QVariant::fromValue<Tag*>(list.at(index).data());
+    case Storage::TagPtrRole:
+        return QVariant::fromValue<Tag::Ptr>(list.at(index));
+    default:
+        return QVariant();
+    }
+}
+
+
+static QVariant tasksDataFunction(const TaskList &list, int index, int role)
+{
+    switch (role) {
+    case Storage::TaskRole:
+        return QVariant::fromValue<Task*>(list.at(index).data());
+    case Storage::TaskPtrRole:
+        return QVariant::fromValue<Task::Ptr>(list.at(index));
+    default:
+        return QVariant();
+    }
+}
+
 Storage::Storage(QObject *parent)
     : QObject(parent)
     , m_savingDisabled(0)
@@ -44,8 +69,9 @@ Storage::Storage(QObject *parent)
     m_scheduleTimer.setInterval(0);
     connect(&m_scheduleTimer, &QTimer::timeout, this, &Storage::save);
 
-    m_data.tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_data.tags.at(i).data()); }, TagRole);
-    m_data.tags.insertRole("tagPtr", [&](int i) { return QVariant::fromValue<Tag::Ptr>(m_data.tags.at(i)); }, TagPtrRole);
+    m_data.tags.setDataFunction(&tagsDataFunction);
+    m_data.tags.insertRole("tag", Q_NULLPTR, TagRole);
+    m_data.tags.insertRole("tagPtr", Q_NULLPTR, TagPtrRole);
     QAbstractItemModel *tagsModel = m_data.tags; // android doesn't build if you use m_data.tags directly in the connect statement
     connect(tagsModel, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
     connect(tagsModel, &QAbstractListModel::rowsInserted, this, &Storage::scheduleSave);
@@ -69,8 +95,9 @@ Storage::Storage(QObject *parent)
     connect(tasksModel, &QAbstractListModel::rowsRemoved, this, &Storage::scheduleSave);
     connect(tasksModel, &QAbstractListModel::modelReset, this, &Storage::scheduleSave);
 
-    m_data.tasks.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_data.tasks.at(i).data()); }, TaskRole);
-    m_data.tasks.insertRole("taskPtr", [&](int i) { return QVariant::fromValue<Task::Ptr>(m_data.tasks.at(i)); }, TaskPtrRole);
+    m_data.tasks.setDataFunction(&tasksDataFunction);
+    m_data.tasks.insertRole("task", Q_NULLPTR, TaskRole);
+    m_data.tasks.insertRole("taskPtr", Q_NULLPTR, TaskPtrRole);
     m_stagedTasksModel->setSourceModel(m_data.tasks);
     m_stagedTasksModel->setAcceptArchived(false);
 

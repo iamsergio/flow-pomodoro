@@ -30,6 +30,18 @@ enum {
     TaskRole
 };
 
+static QVariant dataFunction(const TagRef::List &list, int index, int role)
+{
+    switch (role) {
+    case TagRole:
+        return QVariant::fromValue<Tag*>(list.at(index).m_tag.data());
+    case TaskRole:
+        return QVariant::fromValue<Task*>(list.at(index).m_task.data());
+    default:
+        return QVariant();
+    }
+}
+
 Task::Task(const QString &summary)
     : QObject()
     , Syncable()
@@ -40,8 +52,9 @@ Task::Task(const QString &summary)
     , m_creationDate(QDateTime::currentDateTimeUtc())
     , m_modificationDate(m_creationDate)
 {
-    m_tags.insertRole("tag", [&](int i) { return QVariant::fromValue<Tag*>(m_tags.at(i).m_tag.data()); }, TagRole);
-    m_tags.insertRole("task", [&](int i) { return QVariant::fromValue<Task*>(m_tags.at(i).m_task.data()); }, TaskRole);
+    m_tags.setDataFunction(&dataFunction);
+    m_tags.insertRole("tag", Q_NULLPTR, TagRole);
+    m_tags.insertRole("task", Q_NULLPTR, TaskRole);
 
     connect(this, &Task::summaryChanged, &Task::onEdited);
     connect(this, &Task::tagsChanged, &Task::onEdited);
