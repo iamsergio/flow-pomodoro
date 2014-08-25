@@ -240,8 +240,12 @@ QString Storage::deletedTagName() const
 bool Storage::containsTag(const QString &name) const
 {
     QString normalizedName = name.toLower().trimmed();
-    return std::find_if(m_data.tags.cbegin(), m_data.tags.cend(),
-                        [&](const Tag::Ptr &tag) { return tag->name().toLower() == normalizedName; }) != m_data.tags.cend();
+    foreach (const Tag::Ptr &tag, m_data.tags) {
+        if (tag->name().toLower() == normalizedName)
+            return true;
+    }
+
+    return false;
 }
 
 bool Storage::renameTag(const QString &oldName, const QString &newName)
