@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8' standalone='no'?>
+<qnx xmlns="http://www.qnx.com/schemas/application/1.0">
+    <id>com.kdab.flow-pomodoro</id>
+    <name>flow-pomodoro</name>
+    <versionNumber>1.0.0</versionNumber>
+    <description>flow-pomodoro</description>
+    <copyright>Sergio Martins</copyright>
+    <initialWindow>
+        <systemChrome>none</systemChrome>
+        <transparent>false</transparent>
+        <autoOrients>true</autoOrients>
+        <aspectRatio>landscape</aspectRatio>
+    </initialWindow>
+    <env var="LD_LIBRARY_PATH" value="app/native/runtime/qt/lib:$LD_LIBRARY_PATH"/>
+    <env var="QT_PLUGIN_PATH" value="app/native/runtime/qt/plugins:$QT_PLUGIN_PATH"/>
+    <env var="QML_IMPORT_PATH" value="app/native/runtime/qt/imports:$QML_IMPORT_PATH"/>
+    <env var="QML2_IMPORT_PATH" value="app/native/runtime/qt/qml:$QML2_IMPORT_PATH"/>
+    <action system="true">run_native</action>
+    <asset entry="true" path="flow" type="Qnx/Elf">flow</asset>
+    <author>KDAB</author>
+    <authorId>gYAAgEVEwdC4x3s7rkOs9heKy_I</authorId>
+    <asset path="/data/extra2/installation/qt/playbook-5.3d/lib/">runtime/qt/lib/</asset>
+    <asset path="/data/extra2/installation/qt/playbook-5.3d/plugins">runtime/qt/plugins</asset>
+    <asset path="/data/extra2/installation/qt/playbook-5.3d/qml">runtime/qt/qml</asset>
+</qnx>
