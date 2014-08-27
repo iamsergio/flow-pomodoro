@@ -6,6 +6,7 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/controller.cpp  \
            $$PWD/imageprovider.cpp \
            $$PWD/jsonstorage.cpp \
+           $$PWD/kernel.cpp \
            $$PWD/pluginmodel.cpp \
            $$PWD/quickview.cpp   \
            $$PWD/settings.cpp    \
@@ -24,6 +25,7 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/controller.h      \
            $$PWD/imageprovider.h \
            $$PWD/jsonstorage.h      \
+           $$PWD/kernel.h \
            $$PWD/genericlistmodel.h \
            $$PWD/plugininterface.h \
            $$PWD/pluginmodel.h     \

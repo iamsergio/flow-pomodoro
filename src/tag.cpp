@@ -22,6 +22,7 @@
 #include "archivedtasksfiltermodel.h"
 #include "taskfilterproxymodel.h"
 #include "storage.h"
+#include "kernel.h"
 
 #include <QQmlEngine>
 
@@ -36,7 +37,7 @@ Tag::Tag(const QString &_name)
     , m_taskModel(Q_NULLPTR)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-    //Storage::instance()->monitorTag(this);
+    //Kernel::instance()->storage()->monitorTag(this);
     //s_tagCount++;
     //qDebug() << Q_FUNC_INFO << s_tagCount;
 }
@@ -90,12 +91,12 @@ void Tag::setBeingEdited(bool yes)
 
 QAbstractItemModel *Tag::taskModel()
 {
-    // Delayed initialization do avoid deadlock accessing Storage::instance() when TaskStorage is being constructed
+    // Delayed initialization do avoid deadlock accessing Kernel::instance()->storage() when TaskStorage is being constructed
     // TODO: this should be ok now
     if (!m_taskModel) {
         m_taskModel = new TaskFilterProxyModel(this);
         m_taskModel->setTagName(m_name);
-        m_taskModel->setSourceModel(Storage::instance()->archivedTasksModel());
+        m_taskModel->setSourceModel(Kernel::instance()->storage()->archivedTasksModel());
         m_taskModel->setObjectName(QString("Tasks with tag %1 model").arg(m_name));
 
         connect(this, &Tag::taskCountChanged,

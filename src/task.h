@@ -43,7 +43,6 @@ enum SerializerVersion {
     SerializerVersion2 = 101 // Added Task::description()
 };
 
-class Storage;
 class CheckableTagModel;
 class QAbstractListModel;
 
@@ -114,6 +113,7 @@ private Q_SLOTS:
 
 private:
     explicit Task(const QString &name = QString());
+    void modelSetup();
     void setModificationDate(const QDateTime &);
     void setCreationDate(const QDateTime &);
 
@@ -124,7 +124,6 @@ private:
     TaskStatus m_status;
     bool m_staged;
     QWeakPointer<Task> m_this;
-    Storage *m_storage;
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
 };

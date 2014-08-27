@@ -20,14 +20,16 @@
 
 #include "controller.h"
 #include "settings.h"
-#include "quickview.h"
 #include "taskfilterproxymodel.h"
 #include "storage.h"
+#include "kernel.h"
 
 #include <QTimer>
 #include <QScreen>
 #include <QGuiApplication>
 #include <QQmlExpression>
+#include <QQmlContext>
+#include <QKeyEvent>
 #include <qglobal.h>
 
 enum {
@@ -35,23 +37,23 @@ enum {
     TickInterval = 1000*60 // Ticks every minute
 };
 
-Controller::Controller(QuickView *quickView)
-    : QObject(quickView)
+Controller::Controller(QQmlContext *context, Storage *storage, QObject *parent)
+    : QObject(parent)
     , m_currentTaskDuration(0)
     , m_tickTimer(new QTimer(this))
     , m_afterAddingTimer(new QTimer(this))
     , m_elapsedMinutes(0)
     , m_expanded(isMobile()) // Mobile is always expanded
     , m_page(MainPage)
-    , m_quickView(quickView)
     , m_popupVisible(false)
     , m_editMode(EditModeNone)
     , m_tagEditStatus(TagEditStatusNone)
     , m_invalidTask(Task::createTask())
     , m_configureTabIndex(0)
     , m_queueType(QueueTypeToday)
-    , m_storage(Storage::instance())
+    , m_storage(storage)
     , m_pomodoroFunctionalityDisabled(false)
+    , m_qmlContext(context)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -207,7 +209,7 @@ void Controller::onPopupButtonClicked(bool okClicked)
 
     if (okClicked) {
         // qDebug() << "Running " << m_popupOkCallback << "of" << m_popupCallbackOwner;
-        QQmlExpression expr(m_quickView->rootContext(), m_popupCallbackOwner, m_popupOkCallback);
+        QQmlExpression expr(m_qmlContext, m_popupCallbackOwner, m_popupOkCallback);
         bool valueIsUndefined = false;
         expr.evaluate(&valueIsUndefined);
     }
@@ -228,7 +230,7 @@ void Controller::setExpanded(bool expanded)
     if (expanded != m_expanded) {
         m_expanded = expanded;
         if (expanded) {
-            m_quickView->requestActivate();
+            emit requestActivateWindow();
         } else {
             editTask(Q_NULLPTR, EditModeNone);
         }

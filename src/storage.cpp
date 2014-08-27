@@ -111,12 +111,6 @@ Storage::Storage(QObject *parent)
 #endif
 }
 
-Storage *Storage::instance()
-{
-    static Storage *storage = new JsonStorage(qApp);
-    return storage;
-}
-
 Storage::~Storage()
 {
     if (m_scheduleTimer.isActive())

@@ -71,16 +71,13 @@ public:
         QByteArray instanceId;
     };
 
-    static Storage *instance();
+    explicit Storage(QObject *parent = 0);
     ~Storage();
 
     TagList tags() const;
     TaskList tasks() const;
     Storage::Data data() const;
     void setData(const Storage::Data &data);
-
-    void load();
-    void save();
 
     int serializerVersion() const;
 
@@ -141,6 +138,8 @@ public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);
     void dumpDebugInfo();
     void webDavSync();
+    void load();
+    void save();
 
 Q_SIGNALS:
     void tagAboutToBeRemoved(const QString &name);
@@ -153,7 +152,6 @@ private Q_SLOTS:
     void onTagAboutToBeRemoved(const QString &tagName);
 
 protected:
-    explicit Storage(QObject *parent = 0);
     Task::Ptr addTask(const Task::Ptr &task);
     Data m_data;
     virtual void load_impl() = 0;

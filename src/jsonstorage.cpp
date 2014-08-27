@@ -18,6 +18,7 @@
 */
 
 #include "jsonstorage.h"
+#include "kernel.h"
 
 #include <QDir>
 #include <QFile>
@@ -59,7 +60,7 @@ JsonStorage::JsonStorage(QObject *parent)
 }
 
 Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
-                                               QString &errorMsg, bool reuseTags)
+                                               QString &errorMsg, Storage *storage)
 {
     Data result;
     errorMsg.clear();
@@ -87,8 +88,8 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
         Tag::Ptr tag = Tag::Ptr(new Tag(QString()));
         tag->fromJson(t.toMap());
         if (!tag->name().isEmpty() && !Storage::itemListContains<Tag::Ptr>(result.tags, tag)) {
-            if (reuseTags)
-                tag = Storage::instance()->tag(tag->name());
+            if (storage) // Reuse tags from given storage
+                tag = storage->tag(tag->name());
             result.tags << tag;
         }
     }
@@ -120,7 +121,7 @@ void JsonStorage::load_impl()
     file.close();
 
     QString errorMsg;
-    Data data = deserializeJsonData(serializedData, errorMsg, /*reuseTags=*/ true);
+    Data data = deserializeJsonData(serializedData, errorMsg, this);
 
     if (!errorMsg.isEmpty()) {
         qWarning() << "Error parsing json file" << dataFileName();

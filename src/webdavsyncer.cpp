@@ -19,6 +19,7 @@
 
 #include "webdavsyncer.h"
 #include "jsonstorage.h"
+#include "kernel.h"
 #ifndef NO_WEBDAV
 #include "qwebdav.h"
 #endif
@@ -86,7 +87,7 @@ private:
     void onDownloadLockFileFinished()
     {
         QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-        QByteArray ourInstanceId = Storage::instance()->instanceId();
+        QByteArray ourInstanceId = Kernel::instance()->storage()->instanceId();
 
         if (reply->error() == QNetworkReply::ContentNotFoundError) {
             QNetworkReply *reply2 = m_syncer->m_webdav->put("/flow.lock", ourInstanceId);
@@ -155,7 +156,7 @@ private:
                                      GenericListModel<T> &serverList)
     {
         GenericListModel<T> finalList;
-        Storage *storage = Storage::instance();
+        Storage *storage = Kernel::instance()->storage();
 
         // Case 1: Present locally, not present on server
         const GenericListModel<T> localTasksCopy = localList; // GenericListModel doesn't let use use iterators

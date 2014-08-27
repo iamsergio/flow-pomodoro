@@ -20,6 +20,7 @@
 
 #include "quickview.h"
 #include "controller.h"
+#include "kernel.h"
 #include "dbus/flow.h"
 
 #ifdef QT_WIDGETS_LIB
@@ -113,10 +114,11 @@ int main(int argc, char *argv[])
     translator.load(QString(":/translations/flow_%1").arg(QLocale::system().name())); // export LANG="pt_PT" to change
     app.installTranslator(&translator);
 
-    QuickView window;
-    initDBus(window.controller());
+    Kernel *kernel = Kernel::instance();
+    QuickView window(kernel->qmlEngine());
+    initDBus(kernel->controller());
 
-    if (window.controller()->isMobile()) {
+    if (kernel->controller()->isMobile()) {
         window.showMaximized(); // Don't use fullscreen on android
 
         QScreen *screen = QGuiApplication::primaryScreen();

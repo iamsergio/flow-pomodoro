@@ -20,6 +20,7 @@
 #include "tagref.h"
 #include "storage.h"
 #include "task.h"
+#include "kernel.h"
 
 TagRef::TagRef(const TagRef &other)
 {
@@ -42,7 +43,7 @@ TagRef TagRef::operator=(const TagRef &other)
 }
 
 TagRef::TagRef(const QPointer<Task> &task, const QString &tagName)
-    : m_tag(Storage::instance()->tag(tagName))
+    : m_tag(Kernel::instance()->storage()->tag(tagName))
     , m_task(task)
 {
     Q_ASSERT(m_tag);

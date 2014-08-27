@@ -29,7 +29,7 @@
 
 class QTimer;
 class Storage;
-class QuickView;
+class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
@@ -95,7 +95,7 @@ public:
     };
     Q_ENUMS(QueueType)
 
-    Controller(QuickView *quickView);
+    explicit Controller(QQmlContext *context, Storage *storage, QObject *parent = 0);
     ~Controller();
 
     int remainingMinutes() const;
@@ -196,6 +196,7 @@ Q_SIGNALS:
     void invalidateTaskModel();
     void queueTypeChanged();
     void addingNewTask();
+    void requestActivateWindow();
 
 private:
     int indexOfTaskInCurrentTab(const Task::Ptr &task);
@@ -215,7 +216,6 @@ private:
     Task::Ptr m_currentTask;
     Page m_page;
     int m_defaultPomodoroDuration;
-    QuickView *m_quickView;
     bool m_popupVisible;
     QString m_popupText;
     QString m_popupOkCallback;
@@ -232,6 +232,7 @@ private:
     QueueType m_queueType;
     Storage *m_storage;
     bool m_pomodoroFunctionalityDisabled;
+    QQmlContext *m_qmlContext;
 };
 
 #endif

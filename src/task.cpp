@@ -22,6 +22,8 @@
 #include "settings.h"
 #include "checkabletagmodel.h"
 #include "storage.h"
+#include "kernel.h"
+
 #include <QQmlEngine>
 #include <QUuid>
 
@@ -48,9 +50,18 @@ Task::Task(const QString &summary)
     , m_summary(summary.isEmpty() ? tr("New Task") : summary)
     , m_status(TaskStopped)
     , m_staged(false)
-    , m_storage(Storage::instance())
     , m_creationDate(QDateTime::currentDateTimeUtc())
     , m_modificationDate(m_creationDate)
+{
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+    m_checkableTagModel = new CheckableTagModel(this);
+
+    // Dummy task doesn't need model setup
+    if (!summary.isEmpty())
+        modelSetup();
+}
+
+void Task::modelSetup()
 {
     m_tags.setDataFunction(&dataFunction);
     m_tags.insertRole("tag", Q_NULLPTR, TagRole);
@@ -68,11 +79,9 @@ Task::Task(const QString &summary)
     connect(tagsModel, &QAbstractListModel::layoutChanged, this, &Task::tagsChanged);
     connect(tagsModel, &QAbstractListModel::dataChanged, this, &Task::tagsChanged);
 
-    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-    auto roleNames = m_storage->tagsModel()->roleNames();
+    auto roleNames = Kernel::instance()->storage()->tagsModel()->roleNames();
     roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
-    m_checkableTagModel = new CheckableTagModel(this);
-    m_checkableTagModel->setSourceModel(m_storage->tagsModel());
+    m_checkableTagModel->setSourceModel(Kernel::instance()->storage()->tagsModel());
 }
 
 Task::Ptr Task::createTask(const QString &summary)
@@ -336,7 +345,7 @@ QDataStream &operator>>(QDataStream &in, Task::Ptr &task)
         for (int i = 0; i < tagCount; i++) {
             QString name;
             in >> name;
-            if (Storage::instance()->deletedTagName() != name) {
+            if (Kernel::instance()->storage()->deletedTagName() != name) {
                 // QSettings reads before saving, which invokes this deserializer
                 // Sometimes we're deleted a tag and it would get recreated because
                 // it was loaded when we were saving

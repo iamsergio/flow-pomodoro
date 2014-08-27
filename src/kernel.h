@@ -1,8 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
-  Author: Sérgio Martins <sergio.martins@kdab.com>
+  Copyright (C) 2014 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -18,30 +17,41 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _QUICK_WINDOW_H_
-#define _QUICK_WINDOW_H_
+#ifndef FLOW_KERNEL_H
+#define FLOW_KERNEL_H
 
-#include <QQuickView>
-#include <QUrl>
+#include "task.h"
 
+#include <QObject>
+
+class Storage;
 class Controller;
-class QKeyEvent;
+class PluginModel;
+class QQmlEngine;
+class QQmlContext;
 
-class QuickView : public QQuickView {
+class Kernel : public QObject
+{
     Q_OBJECT
 public:
-    explicit QuickView(QQmlEngine *engine);
+    static Kernel *instance();
+    Storage* storage() const;
+    Controller *controller() const;
+    QQmlContext *qmlContext() const;
+    QQmlEngine *qmlEngine() const;
 
-protected:
-    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+private Q_SLOTS:
+    void onTaskStatusChanged();
 
 private:
-    void reloadQML();
-    QUrl styleFileName() const;
-    void createStyleComponent();
+    void loadPlugins();
+    void notifyPlugins(TaskStatus newStatus);
 
+    explicit Kernel(QObject *parent = 0);
+    Storage *m_storage;
+    QQmlEngine *m_qmlEngine;
     Controller *m_controller;
-    bool m_developerMode;
+    PluginModel *m_pluginModel;
 };
 
 #endif
