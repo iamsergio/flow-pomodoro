@@ -15,7 +15,10 @@ contains(QT_CONFIG, dbus) {
 }
 
 include("src.pri")
-SOURCES += main.cpp
+SOURCES += quickview.cpp \
+           main.cpp
+
+HEADERS += quickview.h
 
 OTHER_FILES += qml/AboutPage.qml      \
                qml/config/Hacking.qml \
