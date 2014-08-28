@@ -196,7 +196,6 @@ bool Storage::removeTag(const QString &tagName)
     int index = indexOfTag(tagName);
     if (index == -1) {
         qWarning() << Q_FUNC_INFO << "Non existant tag" << tagName;
-        Q_ASSERT(false);
         return false;
     }
 
