@@ -1,10 +1,98 @@
 #include "tests.h"
+#include "kernel.h"
+#include "tag.h"
+#include "task.h"
+#include "storage.h"
+#include "runtimeconfiguration.h"
 
-
-
-void Tests::test1()
+void Tests::initTestCase()
 {
+    m_kernel = Kernel::instance();
+    m_storage = m_kernel->storage();
+    RuntimeConfiguration config;
+    config.setDataFileName("data.dat");
+    m_kernel->setRuntimeConfiguration(config);
+}
 
+void Tests::cleanupTestCase()
+{
+    delete m_kernel;
+    m_kernel = 0;
+}
+
+void Tests::testCreateTag()
+{
+    TagList tags = m_storage->tags();
+    QVERIFY(tags.isEmpty());
+
+    m_storage->createTag("tag1");
+    QVERIFY(m_storage->tags().count() == 1);
+    m_storage->createTag("tag2");
+    m_storage->createTag("tag3");
+    QVERIFY(m_storage->tags().count() == 3);
+
+    m_storage->createTag("tag3"); // duplicate!
+    QVERIFY(m_storage->tags().count() == 3);
+
+    m_storage->createTag(" Tag3 "); // duplicate! with spaces and uppercase
+    QVERIFY(m_storage->tags().count() == 3);
+
+    m_storage->createTag(""); // Empty
+    QVERIFY(m_storage->tags().count() == 3);
+}
+
+void Tests::testDeleteTag()
+{
+    m_storage->clearTags();
+}
+
+void Tests::testContainsTag()
+{
+    m_storage->clearTags();
+
+    m_storage->createTag("testingContains1");
+    QVERIFY(!m_storage->containsTag("testingContains"));
+    QVERIFY(m_storage->containsTag("testingContains1"));
+    QVERIFY(m_storage->containsTag(" testingCoNtains1 "));
+    m_storage->removeTag("testingContains1");
+    QVERIFY(!m_storage->containsTag("testingContains1"));
+    QVERIFY(!m_storage->containsTag(" testingCoNtains1 "));
+}
+
+void Tests::testTag()
+{
+    m_storage->clearTags();
+    m_storage->setCreateNonExistentTags(true);
+
+    Tag::Ptr tag = m_storage->tag("tag1");
+    QVERIFY(tag);
+    QCOMPARE(m_storage->tags().count(), 1);
+
+    tag = m_storage->tag("tag2");
+    QVERIFY(tag);
+
+    tag = m_storage->tag("tag3");
+    QVERIFY(tag);
+    QCOMPARE(m_storage->tags().count(), 3);
+
+    Tag::Ptr tag2 = m_storage->tag("tag3"); // duplicate!
+    QCOMPARE(tag, tag2);
+    QCOMPARE(m_storage->tags().count(), 3);
+
+
+    tag2 = m_storage->tag(" Tag3 "); // duplicate! with spaces and uppercase
+    QCOMPARE(tag, tag2);
+    QCOMPARE(m_storage->tags().count(), 3);
+
+    tag = m_storage->tag(""); // Empty
+    QVERIFY(!tag);
+    QCOMPARE(m_storage->tags().count(), 3);
+
+    m_storage->setCreateNonExistentTags(false);
+    tag = m_storage->tag("Foo");
+    QVERIFY(!tag);
+    tag = m_storage->tag("tag2");
+    QVERIFY(tag->name() == "tag2");
 }
 
 QTEST_MAIN(Tests)

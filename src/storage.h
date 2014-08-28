@@ -132,6 +132,7 @@ public:
     QAbstractItemModel *tagsModel() const;
     QString deletedTagName() const;
     bool containsTag(const QString &name) const;
+    void clearTags();
 //------------------------------------------------------------------------------
 
 public Q_SLOTS:

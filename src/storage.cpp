@@ -269,6 +269,11 @@ bool Storage::containsTag(const QString &name) const
     return false;
 }
 
+void Storage::clearTags()
+{
+    m_data.tags.clear();
+}
+
 bool Storage::renameTag(const QString &oldName, const QString &newName)
 {
     QString trimmedNewName = newName.trimmed();
