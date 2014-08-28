@@ -23,35 +23,11 @@
 #include <QDir>
 #include <QFile>
 #include <QJsonDocument>
-#include <QStandardPaths>
 #include <QTemporaryFile>
-
-static QString dataFileName()
-{
-    static QString filename;
-    if (filename.isEmpty()) {
-#if defined(Q_OS_ANDROID) && defined(DEVELOPER_MODE)
-        return "/storage/sdcard0/flow.dat";
-#endif
-        QString directory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-        if (!QFile::exists(directory)) {
-            QDir dir(directory);
-            if (!dir.mkpath(directory)) {
-                qWarning() << "Failed to create directory" << directory;
-                qFatal("Bailing out...");
-                return QString();
-            }
-        }
-
-        filename += directory + "/flow.dat";
-    }
-
-    return filename;
-}
 
 static QString tmpDataFileName()
 {
-    return dataFileName() + "~";
+    return Kernel::instance()->runtimeConfiguration().dataFileName() + "~";
 }
 
 JsonStorage::JsonStorage(QObject *parent)
@@ -106,12 +82,13 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
 
 void JsonStorage::load_impl()
 {
-    if (!QFile::exists(dataFileName())) // Nothing to load
+    const QString dataFileName = Kernel::instance()->runtimeConfiguration().dataFileName();
+    if (!QFile::exists(dataFileName)) // Nothing to load
         return;
 
-    QFile file(dataFileName());
+    QFile file(dataFileName);
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Could not open data file" << dataFileName()
+        qWarning() << "Could not open data file" << dataFileName
                    << "; error=" << file.errorString() << file.error();
         qFatal("Bailing out");
         return;
@@ -124,7 +101,7 @@ void JsonStorage::load_impl()
     Data data = deserializeJsonData(serializedData, errorMsg, this);
 
     if (!errorMsg.isEmpty()) {
-        qWarning() << "Error parsing json file" << dataFileName();
+        qWarning() << "Error parsing json file" << dataFileName;
         qWarning() << "Error was" << errorMsg;
         qFatal("Bailing out");
         return;
@@ -150,15 +127,16 @@ void JsonStorage::save_impl()
         return;
     }
 
+    const QString dataFileName = Kernel::instance()->runtimeConfiguration().dataFileName();
     temporaryFile.write(serializedData, serializedData.count());
-    if (QFile::exists(dataFileName()) && !QFile::remove(dataFileName())) {
-        qWarning() << "Could not update (remove error)" << dataFileName()
+    if (QFile::exists(dataFileName) && !QFile::remove(dataFileName)) {
+        qWarning() << "Could not update (remove error)" << dataFileName
                    << "backup file is at" << tmpDataFileName();
         return;
     }
 
-    if (!temporaryFile.copy(dataFileName())) {
-        qWarning() << "Could not update" << dataFileName()
+    if (!temporaryFile.copy(dataFileName)) {
+        qWarning() << "Could not update" << dataFileName
                    << "backup file is at" << tmpDataFileName();
         return;
     }

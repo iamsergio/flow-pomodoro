@@ -29,6 +29,7 @@
 #include "task.h"
 #include "tag.h"
 
+#include <QStandardPaths>
 #include <QAbstractListModel>
 #include <QAbstractItemModel>
 #include <QQmlEngine>
@@ -69,6 +70,26 @@ static void registerQmlTypes()
     qmlRegisterType<CircularProgressIndicator>("com.kdab.flowpomodoro", 1, 0, "CircularProgressIndicator");
 }
 
+static QString defaultDataFileName()
+{
+#if defined(Q_OS_ANDROID) && defined(DEVELOPER_MODE)
+    return "/storage/sdcard0/flow.dat";
+#endif
+    QString filename;
+    QString directory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    if (!QFile::exists(directory)) {
+        QDir dir(directory);
+        if (!dir.mkpath(directory)) {
+            qWarning() << "Failed to create directory" << directory;
+            qFatal("Bailing out...");
+            return QString();
+        }
+    }
+
+    filename += directory + "/flow.dat";
+    return filename;
+}
+
 Kernel *Kernel::instance()
 {
     static Kernel *kernel = new Kernel(qApp);
@@ -82,6 +103,7 @@ Kernel::Kernel(QObject *parent)
     , m_controller(new Controller(m_qmlEngine->rootContext(), m_storage, this))
     , m_pluginModel(new PluginModel(this))
 {
+    m_runtimeConfiguration.setDataFileName(defaultDataFileName());
     registerQmlTypes();
     qmlContext()->setContextProperty("_controller", m_controller);
     qmlContext()->setContextProperty("_storage", m_storage);
@@ -112,6 +134,16 @@ QQmlContext *Kernel::qmlContext() const
 QQmlEngine *Kernel::qmlEngine() const
 {
     return m_qmlEngine;
+}
+
+void Kernel::setRuntimeConfiguration(const RuntimeConfiguration &config)
+{
+    m_runtimeConfiguration = config;
+}
+
+RuntimeConfiguration Kernel::runtimeConfiguration() const
+{
+    return m_runtimeConfiguration;
 }
 
 void Kernel::notifyPlugins(TaskStatus newStatus)

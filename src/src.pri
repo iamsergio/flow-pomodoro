@@ -8,6 +8,7 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/jsonstorage.cpp \
            $$PWD/kernel.cpp \
            $$PWD/pluginmodel.cpp \
+           $$PWD/runtimeconfiguration.cpp \
            $$PWD/settings.cpp    \
            $$PWD/sortedtagsmodel.cpp \
            $$PWD/storage.cpp \
@@ -28,6 +29,7 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/genericlistmodel.h \
            $$PWD/plugininterface.h \
            $$PWD/pluginmodel.h     \
+           $$PWD/runtimeconfiguration.h \
            $$PWD/settings.h        \
            $$PWD/sortedtagsmodel.h \
            $$PWD/storage.h \

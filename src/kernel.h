@@ -21,6 +21,7 @@
 #define FLOW_KERNEL_H
 
 #include "task.h"
+#include "runtimeconfiguration.h"
 
 #include <QObject>
 
@@ -39,6 +40,8 @@ public:
     Controller *controller() const;
     QQmlContext *qmlContext() const;
     QQmlEngine *qmlEngine() const;
+    void setRuntimeConfiguration(const RuntimeConfiguration &); // So unit-tests can use another configuration
+    RuntimeConfiguration runtimeConfiguration() const;
 
 private Q_SLOTS:
     void onTaskStatusChanged();
@@ -52,6 +55,7 @@ private:
     QQmlEngine *m_qmlEngine;
     Controller *m_controller;
     PluginModel *m_pluginModel;
+    RuntimeConfiguration m_runtimeConfiguration;
 };
 
 #endif
