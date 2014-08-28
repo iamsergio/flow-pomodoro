@@ -44,6 +44,19 @@ void Tests::testCreateTag()
 void Tests::testDeleteTag()
 {
     m_storage->clearTags();
+    QVERIFY(m_storage->tags().isEmpty());
+
+    m_storage->createTag("t1");
+    QCOMPARE(m_storage->tags().count(), 1);
+    QVERIFY(m_storage->removeTag("t1"));
+    QCOMPARE(m_storage->tags().count(), 0);
+
+    m_storage->createTag("t1");
+    QCOMPARE(m_storage->tags().count(), 1);
+    QVERIFY(m_storage->removeTag("T1 ")); // upper case and whitespace
+    QCOMPARE(m_storage->tags().count(), 0);
+
+    QVERIFY(!m_storage->removeTag("T1 ")); // Remove again, should not crash.
 }
 
 void Tests::testContainsTag()
