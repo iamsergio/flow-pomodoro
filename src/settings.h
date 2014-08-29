@@ -26,9 +26,6 @@
 class Settings : public QSettings {
     Q_OBJECT
 public:
-    static Settings* instance();
-
-private:
     explicit Settings(QObject *parent = 0);
 };
 

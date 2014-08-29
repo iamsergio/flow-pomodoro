@@ -26,9 +26,3 @@
 Settings::Settings(QObject *parent) : QSettings("KDAB", "flow-pomodoro", parent)
 {
 }
-
-Settings *Settings::instance()
-{
-    static Settings *instance = new Settings(qApp);
-    return instance;
-}

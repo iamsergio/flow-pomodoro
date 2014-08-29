@@ -25,6 +25,7 @@
 
 #include <QObject>
 
+class Settings;
 class Storage;
 class Controller;
 class PluginModel;
@@ -40,6 +41,7 @@ public:
     Controller *controller() const;
     QQmlContext *qmlContext() const;
     QQmlEngine *qmlEngine() const;
+    Settings *settings() const;
     void setRuntimeConfiguration(const RuntimeConfiguration &); // So unit-tests can use another configuration
     RuntimeConfiguration runtimeConfiguration() const;
 
@@ -55,6 +57,7 @@ private:
     QQmlEngine *m_qmlEngine;
     Controller *m_controller;
     PluginModel *m_pluginModel;
+    Settings *m_settings;
     RuntimeConfiguration m_runtimeConfiguration;
 };
 

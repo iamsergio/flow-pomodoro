@@ -28,6 +28,7 @@
 #include "archivedtasksfiltermodel.h"
 #include "task.h"
 #include "tag.h"
+#include "settings.h"
 
 #include <QStandardPaths>
 #include <QAbstractListModel>
@@ -102,6 +103,7 @@ Kernel::Kernel(QObject *parent)
     , m_qmlEngine(new QQmlEngine(this))
     , m_controller(new Controller(m_qmlEngine->rootContext(), m_storage, this))
     , m_pluginModel(new PluginModel(this))
+    , m_settings(new Settings(this))
 {
     m_runtimeConfiguration.setDataFileName(defaultDataFileName());
     registerQmlTypes();
@@ -136,6 +138,11 @@ QQmlEngine *Kernel::qmlEngine() const
     return m_qmlEngine;
 }
 
+Settings *Kernel::settings() const
+{
+    return m_settings;
+}
+
 void Kernel::setRuntimeConfiguration(const RuntimeConfiguration &config)
 {
     m_runtimeConfiguration = config;
@@ -168,7 +175,6 @@ void Kernel::loadPlugins()
 
         qDebug() << "Looking for plugins in " << candidatePath;
         QDir pluginsDir = QDir(candidatePath);
-        QSettings *settings = Settings::instance();
         foreach (const QString &fileName, pluginsDir.entryList(QDir::Files)) {
             QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
             QObject *pluginObject = loader.instance();
@@ -177,9 +183,9 @@ void Kernel::loadPlugins()
                 if (pluginInterface) {
                     pluginInterface->setTaskStatus(TaskStopped);
                     const QString pluginName = pluginObject->metaObject()->className();
-                    settings->beginGroup("plugins");
-                    const bool enabled = settings->value(pluginName + ".enabled", /**defaul=*/true).toBool();
-                    settings->endGroup();
+                    m_settings->beginGroup("plugins");
+                    const bool enabled = m_settings->value(pluginName + ".enabled", /**defaul=*/true).toBool();
+                    m_settings->endGroup();
                     pluginInterface->setEnabled(enabled);
                     m_pluginModel->addPlugin(pluginInterface);
                 }
