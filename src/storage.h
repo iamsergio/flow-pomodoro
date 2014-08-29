@@ -133,6 +133,7 @@ public:
     QString deletedTagName() const;
     bool containsTag(const QString &name) const;
     void clearTags();
+    int indexOfTag(const QString &name) const;
 //------------------------------------------------------------------------------
 
 public Q_SLOTS:
@@ -160,7 +161,6 @@ protected:
 
 private:
     void connectTask(const Task::Ptr &);
-    int indexOfTag(const QString &name) const;
     int proxyRowToSource(int proxyIndex) const;
     QTimer m_scheduleTimer;
     SortedTagsModel *m_sortedTagModel;

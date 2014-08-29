@@ -14,6 +14,8 @@ private Q_SLOTS:
     void testDeleteTag();
     void testContainsTag();
     void testTag();
+    void testIndexOf();
+    void testRenameTag();
 private:
     Kernel *m_kernel;
     Storage *m_storage;

@@ -285,7 +285,6 @@ bool Storage::renameTag(const QString &oldName, const QString &newName)
     Tag::Ptr tag = m_data.tags.value(indexOfTag(oldName));
     if (!tag) {
         qWarning() << "Could not find tag with name" << oldName;
-        Q_ASSERT(false);
         return false;
     }
 

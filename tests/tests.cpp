@@ -108,4 +108,31 @@ void Tests::testTag()
     QVERIFY(tag->name() == "tag2");
 }
 
+void Tests::testIndexOf()
+{
+   m_storage->clearTags();
+   QCOMPARE(m_storage->indexOfTag("doesnt exist"), -1);
+   m_storage->createTag("0");
+   m_storage->createTag("1");
+   m_storage->createTag("2");
+   m_storage->createTag("3a");
+
+   QCOMPARE(m_storage->indexOfTag("0"), 0);
+   QCOMPARE(m_storage->indexOfTag("2"), 2);
+   QCOMPARE(m_storage->indexOfTag("3A "), 3); // has space and uppercase
+   QCOMPARE(m_storage->indexOfTag("4"), -1);
+}
+
+void Tests::testRenameTag()
+{
+    m_storage->clearTags();
+    m_storage->createTag("0a");
+    QVERIFY(!m_storage->renameTag("0a", " 0A"));
+    QVERIFY(m_storage->renameTag("0A", "1"));
+    QVERIFY(m_storage->containsTag("1"));
+    QVERIFY(!m_storage->renameTag("non-existant", "2"));
+    m_storage->createTag("2");
+    QVERIFY(!m_storage->renameTag("1", "2")); // Already exists
+}
+
 QTEST_MAIN(Tests)
