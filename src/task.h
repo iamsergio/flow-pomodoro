@@ -128,10 +128,4 @@ private:
     QDateTime m_modificationDate;
 };
 
-QDataStream &operator<<(QDataStream &out, const Task::Ptr &task);
-QDataStream &operator>>(QDataStream &in, Task::Ptr &task);
-
-Q_DECLARE_METATYPE(Task::Ptr)
-Q_DECLARE_METATYPE(Task::List)
-
 #endif

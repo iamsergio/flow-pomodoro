@@ -25,8 +25,6 @@
 
 Settings::Settings(QObject *parent) : QSettings("KDAB", "flow-pomodoro", parent)
 {
-    qRegisterMetaTypeStreamOperators<Task::Ptr>("Task");
-    qRegisterMetaTypeStreamOperators<Task::List>("Task::List");
 }
 
 Settings *Settings::instance()
