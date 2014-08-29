@@ -147,6 +147,35 @@ void Tests::testRenameTag()
     QVERIFY(!m_storage->renameTag("1", "2")); // Already exists
 }
 
+void Tests::testAddTask()
+{
+    Task::Ptr task = m_storage->addTask("t1");
+    QVERIFY(task);
+    QCOMPARE(m_storage->tasks().count(), 1);
+    task = m_storage->addTask("t2");
+    QCOMPARE(m_storage->tasks().count(), 2);
+    QVERIFY(task);
+}
+
+void Tests::testDeleteTask()
+{
+    m_storage->clearTasks();
+    QCOMPARE(m_storage->tasks().count(), 0);
+
+    Task::Ptr task1 = m_storage->addTask("t1");
+    Task::Ptr task2 = m_storage->addTask("t2");
+    QCOMPARE(m_storage->tasks().count(), 2);
+
+    m_storage->removeTask(task1);
+    QCOMPARE(m_storage->tasks().count(), 1);
+    m_storage->removeTask(task2);
+    QCOMPARE(m_storage->tasks().count(), 0);
+
+    // Lets remove it again
+    m_storage->removeTask(task2);
+    QCOMPARE(m_storage->tasks().count(), 0);
+}
+
 void Tests::waitForSignals()
 {
     QTestEventLoop::instance().enterLoop(10);

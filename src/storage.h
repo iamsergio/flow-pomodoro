@@ -124,6 +124,7 @@ public:
     Task::Ptr prependTask(const QString &taskText);
     void removeTask(const Task::Ptr &task);
     int indexOfTask(const Task::Ptr &) const;
+    void clearTasks();
 //------------------------------------------------------------------------------
 // Stuff for tags
     Q_INVOKABLE bool removeTag(const QString &tagName);

@@ -352,6 +352,11 @@ int Storage::indexOfTask(const Task::Ptr &task) const
     return -1;
 }
 
+void Storage::clearTasks()
+{
+    m_data.tasks.clear();
+}
+
 void Storage::setDisableSaving(bool disable)
 {
     m_savingDisabled += (disable ? 1 : -1);

@@ -20,6 +20,10 @@ private Q_SLOTS:
     void testTag();
     void testIndexOf();
     void testRenameTag();
+
+    void testAddTask();
+    void testDeleteTask();
+
 private:
     void waitForSignals();
     void checkExitLoop();
