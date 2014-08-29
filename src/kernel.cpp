@@ -101,9 +101,9 @@ Kernel::Kernel(QObject *parent)
     : QObject(parent)
     , m_storage(new JsonStorage(this))
     , m_qmlEngine(new QQmlEngine(this))
-    , m_controller(new Controller(m_qmlEngine->rootContext(), m_storage, this))
-    , m_pluginModel(new PluginModel(this))
     , m_settings(new Settings(this))
+    , m_controller(new Controller(m_qmlEngine->rootContext(), m_storage, m_settings, this))
+    , m_pluginModel(new PluginModel(this))
 {
     m_runtimeConfiguration.setDataFileName(defaultDataFileName());
     registerQmlTypes();

@@ -37,7 +37,8 @@ enum {
     TickInterval = 1000*60 // Ticks every minute
 };
 
-Controller::Controller(QQmlContext *context, Storage *storage, QObject *parent)
+Controller::Controller(QQmlContext *context, Storage *storage,
+                       Settings *settings, QObject *parent)
     : QObject(parent)
     , m_currentTaskDuration(0)
     , m_tickTimer(new QTimer(this))
@@ -54,6 +55,7 @@ Controller::Controller(QQmlContext *context, Storage *storage, QObject *parent)
     , m_storage(storage)
     , m_pomodoroFunctionalityDisabled(false)
     , m_qmlContext(context)
+    , m_settings(settings)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -62,8 +64,8 @@ Controller::Controller(QQmlContext *context, Storage *storage, QObject *parent)
     m_afterAddingTimer->setSingleShot(true);
     m_afterAddingTimer->setInterval(AfterAddingTimeout);
 
-    m_defaultPomodoroDuration = Kernel::instance()->settings()->value("defaultPomodoroDuration", /*default=*/QVariant(25)).toInt();
-    m_pomodoroFunctionalityDisabled = Kernel::instance()->settings()->value("pomodoroFunctionalityDisabled", /*default=*/ false).toBool();
+    m_defaultPomodoroDuration = m_settings->value("defaultPomodoroDuration", /*default=*/QVariant(25)).toInt();
+    m_pomodoroFunctionalityDisabled = m_settings->value("pomodoroFunctionalityDisabled", /*default=*/ false).toBool();
     connect(this, &Controller::invalidateTaskModel,
             m_storage->taskFilterModel(), &TaskFilterProxyModel::invalidateFilter,
             Qt::QueuedConnection);
@@ -271,8 +273,8 @@ void Controller::setDefaultPomodoroDuration(int duration)
 {
     if (m_defaultPomodoroDuration != duration && duration > 0 && duration < 59) {
         m_defaultPomodoroDuration = duration;
-        Kernel::instance()->settings()->setValue("defaultPomodoroDuration", QVariant(duration));
-        Kernel::instance()->settings()->sync();
+        m_settings->setValue("defaultPomodoroDuration", QVariant(duration));
+        m_settings->sync();
         emit defaultPomodoroDurationChanged();
     }
 }
@@ -286,8 +288,8 @@ void Controller::setPomodoroFunctionalityDisabled(bool disable)
 {
     if (disable != m_pomodoroFunctionalityDisabled) {
         m_pomodoroFunctionalityDisabled = disable;
-        Kernel::instance()->settings()->setValue("pomodoroFunctionalityDisabled", QVariant(disable));
-        Kernel::instance()->settings()->sync();
+        m_settings->setValue("pomodoroFunctionalityDisabled", QVariant(disable));
+        m_settings->sync();
         stopPomodoro();
         emit pomodoroFunctionalityDisabledChanged();
     }

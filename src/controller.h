@@ -29,6 +29,7 @@
 
 class QTimer;
 class Storage;
+class Settings;
 class QQmlContext;
 
 class Controller : public QObject {
@@ -95,7 +96,8 @@ public:
     };
     Q_ENUMS(QueueType)
 
-    explicit Controller(QQmlContext *context, Storage *storage, QObject *parent = 0);
+    explicit Controller(QQmlContext *context, Storage *storage,
+                        Settings *settings, QObject *parent = 0);
     ~Controller();
 
     int remainingMinutes() const;
@@ -233,6 +235,7 @@ private:
     Storage *m_storage;
     bool m_pomodoroFunctionalityDisabled;
     QQmlContext *m_qmlContext;
+    Settings *m_settings;
 };
 
 #endif

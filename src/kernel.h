@@ -55,9 +55,9 @@ private:
     explicit Kernel(QObject *parent = 0);
     Storage *m_storage;
     QQmlEngine *m_qmlEngine;
+    Settings *m_settings;
     Controller *m_controller;
     PluginModel *m_pluginModel;
-    Settings *m_settings;
     RuntimeConfiguration m_runtimeConfiguration;
 };
 
