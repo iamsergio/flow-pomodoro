@@ -58,6 +58,7 @@ class Controller : public QObject {
     // Other properties
     Q_PROPERTY(qreal dpiFactor READ dpiFactor CONSTANT)
     Q_PROPERTY(bool isMobile READ isMobile CONSTANT)
+    Q_PROPERTY(bool isIOS READ isIOS CONSTANT)
     Q_PROPERTY(bool openSSLSupported READ openSSLSupported CONSTANT)
     Q_PROPERTY(bool hackingMenuSupported READ hackingMenuSupported CONSTANT)
 public:
@@ -144,6 +145,7 @@ public:
     void setQueueType(QueueType);
 
     bool isMobile() const;
+    bool isIOS() const;
     bool openSSLSupported() const;
     bool hackingMenuSupported() const;
 

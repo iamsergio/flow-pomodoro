@@ -406,6 +406,15 @@ bool Controller::isMobile() const
 #endif
 }
 
+bool Controller::isIOS() const
+{
+#ifdef Q_OS_IOS
+    return true;
+#else
+    return false;
+#endif
+}
+
 bool Controller::openSSLSupported() const
 {
 #ifndef QT_NO_OPENSSL

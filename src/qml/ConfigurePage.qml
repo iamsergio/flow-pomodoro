@@ -107,8 +107,8 @@ Page {
 
             Loader {
                 anchors.fill: parent
-                sourceComponent: _controller.isMobile ? mobileTabBarComponent
-                                                      : desktopTabBarComponent
+                sourceComponent: (_controller.isMobile && !_controller.isIOS) ? mobileTabBarComponent
+                                                                              : desktopTabBarComponent
             }
         }
 
