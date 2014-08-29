@@ -6,6 +6,10 @@ class Storage;
 class Tests: public QObject
 {
     Q_OBJECT
+
+protected Q_SLOTS:
+    void onTagAboutToBeRemoved();
+
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
@@ -17,6 +21,10 @@ private Q_SLOTS:
     void testIndexOf();
     void testRenameTag();
 private:
+    void waitForSignals();
+    void checkExitLoop();
     Kernel *m_kernel;
     Storage *m_storage;
+
+    bool m_waitingForTagAboutToBeRemoved;
 };

@@ -5,6 +5,12 @@
 #include "storage.h"
 #include "runtimeconfiguration.h"
 
+void Tests::onTagAboutToBeRemoved()
+{
+    m_waitingForTagAboutToBeRemoved = false;
+    checkExitLoop();
+}
+
 void Tests::initTestCase()
 {
     m_kernel = Kernel::instance();
@@ -12,6 +18,8 @@ void Tests::initTestCase()
     RuntimeConfiguration config;
     config.setDataFileName("data.dat");
     m_kernel->setRuntimeConfiguration(config);
+    m_waitingForTagAboutToBeRemoved = false;
+    connect(m_storage, &Storage::tagAboutToBeRemoved, this, &Tests::onTagAboutToBeRemoved);
 }
 
 void Tests::cleanupTestCase()
@@ -48,7 +56,9 @@ void Tests::testDeleteTag()
 
     m_storage->createTag("t1");
     QCOMPARE(m_storage->tags().count(), 1);
+    m_waitingForTagAboutToBeRemoved = true;
     QVERIFY(m_storage->removeTag("t1"));
+    QVERIFY(!m_waitingForTagAboutToBeRemoved);
     QCOMPARE(m_storage->tags().count(), 0);
 
     m_storage->createTag("t1");
@@ -56,7 +66,9 @@ void Tests::testDeleteTag()
     QVERIFY(m_storage->removeTag("T1 ")); // upper case and whitespace
     QCOMPARE(m_storage->tags().count(), 0);
 
+    m_waitingForTagAboutToBeRemoved = true;
     QVERIFY(!m_storage->removeTag("T1 ")); // Remove again, should not crash.
+    QVERIFY(m_waitingForTagAboutToBeRemoved); // And should not emit
 }
 
 void Tests::testContainsTag()
@@ -133,6 +145,18 @@ void Tests::testRenameTag()
     QVERIFY(!m_storage->renameTag("non-existant", "2"));
     m_storage->createTag("2");
     QVERIFY(!m_storage->renameTag("1", "2")); // Already exists
+}
+
+void Tests::waitForSignals()
+{
+    QTestEventLoop::instance().enterLoop(10);
+    QVERIFY(!QTestEventLoop::instance().timeout());
+}
+
+void Tests::checkExitLoop()
+{
+    if (!m_waitingForTagAboutToBeRemoved)
+        QTestEventLoop::instance().exitLoop();
 }
 
 QTEST_MAIN(Tests)
