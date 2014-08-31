@@ -127,7 +127,7 @@ Item {
     property bool configTabBarEnableGradient: true
     property color configTabBarLightGradientColor: "#454C54"
     property color configTabBarDarkerGradientColor: "#222222"
-    property int configTabBarWidth: 250 * _controller.dpiFactor
+    property int configTabBarWidth: (250 + (_storage.webDAVSyncSupported ? 50 : 0)) * _controller.dpiFactor
 
     // Circular Progress Indicator
     property int circularIndicatorBorderWidth: 3 * _controller.dpiFactor
