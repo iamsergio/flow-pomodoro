@@ -154,7 +154,8 @@ TagRef::List Task::tags() const
 
 void Task::setTagList(const TagRef::List &list)
 {
-    m_tags.clear();
+    if (!m_tags.isEmpty()) // No need to emit uneeded signals
+        m_tags.clear();
 
     // Filter out duplicated tags
     QStringList addedTags;
