@@ -48,6 +48,7 @@ public:
 
 private Q_SLOTS:
     void onTaskStatusChanged();
+    void maybeLoadPlugins();
 
 private:
     void loadPlugins();

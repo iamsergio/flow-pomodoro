@@ -20,6 +20,7 @@ public:
         m_storage = m_kernel->storage();
         RuntimeConfiguration config;
         config.setDataFileName("data.dat");
+        config.setPluginsSupported(false);
         m_kernel->setRuntimeConfiguration(config);
     }
 

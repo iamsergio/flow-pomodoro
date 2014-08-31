@@ -30,8 +30,12 @@ public:
     void setDataFileName(const QString &);
     QString dataFileName() const;
 
+    void setPluginsSupported(bool); // default true
+    bool pluginsSupported() const;
+
 private:
     QString m_dataFileName;
+    bool m_pluginsSupported;
 
 };
 

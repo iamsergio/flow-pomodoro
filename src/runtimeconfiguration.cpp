@@ -20,6 +20,7 @@
 #include "runtimeconfiguration.h"
 
 RuntimeConfiguration::RuntimeConfiguration()
+    : m_pluginsSupported(true)
 {
 }
 
@@ -31,4 +32,14 @@ void RuntimeConfiguration::setDataFileName(const QString &dataFileName)
 QString RuntimeConfiguration::dataFileName() const
 {
     return m_dataFileName;
+}
+
+void RuntimeConfiguration::setPluginsSupported(bool supported)
+{
+    m_pluginsSupported = supported;
+}
+
+bool RuntimeConfiguration::pluginsSupported() const
+{
+    return m_pluginsSupported;
 }

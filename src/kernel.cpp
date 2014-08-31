@@ -116,12 +116,11 @@ Kernel::Kernel(QObject *parent)
     qmlContext()->setContextProperty("_controller", m_controller);
     qmlContext()->setContextProperty("_storage", m_storage);
     qmlContext()->setContextProperty("_pluginModel", m_pluginModel);
-    if (!m_controller->isMobile())
-        loadPlugins();
 
     connect(m_controller, &Controller::currentTaskChanged, this, &Kernel::onTaskStatusChanged);
     connect(m_qmlEngine, &QQmlEngine::quit, qGuiApp, &QGuiApplication::quit);
     QMetaObject::invokeMethod(m_storage, "load", Qt::QueuedConnection); // Schedule a load. Don't do it directly, it will deadlock in instance()
+    QMetaObject::invokeMethod(this, "maybeLoadPlugins", Qt::QueuedConnection);
 }
 
 Storage *Kernel::storage() const
@@ -206,4 +205,10 @@ void Kernel::loadPlugins()
 void Kernel::onTaskStatusChanged()
 {
     notifyPlugins(m_controller->currentTask()->status());
+}
+
+void Kernel::maybeLoadPlugins()
+{
+    if (!m_controller->isMobile() && m_runtimeConfiguration.pluginsSupported())
+        loadPlugins();
 }
