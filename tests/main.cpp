@@ -1,4 +1,6 @@
 #include "teststorage.h"
+#include "testtask.h"
+
 #include <QtTest/QtTest>
 #include <QGuiApplication>
 
@@ -8,4 +10,7 @@ int main(int argc, char *argv[])
     app.setAttribute(Qt::AA_Use96Dpi, true);
     Tests test1;
     return QTest::qExec(&test1, argc, argv);
+
+    TestTask test2;
+    return QTest::qExec(&test2, argc, argv);
 }
