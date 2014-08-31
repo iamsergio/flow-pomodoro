@@ -20,6 +20,7 @@
 #include "webdavsyncer.h"
 #include "jsonstorage.h"
 #include "kernel.h"
+#include "controller.h"
 #ifndef NO_WEBDAV
 #include "qwebdav.h"
 #endif
@@ -304,14 +305,22 @@ public:
 };
 
 
-WebDAVSyncer::WebDAVSyncer(Storage *parent)
+WebDAVSyncer::WebDAVSyncer(Storage *parent, Controller *controller)
     : QObject(parent)
     , m_webdav(new QWebdav(this))
     , m_stateMachine(new QStateMachine(this))
     , m_storage(parent)
+    , m_controller(controller)
     , m_syncInProgress(false)
 {
-    // TODO: Setup connection
+    bool isHttps = controller->isHttps();
+    int port = controller->port();
+    QString path = controller->path();
+    QString host = controller->host();
+    QString password = controller->password();
+    QString user = controller->user();
+
+    m_webdav->setConnectionSettings(isHttps ? QWebdav::HTTPS : QWebdav::HTTP, host, path, user, password, port);
 
     QState *initialState = new InitialState(this);
     QState *acquireLockState = new AcquireLockState(this);

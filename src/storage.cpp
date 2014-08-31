@@ -61,9 +61,6 @@ Storage::Storage(QObject *parent)
     , m_createNonExistentTags(false)
     , m_savingInProgress(false)
     , m_loadingInProgress(false)
-#ifndef NO_WEBDAV
-    , m_webDavSyncer(new WebDAVSyncer(this))
-#endif
 {
     m_scheduleTimer.setSingleShot(true);
     m_scheduleTimer.setInterval(0);
@@ -105,10 +102,6 @@ Storage::Storage(QObject *parent)
     m_archivedTasksModel->setAcceptArchived(true);
     m_untaggedTasksModel->setFilterUntagged(true);
     m_untaggedTasksModel->setObjectName("Untagged and archived tasks model");
-#ifndef NO_WEBDAV
-    connect(m_webDavSyncer, &WebDAVSyncer::syncInProgressChanged,
-            this, &Storage::webDAVSyncInProgressChanged);
-#endif
 }
 
 Storage::~Storage()
@@ -164,15 +157,6 @@ void Storage::save()
     save_impl();
     m_savingDisabled += -1;
     m_savingInProgress = false;
-}
-
-void Storage::webDavSync()
-{
-#ifndef NO_WEBDAV
-    m_webDavSyncer->sync();
-#else
-    qDebug() << "WebDAV sync not supported";
-#endif
 }
 
 int Storage::serializerVersion() const
@@ -384,14 +368,6 @@ bool Storage::webDAVSyncSupported() const
 {
 #ifndef NO_WEBDAV
     return true;
-#endif
-    return false;
-}
-
-bool Storage::webDAVSyncInProgress() const
-{
-#ifndef NO_WEBDAV
-    return m_webDavSyncer->syncInProgress();
 #endif
     return false;
 }

@@ -30,12 +30,14 @@ class AcquireLockState;
 class DownloadDataState;
 class CleanupState;
 class Storage;
+class Controller;
 
 class WebDAVSyncer : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool syncInProgress READ syncInProgress NOTIFY syncInProgressChanged)
 public:
-    explicit WebDAVSyncer(Storage *parent = 0);
+    explicit WebDAVSyncer(Storage *storage, Controller *controller);
     bool syncInProgress() const;
 
 public Q_SLOTS:
@@ -56,6 +58,7 @@ private:
     QWebdav *m_webdav;
     QStateMachine *m_stateMachine;
     Storage *m_storage;
+    Controller *m_controller;
     bool m_syncInProgress;
 
     friend class InitialState;

@@ -29,6 +29,7 @@
 #include "task.h"
 #include "tag.h"
 #include "settings.h"
+#include "webdavsyncer.h"
 
 #include <QStandardPaths>
 #include <QAbstractListModel>
@@ -110,12 +111,18 @@ Kernel::Kernel(QObject *parent)
     , m_settings(new Settings(this))
     , m_controller(new Controller(m_qmlEngine->rootContext(), m_storage, m_settings, this))
     , m_pluginModel(new PluginModel(this))
+#ifndef NO_WEBDAV
+    , m_webDavSyncer(new WebDAVSyncer(m_storage, m_controller))
+#endif
 {
     m_runtimeConfiguration.setDataFileName(defaultDataFileName());
     registerQmlTypes();
     qmlContext()->setContextProperty("_controller", m_controller);
     qmlContext()->setContextProperty("_storage", m_storage);
     qmlContext()->setContextProperty("_pluginModel", m_pluginModel);
+#ifndef NO_WEBDAV
+    qmlContext()->setContextProperty("_webdavSync", m_webDavSyncer);
+#endif
 
     connect(m_controller, &Controller::currentTaskChanged, this, &Kernel::onTaskStatusChanged);
     connect(m_qmlEngine, &QQmlEngine::quit, qGuiApp, &QGuiApplication::quit);
@@ -157,6 +164,13 @@ RuntimeConfiguration Kernel::runtimeConfiguration() const
 {
     return m_runtimeConfiguration;
 }
+
+#ifndef NO_WEBDAV
+WebDAVSyncer *Kernel::webdavSyncer() const
+{
+    return m_webDavSyncer;
+}
+#endif
 
 void Kernel::notifyPlugins(TaskStatus newStatus)
 {

@@ -23,6 +23,7 @@
 #include "taskfilterproxymodel.h"
 #include "storage.h"
 #include "kernel.h"
+#include "webdavsyncer.h"
 
 #include <QTimer>
 #include <QScreen>
@@ -56,6 +57,8 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_pomodoroFunctionalityDisabled(false)
     , m_qmlContext(context)
     , m_settings(settings)
+    , m_port(80)
+    , m_isHttps(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -66,6 +69,15 @@ Controller::Controller(QQmlContext *context, Storage *storage,
 
     m_defaultPomodoroDuration = m_settings->value("defaultPomodoroDuration", /*default=*/QVariant(25)).toInt();
     m_pomodoroFunctionalityDisabled = m_settings->value("pomodoroFunctionalityDisabled", /*default=*/ false).toBool();
+
+
+    m_host = m_settings->value("webdavHost").toString();
+    m_user = m_settings->value("webdavUser").toString();
+    m_path = m_settings->value("webdavPath").toString();
+    m_password = m_settings->value("webdavPassword").toString();
+    m_isHttps = m_settings->value("webdavIsHttps", false).toBool();
+    m_port = m_settings->value("webdavPort", 80).toInt();
+
     connect(this, &Controller::invalidateTaskModel,
             m_storage->taskFilterModel(), &TaskFilterProxyModel::invalidateFilter,
             Qt::QueuedConnection);
@@ -434,6 +446,90 @@ return true;
 return false;
 }
 
+bool Controller::isHttps() const
+{
+    return m_isHttps;
+}
+
+void Controller::setIsHttps(bool is)
+{
+    if (is != m_isHttps) {
+        m_isHttps = is;
+        m_settings->setValue("webdavIsHttps", m_isHttps);
+        emit isHttpsChanged();
+    }
+}
+
+QString Controller::host() const
+{
+    return m_host;
+}
+
+void Controller::setHost(const QString &host)
+{
+    if (host != m_host) {
+        m_host = host;
+        m_settings->setValue("webdavHost", m_host);
+        emit hostChanged();
+    }
+}
+
+QString Controller::path() const
+{
+    return m_path.startsWith("/") ? m_path : ("/" + m_path);
+}
+
+void Controller::setPath(const QString &path)
+{
+    if (path != m_path) {
+        m_path = path;
+        m_settings->setValue("webdavPath", m_path);
+        emit pathChanged();
+    }
+}
+
+QString Controller::user() const
+{
+    return m_user;
+}
+
+void Controller::setUser(const QString &user)
+{
+    if (user != m_user) {
+        m_user = user;
+        m_settings->setValue("webdavUser", m_user);
+        emit userChanged();
+    }
+}
+
+QString Controller::password() const
+{
+    return m_password;
+}
+
+void Controller::setPassword(const QString &pass)
+{
+    if (pass != m_password) {
+        m_password = pass;
+        m_settings->setValue("webdavPassword", m_password);
+        emit passwordChanged();
+    }
+}
+
+int Controller::port() const
+{
+    return m_port;
+}
+
+void Controller::setPort(int port)
+{
+    if (port != m_port) {
+        m_port = port;
+        m_settings->setValue("webdavPort", m_port);
+        emit portChanged();
+    }
+}
+
 void Controller::setCurrentTabTag(Tag *tag)
 {
     if (m_currentTabTag != tag) {
@@ -749,4 +845,13 @@ void Controller::removeTask(Task *task)
     qDebug() << "Removing task" << task->summary();
     editTask(Q_NULLPTR, EditModeNone);
     m_storage->removeTask(task->toStrongRef());
+}
+
+void Controller::webDavSync()
+{
+#ifndef NO_WEBDAV
+    Kernel::instance()->webdavSyncer()->sync();
+#else
+    qDebug() << "WebDAV sync not supported";
+#endif
 }

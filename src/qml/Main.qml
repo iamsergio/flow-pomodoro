@@ -171,7 +171,7 @@ Rectangle {
                 anchors.bottomMargin: _style.marginMedium + 2 * _controller.dpiFactor
                 anchors.leftMargin: _style.pageMargin + 2 * _controller.dpiFactor
                 height: width
-                running: _storage.webDAVSyncInProgress
+                running: _storage.webDAVSyncSupported && _webdavSync.syncInProgress
                 z: 3
             }
         }

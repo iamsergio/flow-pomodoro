@@ -61,6 +61,14 @@ class Controller : public QObject {
     Q_PROPERTY(bool isIOS READ isIOS CONSTANT)
     Q_PROPERTY(bool openSSLSupported READ openSSLSupported CONSTANT)
     Q_PROPERTY(bool hackingMenuSupported READ hackingMenuSupported CONSTANT)
+
+    Q_PROPERTY(bool isHttps READ isHttps WRITE setIsHttps NOTIFY isHttpsChanged)
+    Q_PROPERTY(int port READ port WRITE setPort NOTIFY portChanged)
+    Q_PROPERTY(QString host READ host WRITE setHost NOTIFY hostChanged)
+    Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+    Q_PROPERTY(QString user READ user WRITE setUser NOTIFY userChanged)
+    Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
+
 public:
     enum Page {
         InvalidPage = 0,
@@ -149,6 +157,20 @@ public:
     bool openSSLSupported() const;
     bool hackingMenuSupported() const;
 
+    // Webdav
+    bool isHttps() const;
+    void setIsHttps(bool);
+    QString host() const;
+    void setHost(const QString &);
+    QString path() const;
+    void setPath(const QString &);
+    QString user() const;
+    void setUser(const QString &);
+    QString password() const;
+    void setPassword(const QString &);
+    int port() const;
+    void setPort(int);
+
 public Q_SLOTS:
     void setCurrentTabTag(Tag *);
     void addTask(const QString &text, bool startEditMode);
@@ -174,6 +196,8 @@ public Q_SLOTS:
     void endAddingNewTag(const QString &tagName);
 
     void requestContextMenu(Task *);
+
+    void webDavSync();
 private Q_SLOTS:
     void onTimerTick();
 
@@ -201,6 +225,14 @@ Q_SIGNALS:
     void queueTypeChanged();
     void addingNewTask();
     void requestActivateWindow();
+
+    // webdav stuff
+    void hostChanged();
+    void userChanged();
+    void passwordChanged();
+    void isHttpsChanged();
+    void portChanged();
+    void pathChanged();
 
 private:
     int indexOfTaskInCurrentTab(const Task::Ptr &task);
@@ -238,6 +270,14 @@ private:
     bool m_pomodoroFunctionalityDisabled;
     QQmlContext *m_qmlContext;
     Settings *m_settings;
+
+    // webdav stuff:
+    int m_port;
+    bool m_isHttps;
+    QString m_host;
+    QString m_path;
+    QString m_user;
+    QString m_password;
 };
 
 #endif

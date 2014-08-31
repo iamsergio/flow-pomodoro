@@ -31,7 +31,6 @@
 class SortedTagsModel;
 class ArchivedTasksFilterModel;
 class TaskFilterProxyModel;
-class WebDAVSyncer;
 
 typedef GenericListModel<Tag::Ptr> TagList;
 typedef GenericListModel<Task::Ptr> TaskList;
@@ -48,7 +47,6 @@ class Storage : public QObject
     Q_PROPERTY(TaskFilterProxyModel* taskFilterModel READ taskFilterModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* untaggedTasksModel READ untaggedTasksModel CONSTANT)
     Q_PROPERTY(bool webDAVSyncSupported READ webDAVSyncSupported CONSTANT)
-    Q_PROPERTY(bool webDAVSyncInProgress READ webDAVSyncInProgress NOTIFY webDAVSyncInProgressChanged)
 
 public:
     enum TagModelRole {
@@ -92,7 +90,6 @@ public:
     bool loadingInProgress() const;
 
     bool webDAVSyncSupported() const;
-    bool webDAVSyncInProgress() const;
 
     QByteArray instanceId();
 #ifdef DEVELOPER_MODE
@@ -141,13 +138,11 @@ public:
 public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);
     void dumpDebugInfo();
-    void webDavSync();
     void load();
     void save();
 
 Q_SIGNALS:
     void tagAboutToBeRemoved(const QString &name);
-    void webDAVSyncInProgressChanged();
 
 private Q_SLOTS:
     void onTagAboutToBeRemoved(const QString &tagName);
@@ -172,9 +167,6 @@ private:
     bool m_createNonExistentTags;
     bool m_savingInProgress;
     bool m_loadingInProgress;
-#ifndef NO_WEBDAV
-    WebDAVSyncer *m_webDavSyncer;
-#endif
 };
 
 #endif

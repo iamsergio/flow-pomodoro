@@ -28,6 +28,7 @@
 class Settings;
 class Storage;
 class Controller;
+class WebDAVSyncer;
 class PluginModel;
 class QQmlEngine;
 class QQmlContext;
@@ -46,6 +47,10 @@ public:
     void setRuntimeConfiguration(const RuntimeConfiguration &); // So unit-tests can use another configuration
     RuntimeConfiguration runtimeConfiguration() const;
 
+#ifndef NO_WEBDAV
+    WebDAVSyncer *webdavSyncer() const;
+#endif
+
 private Q_SLOTS:
     void onTaskStatusChanged();
     void maybeLoadPlugins();
@@ -61,6 +66,9 @@ private:
     Controller *m_controller;
     PluginModel *m_pluginModel;
     RuntimeConfiguration m_runtimeConfiguration;
+#ifndef NO_WEBDAV
+    WebDAVSyncer *m_webDavSyncer;
+#endif
 };
 
 #endif

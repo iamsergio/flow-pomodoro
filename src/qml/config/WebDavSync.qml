@@ -9,10 +9,135 @@ Item {
     id: root
     anchors.fill: parent
 
-    Button {
-        text: qsTr("sync")
-        onClicked: {
-            _storage.webDavSync()
+    GridLayout {
+        id: grid1
+        columns: 2
+
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: _style.marginBig
+        anchors.leftMargin: _style.marginMedium
+        anchors.rightMargin: 40 * _controller.dpiFactor
+        columnSpacing: _style.marginBig
+
+        Text {
+            text: qsTr("Protocol")
+        }
+
+        ComboBox {
+            id: httpsCombo
+            currentIndex: (_controller.isHttps && _controller.openSSLSupported) ? 1 : 0
+            model: ListModel {
+
+                ListElement { text: "http" }
+                ListElement { text: "https" }
+
+                Component.onCompleted: {
+                    if (!_controller.openSSLSupported) {
+                        remove(1)
+                    }
+                }
+            }
+            Binding {
+                target: _controller
+                property: "isHttps"
+                value: httpsCombo.currentIndex == 1
+            }
+        }
+
+        Text {
+            text: qsTr("Host")
+        }
+
+        TextField {
+            id: hostField
+            text: _controller.host
+            Binding {
+                target: _controller
+                property: "host"
+                value: hostField.text
+            }
+        }
+
+        Text {
+            text: qsTr("Path")
+        }
+
+        TextField {
+            id: pathField
+            text: _controller.path
+            Binding {
+                target: _controller
+                property: "path"
+                value: pathField.text
+            }
+        }
+
+        Text {
+            text: qsTr("Port")
+        }
+
+        TextField {
+            id: portField
+            text: _controller.port
+            Binding {
+                target: _controller
+                property: "port"
+                value: portField.text
+            }
+        }
+
+        Text {
+            text: qsTr("User")
+        }
+
+        TextField {
+            id: userField
+            text: _controller.user
+            Binding {
+                target: _controller
+                property: "user"
+                value: userField.text
+            }
+        }
+
+        Text {
+            text: qsTr("Password")
+        }
+
+        TextField {
+            id: passwordField
+            echoMode: TextInput.Password
+            text: _controller.password
+            Binding {
+                target: _controller
+                property: "password"
+                value: passwordField.text
+            }
         }
     }
+
+    Text {
+        id: urlText
+        anchors.top: grid1.bottom
+        anchors.left: grid1.left
+        anchors.topMargin: _style.marginBig
+        text: qsTr("Url") + ": " + httpsCombo.currentText + "://" + hostField.text + (pathField.text.charAt(0) == "/" ? pathField.text : "/" + pathField.text) + (portField.text ? ":" + portField.text : "")
+    }
+
+    Text {
+        color: "red"
+        anchors.top: urlText.bottom
+        anchors.left: grid1.left
+        anchors.topMargin: _style.marginBig
+        text: qsTr("Password will be saved in clear-text")
+        visible: passwordField.text
+    }
+
+    onVisibleChanged: {
+        if (!visible) {
+
+        }
+    }
+
 }
