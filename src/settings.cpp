@@ -23,6 +23,35 @@
 #include <QCoreApplication>
 #include <QMetaType>
 
-Settings::Settings(QObject *parent) : QSettings("KDAB", "flow-pomodoro", parent)
+Settings::Settings(QObject *parent)
+    : QSettings("KDAB", "flow-pomodoro", parent)
+    , m_syncScheduled(false)
+    , m_needsSync(false)
 {
+}
+
+void Settings::setValue(const QString &key, const QVariant &value)
+{
+    QSettings::setValue(key, value);
+    m_needsSync = true;
+}
+
+void Settings::scheduleSync()
+{
+    if (!m_syncScheduled) {
+        m_syncScheduled = true;
+        m_needsSync = false;
+        QMetaObject::invokeMethod(this, "doSync", Qt::QueuedConnection);
+    }
+}
+
+bool Settings::needsSync() const
+{
+    return m_needsSync;
+}
+
+void Settings::doSync()
+{
+    m_syncScheduled = false;
+    QSettings::sync();
 }

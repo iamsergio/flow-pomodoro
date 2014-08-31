@@ -27,6 +27,17 @@ class Settings : public QSettings {
     Q_OBJECT
 public:
     explicit Settings(QObject *parent = 0);
+    void setValue(const QString &key, const QVariant &value);
+    void scheduleSync();
+    bool needsSync() const;
+
+private Q_SLOTS:
+    void doSync();
+
+private:
+    void sync();
+    bool m_syncScheduled;
+    bool m_needsSync;
 };
 
 #endif

@@ -254,6 +254,11 @@ Controller::Page Controller::currentPage() const
 void Controller::setCurrentPage(Controller::Page page)
 {
     if (page != m_page) {
+        if (m_page == ConfigurePage) {
+            // If we came from configure, then sync()
+            m_settings->scheduleSync();
+        }
+
         m_page = page;
         emit currentPageChanged();
     }
@@ -274,7 +279,6 @@ void Controller::setDefaultPomodoroDuration(int duration)
     if (m_defaultPomodoroDuration != duration && duration > 0 && duration < 59) {
         m_defaultPomodoroDuration = duration;
         m_settings->setValue("defaultPomodoroDuration", QVariant(duration));
-        m_settings->sync();
         emit defaultPomodoroDurationChanged();
     }
 }
@@ -289,7 +293,6 @@ void Controller::setPomodoroFunctionalityDisabled(bool disable)
     if (disable != m_pomodoroFunctionalityDisabled) {
         m_pomodoroFunctionalityDisabled = disable;
         m_settings->setValue("pomodoroFunctionalityDisabled", QVariant(disable));
-        m_settings->sync();
         stopPomodoro();
         emit pomodoroFunctionalityDisabledChanged();
     }
