@@ -56,4 +56,10 @@ void TestTag::testTaskCount()
     QCOMPARE(m_tagA->taskCount(), 2);
     QCOMPARE(m_tagB->taskCount(), 1);
     QCOMPARE(m_tagC->taskCount(), 0);
+
+    m_storage->removeTask(task1);
+    QCOMPARE(m_storage->tasks().count(), 1);
+    QCOMPARE(m_tagA->taskCount(), 1);
+
+    checkStorageConsistency();
 }
