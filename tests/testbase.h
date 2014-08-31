@@ -7,6 +7,7 @@
 #include "runtimeconfiguration.h"
 #include "tag.h"
 #include "task.h"
+#include "tagref.h"
 #include <QtTest/QtTest>
 
 class TestBase : public QObject

@@ -154,7 +154,17 @@ TagRef::List Task::tags() const
 
 void Task::setTagList(const TagRef::List &list)
 {
-    m_tags = list;
+    m_tags.clear();
+
+    // Filter out duplicated tags
+    QStringList addedTags;
+    foreach (const TagRef &ref, list) {
+        QString name = ref.m_tag->name().toLower();
+        if (!addedTags.contains(name) && !name.isEmpty()) {
+            addedTags << name;
+            m_tags << ref;
+        }
+    }
 }
 
 QAbstractItemModel *Task::tagModel() const

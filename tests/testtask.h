@@ -12,4 +12,7 @@ private Q_SLOTS:
     void cleanupTestCase();
 
     void testSetTags();
+private:
+    Task::Ptr m_task1;
+    Task::Ptr m_task2;
 };
