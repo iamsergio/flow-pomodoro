@@ -27,6 +27,7 @@ Item {
         ComboBox {
             id: httpsCombo
             currentIndex: (_controller.isHttps && _controller.openSSLSupported) ? 1 : 0
+            enabled: !_webdavSync.syncInProgress
             model: ListModel {
 
                 ListElement { text: "http" }
@@ -52,6 +53,7 @@ Item {
         TextField {
             id: hostField
             text: _controller.host
+            enabled: !_webdavSync.syncInProgress
             Binding {
                 target: _controller
                 property: "host"
@@ -66,11 +68,13 @@ Item {
         TextField {
             id: pathField
             text: _controller.path
+            enabled: !_webdavSync.syncInProgress
             Binding {
                 target: _controller
                 property: "path"
                 value: pathField.text
             }
+
         }
 
         Text {
@@ -80,6 +84,7 @@ Item {
         TextField {
             id: portField
             text: _controller.port
+            enabled: !_webdavSync.syncInProgress
             Binding {
                 target: _controller
                 property: "port"
@@ -94,6 +99,7 @@ Item {
         TextField {
             id: userField
             text: _controller.user
+            enabled: !_webdavSync.syncInProgress
             Binding {
                 target: _controller
                 property: "user"
@@ -109,6 +115,7 @@ Item {
             id: passwordField
             echoMode: TextInput.Password
             text: _controller.password
+            enabled: !_webdavSync.syncInProgress
             Binding {
                 target: _controller
                 property: "password"
