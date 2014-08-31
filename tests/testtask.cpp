@@ -61,7 +61,11 @@ void TestTask::testSetTags()
 void TestTask::testAddAndRemoveTag()
 {
     m_task1->setTagList(TagRef::List());
+    m_storage->clearTasks();
+    m_storage->clearTags();
+    m_storage->setCreateNonExistentTags(true);
     m_spy.clear();
+    QCOMPARE(Tag::tagCount, 0);
     m_task1->addTag("tagA");
     m_task1->addTag("tagB");
     m_task1->addTag("tagC");
@@ -84,4 +88,8 @@ void TestTask::testAddAndRemoveTag()
     QCOMPARE(m_task1->tags().count(), 0);
     expectedSignals = { "changed", "tagsChanged", "changed", "tagsChanged", "changed", "tagsChanged" };
     QCOMPARE(m_spy.caughtSignals(), expectedSignals);
+
+    QCOMPARE(Tag::tagCount, m_storage->tags().count());
+    QCOMPARE(Tag::tagCount, 3);
+    m_storage->setCreateNonExistentTags(true);
 }
