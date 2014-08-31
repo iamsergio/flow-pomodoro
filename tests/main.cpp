@@ -14,5 +14,6 @@ int main(int argc, char *argv[])
     TestTask test2;
     success &= QTest::qExec(&test2, argc, argv);
 
+    delete Kernel::instance(); // Otherwise it's deleted by QGuiApplication and we hang deep in qml engine land for some reason
     return success;
 }
