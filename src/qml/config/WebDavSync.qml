@@ -117,9 +117,48 @@ Item {
         }
     }
 
+    Button {
+        id: testButton
+        anchors.top: grid1.bottom
+        anchors.left: grid1.left
+        anchors.topMargin: _style.marginBig
+        text: qsTr("Test settings")
+        enabled: portField.text && hostField.text && pathField.text && !_webdavSync.syncInProgress
+        onClicked: {
+            testSettingsText.text = ""
+            _webdavSync.testSettings()
+        }
+    }
+
+    Text {
+        id: testSettingsText
+        anchors.verticalCenter: testButton.verticalCenter
+        anchors.left: testButton.right
+        anchors.leftMargin: _style.marginMedium
+        visible: testButton.enabled
+    }
+
+    Connections {
+        target: _webdavSync
+        onTestSettingsFinished: {
+            testSettingsText.color = success ? "black" : "red"
+            testSettingsText.text = success ? qsTr("Success!") : errorMessage
+            timer.start()
+        }
+    }
+
+    Timer {
+        id: timer
+        interval: 5000
+        repeat: false
+        onTriggered: {
+            testSettingsText.text = ""
+        }
+    }
+
     Text {
         id: urlText
-        anchors.top: grid1.bottom
+        anchors.top: testButton.bottom
         anchors.left: grid1.left
         anchors.topMargin: _style.marginBig
         text: qsTr("Url") + ": " + httpsCombo.currentText + "://" + hostField.text + (pathField.text.charAt(0) == "/" ? pathField.text : "/" + pathField.text) + (portField.text ? ":" + portField.text : "")

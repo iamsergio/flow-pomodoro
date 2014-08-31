@@ -42,9 +42,11 @@ public:
 
 public Q_SLOTS:
     void sync();
+    void testSettings();
 
 Q_SIGNALS:
     void startSync();
+    void testSettingsStarted();
     void syncFinished(bool success, const QString &errorMessage);
     void webdavAlreadyLocked();
     void lockAcquired();
@@ -53,6 +55,7 @@ Q_SIGNALS:
     void uploadFinished();
     void cleanupFinished();
     void syncInProgressChanged();
+    void testSettingsFinished(bool success, const QString &errorMessage);
 
 private:
     QWebdav *m_webdav;
@@ -65,6 +68,7 @@ private:
     friend class AcquireLockState;
     friend class DownloadDataState;
     friend class CleanupState;
+    friend class TestSettingsState;
 };
 
 #endif // NO_WEBDAV

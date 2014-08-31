@@ -304,6 +304,45 @@ public:
     }
 };
 
+class TestSettingsState : public SyncState
+{
+    // Tests if we can write to dav server with these settings
+public:
+    TestSettingsState(WebDAVSyncer *syncer) : SyncState(syncer)
+    {
+        setObjectName("TestSettingsState");
+    }
+
+    void onEntry(QEvent *event)
+    {
+        SyncState::onEntry(event);
+        qDebug() << "Entered TestSettingsState";
+        QNetworkReply *reply = m_syncer->m_webdav->put("/testingSettings", "");
+        connect(reply, &QNetworkReply::finished, this, &TestSettingsState::onUploadFinished);
+    }
+
+    void onUploadFinished()
+    {
+        QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+        qDebug() << Q_FUNC_INFO;
+        if (reply->error() == 0) {
+            QNetworkReply *reply2 = m_syncer->m_webdav->remove("/testingSettings");
+            connect(reply2, &QNetworkReply::finished, this, &TestSettingsState::onCleanupFinished);
+        } else {
+            emit m_syncer->testSettingsFinished(false, reply->errorString());
+        }
+        reply->deleteLater();
+    }
+
+    void onCleanupFinished()
+    {
+        QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+        qDebug() << Q_FUNC_INFO;
+        emit m_syncer->testSettingsFinished(reply->error() == 0, reply->errorString());
+        reply->deleteLater();
+    }
+};
+
 
 WebDAVSyncer::WebDAVSyncer(Storage *parent, Controller *controller)
     : QObject(parent)
@@ -326,18 +365,22 @@ WebDAVSyncer::WebDAVSyncer(Storage *parent, Controller *controller)
     QState *acquireLockState = new AcquireLockState(this);
     QState *downloadState = new DownloadDataState(this);
     QState *cleanupState = new CleanupState(this);
+    QState *testSettingsState = new TestSettingsState(this);
     m_stateMachine->addState(initialState);
     m_stateMachine->addState(acquireLockState);
     m_stateMachine->addState(downloadState);
     m_stateMachine->addState(cleanupState);
+    m_stateMachine->addState(testSettingsState);
 
     initialState->addTransition(this, SIGNAL(startSync()), acquireLockState); // Try to acquire the lock
+    initialState->addTransition(this, SIGNAL(testSettingsStarted()), testSettingsState);
     acquireLockState->addTransition(this, SIGNAL(webdavAlreadyLocked()), initialState); // We can't lock, go back to beginning
     acquireLockState->addTransition(this, SIGNAL(lockAcquired()), downloadState);
     downloadState->addTransition(this, SIGNAL(downloadError()), cleanupState);
     downloadState->addTransition(this, SIGNAL(uploadError()), cleanupState);
     downloadState->addTransition(this, SIGNAL(uploadFinished()), cleanupState);
     cleanupState->addTransition(this, SIGNAL(cleanupFinished()), initialState);
+    testSettingsState->addTransition(this, SIGNAL(testSettingsFinished(bool,QString)), initialState);
 
     m_stateMachine->setInitialState(initialState);
     m_stateMachine->setObjectName("State Machine");
@@ -356,4 +399,14 @@ void WebDAVSyncer::sync()
     } else {
         qWarning() << "Will not sync while saving or loading";
     }
+}
+
+void WebDAVSyncer::testSettings()
+{
+    if (syncInProgress()) {
+        qWarning() << Q_FUNC_INFO << "Sync is in progress";
+        return;
+    }
+
+    emit testSettingsStarted();
 }
