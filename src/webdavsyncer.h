@@ -39,6 +39,8 @@ class WebDAVSyncer : public QObject
 public:
     explicit WebDAVSyncer(Storage *storage, Controller *controller);
     bool syncInProgress() const;
+    void setConnectionSettings(bool https, int port, const QString &host, const QString &path,
+                               const QString &user, const QString &password);
 
 public Q_SLOTS:
     void sync();

@@ -457,6 +457,7 @@ void Controller::setIsHttps(bool is)
         m_isHttps = is;
         m_settings->setValue("webdavIsHttps", m_isHttps);
         emit isHttpsChanged();
+        updateWebDavCredentials();
     }
 }
 
@@ -470,6 +471,7 @@ void Controller::setHost(const QString &host)
     if (host != m_host) {
         m_host = host;
         m_settings->setValue("webdavHost", m_host);
+        updateWebDavCredentials();
         emit hostChanged();
     }
 }
@@ -485,6 +487,7 @@ void Controller::setPath(const QString &path)
         m_path = path;
         m_settings->setValue("webdavPath", m_path);
         emit pathChanged();
+        updateWebDavCredentials();
     }
 }
 
@@ -499,6 +502,7 @@ void Controller::setUser(const QString &user)
         m_user = user;
         m_settings->setValue("webdavUser", m_user);
         emit userChanged();
+        updateWebDavCredentials();
     }
 }
 
@@ -513,6 +517,7 @@ void Controller::setPassword(const QString &pass)
         m_password = pass;
         m_settings->setValue("webdavPassword", m_password);
         emit passwordChanged();
+        updateWebDavCredentials();
     }
 }
 
@@ -527,6 +532,7 @@ void Controller::setPort(int port)
         m_port = port;
         m_settings->setValue("webdavPort", m_port);
         emit portChanged();
+        updateWebDavCredentials();
     }
 }
 
@@ -573,6 +579,13 @@ void Controller::onTimerTick()
         stopPomodoro();
         emit taskFinished();
     }
+}
+
+void Controller::updateWebDavCredentials()
+{
+#ifndef NO_WEBDAV
+    Kernel::instance()->webdavSyncer()->setConnectionSettings(m_isHttps, m_port, m_host, m_path, m_user, m_password);
+#endif
 }
 
 int Controller::indexOfTaskInCurrentTab(const Task::Ptr &task)

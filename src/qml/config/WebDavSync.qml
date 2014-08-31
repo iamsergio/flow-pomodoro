@@ -135,7 +135,10 @@ Item {
         anchors.verticalCenter: testButton.verticalCenter
         anchors.left: testButton.right
         anchors.leftMargin: _style.marginMedium
+        anchors.right: parent.right
+        anchors.rightMargin: _style.marginMedium
         visible: testButton.enabled
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
 
     Connections {
@@ -149,7 +152,7 @@ Item {
 
     Timer {
         id: timer
-        interval: 5000
+        interval: 10000
         repeat: false
         onTriggered: {
             testSettingsText.text = ""

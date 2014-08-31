@@ -392,6 +392,18 @@ bool WebDAVSyncer::syncInProgress() const
     return m_syncInProgress;
 }
 
+void WebDAVSyncer::setConnectionSettings(bool https, int port,
+                                         const QString &host,
+                                         const QString &path,
+                                         const QString &user,
+                                         const QString &password)
+{
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "password";
+    m_webdav->setConnectionSettings(https ? QWebdav::HTTPS : QWebdav::HTTP, host,
+                                    path, user, password, port);
+}
+
 void WebDAVSyncer::sync()
 {
     if (!m_storage->savingInProgress() && !m_storage->loadingInProgress()) {
