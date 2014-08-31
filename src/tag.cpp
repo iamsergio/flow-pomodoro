@@ -74,7 +74,7 @@ QString Tag::name() const
 
 void Tag::setName(const QString &name)
 {
-    if (name.trimmed().toLower() != m_name.toLower()) {
+    if (name.trimmed().toLower() != m_name.toLower() && !name.isEmpty()) {
         m_name = name.trimmed(); // We preserve original case
         emit nameChanged();
     }
