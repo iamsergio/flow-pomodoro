@@ -225,7 +225,7 @@ Rectangle {
             task: _controller.rightClickedTask
         }
 
-        MenuSeparator { }
+        MenuSeparator { visible: _controller.rightClickedTask !== null }
 
         MenuItem {
             text: qsTr("Configure...")
