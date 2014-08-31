@@ -185,7 +185,7 @@ void Task::addTag(const QString &tagName)
         return;
 
     if (!containsTag(trimmedName))
-        m_tags.append(TagRef(this, trimmedName));
+        m_tags.append(TagRef(this, trimmedName, /*temporary=*/ true));
 }
 
 void Task::removeTag(const QString &tagName)

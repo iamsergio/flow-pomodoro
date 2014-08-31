@@ -32,7 +32,7 @@ public:
 
     TagRef(const TagRef &other);
     TagRef operator=(const TagRef &);
-    TagRef(const QPointer<Task> &task, const QString &tagName);
+    TagRef(const QPointer<Task> &task, const QString &tagName, bool temporary = false);
     ~TagRef();
 
     Tag::Ptr m_tag;
@@ -41,6 +41,7 @@ private:
     TagRef();
     void incrementCount();
     void decrementCount();
+    bool m_temporary;
 
 };
 

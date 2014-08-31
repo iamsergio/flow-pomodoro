@@ -49,6 +49,7 @@ void TestTag::testTaskCount()
 
     Task::Ptr task1 = m_storage->addTask("task1");
     Task::Ptr task2 = m_storage->addTask("task2");
+
     task1->addTag("tagA");
     task1->addTag("tagB");
     task2->addTag("tagA");
@@ -56,6 +57,8 @@ void TestTag::testTaskCount()
     QCOMPARE(m_tagA->taskCount(), 2);
     QCOMPARE(m_tagB->taskCount(), 1);
     QCOMPARE(m_tagC->taskCount(), 0);
+    QStringList expectedSignals = {"taskCountChanged", "taskCountChanged"};
+    QCOMPARE(m_spyA.caughtSignals(), expectedSignals);
 
     m_storage->removeTask(task1);
     QCOMPARE(m_storage->tasks().count(), 1);

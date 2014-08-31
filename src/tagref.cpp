@@ -26,6 +26,7 @@ TagRef::TagRef(const TagRef &other)
 {
     m_task = other.m_task;
     m_tag = other.m_tag;
+    m_temporary = false;
     Q_ASSERT(m_tag);
     incrementCount();
 }
@@ -42,17 +43,23 @@ TagRef TagRef::operator=(const TagRef &other)
     return *this;
 }
 
-TagRef::TagRef(const QPointer<Task> &task, const QString &tagName)
+
+// Temporary is a performance optimization, we don't want to emit uneeded signals
+// when temporaries are constructed while appending TagRefs into a list
+TagRef::TagRef(const QPointer<Task> &task, const QString &tagName, bool temporary)
     : m_tag(Kernel::instance()->storage()->tag(tagName))
     , m_task(task)
+    , m_temporary(temporary)
 {
     Q_ASSERT(m_tag);
-    incrementCount();
+    if (!temporary)
+        incrementCount();
 }
 
 TagRef::~TagRef()
 {
-    decrementCount();
+    if (!m_temporary)
+        decrementCount();
 }
 
 void TagRef::incrementCount()
