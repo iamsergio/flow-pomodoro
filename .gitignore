@@ -19,3 +19,6 @@ build_dir-android
 tests/tests
 data.dat
 *~
+/android-build
+/src/android-libflow.so-deployment-settings.json
+app_process
