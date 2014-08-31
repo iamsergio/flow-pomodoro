@@ -56,6 +56,8 @@ void TestTask::testSetTags()
     QCOMPARE(m_task1->indexOfTag("tagC"), 2);
     QCOMPARE(m_task1->indexOfTag("tAgC "), 2);
     QCOMPARE(m_task1->indexOfTag("tag"), -1);
+
+    QVERIFY(checkStorageConsistency());
 }
 
 void TestTask::testAddAndRemoveTag()
@@ -76,6 +78,7 @@ void TestTask::testAddAndRemoveTag()
     QCOMPARE(m_task1->tags().count(), 3);
     QStringList expectedSignals = { "changed", "tagsChanged", "changed", "tagsChanged", "changed", "tagsChanged" };
     QCOMPARE(m_spy.caughtSignals(), expectedSignals);
+    QVERIFY(checkStorageConsistency());
 
     // And now remove them
     m_spy.clear();
@@ -92,4 +95,5 @@ void TestTask::testAddAndRemoveTag()
     QCOMPARE(Tag::tagCount, m_storage->tags().count());
     QCOMPARE(Tag::tagCount, 3);
     m_storage->setCreateNonExistentTags(true);
+    QVERIFY(checkStorageConsistency());
 }
