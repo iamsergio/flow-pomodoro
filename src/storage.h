@@ -146,9 +146,6 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void tagAboutToBeRemoved(const QString &name);
-    void taskRemoved();
-    void taskAdded();
-    void taskChanged();
     void webDAVSyncInProgressChanged();
 
 private Q_SLOTS:

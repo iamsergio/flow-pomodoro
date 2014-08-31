@@ -15,9 +15,6 @@ void Tests::initTestCase()
     m_kernel->setRuntimeConfiguration(config);
 
     m_storageSpy.listenTo(m_storage, &Storage::tagAboutToBeRemoved);
-    m_storageSpy.listenTo(m_storage, &Storage::taskAdded);
-    m_storageSpy.listenTo(m_storage, &Storage::taskChanged);
-    m_storageSpy.listenTo(m_storage, &Storage::taskRemoved);
 }
 
 void Tests::cleanupTestCase()
