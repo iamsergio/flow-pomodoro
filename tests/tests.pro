@@ -8,7 +8,7 @@ include ("../global.pri")
 INCLUDEPATH += $$PWD/../src/
 
 SOURCES += signalspy.cpp \
-           tests.cpp 
+           teststorage.cpp 
     
 HEADERS += signalspy.h \
-           tests.h
+           teststorage.h
