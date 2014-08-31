@@ -1,11 +1,11 @@
 #include "testbase.h"
 #include <QtTest/QtTest>
 
-class Tests: public TestBase
+class TestStorage: public TestBase
 {
     Q_OBJECT
 public:
-    Tests();
+    TestStorage();
 
 private Q_SLOTS:
     void initTestCase();

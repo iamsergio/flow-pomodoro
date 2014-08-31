@@ -1,19 +1,19 @@
 #include "teststorage.h"
 
-Tests::Tests() : TestBase()
+TestStorage::TestStorage() : TestBase()
 {
 }
 
-void Tests::initTestCase()
+void TestStorage::initTestCase()
 {
     m_storageSpy.listenTo(m_storage, &Storage::tagAboutToBeRemoved);
 }
 
-void Tests::cleanupTestCase()
+void TestStorage::cleanupTestCase()
 {
 }
 
-void Tests::testCreateTag()
+void TestStorage::testCreateTag()
 {
 
     TagList tags = m_storage->tags();
@@ -35,7 +35,7 @@ void Tests::testCreateTag()
     QVERIFY(m_storage->tags().count() == 3);
 }
 
-void Tests::testDeleteTag()
+void TestStorage::testDeleteTag()
 {
     m_storageSpy.clear();
     m_storage->clearTags();
@@ -59,7 +59,7 @@ void Tests::testDeleteTag()
     QCOMPARE(m_storageSpy.count(), 0); // And should not emit
 }
 
-void Tests::testContainsTag()
+void TestStorage::testContainsTag()
 {
     m_storage->clearTags();
 
@@ -72,7 +72,7 @@ void Tests::testContainsTag()
     QVERIFY(!m_storage->containsTag(" testingCoNtains1 "));
 }
 
-void Tests::testTag()
+void TestStorage::testTag()
 {
     m_storage->clearTags();
     m_storage->setCreateNonExistentTags(true);
@@ -108,7 +108,7 @@ void Tests::testTag()
     QVERIFY(tag->name() == "tag2");
 }
 
-void Tests::testIndexOf()
+void TestStorage::testIndexOf()
 {
    m_storage->clearTags();
    QCOMPARE(m_storage->indexOfTag("doesnt exist"), -1);
@@ -123,7 +123,7 @@ void Tests::testIndexOf()
    QCOMPARE(m_storage->indexOfTag("4"), -1);
 }
 
-void Tests::testRenameTag()
+void TestStorage::testRenameTag()
 {
     m_storage->clearTags();
     m_storage->createTag("0a");
@@ -135,7 +135,7 @@ void Tests::testRenameTag()
     QVERIFY(!m_storage->renameTag("1", "2")); // Already exists
 }
 
-void Tests::testAddTask()
+void TestStorage::testAddTask()
 {
     Task::Ptr task = m_storage->addTask("t1");
     QVERIFY(task);
@@ -145,7 +145,7 @@ void Tests::testAddTask()
     QVERIFY(task);
 }
 
-void Tests::testDeleteTask()
+void TestStorage::testDeleteTask()
 {
     m_storage->clearTasks();
     QCOMPARE(m_storage->tasks().count(), 0);
@@ -164,7 +164,7 @@ void Tests::testDeleteTask()
     QCOMPARE(m_storage->tasks().count(), 0);
 }
 
-void Tests::testPrependTask()
+void TestStorage::testPrependTask()
 {
     m_storage->clearTasks();
     QCOMPARE(m_storage->tasks().count(), 0);
