@@ -126,12 +126,22 @@ Item {
     }
 
     Text {
+        id: passwordWarningText
         color: "red"
         anchors.top: urlText.bottom
         anchors.left: grid1.left
-        anchors.topMargin: _style.marginBig
-        text: qsTr("Password will be saved in clear-text")
+        anchors.topMargin: _style.marginSmall
+        text: qsTr("Password will be saved in clear-text.")
         visible: passwordField.text
+    }
+
+    Text {
+        color: "red"
+        anchors.top: passwordWarningText.visible ? passwordWarningText.bottom : urlText.bottom
+        anchors.left: grid1.left
+        anchors.topMargin: _style.marginSmall
+        text: qsTr("OpenSSL not supported.")
+        visible: !_storage.openSSLSupported
     }
 
     onVisibleChanged: {
