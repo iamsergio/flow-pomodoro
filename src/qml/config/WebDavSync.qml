@@ -143,11 +143,4 @@ Item {
         text: qsTr("OpenSSL not supported.")
         visible: !_storage.openSSLSupported
     }
-
-    onVisibleChanged: {
-        if (!visible) {
-
-        }
-    }
-
 }
