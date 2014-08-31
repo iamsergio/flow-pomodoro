@@ -1,12 +1,11 @@
-#include "signalspy.h"
+#include "testbase.h"
 #include <QtTest/QtTest>
 
-class Kernel;
-class Storage;
-
-class Tests: public QObject
+class Tests: public TestBase
 {
     Q_OBJECT
+public:
+    Tests();
 
 private Q_SLOTS:
     void initTestCase();
@@ -22,10 +21,4 @@ private Q_SLOTS:
     void testAddTask();
     void testDeleteTask();
     void testPrependTask(); // indexOfItem, taskAt
-
-private:
-    Kernel *m_kernel;
-    Storage *m_storage;
-
-    SignalSpy m_storageSpy;
 };

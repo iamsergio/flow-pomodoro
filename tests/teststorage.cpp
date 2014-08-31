@@ -1,27 +1,16 @@
 #include "teststorage.h"
-#include "kernel.h"
-#include "tag.h"
-#include "task.h"
-#include "storage.h"
-#include "signalspy.h"
-#include "runtimeconfiguration.h"
+
+Tests::Tests() : TestBase()
+{
+}
 
 void Tests::initTestCase()
 {
-    m_kernel = Kernel::instance();
-    m_storage = m_kernel->storage();
-    RuntimeConfiguration config;
-    config.setDataFileName("data.dat");
-    m_kernel->setRuntimeConfiguration(config);
-
     m_storageSpy.listenTo(m_storage, &Storage::tagAboutToBeRemoved);
 }
 
 void Tests::cleanupTestCase()
 {
-    qDebug() << Q_FUNC_INFO << "signal count" << m_storageSpy.count();
-    delete m_kernel;
-    m_kernel = 0;
 }
 
 void Tests::testCreateTag()
@@ -192,5 +181,3 @@ void Tests::testPrependTask()
     QCOMPARE(1, m_storage->indexOfItem(m_storage->tasks(), task1));
     QCOMPARE(0, m_storage->indexOfItem(m_storage->tasks(), task2));
 }
-
-QTEST_MAIN(Tests)
