@@ -55,6 +55,10 @@ public:
 
     bool operator==(const Tag &other) const;
 
+#if defined(QT_TESTLIB_LIB)
+    static int tagCount;
+#endif
+
 public Q_SLOTS:
     void onTaskStagedChanged();
 

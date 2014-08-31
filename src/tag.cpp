@@ -26,7 +26,9 @@
 
 #include <QQmlEngine>
 
-//static int s_tagCount = 0;
+#if defined(QT_TESTLIB_LIB)
+    int Tag::tagCount = 0;
+#endif
 
 Tag::Tag(const QString &_name)
     : QObject()
@@ -38,14 +40,16 @@ Tag::Tag(const QString &_name)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     //Kernel::instance()->storage()->monitorTag(this);
-    //s_tagCount++;
-    //qDebug() << Q_FUNC_INFO << s_tagCount;
+#if defined(QT_TESTLIB_LIB)
+    tagCount++;
+#endif
 }
 
 Tag::~Tag()
 {
-    //s_tagCount--;
-    //qDebug() << Q_FUNC_INFO << s_tagCount;
+#if defined(QT_TESTLIB_LIB)
+    tagCount--;
+#endif
 }
 
 int Tag::taskCount() const
