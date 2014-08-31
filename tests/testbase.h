@@ -30,7 +30,6 @@ public:
 protected:
     Kernel *m_kernel;
     Storage *m_storage;
-    SignalSpy m_storageSpy;
 };
 
 #endif
