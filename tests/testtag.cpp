@@ -59,10 +59,17 @@ void TestTag::testTaskCount()
     QCOMPARE(m_tagC->taskCount(), 0);
     QStringList expectedSignals = {"taskCountChanged", "taskCountChanged"};
     QCOMPARE(m_spyA.caughtSignals(), expectedSignals);
+    checkStorageConsistency();
 
+    // Remove task and see if count changes
+    m_spyA.clear();
     m_storage->removeTask(task1);
     QCOMPARE(m_storage->tasks().count(), 1);
     QCOMPARE(m_tagA->taskCount(), 1);
 
+    // Remove tag
+    QCOMPARE(task2->tags().count(), 1);
+    m_storage->removeTag(m_tagA->name());
+    QCOMPARE(task2->tags().count(), 0);
     checkStorageConsistency();
 }
