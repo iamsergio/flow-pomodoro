@@ -1,3 +1,4 @@
+#include "signalspy.h"
 #include <QtTest/QtTest>
 
 class Kernel;
@@ -6,9 +7,6 @@ class Storage;
 class Tests: public QObject
 {
     Q_OBJECT
-
-protected Q_SLOTS:
-    void onTagAboutToBeRemoved();
 
 private Q_SLOTS:
     void initTestCase();
@@ -23,12 +21,11 @@ private Q_SLOTS:
 
     void testAddTask();
     void testDeleteTask();
+    void testPrependTask(); // indexOfItem, taskAt
 
 private:
-    void waitForSignals();
-    void checkExitLoop();
     Kernel *m_kernel;
     Storage *m_storage;
 
-    bool m_waitingForTagAboutToBeRemoved;
+    SignalSpy m_storageSpy;
 };

@@ -3,13 +3,8 @@
 #include "tag.h"
 #include "task.h"
 #include "storage.h"
+#include "signalspy.h"
 #include "runtimeconfiguration.h"
-
-void Tests::onTagAboutToBeRemoved()
-{
-    m_waitingForTagAboutToBeRemoved = false;
-    checkExitLoop();
-}
 
 void Tests::initTestCase()
 {
@@ -18,18 +13,23 @@ void Tests::initTestCase()
     RuntimeConfiguration config;
     config.setDataFileName("data.dat");
     m_kernel->setRuntimeConfiguration(config);
-    m_waitingForTagAboutToBeRemoved = false;
-    connect(m_storage, &Storage::tagAboutToBeRemoved, this, &Tests::onTagAboutToBeRemoved);
+
+    m_storageSpy.listenTo(m_storage, &Storage::tagAboutToBeRemoved);
+    m_storageSpy.listenTo(m_storage, &Storage::taskAdded);
+    m_storageSpy.listenTo(m_storage, &Storage::taskChanged);
+    m_storageSpy.listenTo(m_storage, &Storage::taskRemoved);
 }
 
 void Tests::cleanupTestCase()
 {
+    qDebug() << Q_FUNC_INFO << "signal count" << m_storageSpy.count();
     delete m_kernel;
     m_kernel = 0;
 }
 
 void Tests::testCreateTag()
 {
+
     TagList tags = m_storage->tags();
     QVERIFY(tags.isEmpty());
 
@@ -51,14 +51,16 @@ void Tests::testCreateTag()
 
 void Tests::testDeleteTag()
 {
+    m_storageSpy.clear();
     m_storage->clearTags();
     QVERIFY(m_storage->tags().isEmpty());
 
     m_storage->createTag("t1");
     QCOMPARE(m_storage->tags().count(), 1);
-    m_waitingForTagAboutToBeRemoved = true;
     QVERIFY(m_storage->removeTag("t1"));
-    QVERIFY(!m_waitingForTagAboutToBeRemoved);
+    QCOMPARE(m_storageSpy.at(0), QString("tagAboutToBeRemoved"));
+    m_storageSpy.clear();
+    QCOMPARE(m_storageSpy.count(), 0);
     QCOMPARE(m_storage->tags().count(), 0);
 
     m_storage->createTag("t1");
@@ -66,9 +68,9 @@ void Tests::testDeleteTag()
     QVERIFY(m_storage->removeTag("T1 ")); // upper case and whitespace
     QCOMPARE(m_storage->tags().count(), 0);
 
-    m_waitingForTagAboutToBeRemoved = true;
+    m_storageSpy.clear();
     QVERIFY(!m_storage->removeTag("T1 ")); // Remove again, should not crash.
-    QVERIFY(m_waitingForTagAboutToBeRemoved); // And should not emit
+    QCOMPARE(m_storageSpy.count(), 0); // And should not emit
 }
 
 void Tests::testContainsTag()
@@ -176,16 +178,22 @@ void Tests::testDeleteTask()
     QCOMPARE(m_storage->tasks().count(), 0);
 }
 
-void Tests::waitForSignals()
+void Tests::testPrependTask()
 {
-    QTestEventLoop::instance().enterLoop(10);
-    QVERIFY(!QTestEventLoop::instance().timeout());
-}
+    m_storage->clearTasks();
+    QCOMPARE(m_storage->tasks().count(), 0);
 
-void Tests::checkExitLoop()
-{
-    if (!m_waitingForTagAboutToBeRemoved)
-        QTestEventLoop::instance().exitLoop();
+    Task::Ptr task0 = m_storage->prependTask("t1");
+    Task::Ptr task1 = m_storage->prependTask("t2");
+    Task::Ptr task2 = m_storage->prependTask("t3");
+
+    QCOMPARE(task0, m_storage->taskAt(2));
+    QCOMPARE(task1, m_storage->taskAt(1));
+    QCOMPARE(task2, m_storage->taskAt(0));
+
+    QCOMPARE(2, m_storage->indexOfItem(m_storage->tasks(), task0));
+    QCOMPARE(1, m_storage->indexOfItem(m_storage->tasks(), task1));
+    QCOMPARE(0, m_storage->indexOfItem(m_storage->tasks(), task2));
 }
 
 QTEST_MAIN(Tests)
