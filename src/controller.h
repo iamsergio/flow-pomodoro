@@ -172,6 +172,7 @@ public:
     void setPort(int);
 
 public Q_SLOTS:
+    void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);
     void addTask(const QString &text, bool startEditMode);
     void removeTask(Task *);
@@ -235,7 +236,6 @@ Q_SIGNALS:
     void pathChanged();
 
 private:
-    void updateWebDavCredentials();
     int indexOfTaskInCurrentTab(const Task::Ptr &task);
     Task::Ptr lastTaskAtCurrentTab() const;
     Task::Ptr taskAtCurrentTab(int taskIndex) const;

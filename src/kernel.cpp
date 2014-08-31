@@ -112,7 +112,7 @@ Kernel::Kernel(QObject *parent)
     , m_controller(new Controller(m_qmlEngine->rootContext(), m_storage, m_settings, this))
     , m_pluginModel(new PluginModel(this))
 #ifndef NO_WEBDAV
-    , m_webDavSyncer(new WebDAVSyncer(m_storage, m_controller))
+    , m_webDavSyncer(new WebDAVSyncer(m_storage))
 #endif
 {
     m_runtimeConfiguration.setDataFileName(defaultDataFileName());
@@ -128,6 +128,7 @@ Kernel::Kernel(QObject *parent)
     connect(m_qmlEngine, &QQmlEngine::quit, qGuiApp, &QGuiApplication::quit);
     QMetaObject::invokeMethod(m_storage, "load", Qt::QueuedConnection); // Schedule a load. Don't do it directly, it will deadlock in instance()
     QMetaObject::invokeMethod(this, "maybeLoadPlugins", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(m_controller, "updateWebDavCredentials", Qt::QueuedConnection);
 }
 
 Storage *Kernel::storage() const

@@ -344,23 +344,13 @@ public:
 };
 
 
-WebDAVSyncer::WebDAVSyncer(Storage *parent, Controller *controller)
+WebDAVSyncer::WebDAVSyncer(Storage *parent)
     : QObject(parent)
-    , m_webdav(new QWebdav(this))
+    , m_webdav(0)
     , m_stateMachine(new QStateMachine(this))
     , m_storage(parent)
-    , m_controller(controller)
     , m_syncInProgress(false)
 {
-    bool isHttps = controller->isHttps();
-    int port = controller->port();
-    QString path = controller->path();
-    QString host = controller->host();
-    QString password = controller->password();
-    QString user = controller->user();
-
-    m_webdav->setConnectionSettings(isHttps ? QWebdav::HTTPS : QWebdav::HTTP, host, path, user, password, port);
-
     QState *initialState = new InitialState(this);
     QState *acquireLockState = new AcquireLockState(this);
     QState *downloadState = new DownloadDataState(this);
@@ -398,14 +388,22 @@ void WebDAVSyncer::setConnectionSettings(bool https, int port,
                                          const QString &user,
                                          const QString &password)
 {
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "password";
+    // qDebug() << Q_FUNC_INFO;
+    if (m_webdav)
+        m_webdav->deleteLater();
+    m_webdav = new QWebdav(this);
     m_webdav->setConnectionSettings(https ? QWebdav::HTTPS : QWebdav::HTTP, host,
                                     path, user, password, port);
 }
 
 void WebDAVSyncer::sync()
 {
+    if (!m_webdav) {
+        qWarning() << "m_webdav is null";
+        Q_ASSERT(false);
+        return;
+    }
+
     if (!m_storage->savingInProgress() && !m_storage->loadingInProgress()) {
         emit startSync();
     } else {
@@ -415,6 +413,12 @@ void WebDAVSyncer::sync()
 
 void WebDAVSyncer::testSettings()
 {
+    if (!m_webdav) {
+        qWarning() << "m_webdav is null";
+        Q_ASSERT(false);
+        return;
+    }
+
     if (syncInProgress()) {
         qWarning() << Q_FUNC_INFO << "Sync is in progress";
         return;

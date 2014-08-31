@@ -37,7 +37,7 @@ class WebDAVSyncer : public QObject
     Q_OBJECT
     Q_PROPERTY(bool syncInProgress READ syncInProgress NOTIFY syncInProgressChanged)
 public:
-    explicit WebDAVSyncer(Storage *storage, Controller *controller);
+    explicit WebDAVSyncer(Storage *storage);
     bool syncInProgress() const;
     void setConnectionSettings(bool https, int port, const QString &host, const QString &path,
                                const QString &user, const QString &password);
