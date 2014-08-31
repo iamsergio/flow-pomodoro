@@ -18,13 +18,6 @@ Page {
             mouse.accepted = false
         }
 
-        TitleText {
-            id: titleText
-            text: qsTr("Configuration")
-            anchors.top: parent.top
-            anchors.topMargin: _style.marginSmall
-        }
-
         Component {
             id: mobileTabBarComponent
             Item {
@@ -98,7 +91,7 @@ Page {
 
         Item {
             id: tabView
-            anchors.top: titleText.bottom
+            anchors.top: parent.top
             anchors.topMargin: _style.marginMedium
             anchors.left: parent.left
             anchors.right: parent.right

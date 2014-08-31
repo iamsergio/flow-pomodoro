@@ -63,7 +63,6 @@
     <file>qml/TaskEditorDialog.qml</file>
     <file>qml/TaskListView.qml</file>
     <file>qml/TaskTextField.qml</file>
-    <file>qml/TitleText.qml</file>
     <file>qml/ToolTip.qml</file>
 
     <file>qml/config/Hacking.qml</file>

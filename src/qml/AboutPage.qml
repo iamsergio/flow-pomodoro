@@ -13,18 +13,10 @@ Page {
         z: 1
         anchors.fill: parent
 
-        TitleText {
-            id: titleText
-            text: qsTr("About")
-            anchors.top: parent.top
-            anchors.topMargin: _style.marginSmall
-            height: 50 * _controller.dpiFactor
-        }
-
-
         SmallText {
             id: copyrightText
-            anchors.top: titleText.bottom
+            anchors.top: parent.top
+            anchors.topMargin: _style.marginMedium
             text: "<html>Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, <a href=\"mailto:info@kdab.com\">info@kdab.com</a><br>" +
                   qsTr("Author") + ": Sérgio Martins &lt;<a href=\"sergio.martins@kdab.com\" >sergio.martins@kdab.com</a>&gt;<br><br>" +
                   "Copyright (C) 2014 Sérgio Martins &lt;<a href=\"mailto:iamsergio@gmail.com\">iamsergio@gmail.com</a>&gt;<br><br>"

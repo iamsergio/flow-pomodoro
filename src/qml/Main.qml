@@ -9,7 +9,7 @@ import com.kdab.flowpomodoro 1.0
 Rectangle {
     id: root
 
-    property string titleText: _controller.currentTask.stopped ? qsTr("You're slacking") : _controller.currentTask.summary
+    property string titleText: _controller.currentTitleText
 
     radius: 4
     color: "transparent"

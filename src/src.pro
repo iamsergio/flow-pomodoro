@@ -45,7 +45,6 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/TaskEditorDialog.qml \
                qml/qml/TaskListView.qml \
                qml/TaskTextField.qml \
-               qml/TitleText.qml     \
                qml/ToolTip.qml
 
 

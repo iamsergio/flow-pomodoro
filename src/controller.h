@@ -68,6 +68,7 @@ class Controller : public QObject {
     Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
     Q_PROPERTY(QString user READ user WRITE setUser NOTIFY userChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
+    Q_PROPERTY(QString currentTitleText READ currentTitleText NOTIFY currentTitleTextChanged)
 
 public:
     enum Page {
@@ -171,6 +172,8 @@ public:
     int port() const;
     void setPort(int);
 
+    QString currentTitleText() const;
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);
@@ -226,6 +229,7 @@ Q_SIGNALS:
     void queueTypeChanged();
     void addingNewTask();
     void requestActivateWindow();
+    void currentTitleTextChanged();
 
     // webdav stuff
     void hostChanged();

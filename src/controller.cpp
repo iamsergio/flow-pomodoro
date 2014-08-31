@@ -250,6 +250,7 @@ void Controller::setExpanded(bool expanded)
         }
         setSelectedTask(Task::Ptr());
         emit expandedChanged();
+        emit currentTitleTextChanged();
     }
 }
 
@@ -273,6 +274,7 @@ void Controller::setCurrentPage(Controller::Page page)
 
         m_page = page;
         emit currentPageChanged();
+        emit currentTitleTextChanged();
     }
 }
 
@@ -283,6 +285,7 @@ void Controller::setTaskStatus(TaskStatus status)
         emit currentTaskChanged();
         emit remainingMinutesChanged();
         emit currentTaskDurationChanged();
+        emit currentTaskChanged();
     }
 }
 
@@ -533,6 +536,19 @@ void Controller::setPort(int port)
         m_settings->setValue("webdavPort", m_port);
         emit portChanged();
         updateWebDavCredentials();
+    }
+}
+
+QString Controller::currentTitleText() const
+{
+    if (m_page == ConfigurePage && m_expanded) {
+        return tr("Configuration");
+    } else if (m_page == AboutPage && m_expanded) {
+        return tr("About");
+    } else {
+        if (currentTask()->stopped())
+            return tr("You're slacking");
+        return currentTask()->summary();
     }
 }
 
