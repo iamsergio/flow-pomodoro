@@ -18,5 +18,5 @@ private:
     Tag::Ptr m_tagA;
     Tag::Ptr m_tagB;
     Tag::Ptr m_tagC;
-    SignalSpy m_spy;
+    SignalSpy m_spyA;
 };
