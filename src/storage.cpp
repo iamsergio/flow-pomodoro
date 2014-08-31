@@ -113,8 +113,6 @@ Storage::Storage(QObject *parent)
 
 Storage::~Storage()
 {
-    if (m_scheduleTimer.isActive())
-        save();
 }
 
 TagList Storage::tags() const
@@ -180,6 +178,11 @@ void Storage::webDavSync()
 int Storage::serializerVersion() const
 {
     return JsonSerializerVersion1;
+}
+
+bool Storage::saveScheduled() const
+{
+    return m_scheduleTimer.isActive();
 }
 
 void Storage::scheduleSave()

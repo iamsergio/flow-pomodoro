@@ -37,6 +37,7 @@ class Kernel : public QObject
     Q_OBJECT
 public:
     static Kernel *instance();
+    ~Kernel();
     Storage* storage() const;
     Controller *controller() const;
     QQmlContext *qmlContext() const;

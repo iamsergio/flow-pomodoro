@@ -97,6 +97,12 @@ Kernel *Kernel::instance()
     return kernel;
 }
 
+Kernel::~Kernel()
+{
+    if (m_storage->saveScheduled())
+        m_storage->save();
+}
+
 Kernel::Kernel(QObject *parent)
     : QObject(parent)
     , m_storage(new JsonStorage(this))

@@ -81,6 +81,7 @@ public:
 
     int serializerVersion() const;
 
+    bool saveScheduled() const;
     void scheduleSave();
     // Temporary disable saving. For performance purposes
     void setDisableSaving(bool);
