@@ -15,7 +15,6 @@ public:
 
     TestBase()
     {
-        qDebug() << "inited";
         m_kernel = Kernel::instance();
         m_storage = m_kernel->storage();
         RuntimeConfiguration config;
@@ -25,8 +24,6 @@ public:
 
     ~TestBase()
     {
-        delete m_kernel;
-        m_kernel = 0;
     }
 
 protected:

@@ -11,3 +11,8 @@ void TestTask::initTestCase()
 void TestTask::cleanupTestCase()
 {
 }
+
+void TestTask::testSetTags()
+{
+
+}

@@ -10,8 +10,8 @@ INCLUDEPATH += $$PWD/../src/
 SOURCES += main.cpp \
            signalspy.cpp \
            teststorage.cpp \
-           #testtask.cpp
+           testtask.cpp
     
 HEADERS += signalspy.h \
            teststorage.h \
-           #testtask.h
+           testtask.h
