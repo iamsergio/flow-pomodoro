@@ -17,3 +17,5 @@ config.log
 config.tests/qwebdavlib/qwebdavlib
 build_dir-android
 tests/tests
+data.dat
+*~
