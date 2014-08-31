@@ -15,4 +15,5 @@ private Q_SLOTS:
 private:
     Task::Ptr m_task1;
     Task::Ptr m_task2;
+    SignalSpy m_spy;
 };
