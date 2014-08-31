@@ -22,6 +22,18 @@ QString SignalSpy::at(int index) const
     return m_caughtSignals.at(index);
 }
 
+QStringList SignalSpy::caughtSignals() const
+{
+    return m_caughtSignals;
+}
+
+void SignalSpy::dumpDebugInfo()
+{
+    foreach (const QString &signal, m_caughtSignals) {
+        qDebug() << signal;
+    }
+}
+
 void SignalSpy::onSignalTriggered()
 {
     QMetaMethod method = sender()->metaObject()->method(senderSignalIndex());

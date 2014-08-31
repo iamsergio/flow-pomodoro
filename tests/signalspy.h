@@ -30,6 +30,9 @@ public:
     void clear();
     int count() const;
     QString at(int) const;
+    QStringList caughtSignals() const;
+
+    void dumpDebugInfo();
 
 public Q_SLOTS:
     void onSignalTriggered();
