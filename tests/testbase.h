@@ -7,6 +7,7 @@
 #include "runtimeconfiguration.h"
 #include "tag.h"
 #include "task.h"
+#include "controller.h"
 #include "tagref.h"
 #include <QtTest/QtTest>
 
@@ -18,6 +19,7 @@ public:
     {
         m_kernel = Kernel::instance();
         m_storage = m_kernel->storage();
+        m_controller = m_kernel->controller();
         RuntimeConfiguration config;
         config.setDataFileName("data.dat");
         config.setPluginsSupported(false);
@@ -51,6 +53,7 @@ public:
 protected:
     Kernel *m_kernel;
     Storage *m_storage;
+    Controller *m_controller;
 };
 
 #endif

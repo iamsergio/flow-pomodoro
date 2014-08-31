@@ -1,5 +1,6 @@
 #include "teststorage.h"
 #include "testtask.h"
+#include "testtag.h"
 
 #include <QtTest/QtTest>
 #include <QGuiApplication>
@@ -13,6 +14,9 @@ int main(int argc, char *argv[])
 
     TestTask test2;
     success &= QTest::qExec(&test2, argc, argv);
+
+    TestTag test3;
+    success &= QTest::qExec(&test3, argc, argv);
 
     delete Kernel::instance(); // Otherwise it's deleted by QGuiApplication and we hang deep in qml engine land for some reason
     return success;

@@ -1,0 +1,59 @@
+#include "testtag.h"
+
+TestTag::TestTag() : TestBase()
+{
+}
+
+void TestTag::initTestCase()
+{
+    m_storage->clearTags();
+    m_storage->clearTasks();
+
+    m_tagA = m_storage->createTag("tagA");
+    m_tagB = m_storage->createTag("tagB");
+    m_tagC = m_storage->createTag("tagC");
+
+    m_spy.listenTo(m_tagA.data(), &Tag::taskCountChanged);
+    m_spy.listenTo(m_tagA.data(), &Tag::nameChanged);
+    m_spy.listenTo(m_tagA.data(), &Tag::beingEditedChanged);
+
+    QCOMPARE(m_tagA->taskCount(), 0);
+    QCOMPARE(m_tagB->taskCount(), 0);
+}
+
+void TestTag::cleanupTestCase()
+{
+}
+
+void TestTag::testSetName()
+{
+    m_spy.clear();
+    m_tagA->setName(" tAgA ");
+    QCOMPARE(m_spy.count(), 0);
+
+    m_tagA->setName("");
+    QCOMPARE(m_spy.count(), 0);
+
+    m_tagA->setName("X");
+    QCOMPARE(m_spy.caughtSignals(), {"nameChanged"});
+    m_spy.clear();
+    m_tagA->setName("tagA ");
+    QCOMPARE(m_tagA->name(), QString("tagA"));
+    QCOMPARE(m_spy.caughtSignals(), {"nameChanged"});
+}
+
+void TestTag::testTaskCount()
+{
+    m_spy.clear();
+    m_storage->clearTasks();
+
+    Task::Ptr task1 = m_storage->addTask("task1");
+    Task::Ptr task2 = m_storage->addTask("task2");
+    task1->addTag("tagA");
+    task1->addTag("tagB");
+    task2->addTag("tagA");
+
+    QCOMPARE(m_tagA->taskCount(), 2);
+    QCOMPARE(m_tagB->taskCount(), 1);
+    QCOMPARE(m_tagC->taskCount(), 0);
+}
