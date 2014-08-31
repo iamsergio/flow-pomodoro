@@ -31,7 +31,7 @@
 Tag::Tag(const QString &_name)
     : QObject()
     , Syncable()
-    , m_name(_name)
+    , m_name(_name.trimmed())
     , m_taskCount(0)
     , m_beingEdited(false)
     , m_taskModel(Q_NULLPTR)
@@ -70,8 +70,8 @@ QString Tag::name() const
 
 void Tag::setName(const QString &name)
 {
-    if (name != m_name) {
-        m_name = name;
+    if (name.trimmed().toLower() != m_name.toLower()) {
+        m_name = name.trimmed(); // We preserve original case
         emit nameChanged();
     }
 }
@@ -127,7 +127,7 @@ void Tag::fromJson(const QVariantMap &map)
 
 bool Tag::operator==(const Tag &other) const
 {
-    return other.m_name.toLower().trimmed() == m_name.toLower().trimmed();
+    return other.m_name.toLower() == m_name.toLower();
 }
 
 bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
