@@ -17,7 +17,7 @@ Rectangle {
     property bool selected: _controller.selectedTask === taskObj && !inlineEditMode && taskObj !== null
 
     id: root
-    color: selected ? _style.selectedTaskBgColor : _style.taskBackgroundColor
+    color: _style.taskBackgroundColor
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.leftMargin: _style.marginSmall
@@ -27,11 +27,15 @@ Rectangle {
     border.width: selected ? _style.selectedTaskBorderWidth : 1
     radius: _style.taskBorderRadius
 
-    gradient: Gradient {
-        GradientStop { color: "gray"; position: 0 }
-        GradientStop { color: "black" ; position: 0.1 }
-        GradientStop { color: "black" ; position: 1 }
+    Gradient {
+        id: grad1
+        GradientStop { color: _style.taskBackgroundColor; position: 0 }
+        GradientStop { color: "#202020" ; position: 0.4 }
+        GradientStop { color: "#101010" ; position: 0.6 }
+        GradientStop { color: _style.taskBackgroundColor ; position: 1 }
     }
+
+    gradient: selected ? null : grad1
 
     Row {
         id: tagRow
@@ -84,7 +88,7 @@ Rectangle {
             id: textItem
             text: root.taskSummary
             elide: Text.ElideRight
-            color: root.selected ? _style.selectedTaskFgColor : _style.taskFontColor
+            color: _style.taskFontColor
             font.bold: true
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
