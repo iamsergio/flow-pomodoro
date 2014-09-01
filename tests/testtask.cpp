@@ -116,3 +116,23 @@ void TestTask::testAddAndRemoveTag()
     m_storage->setCreateNonExistentTags(true);
     QVERIFY(checkStorageConsistency());
 }
+
+void TestTask::testJson()
+{
+    Task::Ptr task = Task::createTask("test task");
+    task->setDescription("some description");
+    task->setStaged(true);
+    TagRef::List tags;
+    tags << TagRef(m_task1.data(), "tagA");
+    task->setTagList(tags);
+
+    QVariantMap map = task->toJson();
+    Task::Ptr task2 = Task::createTask("another task");
+    task2->fromJson(map);
+
+    QCOMPARE(task->summary(), task2->summary());
+    QCOMPARE(task->description(), task2->description());
+    QCOMPARE(task->staged(), task2->staged());
+    QCOMPARE(task->tags().count(), task2->tags().count());
+    QCOMPARE(task->tags().at(0).m_tag->name(), task2->tags().at(0).m_tag->name());
+}

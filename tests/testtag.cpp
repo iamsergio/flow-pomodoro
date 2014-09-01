@@ -92,3 +92,14 @@ void TestTag::testTaskCount()
     QCOMPARE(task2->tags().count(), 0);
     checkStorageConsistency();
 }
+
+void TestTag::testJson()
+{
+    Tag::Ptr tag1 = Tag::Ptr(new Tag("tag1"));
+    Tag::Ptr tag2 = Tag::Ptr(new Tag("tag2"));
+
+    QVariantMap map = tag1->toJson();
+    tag2->fromJson(map);
+
+    QCOMPARE(tag1->name(), tag2->name());
+}

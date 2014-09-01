@@ -32,6 +32,7 @@ private Q_SLOTS:
 
     void testSetName();
     void testTaskCount();
+    void testJson();
 
 private:
     Tag::Ptr m_tagA;

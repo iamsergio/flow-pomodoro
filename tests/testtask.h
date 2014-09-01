@@ -32,6 +32,7 @@ private Q_SLOTS:
 
     void testSetTags();
     void testAddAndRemoveTag();
+    void testJson();
 private:
     Task::Ptr m_task1;
     Task::Ptr m_task2;
