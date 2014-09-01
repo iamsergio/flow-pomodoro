@@ -2,8 +2,8 @@ TEMPLATE = app
 QT += testlib
 CONFIG += testcase
 
-include("../src/src.pri")
 include ("../global.pri")
+include("../src/src.pri")
 
 INCLUDEPATH += $$PWD/../src/
 
