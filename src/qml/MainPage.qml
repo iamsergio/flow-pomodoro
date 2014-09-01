@@ -22,40 +22,28 @@ Page {
             anchors.leftMargin: _style.marginMedium
             height: childrenRect.height
 
-            Text {
-                id: textItem
-                anchors.top: parent.top
-                anchors.topMargin: -5 * _controller.dpiFactor
-                font.pixelSize: _style.titleFontSize
-                font.bold: true
-                color: _style.regularTextColor
-                text: _controller.queueType === Controller.QueueTypeToday ? qsTr("Today's work queue") : qsTr("Tasks for someday")
-            }
-
             Switch {
                 id: switchItem
                 checked: _controller.queueType === Controller.QueueTypeToday
                 anchors.right: parent.right
                 anchors.rightMargin: 2
-                anchors.verticalCenter: textItem.verticalCenter
+                anchors.verticalCenter: addIcon.verticalCenter
                 Binding {
                     target: _controller
                     property: "queueType"
                     value: switchItem.checked ? Controller.QueueTypeToday : Controller.QueueTypeArchive
                 }
             }
-        }
 
-        ClickableImage {
-            id: addIcon
-            source: "image://icons/add.png"
-            anchors.top: headerRectangle.bottom
-            anchors.topMargin: _style.marginSmall
-            anchors.left: parent.left
-            anchors.leftMargin: _style.marginSmall
-            toolTip: qsTr("Add new task")
-            onClicked: {
-                _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
+            ClickableImage {
+                id: addIcon
+                source: "image://icons/add.png"
+                anchors.top: parent.top
+                anchors.left: parent.left
+                toolTip: qsTr("Add new task")
+                onClicked: {
+                    _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
+                }
             }
         }
 
@@ -65,7 +53,7 @@ Page {
             anchors.topMargin: _style.marginSmall
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.top: addIcon.bottom
+            anchors.top: headerRectangle.bottom
             anchors.bottom: parent.bottom
             visible: _controller.queueType === Controller.QueueTypeToday
             emptyText: qsTr("No queued tasks for today.") + "\n"+ qsTr("Please create new ones or pick some from your archive.")
@@ -77,7 +65,7 @@ Page {
             anchors.margins: _style.marginSmall
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.top: addIcon.bottom
+            anchors.top: headerRectangle.bottom
             model: _storage.tagsModel
         }
 

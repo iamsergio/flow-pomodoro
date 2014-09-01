@@ -412,6 +412,7 @@ void Controller::setQueueType(QueueType type)
     if (type != m_queueType) {
         m_queueType = type;
         emit queueTypeChanged();
+        emit currentTitleTextChanged();
     }
 }
 
@@ -545,6 +546,9 @@ QString Controller::currentTitleText() const
         return tr("Configuration");
     } else if (m_page == AboutPage && m_expanded) {
         return tr("About");
+    } else if (m_page == MainPage && m_expanded) {
+        return queueType() == QueueTypeToday ? tr("Today's work queue")
+                                             : tr("Tasks for someday");
     } else {
         if (currentTask()->stopped())
             return tr("You're slacking");
