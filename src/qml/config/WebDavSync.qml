@@ -190,6 +190,6 @@ Item {
         anchors.left: grid1.left
         anchors.topMargin: _style.marginSmall
         text: qsTr("OpenSSL not supported.")
-        visible: !_storage.openSSLSupported
+        visible: !_controller.openSSLSupported
     }
 }
