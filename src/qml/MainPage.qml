@@ -69,6 +69,7 @@ Page {
                                 text: qsTr("Today's tasks")
                                 horizontalAlignment: Text.AlignHCenter
                                 color: "#4A4A53"
+                                font.pixelSize: 11 * _controller.dpiFactor
                             }
                             Text {
                                 anchors.right: parent.right
@@ -78,6 +79,7 @@ Page {
                                 text: qsTr("Later tasks")
                                 color: text1.color
                                 horizontalAlignment: Text.AlignHCenter
+                                font.pixelSize: 11 * _controller.dpiFactor
                             }
                         }
 
