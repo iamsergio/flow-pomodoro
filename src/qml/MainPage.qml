@@ -84,18 +84,18 @@ Page {
                                 font.pixelSize: 11 * _controller.dpiFactor
                             }
                             Image {
-                                id: archiveImage
+                                id: actionIcon
                                 width: 16 * _controller.dpiFactor
                                 height: 16 * _controller.dpiFactor
-                                anchors.left: text1.right
+                                anchors.left: control.checked ? parent.left : text1.right
                                 anchors.verticalCenter: parent.verticalCenter
-                                anchors.margins: 10 * _controller.dpiFactor
-                                source:  "image://icons/archive.png"
+                                anchors.margins: _style.marginMedium
+                                source: control.checked ? "image://icons/stage.png" : "image://icons/archive.png"
                             }
                             Desaturate {
-                                anchors.fill: archiveImage
-                                source: archiveImage
-                                desaturation: 0.8
+                                anchors.fill: actionIcon
+                                source: actionIcon
+                                desaturation: 1
                             }
                         }
 
@@ -129,9 +129,8 @@ Page {
                             height: 16 * _controller.dpiFactor
                             anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.margins: _style.marginSmall
-                            source:  "image://icons/archive.png"
-                            visible: control.checked
+                            anchors.margins: _style.marginMedium
+                            source: control.checked ? "image://icons/archive.png" : "image://icons/stage.png"
                         }
 
                         radius: 2 * _controller.dpiFactor
