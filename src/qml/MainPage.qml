@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import Controller 1.0
+import QtGraphicalEffects 1.0
 
 Page {
     id: root
@@ -72,6 +73,7 @@ Page {
                                 font.pixelSize: 11 * _controller.dpiFactor
                             }
                             Text {
+                                id: text2
                                 anchors.right: parent.right
                                 width: parent.width / 2
                                 anchors.verticalCenter: parent.verticalCenter
@@ -80,6 +82,20 @@ Page {
                                 color: text1.color
                                 horizontalAlignment: Text.AlignHCenter
                                 font.pixelSize: 11 * _controller.dpiFactor
+                            }
+                            Image {
+                                id: archiveImage
+                                width: 16 * _controller.dpiFactor
+                                height: 16 * _controller.dpiFactor
+                                anchors.left: text1.right
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.margins: 10 * _controller.dpiFactor
+                                source:  "image://icons/archive.png"
+                            }
+                            Desaturate {
+                                anchors.fill: archiveImage
+                                source: archiveImage
+                                desaturation: 0.8
                             }
                         }
 
@@ -105,6 +121,17 @@ Page {
                             text: control.checked ? qsTr("Later tasks") : qsTr("Today's tasks")
                             font.bold: true
                             font.pixelSize: 14 * _controller.dpiFactor
+                        }
+
+                        Image {
+                            id: icon
+                            width: 16 * _controller.dpiFactor
+                            height: 16 * _controller.dpiFactor
+                            anchors.left: parent.left
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.margins: _style.marginSmall
+                            source:  "image://icons/archive.png"
+                            visible: control.checked
                         }
 
                         radius: 2 * _controller.dpiFactor
