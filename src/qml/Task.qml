@@ -27,6 +27,12 @@ Rectangle {
     border.width: selected ? _style.selectedTaskBorderWidth : 1
     radius: _style.taskBorderRadius
 
+    gradient: Gradient {
+        GradientStop { color: "gray"; position: 0 }
+        GradientStop { color: "black" ; position: 0.1 }
+        GradientStop { color: "black" ; position: 1 }
+    }
+
     Row {
         id: tagRow
         anchors.left: parent.left
