@@ -5,6 +5,8 @@
   . Add timestamp to lock file
   . Enable it by default
 - Unit-tests
+  . WebDav unit-tests
+  . ModelStack unit-tests
 - Konversation plugin
 - Show tag menu on long press, with an "Edit" option
 - Fullscreen pomodoro indicator on mobile
