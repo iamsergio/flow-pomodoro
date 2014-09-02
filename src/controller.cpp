@@ -553,6 +553,14 @@ QString Controller::currentTitleText() const
     }
 }
 
+#define STR_EXPAND(tok) #tok
+#define STR(tok) STR_EXPAND(tok)
+
+QString Controller::version() const
+{
+    return STR(FLOW_VERSION);
+}
+
 void Controller::setCurrentTabTag(Tag *tag)
 {
     if (m_currentTabTag != tag) {

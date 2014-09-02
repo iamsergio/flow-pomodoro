@@ -69,6 +69,7 @@ class Controller : public QObject {
     Q_PROPERTY(QString user READ user WRITE setUser NOTIFY userChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
     Q_PROPERTY(QString currentTitleText READ currentTitleText NOTIFY currentTitleTextChanged)
+    Q_PROPERTY(QString version READ version CONSTANT)
 
 public:
     enum Page {
@@ -173,6 +174,7 @@ public:
     void setPort(int);
 
     QString currentTitleText() const;
+    QString version() const;
 
 public Q_SLOTS:
     void updateWebDavCredentials();

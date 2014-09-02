@@ -20,3 +20,5 @@ CONFIG += debug c++11
 # Features:
 DEFINES += NO_WEBDAV # Will uncomment when UI is ready
 # DEFINES += DEVELOPER_MODE
+
+DEFINES += FLOW_VERSION="1.0_beta"
