@@ -14,11 +14,21 @@ Page {
         anchors.fill: parent
 
         SmallText {
-            id: copyrightText
+            id: versionText
             anchors.top: parent.top
             anchors.topMargin: _style.marginMedium
+            anchors.left: parent.left
+            anchors.right: parent.right
+            horizontalAlignment: Text.AlignRight
+            text: qsTr("Flow version") + ": " + _controller.version
+        }
+
+        SmallText {
+            id: copyrightText
+            anchors.top: versionText.bottom
+            anchors.topMargin: _style.marginMedium * 2
             text: "<html>Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, <a href=\"mailto:info@kdab.com\">info@kdab.com</a><br>" +
-                  qsTr("Author") + ": Sérgio Martins &lt;<a href=\"sergio.martins@kdab.com\" >sergio.martins@kdab.com</a>&gt;<br><br>" +
+                  qsTr("Author") + ": Sérgio Martins &lt;<a href=\"sergio.martins@kdab.com\" >sergio.martins@kdab.com</a>&gt;<br>" +
                   "Copyright (C) 2014 Sérgio Martins &lt;<a href=\"mailto:iamsergio@gmail.com\">iamsergio@gmail.com</a>&gt;<br><br>"
             onLinkActivated: Qt.openUrlExternally(link)
         }
@@ -27,7 +37,7 @@ Page {
             id: keysText
             text: qsTr("Keyboard bindings") + ":"
             anchors.top: copyrightText.bottom
-            anchors.topMargin: 60 * _controller.dpiFactor
+            anchors.topMargin: _style.marginMedium
             anchors.left: parent.left
             anchors.leftMargin: _style.marginMedium
             font.bold: true
