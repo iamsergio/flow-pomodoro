@@ -94,7 +94,11 @@ static QString defaultDataFileName()
 
 Kernel *Kernel::instance()
 {
-    static Kernel *kernel = new Kernel(qApp);
+    // QPointer, so unit-tests can delete and recreate
+    static QPointer<Kernel> kernel;
+    if (!kernel)
+        kernel = new Kernel(qApp);
+
     return kernel;
 }
 
