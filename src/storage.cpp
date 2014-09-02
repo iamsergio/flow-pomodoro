@@ -108,7 +108,7 @@ Storage::~Storage()
 {
 }
 
-TagList Storage::tags() const
+const TagList& Storage::tags() const
 {
     return m_data.tags;
 }

@@ -8,13 +8,17 @@ include("../src/src.pri")
 INCLUDEPATH += $$PWD/../src/
 
 SOURCES += main.cpp \
+           modelsignalspy.cpp \
            signalspy.cpp \
            teststorage.cpp \
            testtag.cpp \
-           testtask.cpp
+           testtask.cpp \
+           testtagmodel.cpp
     
-HEADERS += signalspy.h \
+HEADERS += modelsignalspy.h \
+           signalspy.h \
            teststorage.h \
            testbase.h \
            testtag.h \
-           testtask.h
+           testtask.h \
+           testtagmodel.h

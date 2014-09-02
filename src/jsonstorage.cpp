@@ -86,6 +86,7 @@ void JsonStorage::load_impl()
     if (!QFile::exists(dataFileName)) // Nothing to load
         return;
 
+    qDebug() << "JsonStorage::load_impl Loading from" << dataFileName;
     QFile file(dataFileName);
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "Could not open data file" << dataFileName

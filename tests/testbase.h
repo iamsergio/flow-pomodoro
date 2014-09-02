@@ -21,6 +21,7 @@
 #define FLOW_TEST_BASE_H
 
 #include "signalspy.h"
+#include "modelsignalspy.h"
 #include "storage.h"
 #include "kernel.h"
 #include "runtimeconfiguration.h"

@@ -72,7 +72,7 @@ public:
     explicit Storage(QObject *parent = 0);
     ~Storage();
 
-    TagList tags() const;
+    const TagList& tags() const;
     TaskList tasks() const;
     Storage::Data data() const;
     void setData(const Storage::Data &data);
