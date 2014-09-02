@@ -58,10 +58,12 @@ QuickView::QuickView(QQmlEngine *engine)
 # if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
         // Qt 5.1 does not support frameless and translucent windows on Windows
         setColor(Qt::transparent);
+        setDefaultAlphaBuffer(true);
 # endif
 
 #else
     setColor(Qt::transparent);
+    setDefaultAlphaBuffer(true); // Because some drivers don't request it. QTBUG-41074
 #endif
     QSize screenSize = qApp->primaryScreen()->size();
     if (m_controller->isMobile()) {
