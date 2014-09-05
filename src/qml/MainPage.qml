@@ -20,7 +20,7 @@ Page {
             anchors.top: parent.top
             anchors.topMargin: _style.marginMedium
             anchors.rightMargin: _style.marginSmall
-            anchors.leftMargin: _style.marginMedium
+            anchors.leftMargin: _style.marginSmall
             height: childrenRect.height
 
             Switch {
@@ -29,7 +29,7 @@ Page {
                 anchors.left: addIcon.right
                 anchors.right: parent.right
                 anchors.verticalCenter: addIcon.verticalCenter
-                anchors.leftMargin: _style.marginMedium
+                anchors.leftMargin: _style.marginSmall
                 style: SwitchStyle {
                     groove:
                     Rectangle {

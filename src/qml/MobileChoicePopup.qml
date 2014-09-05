@@ -10,8 +10,8 @@ Item {
     Rectangle {
         id: background
         anchors.fill: parent
-        opacity: 0.3
-        color: "blue"
+        opacity: 0.5
+        color: "black"
     }
 
     MouseArea {
