@@ -109,7 +109,7 @@ Kernel::~Kernel()
 Kernel::Kernel(QObject *parent)
     : QObject(parent)
     , m_storage(new JsonStorage(this))
-    , m_qmlEngine(new QQmlEngine(this))
+    , m_qmlEngine(new QQmlEngine(0)) // leak the engine, no point in wasting shutdown time. Also we get a qmldebug server crash if it's parented to qApp, which Kernel is
     , m_settings(new Settings(this))
     , m_controller(new Controller(m_qmlEngine->rootContext(), m_storage, m_settings, this))
     , m_pluginModel(new PluginModel(this))
