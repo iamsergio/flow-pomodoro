@@ -324,7 +324,7 @@ qreal Controller::dpiFactor() const
     Q_ASSERT(screen);
 
     if (isMobile()) {
-        return screen->logicalDotsPerInch() / 72.0;
+        return (screen->physicalDotsPerInch() / 72.0) / 2; // /2 because looks good on all devices
     }
 
     return 1;
