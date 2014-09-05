@@ -59,6 +59,7 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_settings(settings)
     , m_port(80)
     , m_isHttps(false)
+    , m_optionsContextMenuVisible(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -559,6 +560,19 @@ QString Controller::currentTitleText() const
 QString Controller::version() const
 {
     return STR(FLOW_VERSION);
+}
+
+bool Controller::optionsContextMenuVisible() const
+{
+    return m_optionsContextMenuVisible;
+}
+
+void Controller::setOptionsContextMenuVisible(int visible)
+{
+    if (visible != m_optionsContextMenuVisible) {
+        m_optionsContextMenuVisible = visible;
+        emit optionsContextMenuVisibleChanged();
+    }
 }
 
 void Controller::setCurrentTabTag(Tag *tag)

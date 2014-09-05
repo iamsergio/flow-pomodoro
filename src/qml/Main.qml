@@ -16,6 +16,12 @@ Rectangle {
     width: 400 * _controller.dpiFactor
     height: _style.contractedHeight + (_controller.expanded ? _style.pageHeight : 0)
 
+    function toggleConfigure()
+    {
+        _controller.currentPage = _controller.currentPage == Controller.ConfigurePage ? Controller.MainPage
+                                                                                      : Controller.ConfigurePage
+    }
+
     Connections {
         target: _controller
         onExpandedChanged: {
@@ -67,7 +73,7 @@ Rectangle {
                 anchors.rightMargin: _style.menuBarMargin
                 onButtonClicked: {
                     _controller.requestContextMenu(null) // reset task
-                    contextMenu.popup()
+                    _controller.optionsContextMenuVisible = true
                 }
             }
 
@@ -231,8 +237,7 @@ Rectangle {
             text: qsTr("Configure...")
             visible: _controller.currentPage != Controller.ConfigurePage
             onTriggered: {
-                _controller.currentPage = _controller.currentPage == Controller.ConfigurePage ? Controller.MainPage
-                                                                                              : Controller.ConfigurePage
+                root.toggleConfigure()
             }
         }
 
@@ -247,9 +252,43 @@ Rectangle {
         MenuItem {
             text: qsTr("Quit")
             onTriggered: {
-                _controller.stopPomodoro(true)
                 Qt.quit()
             }
         }
+    }
+
+    Component {
+        id: configureContextMenu
+        Item {
+            anchors.fill: parent
+            visible: _controller.optionsContextMenuVisible
+            ListModel {
+                id: optionsModel
+                ListElement { itemText: "Configure ..." }
+                ListElement { itemText: "About ..." }
+                ListElement { itemText: "Quit" }
+            }
+
+            MobileChoicePopup {
+                anchors.fill: parent
+                model: optionsModel
+                onChoiceClicked: {
+                    _controller.optionsContextMenuVisible = false
+                    if (index === 0) {
+                        root.toggleConfigure()
+                    } else if (index === 1) {
+                        _controller.currentPage = Controller.AboutPage
+                    } else if (index === 2) {
+                        Qt.quit()
+                    }
+                }
+            }
+        }
+    }
+
+    Loader {
+        sourceComponent: _controller.isMobile ? configureContextMenu : null
+        anchors.fill: parent
+        z: main.z + 1
     }
 }

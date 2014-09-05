@@ -71,6 +71,8 @@ class Controller : public QObject {
     Q_PROPERTY(QString currentTitleText READ currentTitleText NOTIFY currentTitleTextChanged)
     Q_PROPERTY(QString version READ version CONSTANT)
 
+    Q_PROPERTY(bool optionsContextMenuVisible READ optionsContextMenuVisible WRITE setOptionsContextMenuVisible NOTIFY optionsContextMenuVisibleChanged)
+
 public:
     enum Page {
         InvalidPage = 0,
@@ -176,6 +178,9 @@ public:
     QString currentTitleText() const;
     QString version() const;
 
+    bool optionsContextMenuVisible() const;
+    void setOptionsContextMenuVisible(int);
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);
@@ -232,6 +237,7 @@ Q_SIGNALS:
     void addingNewTask();
     void requestActivateWindow();
     void currentTitleTextChanged();
+    void optionsContextMenuVisibleChanged();
 
     // webdav stuff
     void hostChanged();
@@ -285,6 +291,8 @@ private:
     QString m_path;
     QString m_user;
     QString m_password;
+
+    bool m_optionsContextMenuVisible;
 };
 
 #endif
