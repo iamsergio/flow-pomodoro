@@ -35,6 +35,12 @@ JsonStorage::JsonStorage(QObject *parent)
 {
 }
 
+JsonStorage::~JsonStorage()
+{
+    if (saveScheduled())
+        save_impl();
+}
+
 Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
                                                QString &errorMsg, Storage *storage)
 {

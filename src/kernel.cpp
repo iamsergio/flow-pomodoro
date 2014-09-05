@@ -104,8 +104,6 @@ Kernel *Kernel::instance()
 
 Kernel::~Kernel()
 {
-    if (m_storage->saveScheduled())
-        m_storage->save();
 }
 
 Kernel::Kernel(QObject *parent)
