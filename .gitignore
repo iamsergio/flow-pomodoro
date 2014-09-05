@@ -16,6 +16,7 @@ install.sh
 config.log
 config.tests/qwebdavlib/qwebdavlib
 build_dir-android
+build_dir-blackberry
 tests/tests
 data.dat
 *~
