@@ -4,7 +4,7 @@ import QtGraphicalEffects 1.0
 Item {
     id: root
     property alias model: repeater.model
-    property int delegateHeight: 35 * _controller.dpiFactor
+    property int delegateHeight: 50 * _controller.dpiFactor
     signal choiceClicked(var index)
 
     Rectangle {
@@ -56,7 +56,7 @@ Item {
                                 anchors.left: parent.left
                                 anchors.leftMargin: 15 * _controller.dpiFactor
                                 text: itemText
-                                font.pixelSize: 15 * _controller.dpiFactor
+                                font.pixelSize: 19 * _controller.dpiFactor
                             }
 
                             Rectangle {
