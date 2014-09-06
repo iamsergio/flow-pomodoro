@@ -44,7 +44,7 @@ static QVariant dataFunction(const TagRef::List &list, int index, int role)
     }
 }
 
-Task::Task(const QString &summary)
+Task::Task(Storage *storage, const QString &summary)
     : QObject()
     , Syncable()
     , m_summary(summary.isEmpty() ? tr("New Task") : summary)
@@ -56,12 +56,10 @@ Task::Task(const QString &summary)
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     m_checkableTagModel = new CheckableTagModel(this);
 
-    // Dummy task doesn't need model setup
-    if (!summary.isEmpty())
-        modelSetup();
+    modelSetup(storage);
 }
 
-void Task::modelSetup()
+void Task::modelSetup(Storage *storage)
 {
     m_tags.setDataFunction(&dataFunction);
     m_tags.insertRole("tag", Q_NULLPTR, TagRole);
@@ -79,14 +77,16 @@ void Task::modelSetup()
     connect(tagsModel, &QAbstractListModel::layoutChanged, this, &Task::tagsChanged);
     connect(tagsModel, &QAbstractListModel::dataChanged, this, &Task::tagsChanged);
 
-    auto roleNames = Kernel::instance()->storage()->tagsModel()->roleNames();
+    auto roleNames = storage->tagsModel()->roleNames();
     roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
-    m_checkableTagModel->setSourceModel(Kernel::instance()->storage()->tagsModel());
+    QAbstractItemModel *allTagsModel = storage->tagsModel();
+    Q_ASSERT(allTagsModel);
+    m_checkableTagModel->setSourceModel(allTagsModel);
 }
 
-Task::Ptr Task::createTask(const QString &summary)
+Task::Ptr Task::createTask(Storage *storage, const QString &summary)
 {
-    Task::Ptr task = Task::Ptr(new Task(summary));
+    Task::Ptr task = Task::Ptr(new Task(storage, summary));
     task->setWeakPointer(task);
     return task;
 }

@@ -50,7 +50,7 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_popupVisible(false)
     , m_editMode(EditModeNone)
     , m_tagEditStatus(TagEditStatusNone)
-    , m_invalidTask(Task::createTask())
+    , m_invalidTask(Task::createTask(storage))
     , m_configureTabIndex(0)
     , m_queueType(QueueTypeToday)
     , m_storage(storage)

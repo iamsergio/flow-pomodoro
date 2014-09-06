@@ -1,0 +1,44 @@
+{
+    "JsonSerializerVersion": 1,
+    "instanceId": "{7073efff-3d70-421f-b811-d02f9ff080b3}",
+    "tags": [
+        {
+            "name": "test",
+            "revision": 0,
+            "revisionOnWebDAVServer": -1,
+            "uuid": "{939af352-4aa7-4a6b-be5b-c31be50ae21f}"
+        },
+        {
+            "name": "test2",
+            "revision": 0,
+            "revisionOnWebDAVServer": -1,
+            "uuid": "{9d1ee557-9276-4e0d-82ba-9f79f4bba1e7}"
+        }
+    ],
+    "tasks": [
+        {
+            "creationTimestamp": 1410012789390,
+            "description": "",
+            "modificationTimestamp": 1410012789392,
+            "revision": 1,
+            "revisionOnWebDAVServer": -1,
+            "staged": true,
+            "summary": "New Task",
+            "tags": [
+            ],
+            "uuid": "{c6b5f134-3503-4b44-91af-624439cb5bbe}"
+        },
+        {
+            "creationTimestamp": 1410011053837,
+            "description": "",
+            "modificationTimestamp": 1410011053838,
+            "revision": 1,
+            "revisionOnWebDAVServer": -1,
+            "staged": true,
+            "summary": "New Task",
+            "tags": [
+            ],
+            "uuid": "{65c69022-8234-48c3-a329-69bdc589fe9d}"
+        }
+    ]
+}

@@ -70,6 +70,20 @@ public:
         return true;
     }
 
+    void createNewKernel(const QString &dataFilename)
+    {
+        delete m_kernel;
+        RuntimeConfiguration config;
+        config.setDataFileName("data_files/" + dataFilename);
+        config.setPluginsSupported(false);
+
+        m_kernel = Kernel::instance();
+        m_kernel->setRuntimeConfiguration(config);
+        m_kernel->storage()->load();
+        m_storage = m_kernel->storage();
+        m_controller = m_kernel->controller();
+    }
+
 protected:
     Kernel *m_kernel;
     Storage *m_storage;

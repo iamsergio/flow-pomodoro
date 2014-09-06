@@ -387,13 +387,13 @@ Task::Ptr Storage::taskAt(int proxyIndex) const
 
 Task::Ptr Storage::addTask(const QString &taskText)
 {
-    Task::Ptr task = Task::createTask(taskText);
+    Task::Ptr task = Task::createTask(this, taskText);
     return addTask(task);
 }
 
 Task::Ptr Storage::prependTask(const QString &taskText)
 {
-    Task::Ptr task = Task::createTask(taskText);
+    Task::Ptr task = Task::createTask(this, taskText);
     connectTask(task);
     m_data.tasks.prepend(task);
     return task;

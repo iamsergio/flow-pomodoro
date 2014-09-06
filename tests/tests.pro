@@ -10,6 +10,7 @@ INCLUDEPATH += $$PWD/../src/
 SOURCES += main.cpp \
            modelsignalspy.cpp \
            signalspy.cpp \
+           testcheckabletagmodel.cpp \
            teststorage.cpp \
            testtag.cpp \
            testtask.cpp \
@@ -17,6 +18,7 @@ SOURCES += main.cpp \
     
 HEADERS += modelsignalspy.h \
            signalspy.h \
+           testcheckabletagmodel.h \
            teststorage.h \
            testbase.h \
            testtag.h \

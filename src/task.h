@@ -45,6 +45,7 @@ enum SerializerVersion {
 
 class CheckableTagModel;
 class QAbstractListModel;
+class Storage;
 
 class Task : public QObject, public Syncable {
     Q_OBJECT
@@ -61,7 +62,7 @@ public:
     typedef QSharedPointer<Task> Ptr;
     typedef GenericListModel<Ptr> List;
 
-    static Task::Ptr createTask(const QString &name = QString());
+    static Task::Ptr createTask(Storage *storage, const QString &name = QString());
 
     bool staged() const;
     void setStaged(bool);
@@ -112,8 +113,8 @@ private Q_SLOTS:
     void onEdited();
 
 private:
-    explicit Task(const QString &name = QString());
-    void modelSetup();
+    explicit Task(Storage *storage, const QString &name = QString());
+    void modelSetup(Storage *storage);
     void setModificationDate(const QDateTime &);
     void setCreationDate(const QDateTime &);
 

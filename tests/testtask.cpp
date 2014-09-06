@@ -119,7 +119,7 @@ void TestTask::testAddAndRemoveTag()
 
 void TestTask::testJson()
 {
-    Task::Ptr task = Task::createTask("test task");
+    Task::Ptr task = Task::createTask(m_storage, "test task");
     task->setDescription("some description");
     task->setStaged(true);
     TagRef::List tags;
@@ -127,7 +127,7 @@ void TestTask::testJson()
     task->setTagList(tags);
 
     QVariantMap map = task->toJson();
-    Task::Ptr task2 = Task::createTask("another task");
+    Task::Ptr task2 = Task::createTask(m_storage, "another task");
     task2->fromJson(map);
 
     QCOMPARE(task->summary(), task2->summary());

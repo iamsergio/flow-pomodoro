@@ -2,6 +2,7 @@
 #include "testtask.h"
 #include "testtag.h"
 #include "testtagmodel.h"
+#include "testcheckabletagmodel.h"
 
 #include <QtTest/QtTest>
 #include <QGuiApplication>
@@ -23,6 +24,9 @@ int main(int argc, char *argv[])
 
     TestTagModel test4;
     success &= QTest::qExec(&test4, argc, argv);
+
+    TestCheckableTagModel test5;
+    success &= QTest::qExec(&test5, argc, argv);
 
     delete Kernel::instance(); // Otherwise it's deleted by QGuiApplication and we hang deep in qml engine land for some reason
     return success;
