@@ -31,12 +31,15 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/ConfigurePage.qml  \
                qml/DecentTabView.qml  \
                qml/DefaultStyle.qml   \
+               qml/FlowCircularProgressIndicator.qml \
                qml/PushButton.qml \
                qml/Main.qml           \
                qml/MainPage.qml       \
                qml/ModalDialog.qml    \
                qml/MobileButton.qml \
                qml/MobileChoicePopup.qml \
+               qml/MobileMenuBar.qml \
+               qml/MobileStyle.qml \
                qml/MobileTabView.qml  \
                qml/Page.qml           \
                qml/QuestionPopup.qml  \
