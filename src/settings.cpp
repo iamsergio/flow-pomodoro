@@ -39,7 +39,7 @@ void Settings::setValue(const QString &key, const QVariant &value)
 void Settings::scheduleSync()
 {
     if (!m_syncScheduled) {
-        qDebug() << Q_FUNC_INFO;
+        //qDebug() << Q_FUNC_INFO;
         m_syncScheduled = true;
         m_needsSync = false;
         QMetaObject::invokeMethod(this, "doSync", Qt::QueuedConnection);
@@ -53,7 +53,7 @@ bool Settings::needsSync() const
 
 void Settings::doSync()
 {
-    qDebug() << Q_FUNC_INFO;
+    //qDebug() << Q_FUNC_INFO;
     m_syncScheduled = false;
     QSettings::sync();
 }
