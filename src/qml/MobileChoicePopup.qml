@@ -37,6 +37,7 @@ Item {
                 border.color: "gray"
                 border.width: 1 * _controller.dpiFactor
                 visible: root.model.count > 0
+                radius: 2 * _controller.dpiFactor
 
                 Column {
                     anchors.fill: parent
@@ -61,7 +62,7 @@ Item {
 
                             Rectangle {
                                 id: topLine
-                                height: popupRect.border.width
+                                height: Math.max(1, popupRect.border.width / 2 )
                                 anchors.left: parent.left
                                 anchors.right: parent.right
                                 anchors.top: parent.top
