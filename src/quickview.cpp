@@ -39,7 +39,11 @@
 QuickView::QuickView(QQmlEngine *engine)
     : QQuickView(engine, 0)
     , m_controller(Kernel::instance()->controller())
-    , m_developerMode(qApp->arguments().contains("-d"))
+#ifdef DEVELOPER_MODE
+    , m_developerMode(true)
+#else
+    , m_developerMode(false)
+#endif
 {
     rootContext()->setContextProperty("_toolTipController", new ToolTipController(this));
 
