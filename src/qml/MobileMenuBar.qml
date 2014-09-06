@@ -72,6 +72,7 @@ Rectangle {
             id: mouseArea
             anchors.fill: parent
             onClicked: {
+                Qt.inputMethod.hide()
                 root.buttonClicked()
             }
         }
