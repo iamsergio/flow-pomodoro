@@ -41,7 +41,7 @@ private:
     void createStyleComponent();
 
     Controller *m_controller;
-    const bool m_developerMode;
+    const bool m_useqresources;
 };
 
 #endif

@@ -40,9 +40,9 @@ QuickView::QuickView(QQmlEngine *engine)
     : QQuickView(engine, 0)
     , m_controller(Kernel::instance()->controller())
 #ifdef DEVELOPER_MODE
-    , m_developerMode(true)
+    , m_useqresources(!m_controller->isMobile())
 #else
-    , m_developerMode(false)
+    , m_useqresources(false)
 #endif
 {
     rootContext()->setContextProperty("_toolTipController", new ToolTipController(this));
@@ -50,7 +50,7 @@ QuickView::QuickView(QQmlEngine *engine)
     createStyleComponent();
     engine->addImageProvider("icons", new ImageProvider(m_controller->isMobile()));
 
-    if (m_developerMode) {
+    if (m_useqresources) {
         // So that F5 reloads QML without having to restart the application
         setSource(QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/Main.qml"));
     } else {
@@ -100,7 +100,7 @@ QUrl QuickView::styleFileName() const
     } else {
         const QString filename = m_controller->isMobile() ? "MobileStyle.qml" : "DefaultStyle.qml";
         // Developer mode doesn't use qrc:, so we can reload with F5
-        return m_developerMode ? QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/" + filename)
+        return m_useqresources ? QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/" + filename)
                                : QUrl("qrc:/qml/" + filename);
     }
 }
@@ -126,10 +126,10 @@ void QuickView::createStyleComponent()
 
 void QuickView::keyReleaseEvent(QKeyEvent *event)
 {
-    if (m_developerMode && event->key() == Qt::Key_F5) {
+    if (m_useqresources && event->key() == Qt::Key_F5) {
         event->accept();
         reloadQML();
-    } else if (m_developerMode && event->key() == Qt::Key_F4) {
+    } else if (m_useqresources && event->key() == Qt::Key_F4) {
         Kernel::instance()->storage()->dumpDebugInfo();
         qDebug() << "Active focus belongs to" << activeFocusItem();
         qDebug() << "TagEditStatus:" << m_controller->tagEditStatus();
