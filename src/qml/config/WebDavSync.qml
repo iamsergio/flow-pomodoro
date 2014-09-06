@@ -124,11 +124,11 @@ Item {
         }
     }
 
-    Button {
+    PushButton {
         id: testButton
         anchors.top: grid1.bottom
         anchors.left: grid1.left
-        anchors.topMargin: _style.marginBig
+        anchors.topMargin: _style.marginMedium
         text: qsTr("Test settings")
         enabled: portField.text && hostField.text && pathField.text && !_webdavSync.syncInProgress
         onClicked: {

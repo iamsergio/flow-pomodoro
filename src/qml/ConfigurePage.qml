@@ -105,10 +105,8 @@ Page {
             }
         }
 
-        Button {
+        PushButton {
             id: okButton
-            width : 100 * _controller.dpiFactor
-            height: 50 * _controller.dpiFactor
             text: qsTr("OK")
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom

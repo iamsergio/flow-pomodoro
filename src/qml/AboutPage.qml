@@ -132,10 +132,8 @@ Page {
                                     + (_controller.hackingMenuSupported ? ", hacking" : "")
         }
 
-        Button {
+        PushButton {
             z: 2
-            width : 100 * _controller.dpiFactor
-            height: 50 * _controller.dpiFactor
             text: qsTr("OK")
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom

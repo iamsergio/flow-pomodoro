@@ -32,7 +32,7 @@ Page {
                 anchors.leftMargin: _style.marginSmall
                 style: SwitchStyle {
                     groove:
-                    Rectangle {
+                        Rectangle {
                             property color shadow: control.checked ? Qt.darker(highlight, 1.2): "#999"
                             property color bg: control.checked ? highlight: "#bbb"
                             property color highlight: "#bbb"
