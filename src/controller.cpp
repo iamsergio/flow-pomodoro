@@ -543,16 +543,19 @@ void Controller::setPort(int port)
 }
 
 QString Controller::currentTitleText() const
-{
+{    
     if (m_page == ConfigurePage && m_expanded) {
         return tr("Configuration");
     } else if (m_page == AboutPage && m_expanded) {
         return tr("About");
     } else {
-        if (currentTask()->stopped())
+        if (!currentTask()->stopped())
+            return currentTask()->summary();
+        if (!m_expanded)
             return tr("You're slacking");
-        return currentTask()->summary();
+        return m_queueType == QueueTypeToday ? tr("Today's queue") : tr("Later queue");
     }
+
 }
 
 #define STR_EXPAND(tok) #tok

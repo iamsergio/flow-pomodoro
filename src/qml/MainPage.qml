@@ -28,8 +28,8 @@ Page {
                 checked: _controller.queueType === Controller.QueueTypeToday
                 anchors.left: addIcon.right
                 anchors.right: parent.right
-                anchors.verticalCenter: addIcon.verticalCenter
                 anchors.leftMargin: _style.marginSmall
+                anchors.top: parent.top
                 style: SwitchStyle {
                     groove:
                         Rectangle {
@@ -38,7 +38,7 @@ Page {
                             property color highlight: "#bbb"
 
                             implicitWidth: headerRectangle.width - addIcon.width - _style.marginMedium
-                            implicitHeight: addIcon.height
+                            implicitHeight: 50 * _controller.dpiFactor
 
                             border.color: "gray"
                             color: "red"
@@ -63,46 +63,46 @@ Page {
 
                             Text {
                                 id: text1
-                                anchors.left: parent.left
-                                width: parent.width / 2
+                                anchors.left: actionIcon.right
+                                anchors.leftMargin: _style.marginSmall
+                                width: parent.width / 3
                                 anchors.verticalCenter: parent.verticalCenter
-                                visible: control.checked
+                                visible: control.checked && false
                                 text: qsTr("Today's tasks")
-                                horizontalAlignment: Text.AlignHCenter
+                                horizontalAlignment: Text.AlignLeft
                                 color: "#4A4A53"
                                 font.pixelSize: 11 * _controller.dpiFactor
                             }
                             Text {
                                 id: text2
                                 anchors.right: parent.right
-                                width: parent.width / 2
+                                anchors.leftMargin: _style.marginSmall
+                                width: parent.width / 3
                                 anchors.verticalCenter: parent.verticalCenter
-                                visible: !control.checked
-                                text: qsTr("Later tasks")
+                                visible: !control.checked && false
+                                text: qsTr("Later tasks") + handle.width
                                 color: text1.color
                                 horizontalAlignment: Text.AlignHCenter
                                 font.pixelSize: 11 * _controller.dpiFactor
                             }
                             Image {
                                 id: actionIcon
+                                property int margin: _style.marginMedium
                                 width: 16 * _controller.dpiFactor
                                 height: 16 * _controller.dpiFactor
-                                anchors.left: control.checked ? parent.left : text1.right
+                                x: (control.checked ? margin : control.width - width - margin) - 2 * _controller.dpiFactor
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.margins: _style.marginMedium
                                 source: control.checked ? "image://icons/stage.png" : "image://icons/archive.png"
                             }
-                            Desaturate {
-                                anchors.fill: actionIcon
-                                source: actionIcon
-                                desaturation: 1
-                            }
+
                         }
 
                     handle:
                     Rectangle {
+                        id: handleRect
                         opacity: control.enabled ? 1.0 : 0.5
-                        implicitWidth: Math.round((parent.parent.width - padding.left - padding.right) / 2)
+                        implicitWidth: control.width - 16 * _controller.dpiFactor - 2*_style.marginMedium
                         implicitHeight: control.height - padding.top - padding.bottom
 
                         border.color: control.activeFocus ? Qt.darker(highlight, 2) : Qt.darker(button, 2)
@@ -147,7 +147,7 @@ Page {
             ClickableImage {
                 id: addIcon
                 source: "image://icons/add.png"
-                anchors.top: parent.top
+                anchors.verticalCenter: switchItem.verticalCenter
                 anchors.left: parent.left
                 toolTip: qsTr("Add new task")
                 onClicked: {
