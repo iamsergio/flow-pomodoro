@@ -120,16 +120,31 @@ Page {
         }
 
         Text {
+            id: optionsText
             anchors.top: keyGrid.bottom
             font.pixelSize: _style.smallTextSize
             anchors.left: parent.left
             anchors.topMargin: _style.marginMedium
             anchors.leftMargin: _style.marginMedium
             color: _style.smallTextColor
-            text: "Build options: " + (_controller.isMobile ? "mobile, " : "desktop, ")
+            text: qsTr("Build options") + ": " + (_controller.isMobile ? "mobile, " : "desktop, ")
                                     + (_storage.webDAVSyncSupported ? "webdav, " : "no-webdav, ")
                                     + (_controller.openSSLSupported ? "openssl" : "no-openssl")
                                     + (_controller.hackingMenuSupported ? ", hacking" : "")
+        }
+
+        Text {
+            id: dataPathText
+            anchors.top: optionsText.bottom
+            font.pixelSize: _style.smallTextSize
+            anchors.left: parent.left
+            anchors.topMargin: _style.marginMedium
+            anchors.leftMargin: _style.marginMedium
+            anchors.right: parent.right
+            anchors.rightMargin: _style.marginMedium
+            color: _style.smallTextColor
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            text: qsTr("Data file") + ": " + _storage.dataFile();
         }
 
         PushButton {

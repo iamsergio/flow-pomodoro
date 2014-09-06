@@ -20,6 +20,7 @@
 #include "storage.h"
 #include "tag.h"
 #include "task.h"
+#include "kernel.h"
 #include "jsonstorage.h"
 #include "sortedtagsmodel.h"
 #include "archivedtasksfiltermodel.h"
@@ -232,6 +233,11 @@ int Storage::indexOfTag(const QString &name) const
     }
 
     return -1;
+}
+
+QString Storage::dataFile() const
+{
+    return Kernel::instance()->runtimeConfiguration().dataFileName();
 }
 
 QAbstractItemModel *Storage::tagsModel() const

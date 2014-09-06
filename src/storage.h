@@ -135,6 +135,8 @@ public:
     int indexOfTag(const QString &name) const;
 //------------------------------------------------------------------------------
 
+    Q_INVOKABLE QString dataFile() const;
+
 public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);
     void dumpDebugInfo();
