@@ -26,15 +26,6 @@ TestCheckableTagModel::TestCheckableTagModel()
 
 void TestCheckableTagModel::initTestCase()
 {
-    m_storage->clearTags();
-    m_storage->clearTasks();
-
-    m_task1 = m_storage->addTask("task1");
-    m_storage->createTag("tagA");
-    m_storage->createTag("tagB");
-    m_storage->createTag("tagC");
-    m_task2 = m_storage->addTask("task2");
-
 }
 
 void TestCheckableTagModel::cleanupTestCase()
@@ -43,12 +34,6 @@ void TestCheckableTagModel::cleanupTestCase()
 
 void TestCheckableTagModel::testHasTags()
 {
-    QCOMPARE(m_task1->tags().count(), 0);
-    QCOMPARE(m_task2->tags().count(), 0);
-
-    QCOMPARE(m_task1->checkableTagModel()->rowCount(), 3);
-    QCOMPARE(m_task2->checkableTagModel()->rowCount(), 3);
-
     // Restart an instance
     createNewKernel("testcheckablemodeltest1.dat");
     QCOMPARE(m_storage->tags().count(), 2);
@@ -60,4 +45,17 @@ void TestCheckableTagModel::testHasTags()
         QVERIFY(model->sourceModel());
         QCOMPARE(task->checkableTagModel()->rowCount(), 2);
     }
+
+    Task::Ptr task1 = m_storage->tasks().at(0);
+    ModelSignalSpy modelSpy(task1->checkableTagModel());
+    m_storage->createTag("tagZZZ");
+
+    QCOMPARE(modelSpy.count(), 2);
+    QCOMPARE(modelSpy.caughtSignals().at(0).name, QString("rowsAboutToBeInserted"));
+    QCOMPARE(modelSpy.caughtSignals().at(1).name, QString("rowsInserted"));
+    modelSpy.clear();
+    m_storage->removeTag("tagZZZ");
+    QCOMPARE(modelSpy.count(), 2);
+    QCOMPARE(modelSpy.caughtSignals().at(0).name, QString("rowsAboutToBeRemoved"));
+    QCOMPARE(modelSpy.caughtSignals().at(1).name, QString("rowsRemoved"));
 }

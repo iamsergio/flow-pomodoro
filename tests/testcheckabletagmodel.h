@@ -23,6 +23,8 @@
 #include "testbase.h"
 #include <QObject>
 
+// TODO: Test rename tags
+
 class TestCheckableTagModel : public TestBase
 {
     Q_OBJECT
@@ -34,10 +36,6 @@ private Q_SLOTS:
     void cleanupTestCase();
 
     void testHasTags();
-
-private:
-    Task::Ptr m_task1;
-    Task::Ptr m_task2;
 };
 
 #endif
