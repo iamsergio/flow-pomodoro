@@ -72,35 +72,28 @@ void TestTagModel::testFromFile()
     QFETCH(QStringList, expectedSignals);
     QFETCH(QStringList, expectedSignalsInUnsortedModel);
 
+    createNewKernel(filename);
 
-    delete Kernel::instance();
-    RuntimeConfiguration config;
-    config.setDataFileName("data_files/" + filename);
-    config.setPluginsSupported(false);
-
-    Kernel *kernel = Kernel::instance();
-    kernel->setRuntimeConfiguration(config);
-    Storage *storage = kernel->storage();
-    ModelSignalSpy *tagsModelSpy = new ModelSignalSpy(storage->tagsModel());
-    const TagList &unsortedTags = storage->tags();
+    ModelSignalSpy *tagsModelSpy = new ModelSignalSpy(m_storage->tagsModel());
+    const TagList &unsortedTags = m_storage->tags();
     QAbstractListModel *unsortedTagsModel = unsortedTags;
     ModelSignalSpy *unsortedTagsModelSpy = new ModelSignalSpy(unsortedTagsModel);
-    QVERIFY(storage->tags().isEmpty());
+    QVERIFY(m_storage->tags().isEmpty());
     QCOMPARE(unsortedTagsModel->rowCount(), 0);
-    storage->load();
 
-    if (storage->tags().count() != expectedNumTags) {
-        qDebug() << "Got" << storage->tags().count()
+
+    if (m_storage->tags().count() != expectedNumTags) {
+        qDebug() << "Got" << m_storage->tags().count()
                  << "; Expected" << expectedNumTags;
 
-        foreach (const Tag::Ptr &tag, storage->tags()) {
+        foreach (const Tag::Ptr &tag, m_storage->tags()) {
             qDebug() << "Got" << tag->name();
         }
 
         QVERIFY(false);
     }
 
-    QAbstractItemModel *model = storage->tagsModel();
+    QAbstractItemModel *model = m_storage->tagsModel();
     QCOMPARE(model->rowCount(), expectedNumTags);
     QCOMPARE(expectedNumTags, expectedTags.count());
 
@@ -131,5 +124,3 @@ void TestTagModel::testFromFile()
     tagsModelSpy->deleteLater();
     unsortedTagsModelSpy->deleteLater();
 }
-
-
