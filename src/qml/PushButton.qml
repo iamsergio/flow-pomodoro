@@ -12,7 +12,7 @@ Loader {
     Component {
         id: desktopButton
         Button {
-            height: 50 * _controller.dpiFactor
+            height: 40 * _controller.dpiFactor
             text: root.text
             onClicked:
                 root.clicked()

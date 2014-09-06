@@ -48,7 +48,7 @@ Item {
     property int dialogBorderWidth: 2 * _controller.dpiFactor
     property int dialogFontSize: 14 * _controller.dpiFactor
     property int extraMargin: 4 * _controller.dpiFactor
-    property int questionDialogHeight: 75 * _controller.dpiFactor
+    property int questionDialogHeight: 135 * _controller.dpiFactor
     property int dialogButtonsMargin: 6 * _controller.dpiFactor
 
     // Task Editor
