@@ -72,7 +72,7 @@ void TestTagModel::testFromFile()
     QFETCH(QStringList, expectedSignals);
     QFETCH(QStringList, expectedSignalsInUnsortedModel);
 
-    createNewKernel(filename);
+    createNewKernel(filename, /*load=*/ false);
 
     ModelSignalSpy *tagsModelSpy = new ModelSignalSpy(m_storage->tagsModel());
     const TagList &unsortedTags = m_storage->tags();
@@ -80,7 +80,7 @@ void TestTagModel::testFromFile()
     ModelSignalSpy *unsortedTagsModelSpy = new ModelSignalSpy(unsortedTagsModel);
     QVERIFY(m_storage->tags().isEmpty());
     QCOMPARE(unsortedTagsModel->rowCount(), 0);
-
+    m_storage->load();
 
     if (m_storage->tags().count() != expectedNumTags) {
         qDebug() << "Got" << m_storage->tags().count()

@@ -70,7 +70,7 @@ public:
         return true;
     }
 
-    void createNewKernel(const QString &dataFilename)
+    void createNewKernel(const QString &dataFilename, bool load = true)
     {
         delete m_kernel;
         RuntimeConfiguration config;
@@ -79,9 +79,10 @@ public:
 
         m_kernel = Kernel::instance();
         m_kernel->setRuntimeConfiguration(config);
-        m_kernel->storage()->load();
         m_storage = m_kernel->storage();
         m_controller = m_kernel->controller();
+        if (load)
+            m_kernel->storage()->load();
     }
 
 protected:
