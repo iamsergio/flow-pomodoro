@@ -287,6 +287,7 @@ void Controller::setTaskStatus(TaskStatus status)
         emit remainingMinutesChanged();
         emit currentTaskDurationChanged();
         emit currentTaskChanged();
+        emit currentTitleTextChanged();
     }
 }
 
