@@ -89,7 +89,16 @@ void TestTagModel::testFromFile()
     QCOMPARE(unsortedTagsModel->rowCount(), 0);
     storage->load();
 
-    QCOMPARE(storage->tags().count(), expectedNumTags);
+    if (storage->tags().count() != expectedNumTags) {
+        qDebug() << "Got" << storage->tags().count()
+                 << "; Expected" << expectedNumTags;
+
+        foreach (const Tag::Ptr &tag, storage->tags()) {
+            qDebug() << "Got" << tag->name();
+        }
+
+        QVERIFY(false);
+    }
 
     QAbstractItemModel *model = storage->tagsModel();
     QCOMPARE(model->rowCount(), expectedNumTags);

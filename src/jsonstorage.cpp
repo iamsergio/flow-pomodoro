@@ -89,10 +89,10 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
 void JsonStorage::load_impl()
 {
     const QString dataFileName = Kernel::instance()->runtimeConfiguration().dataFileName();
+    qDebug() << "JsonStorage::load_impl Loading from" << dataFileName;
     if (!QFile::exists(dataFileName)) // Nothing to load
         return;
 
-    qDebug() << "JsonStorage::load_impl Loading from" << dataFileName;
     QFile file(dataFileName);
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "Could not open data file" << dataFileName
