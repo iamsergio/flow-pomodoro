@@ -27,6 +27,10 @@ CheckableTagModel::CheckableTagModel(Task *parent)
 {
     Q_ASSERT(parent);
     setObjectName("CheckableTagModel");
+    connect(this, &CheckableTagModel::rowsInserted, this, &CheckableTagModel::countChanged);
+    connect(this, &CheckableTagModel::rowsRemoved, this, &CheckableTagModel::countChanged);
+    connect(this, &CheckableTagModel::modelReset, this, &CheckableTagModel::countChanged);
+    connect(this, &CheckableTagModel::layoutChanged, this, &CheckableTagModel::countChanged);
 }
 
 QVariant CheckableTagModel::data(const QModelIndex &proxyIndex, int role) const
@@ -56,4 +60,9 @@ QHash<int, QByteArray> CheckableTagModel::roleNames() const
     QHash<int, QByteArray> roles = QIdentityProxyModel::roleNames();
     roles.insert(Qt::CheckStateRole, "checkState");
     return roles;
+}
+
+int CheckableTagModel::count() const
+{
+    return rowCount();
 }

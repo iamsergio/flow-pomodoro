@@ -27,10 +27,17 @@ class Task;
 class CheckableTagModel : public QIdentityProxyModel
 {
     Q_OBJECT
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     explicit CheckableTagModel(Task *parent);
     QVariant data(const QModelIndex &proxyIndex, int role) const Q_DECL_OVERRIDE;
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
+
+    int count() const;
+
+Q_SIGNALS:
+    void countChanged();
+
 private:
     Task *m_parentTask;
 
