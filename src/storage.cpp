@@ -175,8 +175,8 @@ bool Storage::saveScheduled() const
 void Storage::scheduleSave()
 {
     if (m_savingDisabled == 0) {
-        if (!m_scheduleTimer.isActive())
-            qDebug() << Q_FUNC_INFO;
+        //if (!m_scheduleTimer.isActive())
+            //qDebug() << Q_FUNC_INFO;
         m_scheduleTimer.start();
     }
 }
