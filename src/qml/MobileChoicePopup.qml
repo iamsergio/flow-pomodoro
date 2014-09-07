@@ -73,8 +73,24 @@ Item {
                                 id: itemMouseArea
                                 anchors.fill: parent
                                 onClicked: {
-                                    root.choiceClicked(index)
+                                    if (checkable) {
+                                        checked = !checked
+                                    } else {
+                                        root.choiceClicked(index)
+                                    }
                                 }
+                            }
+
+                            Rectangle {
+                                visible: checkable
+                                width: 15 * _controller.dpiFactor
+                                height: width
+                                border.color: "gray"
+                                border.width: _controller.dpiFactor
+                                anchors.right: parent.right
+                                anchors.rightMargin: 10 * _controller.dpiFactor
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: checked ? "black" : "white"
                             }
                         }
                     }

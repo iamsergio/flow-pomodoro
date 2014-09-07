@@ -244,9 +244,9 @@ Rectangle {
             visible: _controller.optionsContextMenuVisible
             ListModel {
                 id: optionsModel
-                ListElement { itemText: "Configure ..." }
-                ListElement { itemText: "About ..." }
-                ListElement { itemText: "Quit" }
+                ListElement { itemText: "Configure ..."; checkable: false }
+                ListElement { itemText: "About ..."; checkable: false }
+                ListElement { itemText: "Quit"; checkable: false }
             }
 
             MobileChoicePopup {
