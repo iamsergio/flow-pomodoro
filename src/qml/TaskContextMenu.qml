@@ -9,6 +9,23 @@ Menu {
 
     visible: task !== null
     title: qsTr("Tags")
+
+    MenuItem {
+        text: qsTr("Edit...")
+        onTriggered: {
+            _controller.editTask(_controller.rightClickedTask, Controller.EditModeEditor)
+        }
+    }
+
+    MenuItem {
+        text: qsTr("Delete")
+        onTriggered: {
+            _controller.removeTask(_controller.rightClickedTask)
+        }
+    }
+
+    MenuSeparator {}
+
     Instantiator {
         id: instantiator
         model: task === null ? 0 : task.checkableTagModel

@@ -231,30 +231,10 @@ Rectangle {
         }
     }
 
-    Menu {
+    TaskContextMenu {
         id: taskContextMenu
         enabled: !_controller.popupVisible
-
-        MenuItem {
-            visible: _controller.rightClickedTask !== null
-            text: qsTr("Delete")
-            onTriggered: {
-                _controller.removeTask(_controller.rightClickedTask)
-            }
-        }
-
-        MenuItem {
-            visible: _controller.rightClickedTask !== null
-            text: qsTr("Edit...")
-            onTriggered: {
-                _controller.editTask(_controller.rightClickedTask, Controller.EditModeEditor)
-            }
-        }
-
-        TagsMenu {
-            task: _controller.rightClickedTask
-        }
-
+        task: _controller.rightClickedTask
     }
 
     Component {

@@ -79,7 +79,7 @@ ModalDialog {
                             tagsMenu.popup()
                         }
 
-                        TagsMenu {
+                        TaskContextMenu {
                             id: tagsMenu
                             task: _controller.taskBeingEdited
                             showConfigureItem: false
