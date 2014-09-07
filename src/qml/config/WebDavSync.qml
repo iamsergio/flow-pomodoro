@@ -170,8 +170,11 @@ Item {
         id: urlText
         anchors.top: testButton.bottom
         anchors.left: grid1.left
-        anchors.topMargin: _style.marginBig
+        anchors.right: parent.right
+        anchors.rightMargin: _style.marginSmall
+        anchors.topMargin: _style.marginSmall
         text: qsTr("Url") + ": " + httpsCombo.currentText + "://" + hostField.text + (pathField.text.charAt(0) == "/" ? pathField.text : "/" + pathField.text) + (portField.text ? ":" + portField.text : "")
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
 
     Text {
