@@ -22,6 +22,7 @@
 #include "controller.h"
 #include "kernel.h"
 #include "dbus/flow.h"
+#include "utils.h"
 
 #ifdef QT_WIDGETS_LIB
 # include <QApplication>
@@ -102,21 +103,28 @@ void windowsMessageHandler(QtMsgType type, const QMessageLogContext &context, co
 
 int main(int argc, char *argv[])
 {
+    printTimeInfo("main");
+
 #ifdef Q_OS_WIN
     qputenv("QT_QPA_PLATFORM","windows:fontengine=freetype");
     qInstallMessageHandler(windowsMessageHandler);
 #endif
     Application app(argc, argv);
+    printTimeInfo("main: created QApplication");
     app.setOrganizationName("KDAB");
     app.setApplicationName("flow");
 
     QTranslator translator;
     translator.load(QString(":/translations/flow_%1").arg(QLocale::system().name())); // export LANG="pt_PT" to change
     app.installTranslator(&translator);
+    printTimeInfo("main: installed QTranslator");
 
     Kernel *kernel = Kernel::instance();
+    printTimeInfo("main: created Kernel::instance()");
     QuickView window(kernel->qmlEngine());
+    printTimeInfo("main: created QuickView");
     initDBus(kernel->controller());
+    printTimeInfo("main: initialized dbus");
 
     if (kernel->controller()->isMobile()) {
         window.showMaximized(); // Don't use fullscreen on android
@@ -133,5 +141,6 @@ int main(int argc, char *argv[])
         window.show();
     }
 
+    printTimeInfo("main: starting app.exec()");
     return app.exec();
 }

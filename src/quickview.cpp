@@ -26,6 +26,7 @@
 #include "imageprovider.h"
 #include "webdavsyncer.h"
 #include "kernel.h"
+#include "utils.h"
 
 #include <QStandardPaths>
 #include <QQmlContext>
@@ -49,13 +50,14 @@ QuickView::QuickView(QQmlEngine *engine)
 
     createStyleComponent();
     engine->addImageProvider("icons", new ImageProvider(m_controller->isMobile()));
-
+    printTimeInfo("QuickView: addImageProvider end");
     if (m_useqresources) {
         // So that F5 reloads QML without having to restart the application
         setSource(QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/Main.qml"));
     } else {
         setSource(QUrl("qrc:/qml/Main.qml"));
     }
+    printTimeInfo("QuickView: Set Source END");
 
 #ifdef Q_OS_WIN
 
@@ -79,14 +81,17 @@ QuickView::QuickView(QQmlEngine *engine)
     }
 
     connect(m_controller, &Controller::requestActivateWindow, this, &QuickView::requestActivate);
+    printTimeInfo("QuickView: CTOR END");
 }
 
 void QuickView::reloadQML()
 {
     qDebug() << "Reloading QML ...";
     engine()->clearComponentCache();
+    printTimeInfo("QuickView: cleared component cache");
     createStyleComponent();
     setSource(source());
+    printTimeInfo("QuickView: setted Source");
 }
 
 QUrl QuickView::styleFileName() const
@@ -122,6 +127,7 @@ void QuickView::createStyleComponent()
         qWarning() << styleComponent->errorString();
         Q_ASSERT(false);
     }
+    printTimeInfo("QuickView: created style component");
 }
 
 void QuickView::keyReleaseEvent(QKeyEvent *event)

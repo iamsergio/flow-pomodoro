@@ -17,7 +17,8 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/tagref.cpp \
            $$PWD/task.cpp \
            $$PWD/taskfilterproxymodel.cpp \
-           $$PWD/tooltipcontroller.cpp
+           $$PWD/tooltipcontroller.cpp \
+           $$PWD/utils.cpp
 
 HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/checkabletagmodel.h \
@@ -38,7 +39,8 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/tagref.h \
            $$PWD/task.h            \
            $$PWD/taskfilterproxymodel.h \
-           $$PWD/tooltipcontroller.h
+           $$PWD/tooltipcontroller.h \
+           $$PWD/utils.h
 
 !contains(DEFINES, NO_WEBDAV) {
     include("$$PWD/../3rdparty/qwebdav/qwebdav.pri")
