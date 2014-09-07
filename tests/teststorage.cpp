@@ -204,5 +204,5 @@ void TestStorage::testPrependTask()
 void TestStorage::testSetData()
 {
     m_storage->setData(Storage::Data());
-    QVERIFY(!m_storage->data().instanceId.isEmpty())
+    QVERIFY(!m_storage->data().instanceId.isEmpty());
 }
