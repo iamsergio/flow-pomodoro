@@ -3,6 +3,10 @@
 #include "testtag.h"
 #include "testtagmodel.h"
 #include "testcheckabletagmodel.h"
+#include "testwebdav.h"
+#include "testtaskfiltermodel.h"
+#include "teststagedtasksmodel.h"
+#include "testarchivedtasksmodel.h"
 
 #include <QtTest/QtTest>
 #include <QGuiApplication>
@@ -27,6 +31,18 @@ int main(int argc, char *argv[])
 
     TestCheckableTagModel test5;
     success &= QTest::qExec(&test5, argc, argv) == 0;
+
+    TestArchivedTasksModel test6;
+    success &= QTest::qExec(&test6, argc, argv) == 0;
+
+    TestStagedTasksModel test7;
+    success &= QTest::qExec(&test7, argc, argv) == 0;
+
+    TestTaskFilterModel test8;
+    success &= QTest::qExec(&test8, argc, argv) == 0;
+
+    TestWebDav test9;
+    success &= QTest::qExec(&test9, argc, argv) == 0;
 
     delete Kernel::instance(); // Otherwise it's deleted by QGuiApplication and we hang deep in qml engine land for some reason
 
