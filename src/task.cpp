@@ -77,11 +77,13 @@ void Task::modelSetup(Storage *storage)
     connect(tagsModel, &QAbstractListModel::layoutChanged, this, &Task::tagsChanged);
     connect(tagsModel, &QAbstractListModel::dataChanged, this, &Task::tagsChanged);
 
-    auto roleNames = storage->tagsModel()->roleNames();
-    roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
-    QAbstractItemModel *allTagsModel = storage->tagsModel();
-    Q_ASSERT(allTagsModel);
-    m_checkableTagModel->setSourceModel(allTagsModel);
+    if (storage) { // Can be null when creating temporary tasks for webdav sync
+        auto roleNames = storage->tagsModel()->roleNames();
+        roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
+        QAbstractItemModel *allTagsModel = storage->tagsModel();
+        Q_ASSERT(allTagsModel);
+        m_checkableTagModel->setSourceModel(allTagsModel);
+    }
 }
 
 Task::Ptr Task::createTask(Storage *storage, const QString &summary)
