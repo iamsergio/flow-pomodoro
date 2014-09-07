@@ -126,8 +126,10 @@ Storage::Data Storage::data() const
 
 void Storage::setData(const Storage::Data &data)
 {
+    QByteArray oldInstanceId = m_data.instanceId;
     m_data = data;
-    Q_ASSERT(!m_data.instanceId.isNull());
+    if (m_data.instanceId.isEmpty())
+        m_data.instanceId = oldInstanceId;
 }
 
 void Storage::load()

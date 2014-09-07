@@ -200,3 +200,9 @@ void TestStorage::testPrependTask()
     QCOMPARE(1, m_storage->indexOfItem(m_storage->tasks(), task1));
     QCOMPARE(0, m_storage->indexOfItem(m_storage->tasks(), task2));
 }
+
+void TestStorage::testSetData()
+{
+    m_storage->setData(Storage::Data());
+    QVERIFY(!m_storage->data().instanceId.isEmpty())
+}
