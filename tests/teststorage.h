@@ -41,7 +41,7 @@ private Q_SLOTS:
     void testDeleteTask();
     void testPrependTask(); // indexOfItem, taskAt
 
-    void testSetData();
+    void testPreserveInstanceId();
 
 private:
     SignalSpy m_storageSpy;

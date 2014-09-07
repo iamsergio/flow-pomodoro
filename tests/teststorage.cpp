@@ -201,8 +201,13 @@ void TestStorage::testPrependTask()
     QCOMPARE(0, m_storage->indexOfItem(m_storage->tasks(), task2));
 }
 
-void TestStorage::testSetData()
+void TestStorage::testPreserveInstanceId()
 {
+    Storage::Data data;
+    data.instanceId = "1";
+    m_storage->setData(data);
+    QCOMPARE(data.instanceId, QByteArray("1"));
+
     m_storage->setData(Storage::Data());
-    QVERIFY(!m_storage->data().instanceId.isEmpty());
+    QCOMPARE(data.instanceId, QByteArray("1")); // instanceId is never overwritten
 }
