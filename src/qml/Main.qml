@@ -61,7 +61,7 @@ Rectangle {
                 } else if (mouse.button === Qt.RightButton) {
                     if (_controller.editMode === Controller.EditModeNone) {
                         _controller.requestContextMenu(null) // reset task
-                        contextMenu.popup()
+                        globalContextMenu.popup()
                     }
                 }
             }
@@ -187,13 +187,12 @@ Rectangle {
         target: _controller
         onRightClickedTaskChanged: {
             if (_controller.rightClickedTask !== null)
-                contextMenu.popup()
+                taskContextMenu.popup()
         }
     }
 
     Menu {
-        id: contextMenu
-        enabled: !_controller.popupVisible
+        id: globalContextMenu
 
         MenuItem {
             visible: _controller.rightClickedTask === null && !_controller.currentTask.stopped
@@ -204,6 +203,7 @@ Rectangle {
         }
 
         MenuItem {
+            id: stopMenuItem
             visible: _controller.rightClickedTask === null && !_controller.currentTask.stopped
             text: qsTr("Stop")
             onTriggered: {
@@ -211,34 +211,8 @@ Rectangle {
             }
         }
 
-        MenuItem {
-            visible: _controller.rightClickedTask === null && !_controller.currentTask.stopped
-            text: qsTr("Delete")
-            onTriggered: {
-                _controller.stopPomodoro(false)
-            }
-        }
-
-        MenuItem {
-            visible: _controller.rightClickedTask !== null
-            text: qsTr("Edit...")
-            onTriggered: {
-                _controller.editTask(_controller.rightClickedTask, Controller.EditModeEditor)
-            }
-        }
-
-        TagsMenu {
-            task: _controller.rightClickedTask
-        }
-
-        MenuSeparator { visible: _controller.rightClickedTask !== null }
-
-        MenuItem {
-            text: qsTr("Configure...")
-            visible: _controller.currentPage != Controller.ConfigurePage
-            onTriggered: {
-                root.toggleConfigure()
-            }
+        MenuSeparator {
+            visible: stopMenuItem.visible
         }
 
         MenuItem {
@@ -255,6 +229,32 @@ Rectangle {
                 Qt.quit()
             }
         }
+    }
+
+    Menu {
+        id: taskContextMenu
+        enabled: !_controller.popupVisible
+
+        MenuItem {
+            visible: _controller.rightClickedTask !== null
+            text: qsTr("Delete")
+            onTriggered: {
+                _controller.removeTask(_controller.rightClickedTask)
+            }
+        }
+
+        MenuItem {
+            visible: _controller.rightClickedTask !== null
+            text: qsTr("Edit...")
+            onTriggered: {
+                _controller.editTask(_controller.rightClickedTask, Controller.EditModeEditor)
+            }
+        }
+
+        TagsMenu {
+            task: _controller.rightClickedTask
+        }
+
     }
 
     Component {
