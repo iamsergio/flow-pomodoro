@@ -55,7 +55,7 @@ Rectangle {
                 // For some reason when removing a tag QML prints a warning about tag being undefined.
                 // The underlying model signals are correct, so this looks like a Qt bug.
                 text: typeof tag != 'undefined' ? (tag.name + (last ? "" : ", ")) : ""
-                color: root.selected ?  _style.selectedTaskTagFontColor : _style.taskTagFontColor
+                color: _style.taskTagFontColor
                 elide: Text.ElideRight
                 font.pixelSize: 12 * _controller.dpiFactor
             }
