@@ -24,6 +24,7 @@
 #include <QObject>
 
 // TODO: Test rename tags
+// TODO: Test if it emits data changed when toggling tags
 
 class TestCheckableTagModel : public TestBase
 {
