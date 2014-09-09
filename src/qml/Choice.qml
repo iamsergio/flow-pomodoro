@@ -41,6 +41,7 @@ Rectangle {
     }
 
     Rectangle {
+        id: checkbox
         visible: checkable
         width: 15 * _controller.dpiFactor
         height: width
@@ -49,6 +50,15 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: 10 * _controller.dpiFactor
         anchors.verticalCenter: parent.verticalCenter
-        color: root.checked ? "black" : "white"
+        color: "white"
+
+        Rectangle {
+            visible: root.checked
+            anchors.centerIn: parent
+            color: "black"
+            width: height
+            height: checkbox.height - 6 * _controller.dpiFactor
+            radius: 0// * _controller.dpiFactor
+        }
     }
 }
