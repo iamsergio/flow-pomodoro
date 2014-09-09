@@ -20,6 +20,7 @@
 #include "checkabletagmodel.h"
 #include "storage.h"
 #include "task.h"
+#include "kernel.h"
 
 CheckableTagModel::CheckableTagModel(Task *parent)
     : QIdentityProxyModel(parent)
@@ -31,7 +32,7 @@ CheckableTagModel::CheckableTagModel(Task *parent)
     connect(this, &CheckableTagModel::rowsRemoved, this, &CheckableTagModel::countChanged);
     connect(this, &CheckableTagModel::modelReset, this, &CheckableTagModel::countChanged);
     connect(this, &CheckableTagModel::layoutChanged, this, &CheckableTagModel::countChanged);
-    connect(parent, &Task::tagsChanged, this, &CheckableTagModel::emitDataChanged);
+    connect(parent, &Task::tagToggled, this, &CheckableTagModel::emitDataChanged);
 }
 
 QVariant CheckableTagModel::data(const QModelIndex &proxyIndex, int role) const
@@ -80,9 +81,14 @@ int CheckableTagModel::count() const
     return rowCount();
 }
 
-void CheckableTagModel::emitDataChanged()
+void CheckableTagModel::emitDataChanged(const QString &tagName)
 {
     int count = rowCount();
-    if (count > 0)
-        emit dataChanged(index(0, 0), index(rowCount() - 1, 0));
+    if (count == 0)
+        return;
+
+    for (int i = 0; i < count; ++i) {
+        if (index(i, 0).data(Storage::TagPtrRole).value<Tag::Ptr>()->name() == tagName)
+            emit dataChanged(index(i, 0), index(i, 0));
+    }
 }

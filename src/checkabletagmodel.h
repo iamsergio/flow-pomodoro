@@ -45,7 +45,7 @@ Q_SIGNALS:
     void countChanged();
 
 private Q_SLOTS:
-    void emitDataChanged();
+    void emitDataChanged(const QString &tagName);
 
 private:
     Task *m_parentTask;

@@ -108,6 +108,7 @@ Q_SIGNALS:
     void statusChanged(); // not a stored property, so not connected to changed()
     void stagedChanged();
     void changed();
+    void tagToggled(const QString &tag);
 
 private Q_SLOTS:
     void onEdited();

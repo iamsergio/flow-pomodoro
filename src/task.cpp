@@ -186,15 +186,19 @@ void Task::addTag(const QString &tagName)
     if (trimmedName.isEmpty())
         return;
 
-    if (!containsTag(trimmedName))
+    if (!containsTag(trimmedName)) {
         m_tags.append(TagRef(this, trimmedName, /*temporary=*/ true));
+        emit tagToggled(trimmedName);
+    }
 }
 
 void Task::removeTag(const QString &tagName)
 {
     int index = indexOfTag(tagName);
-    if (index != -1)
+    if (index != -1) {
         m_tags.removeAt(index);
+        emit tagToggled(tagName);
+    }
 }
 
 TaskStatus Task::status() const
