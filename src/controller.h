@@ -84,8 +84,8 @@ public:
 
     enum ConfigureTab {
         GeneralTab = 0,
-        PluginsTab,
-        TagsTab
+        TagsTab,
+        PluginsTabs
     };
     Q_ENUMS(ConfigureTab)
 
