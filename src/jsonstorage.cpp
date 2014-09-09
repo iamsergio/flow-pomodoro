@@ -78,6 +78,7 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
 
     foreach (const QVariant &t, taskList) {
         Task::Ptr task = Task::createTask(storage);
+        Q_ASSERT(task);
         task->fromJson(t.toMap());
         if (task)
             result.tasks << task;
