@@ -11,6 +11,18 @@ Item {
     signal choiceToggled(bool checkState, string itemText)
     signal dismissPopup()
 
+    function modelCount()
+    {
+        var count = 0
+        if (typeof model !== "undefined")
+            count += model.count
+
+        if (typeof secondaryModel !== "undefined")
+            count += secondaryModel.count
+
+        return count
+    }
+
     Rectangle {
         id: background
         anchors.fill: parent
@@ -54,7 +66,7 @@ Item {
                 Rectangle {
                     id: popupRect
                     width: root.width * 0.8
-                    height: delegateHeight * (root.model.count + root.secondaryModel.count)
+                    height: delegateHeight * root.modelCount()
 
                     anchors.centerIn: parent
                     border.color: "gray"
