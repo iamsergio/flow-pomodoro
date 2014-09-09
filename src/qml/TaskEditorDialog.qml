@@ -81,8 +81,6 @@ ModalDialog {
 
                         TaskContextMenu {
                             id: tagsMenu
-                            task: _controller.taskBeingEdited
-                            showConfigureItem: false
                         }
                     }
 

@@ -1,61 +1,48 @@
 import QtQuick 2.1
-import QtQuick.Controls 1.1
 import Controller 1.0
 
-Menu {
+Item {
     id: root
-    property QtObject task: null
-    property bool showConfigureItem: true
-
-    visible: task !== null
-    title: qsTr("Tags")
-
-    MenuItem {
-        text: qsTr("Edit...")
-        onTriggered: {
-            _controller.editTask(_controller.rightClickedTask, Controller.EditModeEditor)
-        }
+    anchors.fill: parent
+    visible: _controller.rightClickedTask !== null
+    ListModel {
+        id: menuModel
+        ListElement { itemText: "Edit ..."; checkable: false }
+        ListElement { itemText: "Delete"; checkable: false }
+        ListElement { itemText: "ConfigureTags ..."; checkable: false }
     }
 
-    MenuItem {
-        text: qsTr("Delete")
-        onTriggered: {
-            _controller.removeTask(_controller.rightClickedTask)
+    MobileChoicePopup {
+        anchors.fill: parent
+        model: menuModel
+        secondaryModel: visible ? _controller.rightClickedTask.checkableTagModel : null
+        title: qsTr("Tags")
+        onChoiceClicked: {
+            if (index === 0) {
+                // Edit
+                _controller.editTask(_controller.rightClickedTask, Controller.EditModeEditor)
+            } else if (index === 1) {
+                // Delete
+                _controller.removeTask(_controller.rightClickedTask)
+            } else if (index === 2) {
+                _controller.configureTabIndex = Controller.TagsTab
+                _controller.currentPage = Controller.ConfigurePage
+            } else {
+                console.warn("Unknown index " + index)
+            }
+            _controller.setRightClickedTask(null)
         }
-    }
 
-    MenuSeparator {}
-
-    Instantiator {
-        id: instantiator
-        model: task === null ? 0 : task.checkableTagModel
-        MenuItem {
-            checkable: true
-            checked: instantiator.model === null ? false : checkState
-            text: instantiator.model === null ? "" : tag.name
-            onToggled: {
-                if (task !== null) { // For some reason this is triggered when popup closes, so check for null
-                    if (checked) {
-                        task.addTag(text)
-                    } else {
-                        task.removeTag(text)
-                    }
-                }
+        onChoiceToggled: {
+            if (checkState) {
+                _controller.rightClickedTask.addTag(itemText)
+            } else {
+                _controller.rightClickedTask.removeTag(itemText)
             }
         }
 
-        onObjectAdded: root.insertItem(index, object)
-        onObjectRemoved: root.removeItem(object)
-    }
-    MenuSeparator {
-        visible: showConfigureItem
-    }
-    MenuItem {
-        visible: showConfigureItem
-        text: qsTr("Configure Tags...")
-        onTriggered: {
-            _controller.configureTabIndex = Controller.TagsTab
-            _controller.currentPage = Controller.ConfigurePage
+        onDismissPopup: {
+            _controller.setRightClickedTask(null)
         }
     }
 }

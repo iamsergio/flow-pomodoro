@@ -3,6 +3,7 @@ import QtQuick 2.0
 Rectangle {
     id: root
     property bool topLineVisible: true
+    property bool checked: false
 
     color: itemMouseArea.pressed ? "#E3E3E3" : "white"
     signal clicked()
@@ -48,6 +49,6 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: 10 * _controller.dpiFactor
         anchors.verticalCenter: parent.verticalCenter
-        color: checkState ? "black" : "white"
+        color: root.checked ? "black" : "white"
     }
 }

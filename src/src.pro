@@ -21,6 +21,7 @@ SOURCES += quickview.cpp \
 HEADERS += quickview.h
 
 OTHER_FILES += qml/AboutPage.qml      \
+               qml/Choice.qml \
                qml/config/Hacking.qml \
                qml/config/General.qml \
                qml/config/Plugins.qml \

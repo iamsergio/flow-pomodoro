@@ -132,4 +132,6 @@ Item {
     property color circularIndicatorForegroundColor: fontColor
     property color circularIndicatorBackgroundColor: "#222222"
     property color circularIndicatorSelectedBackgroundColor: "#222222"
+
+    property int choiceDelegateHeight: 35 * _controller.dpiFactor
 }

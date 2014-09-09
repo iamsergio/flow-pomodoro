@@ -183,14 +183,6 @@ Rectangle {
         }
     }
 
-    Connections {
-        target: _controller
-        onRightClickedTaskChanged: {
-            if (_controller.rightClickedTask !== null)
-                taskContextMenu.popup()
-        }
-    }
-
     Menu {
         id: globalContextMenu
 
@@ -234,7 +226,7 @@ Rectangle {
     TaskContextMenu {
         id: taskContextMenu
         enabled: !_controller.popupVisible
-        task: _controller.rightClickedTask
+        visible: _controller.rightClickedTask !== null
     }
 
     Component {
@@ -261,6 +253,10 @@ Rectangle {
                     } else if (index === 2) {
                         Qt.quit()
                     }
+                }
+
+                onDismissPopup: {
+                    _controller.optionsContextMenuVisible = false
                 }
             }
         }

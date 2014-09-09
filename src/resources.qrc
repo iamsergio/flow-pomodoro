@@ -43,6 +43,7 @@
     <file>translations/flow_pt_PT.qm</file>
 
     <file>qml/AboutPage.qml</file>
+    <file>qml/Choice.qml</file>
     <file>qml/ClickableImage.qml</file>
     <file>qml/ConfigurePage.qml</file>
     <file>qml/DecentTabView.qml</file>

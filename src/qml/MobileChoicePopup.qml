@@ -4,8 +4,12 @@ import QtGraphicalEffects 1.0
 Item {
     id: root
     property alias model: repeater.model
-    property int delegateHeight: 50 * _controller.dpiFactor
+    property alias secondaryModel: secondaryRepeater.model // Was too lazy to create a model that agregates CheckableTagModel with a couple of custom items (Edit/Delete)
+    property int delegateHeight: _style.choiceDelegateHeight
+    property string title: ""
     signal choiceClicked(var index)
+    signal choiceToggled(bool checkState, string itemText)
+    signal dismissPopup()
 
     Rectangle {
         id: background
@@ -15,100 +19,104 @@ Item {
     }
 
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
+        hoverEnabled: true
         onClicked: {
-            _controller.optionsContextMenuVisible = false
+            root.dismissPopup()
         }
 
-        Item {
-            id: shadowContainer
-            z: background.z + 1
+        function choiceClicked(index)
+        {
+            root.choiceClicked(index)
+            root.dismissPopup()
+        }
 
-            anchors.centerIn: parent
-            width:  popupRect.width  + 16 * _controller.dpiFactor
-            height: popupRect.height + 16 * _controller.dpiFactor
+        Flickable {
+            id: flickable
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: shadowContainer.width
+            contentHeight: shadowContainer.height
+            anchors.topMargin: 50 * _controller.dpiFactor
+            anchors.bottomMargin: 50 * _controller.dpiFactor
+            clip: true
 
-            Rectangle {
-                id: popupRect
-                width: root.width * 0.8
-                height: delegateHeight * root.model.count
+            Item {
+                id: shadowContainer
+                z: background.z + 1
 
                 anchors.centerIn: parent
-                border.color: "gray"
-                border.width: 1 * _controller.dpiFactor
-                visible: root.model.count > 0
-                radius: 2 * _controller.dpiFactor
+                width:  popupRect.width  + 16 * _controller.dpiFactor
+                height: popupRect.height + 16 * _controller.dpiFactor
 
-                Column {
-                    anchors.fill: parent
-                    Repeater {
-                        id: repeater
-                        model: testModel
-                        Rectangle {
-                            id: delegate
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            height: root.delegateHeight
-                            color: itemMouseArea.pressed ? "#E3E3E3" : "white"
+                Rectangle {
+                    id: popupRect
+                    width: root.width * 0.8
+                    height: delegateHeight * (root.model.count + root.secondaryModel.count)
 
-                            Text {
-                                color: "black"
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.left: parent.left
-                                anchors.leftMargin: 15 * _controller.dpiFactor
-                                text: itemText
-                                font.pixelSize: 19 * _controller.dpiFactor
-                            }
+                    anchors.centerIn: parent
+                    border.color: "gray"
+                    border.width: 1 * _controller.dpiFactor
+                    visible: root.model.count > 0
+                    radius: 2 * _controller.dpiFactor
 
-                            Rectangle {
-                                id: topLine
-                                height: Math.max(1, popupRect.border.width / 2 )
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                anchors.top: parent.top
-                                visible: index > 0
-                                color: "gray"
-                            }
-                            MouseArea {
-                                id: itemMouseArea
-                                anchors.fill: parent
+                    Column {
+                        id: column
+                        anchors.fill: parent
+                        Repeater {
+                            id: repeater
+                            model: root.model
+                            Choice {
+                                anchors.left: column.left
+                                anchors.right: column.right
+                                topLineVisible: index > 0
+                                height: root.delegateHeight
                                 onClicked: {
                                     if (checkable) {
-                                        checked = !checked
+                                        root.choiceToggled(index)
                                     } else {
-                                        root.choiceClicked(index)
+                                        mouseArea.choiceClicked(index)
                                     }
                                 }
                             }
+                        }
 
-                            Rectangle {
-                                visible: checkable
-                                width: 15 * _controller.dpiFactor
-                                height: width
-                                border.color: "gray"
-                                border.width: _controller.dpiFactor
-                                anchors.right: parent.right
-                                anchors.rightMargin: 10 * _controller.dpiFactor
-                                anchors.verticalCenter: parent.verticalCenter
-                                color: checked ? "black" : "white"
+                        Repeater {
+                            id: secondaryRepeater
+                            model: root.secondaryModel
+                            Choice {
+                                anchors.left: column.left
+                                anchors.right: column.right
+                                height: root.delegateHeight
+                                topLineVisible: true
+                                checked: checkState
+                                onClicked: {
+                                    mouseArea.choiceClicked(index + root.model.count)
+                                }
+
+                                onToggled: {
+                                    root.choiceToggled(checkState, itemText)
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        DropShadow {
-            id: shadowEffect
-            anchors.fill: shadowContainer
-            cached: true
-            smooth: true
-            horizontalOffset: 3 * _controller.dpiFactor
-            verticalOffset: 3 * _controller.dpiFactor
-            radius: 8.0
-            samples: 16
-            color: "#80000000"
-            source: shadowContainer
+            DropShadow {
+                id: shadowEffect
+                anchors.fill: shadowContainer
+                cached: true
+                smooth: true
+                horizontalOffset: 3 * _controller.dpiFactor
+                verticalOffset: 3 * _controller.dpiFactor
+                radius: 8.0
+                samples: 16
+                color: "#80000000"
+                source: shadowContainer
+            }
         }
     }
 }

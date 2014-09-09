@@ -81,7 +81,7 @@ Rectangle {
         }
 
         onPressAndHold: {
-            _controller.editTask(task, Controller.EditModeEditor)
+            _controller.requestContextMenu(task)
         }
 
         Text {

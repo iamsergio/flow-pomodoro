@@ -8,4 +8,5 @@ DefaultStyle {
 
     tagTabHeight: 35 * _controller.dpiFactor
     tagTabWidth: 80 * _controller.dpiFactor
+    choiceDelegateHeight: 50 * _controller.dpiFactor
 }

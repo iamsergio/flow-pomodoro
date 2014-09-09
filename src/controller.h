@@ -209,6 +209,8 @@ public Q_SLOTS:
     void requestContextMenu(Task *);
 
     void webDavSync();
+    void setRightClickedTask(Task *);
+
 private Q_SLOTS:
     void onTimerTick();
 
@@ -254,7 +256,6 @@ private:
     QAbstractItemModel *currentTabTaskModel() const;
     void setTaskStatus(TaskStatus status);
     void setTagEditStatus(TagEditStatus);
-    void setRightClickedTask(Task *);
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
 
     int m_currentTaskDuration;
