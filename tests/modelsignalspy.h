@@ -54,6 +54,7 @@ private Q_SLOTS:
     void onRowsInserted();
     void onRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
     void onRowsRemoved();
+    void onDataChanged(const QModelIndex &left, const QModelIndex &right);
 
 private:
     CaughtSignal::List m_caughtSignals;

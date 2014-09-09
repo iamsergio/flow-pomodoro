@@ -36,6 +36,7 @@ ModelSignalSpy::ModelSignalSpy(QAbstractItemModel *model)
     connect(model, &QAbstractItemModel::rowsAboutToBeRemoved, this, &ModelSignalSpy::onRowsAboutToBeRemoved);
     connect(model, &QAbstractItemModel::rowsInserted, this, &ModelSignalSpy::onRowsInserted);
     connect(model, &QAbstractItemModel::rowsRemoved, this, &ModelSignalSpy::onRowsRemoved);
+    connect(model, &QAbstractItemModel::dataChanged, this, &ModelSignalSpy::onDataChanged);
 }
 
 void ModelSignalSpy::clear()
@@ -55,6 +56,7 @@ CaughtSignal::List ModelSignalSpy::caughtSignals() const
 
 void ModelSignalSpy::dumpDebugInfo()
 {
+    qDebug();
     foreach (const CaughtSignal &signal, m_caughtSignals) {
         qDebug() << signal.name << signal.args;
     }
@@ -147,5 +149,14 @@ void ModelSignalSpy::onRowsRemoved()
     m_expectingSignal.clear();
     CaughtSignal signal;
     signal.name = "rowsRemoved";
+    m_caughtSignals << signal;
+}
+
+void ModelSignalSpy::onDataChanged(const QModelIndex &left, const QModelIndex &right)
+{
+    QCOMPARE(QString(), QString(m_expectingSignal));
+    CaughtSignal signal;
+    signal.name = "dataChanged";
+    signal.args << left.row() << right.row();
     m_caughtSignals << signal;
 }
