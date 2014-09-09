@@ -31,6 +31,7 @@ CheckableTagModel::CheckableTagModel(Task *parent)
     connect(this, &CheckableTagModel::rowsRemoved, this, &CheckableTagModel::countChanged);
     connect(this, &CheckableTagModel::modelReset, this, &CheckableTagModel::countChanged);
     connect(this, &CheckableTagModel::layoutChanged, this, &CheckableTagModel::countChanged);
+    connect(parent, &Task::tagsChanged, this, &CheckableTagModel::emitDataChanged);
 }
 
 QVariant CheckableTagModel::data(const QModelIndex &proxyIndex, int role) const
@@ -50,6 +51,16 @@ QVariant CheckableTagModel::data(const QModelIndex &proxyIndex, int role) const
         }
 
         return m_parentTask->containsTag(tag->name());
+    } else if (role == CheckableRole) {
+        return true;
+    } else if (role == ItemTextRole)  {
+        Tag::Ptr tag = sourceIndex.data(Storage::TagPtrRole).value<Tag::Ptr>();
+        if (!tag) {
+            qWarning() << Q_FUNC_INFO <<"Unexpected null tag";
+            return QString();
+        }
+
+        return tag->name();
     }
 
     return sourceIndex.data(role);
@@ -59,10 +70,19 @@ QHash<int, QByteArray> CheckableTagModel::roleNames() const
 {
     QHash<int, QByteArray> roles = QIdentityProxyModel::roleNames();
     roles.insert(Qt::CheckStateRole, "checkState");
+    roles.insert(ItemTextRole, "itemText");
+    roles.insert(CheckableRole, "checkable");
     return roles;
 }
 
 int CheckableTagModel::count() const
 {
     return rowCount();
+}
+
+void CheckableTagModel::emitDataChanged()
+{
+    int count = rowCount();
+    if (count > 0)
+        emit dataChanged(index(0, 0), index(rowCount() - 1, 0));
 }

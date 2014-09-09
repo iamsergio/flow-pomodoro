@@ -24,7 +24,6 @@
 #include <QObject>
 
 // TODO: Test rename tags
-// TODO: Test if it emits data changed when toggling tags
 
 class TestCheckableTagModel : public TestBase
 {
@@ -37,6 +36,7 @@ private Q_SLOTS:
     void cleanupTestCase();
 
     void testHasTags();
+    void testDataChanged();
 };
 
 #endif

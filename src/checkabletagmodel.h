@@ -20,6 +20,7 @@
 #ifndef CHECKABLETAGMODEL_H
 #define CHECKABLETAGMODEL_H
 
+#include "storage.h"
 #include <QIdentityProxyModel>
 
 class Task;
@@ -29,6 +30,11 @@ class CheckableTagModel : public QIdentityProxyModel
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
+    enum {
+        ItemTextRole = Storage::LastRole + 1,
+        CheckableRole
+    };
+
     explicit CheckableTagModel(Task *parent);
     QVariant data(const QModelIndex &proxyIndex, int role) const Q_DECL_OVERRIDE;
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
@@ -38,9 +44,11 @@ public:
 Q_SIGNALS:
     void countChanged();
 
+private Q_SLOTS:
+    void emitDataChanged();
+
 private:
     Task *m_parentTask;
-
 };
 
 #endif

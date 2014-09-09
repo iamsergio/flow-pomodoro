@@ -59,3 +59,26 @@ void TestCheckableTagModel::testHasTags()
     QCOMPARE(modelSpy.caughtSignals().at(0).name, QString("rowsAboutToBeRemoved"));
     QCOMPARE(modelSpy.caughtSignals().at(1).name, QString("rowsRemoved"));
 }
+
+void TestCheckableTagModel::testDataChanged()
+{
+    // Here we test if it reacts to taggs being toggled
+    m_storage->clearTags();
+    m_storage->clearTasks();
+    Task::Ptr task1 = m_storage->addTask("task1");
+    m_storage->createTag("tagZZZ");
+    QCOMPARE(task1->checkableTagModel()->rowCount(), 1);
+    QVERIFY(!task1->checkableTagModel()->index(0, 0).data(Qt::CheckStateRole).toBool());
+    ModelSignalSpy modelSpy(task1->checkableTagModel());
+    task1->addTag("tagZZZ");
+    QCOMPARE(task1->tags().count(), 1);
+    QCOMPARE(modelSpy.count(), 1);
+    QCOMPARE(task1->checkableTagModel()->rowCount(), 1);
+    QVERIFY(task1->checkableTagModel()->index(0, 0).data(Qt::CheckStateRole).toBool());
+    modelSpy.clear();
+    task1->removeTag("tagZZZ");
+    QCOMPARE(modelSpy.count(), 1);
+    QVERIFY(!task1->checkableTagModel()->index(0, 0).data(Qt::CheckStateRole).toBool());
+    modelSpy.dumpDebugInfo();
+
+}
