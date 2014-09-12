@@ -15,7 +15,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: 15 * _controller.dpiFactor
         text: itemText
-        font.pixelSize: 19 * _controller.dpiFactor
+        font.pixelSize: 17 * _controller.dpiFactor
     }
 
     Rectangle {

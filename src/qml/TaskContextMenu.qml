@@ -16,7 +16,7 @@ Item {
         anchors.fill: parent
         model: menuModel
         secondaryModel: visible ? _controller.rightClickedTask.checkableTagModel : null
-        title: qsTr("Tags")
+        title: _controller.rightClickedTask !== null ? _controller.rightClickedTask.summary : ""
         onChoiceClicked: {
             if (index === 0) {
                 // Edit

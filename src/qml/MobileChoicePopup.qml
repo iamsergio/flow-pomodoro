@@ -66,7 +66,7 @@ Item {
                 Rectangle {
                     id: popupRect
                     width: root.width * 0.8
-                    height: delegateHeight * root.modelCount()
+                    height: delegateHeight * root.modelCount() + (header.visible ? header.height : 0)
 
                     anchors.centerIn: parent
                     border.color: "gray"
@@ -77,6 +77,31 @@ Item {
                     Column {
                         id: column
                         anchors.fill: parent
+
+                        Rectangle {
+                            id: header
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            height: root.delegateHeight
+                            visible: root.title
+                            Text {
+                                text: root.title
+                                anchors.fill: parent
+                                elide: Text.ElideRight
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                font.pixelSize: 20 * _controller.dpiFactor
+                            }
+
+                            Rectangle {
+                                color: "lightblue"
+                                height: 5 * _controller.dpiFactor
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.bottom: parent.bottom
+                            }
+                        }
+
                         Repeater {
                             id: repeater
                             model: root.model
