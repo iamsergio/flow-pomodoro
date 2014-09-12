@@ -46,6 +46,7 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/QuestionPopup.qml  \
                qml/RegularText.qml    \
                qml/SmallText.qml      \
+               qml/TagDelegate.qml \
                qml/Task.qml           \
                qml/TaskContextMenu.qml \
                qml/TaskEditorDialog.qml \

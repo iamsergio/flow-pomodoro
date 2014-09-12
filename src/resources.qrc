@@ -62,6 +62,7 @@
     <file>qml/Page.qml</file>
     <file>qml/RegularText.qml</file>
     <file>qml/SmallText.qml</file>
+    <file>qml/TagDelegate.qml</file>
     <file>qml/Task.qml</file>
     <file>qml/TaskContextMenu.qml</file>
     <file>qml/TaskEditorDialog.qml</file>
