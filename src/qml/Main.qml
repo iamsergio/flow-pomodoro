@@ -154,20 +154,41 @@ Rectangle {
                 anchors.bottomMargin: _style.marginMedium
             }
 
-            ConfigurePage {
-                z: 2
-                id: configurePage
-                anchors.top: header.bottom
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: _style.marginMedium
+            Component {
+                id: configurePageComponent
+                ConfigurePage {
+                    anchors.fill: parent
+                }
             }
 
-            AboutPage {
-                z: 2
-                id: aboutPage
+            Component {
+                id: aboutPageComponent
+                AboutPage {
+                    anchors.fill: parent
+                }
+            }
+
+            Loader {
+                // Loader for startup performance optimization on mobile
                 anchors.top: header.bottom
                 anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
                 anchors.bottomMargin: _style.marginMedium
+                sourceComponent: _controller.configurePageRequested ? configurePageComponent : null
+                z: 2
+            }
+
+            Loader {
+                z: 2
+                id: aboutPage
+                // Loader for startup performance optimization on mobile
+                anchors.top: header.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: _style.marginMedium
+                sourceComponent: _controller.aboutPageRequested ? aboutPageComponent : null
             }
 
             BusyIndicator {

@@ -72,6 +72,8 @@ class Controller : public QObject {
     Q_PROPERTY(QString version READ version CONSTANT)
 
     Q_PROPERTY(bool optionsContextMenuVisible READ optionsContextMenuVisible WRITE setOptionsContextMenuVisible NOTIFY optionsContextMenuVisibleChanged)
+    Q_PROPERTY(bool configurePageRequested READ configurePageRequested NOTIFY configurePageRequestedChanged)
+    Q_PROPERTY(bool aboutPageRequested READ aboutPageRequested NOTIFY aboutPageRequestedChanged)
 
 public:
     enum Page {
@@ -211,6 +213,9 @@ public Q_SLOTS:
     void webDavSync();
     void setRightClickedTask(Task *);
 
+    bool configurePageRequested() const;
+    bool aboutPageRequested() const;
+
 private Q_SLOTS:
     void onTimerTick();
 
@@ -240,6 +245,8 @@ Q_SIGNALS:
     void requestActivateWindow();
     void currentTitleTextChanged();
     void optionsContextMenuVisibleChanged();
+    void configurePageRequestedChanged();
+    void aboutPageRequestedChanged();
 
     // webdav stuff
     void hostChanged();
@@ -257,6 +264,8 @@ private:
     void setTaskStatus(TaskStatus status);
     void setTagEditStatus(TagEditStatus);
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
+    void setAboutPageRequested(bool);
+    void setConfigurePageRequested(bool);
 
     int m_currentTaskDuration;
     QTimer *m_tickTimer;
@@ -294,6 +303,8 @@ private:
     QString m_password;
 
     bool m_optionsContextMenuVisible;
+    bool m_configurePageRequested;
+    bool m_aboutPageRequested;
 };
 
 #endif

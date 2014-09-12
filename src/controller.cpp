@@ -60,6 +60,8 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_port(80)
     , m_isHttps(false)
     , m_optionsContextMenuVisible(false)
+    , m_configurePageRequested(false)
+    , m_aboutPageRequested(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -271,6 +273,12 @@ void Controller::setCurrentPage(Controller::Page page)
         if (m_page == ConfigurePage) {
             // If we came from configure, then sync()
             m_settings->scheduleSync();
+        }
+
+        if (page == ConfigurePage) {
+            setConfigurePageRequested(true);
+        } else if (page == AboutPage) {
+            setAboutPageRequested(true);
         }
 
         m_page = page;
@@ -604,7 +612,33 @@ void Controller::setRightClickedTask(Task *task)
     //if (m_rightClickedTask != task) {
         m_rightClickedTask = task;
         emit rightClickedTaskChanged();
-    //}
+        //}
+}
+
+bool Controller::configurePageRequested() const
+{
+    return m_configurePageRequested;
+}
+
+void Controller::setConfigurePageRequested(bool requested)
+{
+    if (requested != m_configurePageRequested) {
+        m_configurePageRequested = requested;
+        emit configurePageRequestedChanged();
+    }
+}
+
+bool Controller::aboutPageRequested() const
+{
+    return m_aboutPageRequested;
+}
+
+void Controller::setAboutPageRequested(bool requested)
+{
+    if (requested != m_aboutPageRequested) {
+        m_aboutPageRequested = requested;
+        emit aboutPageRequestedChanged();
+    }
 }
 
 Task *Controller::currentTask() const
