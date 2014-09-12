@@ -689,8 +689,23 @@ bool Controller::eventFilter(QObject *, QEvent *event)
         setSelectedTask(Task::Ptr());
         editTask(Q_NULLPTR, EditModeNone);
         return true;
-    } else {
-        return false;
+    }
+
+    const bool editing = !m_taskBeingEdited.isNull();
+
+    if (keyEvent->key() == Qt::Key_Escape) {
+        if (editing) {
+            editTask(Q_NULLPTR, EditModeNone);
+        } else if (m_rightClickedTask) {
+            setRightClickedTask(0);
+        } else if (m_tagBeingEdited) {
+            setTagEditStatus(TagEditStatusNone);
+        } else if (m_page != MainPage) {
+            setCurrentPage(MainPage);
+        } else {
+            setExpanded(false);
+        }
+        return true;
     }
 
     if (m_page != MainPage)
@@ -699,8 +714,6 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     if (m_editMode == EditModeEditor)
         return false;
 
-    const bool editing = !m_taskBeingEdited.isNull();
-
     if (editing && (keyEvent->key() != Qt::Key_Escape &&
                     keyEvent->key() != Qt::Key_Enter &&
                     keyEvent->key() != Qt::Key_Return)) {
@@ -708,15 +721,6 @@ bool Controller::eventFilter(QObject *, QEvent *event)
     }
 
     switch (keyEvent->key()) {
-    case Qt::Key_Escape:
-        if (editing) {
-            editTask(Q_NULLPTR, EditModeNone);
-        } else {
-            setExpanded(false);
-        }
-        return true;
-        break;
-
     case Qt::Key_Return:
     case Qt::Key_Enter:
         if (editing) {
