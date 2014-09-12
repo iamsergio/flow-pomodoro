@@ -52,7 +52,7 @@ public:
     void onEntry(QEvent *event)
     {
         SyncState::onEntry(event);
-        qDebug() << "Entered InitialState, where we idle.";
+        // qDebug() << "Entered InitialState, where we idle.";
         m_syncer->m_syncInProgress = false;
         m_syncer->m_storage->setCreateNonExistentTags(false);
         emit m_syncer->syncInProgressChanged();

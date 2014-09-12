@@ -195,7 +195,7 @@ void Kernel::loadPlugins()
             candidatePath += QStringLiteral("/flow/");
         }
 
-        qDebug() << "Looking for plugins in " << candidatePath;
+        // qDebug() << "Looking for plugins in " << candidatePath;
         QDir pluginsDir = QDir(candidatePath);
         foreach (const QString &fileName, pluginsDir.entryList(QDir::Files)) {
             QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
