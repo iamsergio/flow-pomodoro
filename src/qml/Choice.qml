@@ -5,7 +5,7 @@ Rectangle {
     property bool topLineVisible: true
     property bool checked: false
 
-    color: itemMouseArea.pressed ? "#E3E3E3" : "white"
+    color: (itemMouseArea.pressed && !checkable) ? "#E3E3E3" : "white"
     signal clicked()
     signal toggled(bool checkState, string itemText)
 
