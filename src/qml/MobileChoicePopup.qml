@@ -33,7 +33,7 @@ Item {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        hoverEnabled: true
+        hoverEnabled: false
         onClicked: {
             root.dismissPopup()
         }
