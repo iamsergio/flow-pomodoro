@@ -7,23 +7,27 @@ Rectangle {
     property alias textItem2: countText
     property alias textRow: textRow
     property bool isLastIndex:  true
+    property bool isSelected: false
+    property int taskCount: 0
+    property QtObject tagObj: null
+
+    height: _style.tagTabHeight
     color: "black"
 
-    property bool isSelected: tag == _controller.currentTabTag
     Row {
         id: textRow
         anchors.centerIn: parent
         anchors.horizontalCenterOffset: - Math.ceil(separator.width / 2.0)
         Text {
             id: tagText
-            text: tag.name
+            text: root.text
             color: _style.tagTabTextColor
             font.bold: true
             font.pixelSize: _style.tagTabFontSize
         }
         Text {
             id: countText
-            text: tag.taskModel.count > 0 ? " (" + tag.taskModel.count + ")" : ""
+            text: root.taskCount > 0 ? " (" + root.taskCount + ")" : ""
             color: _style.tagTabTextColor
             anchors.verticalCenter: tagText.verticalCenter
             anchors.verticalCenterOffset: -1
@@ -56,7 +60,8 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            _controller.setCurrentTabTag(isSelected ? null : tag)
+            if (!root.isSelected)
+                _controller.setCurrentTabTag(root.tagObj)
         }
     }
 }

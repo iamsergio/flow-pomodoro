@@ -1,40 +1,46 @@
 import QtQuick 2.0
 import QtGraphicalEffects 1.0
 
-ListView {
+Flickable {
     id: root
-    orientation: Qt.Horizontal
-    delegate: TagDelegate {
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        isLastIndex: index === model.count - 1
-        width: Math.max(Math.max(_style.tagTabWidth, root.width / root.model.count),
-                        textItem.contentWidth + textItem2.contentWidth + textRow.spacing + 12 * _controller.dpiFactor)
-    }
     height: _style.tagTabHeight
+    contentWidth: row.width
     clip: true
 
-    LinearGradient {
-        id: rightScrollIndicator
-        anchors.fill: parent
-        visible: !root.atXEnd
-        start: Qt.point(root.width - _style.tagScrollIndicatorFadeWidth, 0)
-        end: Qt.point(root.width, 0)
-        gradient: Gradient {
-            GradientStop { position: 0.0; color: "transparent" }
-            GradientStop { position: 1.0; color: _style.queueBackgroundColor }
-        }
-    }
+    Row {
+        id: row
+        height: parent.height
+        width: childrenRect.width
+        property int numItems: 1 + _storage.tagsModel.count
+        property int modelCount: _storage.tagsModel.count
 
-    LinearGradient {
-        id: leftScrollIndicator
-        visible: !root.atXBeginning
-        anchors.fill: parent
-        start: Qt.point(0, 0)
-        end: Qt.point(_style.tagScrollIndicatorFadeWidth, 0)
-        gradient: Gradient {
-            GradientStop { position: 0.0; color: _style.queueBackgroundColor }
-            GradientStop { position: 1.0; color: "transparent" }
+        TagDelegate {
+            id: untaggedTab
+            text: qsTr("Untagged")
+            tagObj: null
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            isLastIndex: row.modelCount === 0
+            isSelected: _controller.currentTabTag === null
+            taskCount: _storage.untaggedTasksModel.count
+            width: Math.max(Math.max(_style.tagTabWidth, root.width / (row.numItems)),
+                            textItem.contentWidth + textItem2.contentWidth + textRow.spacing + 12 * _controller.dpiFactor)
+        }
+
+        Repeater {
+            id: repeater
+            model: _storage.tagsModel
+            TagDelegate {
+                anchors.top: row.top
+                anchors.bottom: row.bottom
+                isLastIndex: index === row.modelCount - 1
+                text: tag.name
+                tagObj: tag
+                taskCount: tag.taskModel.count
+                isSelected: tag == _controller.currentTabTag
+                width: Math.max(Math.max(_style.tagTabWidth, root.width / (row.numItems)),
+                                textItem.contentWidth + textItem2.contentWidth + textRow.spacing + 12 * _controller.dpiFactor)
+            }
         }
     }
 

@@ -65,7 +65,7 @@ ListView {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: -height
-        text: _controller.currentTabTag == null ? qsTr("No archived untagged tasks found.") + (_storage.tagsModel.count === 0 ? "" : qsTr("\nClick the tag bar above to see tagged tasks.") )
+        text: _controller.currentTabTag == null ? qsTr("No archived untagged tasks found.")
                                                 : qsTr("No archived tasks found with tag %1").arg(_controller.currentTabTag.name)
         visible: parent.model.count === 0
         wrapMode: Text.WordWrap

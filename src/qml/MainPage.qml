@@ -175,7 +175,30 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: headerRectangle.bottom
-            model: _storage.tagsModel
+        }
+
+        LinearGradient {
+            id: rightScrollIndicator
+            anchors.fill: tabView
+            visible: !tabView.atXEnd && tabView.visible
+            start: Qt.point(tabView.width - _style.tagScrollIndicatorFadeWidth, 0)
+            end: Qt.point(tabView.width, 0)
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "transparent" }
+                GradientStop { position: 1.0; color: _style.queueBackgroundColor }
+            }
+        }
+
+        LinearGradient {
+            id: leftScrollIndicator
+            visible: !tabView.atXBeginning && tabView.visible
+            anchors.fill: tabView
+            start: Qt.point(0, 0)
+            end: Qt.point(_style.tagScrollIndicatorFadeWidth, 0)
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: _style.queueBackgroundColor }
+                GradientStop { position: 1.0; color: "transparent" }
+            }
         }
 
         TaskListView {
@@ -187,7 +210,7 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            emptyText: _controller.currentTabTag == null ? qsTr("No archived untagged tasks found.") + (_storage.tagsModel.count === 0 ? "" : qsTr("\nClick the tag bar above to see tagged tasks.") )
+            emptyText: _controller.currentTabTag == null ? qsTr("No archived untagged tasks found.")
                                                          : qsTr("No archived tasks found with tag %1").arg(_controller.currentTabTag.name)
         }
     }
