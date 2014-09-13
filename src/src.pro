@@ -36,7 +36,6 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/PushButton.qml \
                qml/Main.qml           \
                qml/MainPage.qml       \
-               qml/ModalDialog.qml    \
                qml/MobileButton.qml \
                qml/MobileChoicePopup.qml \
                qml/MobileMenuBar.qml \

@@ -58,7 +58,6 @@
     <file>qml/MobileStyle.qml</file>
     <file>qml/MobileMenuBar.qml</file>
     <file>qml/MobileTabView.qml</file>
-    <file>qml/ModalDialog.qml</file>
     <file>qml/Page.qml</file>
     <file>qml/RegularText.qml</file>
     <file>qml/SmallText.qml</file>
