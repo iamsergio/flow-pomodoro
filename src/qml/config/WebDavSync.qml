@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
+import QtQuick.Controls.Styles 1.2
 import QtQuick.Layouts 1.0
 
 import Controller 1.0
@@ -44,6 +45,22 @@ Item {
                 property: "isHttps"
                 value: httpsCombo.currentIndex == 1
             }
+
+            style: ComboBoxStyle {
+                label: // Explicitely define a label style, since on blackberry it's gray for some reason
+                    Text {
+                        id: textitem
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.leftMargin: 4 * _controller.dpiFactor
+                        anchors.rightMargin: 10 * _controller.dpiFactor
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: control.currentText
+                        color: "black"
+                        elide: Text.ElideLeft
+                        renderType: Text.NativeRendering
+                    }
+            }
         }
 
         Text {
@@ -58,6 +75,11 @@ Item {
                 target: _controller
                 property: "host"
                 value: hostField.text
+            }
+            style:
+            TextFieldStyle {
+                    // Set text color explicitely, for some reason it defaults to gray on blackberry
+                    textColor: "black"
             }
         }
 
@@ -74,7 +96,11 @@ Item {
                 property: "path"
                 value: pathField.text
             }
-
+            style:
+            TextFieldStyle {
+                    // Set text color explicitely, for some reason it defaults to gray on blackberry
+                    textColor: "black"
+            }
         }
 
         Text {
@@ -89,6 +115,11 @@ Item {
                 target: _controller
                 property: "port"
                 value: portField.text
+            }
+            style:
+            TextFieldStyle {
+                    // Set text color explicitely, for some reason it defaults to gray on blackberry
+                    textColor: "black"
             }
         }
 
@@ -105,6 +136,11 @@ Item {
                 property: "user"
                 value: userField.text
             }
+            style:
+            TextFieldStyle {
+                    // Set text color explicitely, for some reason it defaults to gray on blackberry
+                    textColor: "black"
+            }
         }
 
         Text {
@@ -120,6 +156,11 @@ Item {
                 target: _controller
                 property: "password"
                 value: passwordField.text
+            }
+            style:
+            TextFieldStyle {
+                    // Set text color explicitely, for some reason it defaults to gray on blackberry
+                    textColor: "black"
             }
         }
     }
