@@ -63,6 +63,7 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_configurePageRequested(false)
     , m_aboutPageRequested(false)
     , m_inlineEditorRequested(false)
+    , m_questionPopupRequested(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -350,6 +351,8 @@ void Controller::setPopupVisible(bool visible)
 {
     if (m_popupVisible != visible) {
         m_popupVisible = visible;
+        if (visible)
+            setQuestionPopupRequested(true);
         emit popupVisibleChanged();
     }
 }
@@ -637,6 +640,14 @@ void Controller::setInlineEditorRequested(bool requested)
     }
 }
 
+void Controller::setQuestionPopupRequested(bool requested)
+{
+    if (requested != m_questionPopupRequested) {
+        m_questionPopupRequested = requested;
+        emit questionPopupRequestedChanged();
+    }
+}
+
 bool Controller::aboutPageRequested() const
 {
     return m_aboutPageRequested;
@@ -645,6 +656,11 @@ bool Controller::aboutPageRequested() const
 bool Controller::inlineEditorRequested() const
 {
     return m_inlineEditorRequested;
+}
+
+bool Controller::questionPopupRequested() const
+{
+    return m_questionPopupRequested;
 }
 
 void Controller::setAboutPageRequested(bool requested)

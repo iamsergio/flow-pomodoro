@@ -30,8 +30,16 @@ Rectangle {
         }
     }
 
-    QuestionPopup {
-        id: questionPopup
+    Component {
+        id: questionPopupComponent
+        QuestionPopup {
+            anchors.fill: parent
+        }
+    }
+
+    Loader {
+        // Delayed loading for startup performance on mobile
+        sourceComponent: _controller.questionPopupRequested ? questionPopupComponent : null
         anchors.fill: parent
         z: main.z + 1
     }

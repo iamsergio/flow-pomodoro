@@ -75,6 +75,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool configurePageRequested READ configurePageRequested NOTIFY configurePageRequestedChanged)
     Q_PROPERTY(bool aboutPageRequested READ aboutPageRequested NOTIFY aboutPageRequestedChanged)
     Q_PROPERTY(bool inlineEditorRequested READ inlineEditorRequested NOTIFY inlineEditorRequestedChanged)
+    Q_PROPERTY(bool questionPopupRequested READ questionPopupRequested NOTIFY questionPopupRequestedChanged)
 
 public:
     enum Page {
@@ -184,6 +185,11 @@ public:
     bool optionsContextMenuVisible() const;
     void setOptionsContextMenuVisible(int);
 
+    bool configurePageRequested() const;
+    bool aboutPageRequested() const;
+    bool inlineEditorRequested() const;
+    bool questionPopupRequested() const;
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);
@@ -213,10 +219,6 @@ public Q_SLOTS:
 
     void webDavSync();
     void setRightClickedTask(Task *);
-
-    bool configurePageRequested() const;
-    bool aboutPageRequested() const;
-    bool inlineEditorRequested() const;
 
 private Q_SLOTS:
     void onTimerTick();
@@ -250,6 +252,7 @@ Q_SIGNALS:
     void configurePageRequestedChanged();
     void aboutPageRequestedChanged();
     void inlineEditorRequestedChanged();
+    void questionPopupRequestedChanged();
 
     // webdav stuff
     void hostChanged();
@@ -270,6 +273,7 @@ private:
     void setAboutPageRequested(bool);
     void setConfigurePageRequested(bool);
     void setInlineEditorRequested(bool);
+    void setQuestionPopupRequested(bool);
 
     int m_currentTaskDuration;
     QTimer *m_tickTimer;
@@ -310,6 +314,7 @@ private:
     bool m_configurePageRequested;
     bool m_aboutPageRequested;
     bool m_inlineEditorRequested;
+    bool m_questionPopupRequested;
 };
 
 #endif
