@@ -41,25 +41,15 @@ Rectangle {
         }
     }
 
-    Rectangle {
+    FlowCheckBox {
         id: checkbox
         visible: checkable
-        width: 15 * _controller.dpiFactor
-        height: width
-        border.color: "gray"
-        border.width: _controller.dpiFactor
         anchors.right: parent.right
         anchors.rightMargin: 10 * _controller.dpiFactor
         anchors.verticalCenter: parent.verticalCenter
-        color: "white"
-
-        Rectangle {
-            visible: root.checked
-            anchors.centerIn: parent
-            color: "black"
-            width: height
-            height: checkbox.height - 6 * _controller.dpiFactor
-            radius: 0// * _controller.dpiFactor
+        checked: root.checked
+        onToggled: {
+            root.toggled(!checkState, itemText)
         }
     }
 }

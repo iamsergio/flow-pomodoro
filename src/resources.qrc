@@ -25,6 +25,8 @@
     <file>img/32x32/stage.png</file>
     <file>img/32x32/stop.png</file>
     <file>img/32x32/tag.png</file>
+    <file>img/32x32/checkbox.png</file>
+    <file>img/32x32/uncheckbox.png</file>
     <file>img/32x32/window-close.png</file>
     <file>img/48x48/add.png</file>
     <file>img/48x48/add-tag.png</file>
@@ -38,6 +40,8 @@
     <file>img/48x48/stage.png</file>
     <file>img/48x48/stop.png</file>
     <file>img/48x48/tag.png</file>
+    <file>img/48x48/checkbox.png</file>
+    <file>img/48x48/uncheckbox.png</file>
     <file>img/48x48/window-close.png</file>
 
     <file>translations/flow_pt_PT.qm</file>
@@ -49,6 +53,7 @@
     <file>qml/DecentTabView.qml</file>
     <file>qml/DefaultStyle.qml</file>
     <file>qml/FlowCircularProgressIndicator.qml</file>
+    <file>qml/FlowCheckBox.qml</file>
     <file>qml/PushButton.qml</file>
     <file>qml/QuestionPopup.qml</file>
     <file>qml/Main.qml</file>

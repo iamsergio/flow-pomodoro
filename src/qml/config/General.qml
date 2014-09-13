@@ -70,7 +70,7 @@ Item {
             text: qsTr("Disable pomodoro functionality")
         }
 
-        CheckBox {
+        FlowCheckBox {
             id: disablePomodoroCheckBox
             checked: _controller.pomodoroFunctionalityDisabled
             Binding {

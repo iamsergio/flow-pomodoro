@@ -29,6 +29,7 @@
 #include "task.h"
 #include "tag.h"
 #include "settings.h"
+#include "checkbox.h"
 #include "webdavsyncer.h"
 
 #include <QStandardPaths>
@@ -70,6 +71,7 @@ static void registerQmlTypes()
                                     "Tag is not creatable");
 
     qmlRegisterType<CircularProgressIndicator>("com.kdab.flowpomodoro", 1, 0, "CircularProgressIndicator");
+    qmlRegisterType<CheckBoxImpl>("com.kdab.flowpomodoro", 1, 0, "CheckBoxPrivate");
 }
 
 static QString defaultDataFileName()

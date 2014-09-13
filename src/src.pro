@@ -33,6 +33,7 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/DecentTabView.qml  \
                qml/DefaultStyle.qml   \
                qml/FlowCircularProgressIndicator.qml \
+               qml/FlowCheckBox.qml \
                qml/PushButton.qml \
                qml/Main.qml           \
                qml/MainPage.qml       \
