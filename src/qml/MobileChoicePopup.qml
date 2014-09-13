@@ -100,6 +100,13 @@ Item {
                                 anchors.right: parent.right
                                 anchors.bottom: parent.bottom
                             }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    root.dismissPopup()
+                                }
+                            }
                         }
 
                         Repeater {
