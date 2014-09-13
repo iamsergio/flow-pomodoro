@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
+import QtQuick.Controls.Styles 1.2
 import QtQuick.Layouts 1.0
 
 import Controller 1.0
@@ -43,6 +44,11 @@ Item {
             onEditingFinished: {
                 if (_controller.isMobile)
                     Qt.inputMethod.hide(); // hide keyboard
+            }
+
+            style: SpinBoxStyle {
+                // Set it explicitely because it's gray on Blackberry
+                textColor: "black"
             }
         }
 
