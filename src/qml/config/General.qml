@@ -46,9 +46,23 @@ Item {
                     Qt.inputMethod.hide(); // hide keyboard
             }
 
-            style: SpinBoxStyle {
+            style: _controller.isMobile ? mobileSpinBoxStyleComponent
+                                        : desktopSpinBoxStyleComponent
+
+        }
+
+        Component {
+            id: desktopSpinBoxStyleComponent
+            SpinBoxStyle {}
+        }
+
+        Component {
+            id: mobileSpinBoxStyleComponent
+            SpinBoxStyle {
                 // Set it explicitely because it's gray on Blackberry
                 textColor: "black"
+                incrementControl: Item {}
+                decrementControl: Item {}
             }
         }
 
