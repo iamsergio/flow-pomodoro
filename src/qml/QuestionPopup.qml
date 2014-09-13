@@ -24,7 +24,7 @@ Item {
             id: shadowContainer
             z: background.z + 1
             height: _style.questionDialogHeight
-            width: parent ? parent.width * 0.80 : 500 * _controller.dpiFactor
+            width: parent ? parent.width * 0.90 : 500 * _controller.dpiFactor
             anchors.centerIn: parent
 
             Rectangle {
