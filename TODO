@@ -13,8 +13,11 @@
 - git link in about page
 - iPhone build
 - Put on playstores
-- Startup performance improvements, currently taking 4.1 seconds on Z10
+- Startup performance improvements, currently taking 3.2 seconds on Z10
 - Need icon
+- Fix task menu slowness by operating on a copy
+- Pre-compile qml
+- When editing a task, show it on top, so it's visible
 
 Future TODOs:
 -------------
