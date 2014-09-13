@@ -30,6 +30,7 @@ Rectangle {
 
     MouseArea {
         id: itemMouseArea
+        hoverEnabled: true // Otherwise TaskListView will get the hover and show/hide buttons
         anchors.fill: parent
         onClicked: {
             if (checkable) {
