@@ -20,7 +20,7 @@ Item {
         onChoiceClicked: {
             if (index === 0) {
                 // Edit
-                _controller.editTask(_controller.rightClickedTask, Controller.EditModeEditor)
+                _controller.editTask(_controller.rightClickedTask, Controller.EditModeInline)
             } else if (index === 1) {
                 // Delete
                 _controller.removeTask(_controller.rightClickedTask)

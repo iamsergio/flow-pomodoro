@@ -139,21 +139,6 @@ Rectangle {
             }
 
             ClickableImage {
-                id: editImage
-                toolTip: qsTr("Edit task")
-                source: "image://icons/edit.png"
-                visible: root.buttonsVisible && false // Disabled for now, not enough space
-                onClicked: {
-                    if (modelIndex !== -1) {
-                        _controller.editTask(root.taskObj, Controller.EditModeEditor)
-                        if (_controller.editMode === Controller.EditModeInline) {
-                            textField.forceActiveFocus()
-                        }
-                    }
-                }
-            }
-
-            ClickableImage {
                 id: playImage
                 toolTip: qsTr("Start pomodoro on task")
                 source: "image://icons/play.png"

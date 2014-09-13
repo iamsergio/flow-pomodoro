@@ -37,11 +37,6 @@ Rectangle {
         z: main.z + 1
     }
 
-    TaskEditorDialog {
-        anchors.fill: parent
-        z: main.z + 1
-    }
-
     Rectangle {
         id: main
         anchors.fill: parent
