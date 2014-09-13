@@ -74,6 +74,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool optionsContextMenuVisible READ optionsContextMenuVisible WRITE setOptionsContextMenuVisible NOTIFY optionsContextMenuVisibleChanged)
     Q_PROPERTY(bool configurePageRequested READ configurePageRequested NOTIFY configurePageRequestedChanged)
     Q_PROPERTY(bool aboutPageRequested READ aboutPageRequested NOTIFY aboutPageRequestedChanged)
+    Q_PROPERTY(bool inlineEditorRequested READ inlineEditorRequested NOTIFY inlineEditorRequestedChanged)
 
 public:
     enum Page {
@@ -215,6 +216,7 @@ public Q_SLOTS:
 
     bool configurePageRequested() const;
     bool aboutPageRequested() const;
+    bool inlineEditorRequested() const;
 
 private Q_SLOTS:
     void onTimerTick();
@@ -247,6 +249,7 @@ Q_SIGNALS:
     void optionsContextMenuVisibleChanged();
     void configurePageRequestedChanged();
     void aboutPageRequestedChanged();
+    void inlineEditorRequestedChanged();
 
     // webdav stuff
     void hostChanged();
@@ -266,6 +269,7 @@ private:
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
     void setAboutPageRequested(bool);
     void setConfigurePageRequested(bool);
+    void setInlineEditorRequested(bool);
 
     int m_currentTaskDuration;
     QTimer *m_tickTimer;
@@ -305,6 +309,7 @@ private:
     bool m_optionsContextMenuVisible;
     bool m_configurePageRequested;
     bool m_aboutPageRequested;
+    bool m_inlineEditorRequested;
 };
 
 #endif

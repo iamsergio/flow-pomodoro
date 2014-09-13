@@ -62,6 +62,7 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_optionsContextMenuVisible(false)
     , m_configurePageRequested(false)
     , m_aboutPageRequested(false)
+    , m_inlineEditorRequested(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -628,9 +629,22 @@ void Controller::setConfigurePageRequested(bool requested)
     }
 }
 
+void Controller::setInlineEditorRequested(bool requested)
+{
+    if (requested != m_inlineEditorRequested) {
+        m_inlineEditorRequested = requested;
+        emit inlineEditorRequestedChanged();
+    }
+}
+
 bool Controller::aboutPageRequested() const
 {
     return m_aboutPageRequested;
+}
+
+bool Controller::inlineEditorRequested() const
+{
+    return m_inlineEditorRequested;
 }
 
 void Controller::setAboutPageRequested(bool requested)
@@ -859,6 +873,10 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
         Q_ASSERT(false);
         task = Task::Ptr();
         editMode = EditModeNone;
+    }
+
+    if (editMode == EditModeInline) {
+        setInlineEditorRequested(true); // for delayed loading
     }
 
     if (m_editMode != editMode) {

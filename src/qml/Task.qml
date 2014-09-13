@@ -40,7 +40,7 @@ Rectangle {
     Row {
         id: tagRow
         anchors.left: parent.left
-        anchors.leftMargin: textItem.anchors.leftMargin
+        anchors.leftMargin: 22 * _controller.dpiFactor
         anchors.right: parent.right
         anchors.rightMargin: _style.tagRowRightMargin
         anchors.bottom: parent.bottom
@@ -81,7 +81,7 @@ Rectangle {
         }
 
         onPressAndHold: {
-            _controller.requestContextMenu(task)
+            _controller.editTask(task, Controller.EditModeInline)
         }
 
         Text {
@@ -91,24 +91,77 @@ Rectangle {
             color: _style.taskFontColor
             font.bold: true
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 10* _controller.dpiFactor
+            anchors.left: menuIndicator.right
+            anchors.leftMargin: 5 * _controller.dpiFactor
             anchors.right: buttonRow.left
             anchors.rightMargin: 2
             font.pixelSize: _style.taskFontSize
-            visible: !textField.visible
+            visible: !root.inlineEditMode
         }
 
-        TaskTextField {
-            id: textField
-            objectName: "inline text field"
-            visible: root.inlineEditMode
+        Loader {
+            // Startup performance improvement, since QtQuick.Controlls slows this down
+            id: taskTextFieldLoader
             anchors.left: textItem.left
             anchors.top: parent.top
-            anchors.topMargin:  _style.marginMedium
+            anchors.topMargin: _style.marginMedium
             anchors.right: parent.right
             anchors.rightMargin: _style.marginMedium
-            taskIndex: modelIndex
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: _style.marginMedium
+            sourceComponent: _controller.inlineEditorRequested ? taskTextFieldComponent : null
+        }
+
+        Component {
+            id: taskTextFieldComponent
+            TaskTextField {
+                id: textField
+                objectName: "inline text field"
+                visible: root.inlineEditMode
+                anchors.fill: parent
+                taskIndex: modelIndex
+            }
+        }
+
+        Rectangle {
+            id: menuIndicator
+            anchors.left: parent.left
+            anchors.leftMargin: 6 * _controller.dpiFactor
+            width: 10 * _controller.dpiFactor
+            color: taskOptionsMouseArea.pressed ? "gray" : "transparent"
+            height: column.height + 10 * _controller.dpiFactor
+            anchors.verticalCenter: parent.verticalCenter
+            radius: 5 * _controller.dpiFactor
+
+            Column {
+                id: column
+                anchors.verticalCenter: parent.verticalCenter
+                width: parent.width
+                height: (repeater.model * delegateWidth) + (repeater.model - 1) * column.spacing
+                spacing: 5 * _controller.dpiFactor
+                property int delegateWidth: 4 * _controller.dpiFactor
+                Repeater {
+                    id: repeater
+                    model: 3
+                    Rectangle {
+                        anchors.horizontalCenter: column.horizontalCenter
+                        height: width
+                        width: column.delegateWidth
+                        color: "white"
+                        radius: 5 * _controller.dpiFactor
+                    }
+                }
+            }
+
+            MouseArea {
+                id: taskOptionsMouseArea
+                anchors.fill: parent
+                // Bigger hit area, for touch
+                anchors.margins: -10 * _controller.dpiFactor
+                onClicked: {
+                    _controller.requestContextMenu(task)
+                }
+            }
         }
 
         Row {
@@ -125,16 +178,6 @@ Rectangle {
                 visible: root.buttonsVisible
                 onClicked: {
                     taskObj.staged = !taskObj.staged
-                }
-            }
-
-            ClickableImage {
-                id: deleteImage
-                toolTip: qsTr("Delete task")
-                source: "image://icons/delete.png"
-                visible: root.buttonsVisible
-                onClicked: {
-                    root.deleteClicked()
                 }
             }
 
