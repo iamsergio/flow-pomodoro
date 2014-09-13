@@ -945,6 +945,7 @@ void Controller::endAddingNewTag(const QString &tagName)
 
 void Controller::requestContextMenu(Task *task)
 {
+    editTask(0, EditModeNone);
     setRightClickedTask(task);
 }
 
