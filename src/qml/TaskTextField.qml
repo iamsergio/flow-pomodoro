@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
+import QtQuick.Controls.Styles 1.2
 
 import Controller 1.0
 
@@ -32,6 +33,11 @@ TextField {
                 textField.selectAll()
             }
         }
+    }
+
+    style: TextFieldStyle {
+        // Set text color explicitely, for some reason it defaults to gray on blackberry
+        textColor: "black"
     }
 
     onAccepted: {
