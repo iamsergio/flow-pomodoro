@@ -46,13 +46,11 @@ Item {
 
         Flickable {
             id: flickable
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
             width: shadowContainer.width
+            height: Math.min(shadowContainer.height, parent.height - 100 * _controller.dpiFactor)
             contentHeight: shadowContainer.height
-            anchors.topMargin: 50 * _controller.dpiFactor
-            anchors.bottomMargin: 50 * _controller.dpiFactor
             clip: true
 
             Item {
