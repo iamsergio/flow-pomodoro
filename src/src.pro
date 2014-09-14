@@ -35,6 +35,8 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/DefaultStyle.qml   \
                qml/FlowCircularProgressIndicator.qml \
                qml/FlowCheckBox.qml \
+               qml/InputPopup.qml \
+               qml/Popup.qml \
                qml/PushButton.qml \
                qml/Main.qml           \
                qml/MainPage.qml       \

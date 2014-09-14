@@ -55,6 +55,8 @@
     <file>qml/DefaultStyle.qml</file>
     <file>qml/FlowCircularProgressIndicator.qml</file>
     <file>qml/FlowCheckBox.qml</file>
+    <file>qml/InputPopup.qml</file>
+    <file>qml/Popup.qml</file>
     <file>qml/PushButton.qml</file>
     <file>qml/QuestionPopup.qml</file>
     <file>qml/Main.qml</file>
