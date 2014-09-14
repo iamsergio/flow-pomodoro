@@ -51,6 +51,7 @@
     <file>qml/ConfigurePage.qml</file>
     <file>qml/DecentTabView.qml</file>
     <file>qml/DefaultStyle.qml</file>
+    <file>qml/FontAwesomeIcon.qml</file>
     <file>qml/FlowCircularProgressIndicator.qml</file>
     <file>qml/FlowCheckBox.qml</file>
     <file>qml/InputPopup.qml</file>

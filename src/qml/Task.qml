@@ -160,20 +160,21 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             spacing: _style.buttonsSpacing
 
-            ClickableImage {
-                id: archiveImage
+            FontAwesomeIcon {
+                id: archiveIcon
                 toolTip: (taskObj !== null && taskObj.staged) ? qsTr("Archive task") : qsTr("Queue for today")
-                source: (taskObj !== null && taskObj.staged) ? "image://icons/archive.png" : "image://icons/stage.png"
+                size: 30
+                text: (taskObj !== null && taskObj.staged) ? "\uf187" : "\uf06a"
                 visible: root.buttonsVisible
                 onClicked: {
                     taskObj.staged = !taskObj.staged
                 }
             }
 
-            ClickableImage {
-                id: playImage
-                toolTip: qsTr("Start pomodoro on task")
-                source: "image://icons/play.png"
+            FontAwesomeIcon {
+                id: playIcon
+                size: 30
+                text: "\uf01d"
                 visible: root.buttonsVisible && (taskObj !== null && taskObj.staged) && !_controller.pomodoroFunctionalityDisabled
                 onClicked: {
                     _controller.startPomodoro(root.taskObj, _style.defaultPomodoroDuration)
