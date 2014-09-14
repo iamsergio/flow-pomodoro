@@ -264,7 +264,7 @@ Rectangle {
                 ListElement { itemText: "Quit"; checkable: false }
             }
 
-            MobileChoicePopup {
+            ChoicePopup {
                 anchors.fill: parent
                 model: optionsModel
                 onChoiceClicked: {

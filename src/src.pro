@@ -22,6 +22,7 @@ HEADERS += quickview.h
 
 OTHER_FILES += qml/AboutPage.qml      \
                qml/Choice.qml \
+               qml/ChoicePopup.qml \
                qml/config/Hacking.qml \
                qml/config/General.qml \
                qml/config/Plugins.qml \
@@ -38,7 +39,6 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/Main.qml           \
                qml/MainPage.qml       \
                qml/MobileButton.qml \
-               qml/MobileChoicePopup.qml \
                qml/MobileMenuBar.qml \
                qml/MobileStyle.qml \
                qml/MobileTabView.qml  \

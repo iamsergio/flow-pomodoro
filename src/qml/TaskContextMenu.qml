@@ -12,7 +12,7 @@ Item {
         ListElement { itemText: "ConfigureTags ..."; checkable: false }
     }
 
-    MobileChoicePopup {
+    ChoicePopup {
         anchors.fill: parent
         model: menuModel
         secondaryModel: visible ? _controller.rightClickedTask.checkableTagModel : null

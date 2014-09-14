@@ -48,6 +48,7 @@
 
     <file>qml/AboutPage.qml</file>
     <file>qml/Choice.qml</file>
+    <file>qml/ChoicePopup.qml</file>
     <file>qml/ClickableImage.qml</file>
     <file>qml/ConfigurePage.qml</file>
     <file>qml/DecentTabView.qml</file>
@@ -59,7 +60,6 @@
     <file>qml/Main.qml</file>
     <file>qml/MainPage.qml</file>
     <file>qml/MobileButton.qml</file>
-    <file>qml/MobileChoicePopup.qml</file>
     <file>qml/MobileStyle.qml</file>
     <file>qml/MobileMenuBar.qml</file>
     <file>qml/MobileTabView.qml</file>
