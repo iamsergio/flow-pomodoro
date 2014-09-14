@@ -53,10 +53,12 @@ MouseArea {
             NumberAnimation { properties: "x"; duration: _style.tagMoveAnimationDuration }
         }
 
-        ClickableImage {
+        FontAwesomeIcon {
             id: addImage
             toolTip: qsTr("Add new tag")
-            source: "image://icons/add-tag.png"
+            text: "\uf067"
+            anchors.verticalCenter: undefined
+            color: enabled ? "black" : "gray"
             enabled: _controller.tagEditStatus !== Controller.TagEditStatusNew
             onClicked: {
                 newTag.textField.text = ""

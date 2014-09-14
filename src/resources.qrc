@@ -1,7 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="/">
-    <file>img/16x16/add.png</file>
-    <file>img/16x16/add-tag.png</file>
     <file>img/16x16/configure.png</file>
     <file>img/16x16/delete.png</file>
     <file>img/16x16/delete-tag.png</file>
@@ -13,8 +11,6 @@
     <file>img/16x16/stop.png</file>
     <file>img/16x16/tag.png</file>
     <file>img/16x16/window-close.png</file>
-    <file>img/32x32/add.png</file>
-    <file>img/32x32/add-tag.png</file>
     <file>img/32x32/configure.png</file>
     <file>img/32x32/delete.png</file>
     <file>img/32x32/delete-tag.png</file>
@@ -26,8 +22,6 @@
     <file>img/32x32/stop.png</file>
     <file>img/32x32/tag.png</file>
     <file>img/32x32/window-close.png</file>
-    <file>img/48x48/add.png</file>
-    <file>img/48x48/add-tag.png</file>
     <file>img/48x48/configure.png</file>
     <file>img/48x48/delete.png</file>
     <file>img/48x48/delete-tag.png</file>
