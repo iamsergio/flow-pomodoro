@@ -127,28 +127,19 @@ Rectangle {
             anchors.leftMargin: 6 * _controller.dpiFactor
             width: 10 * _controller.dpiFactor
             color: taskOptionsMouseArea.pressed ? "gray" : "transparent"
-            height: column.height + 10 * _controller.dpiFactor
+            height: iconItem.contentHeight + 10 * _controller.dpiFactor
             anchors.verticalCenter: parent.verticalCenter
             radius: 5 * _controller.dpiFactor
 
-            Column {
-                id: column
-                anchors.verticalCenter: parent.verticalCenter
-                width: parent.width
-                height: (repeater.model * delegateWidth) + (repeater.model - 1) * column.spacing
-                spacing: 5 * _controller.dpiFactor
-                property int delegateWidth: 4 * _controller.dpiFactor
-                Repeater {
-                    id: repeater
-                    model: 3
-                    Rectangle {
-                        anchors.horizontalCenter: column.horizontalCenter
-                        height: width
-                        width: column.delegateWidth
-                        color: "white"
-                        radius: 5 * _controller.dpiFactor
-                    }
-                }
+            Text {
+                id: iconItem
+                anchors.fill: parent
+                color: "white"
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: 23 * _controller.dpiFactor
+                font.family: "FontAwesome"
+                text: "\uf142"
             }
 
             MouseArea {

@@ -13,16 +13,13 @@ Item {
         id: checkboxPrivate
     }
 
-    Image {
-        visible: root.checked
-        source: "image://icons/checkbox.png"
+    Text {
+        id: icon
         anchors.fill: parent
-    }
-
-    Image {
-        visible: !root.checked
-        source: "image://icons/uncheckbox.png"
-        anchors.fill: parent
+        font.pixelSize: 20 * _controller.dpiFactor
+        font.family: "FontAwesome"
+        anchors.verticalCenter: parent.verticalCenter
+        text: root.checked ? "\uf046" : "\uf096"
     }
 
     MouseArea {

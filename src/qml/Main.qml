@@ -21,6 +21,10 @@ Rectangle {
                                                                                       : Controller.ConfigurePage
     }
 
+    FontLoader {
+        source: "/fontawesome-webfont.ttf"
+    }
+
     Connections {
         target: _controller
         onExpandedChanged: {

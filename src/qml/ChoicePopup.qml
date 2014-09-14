@@ -114,6 +114,7 @@ Item {
                                 anchors.right: column.right
                                 topLineVisible: index > 0
                                 height: root.delegateHeight
+                                fontAwesomeIconCode: iconCode
                                 onClicked: {
                                     if (checkable) {
                                         root.choiceToggled(index)

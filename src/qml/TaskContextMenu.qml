@@ -7,9 +7,9 @@ Item {
     visible: _controller.rightClickedTask !== null
     ListModel {
         id: menuModel
-        ListElement { itemText: "Edit ..."; checkable: false }
-        ListElement { itemText: "Delete"; checkable: false }
-        ListElement { itemText: "ConfigureTags ..."; checkable: false }
+        ListElement { itemText: "Edit ..."; checkable: false; iconCode: "\uf044" }
+        ListElement { itemText: "Delete"; checkable: false; iconCode: "\uf014" }
+        ListElement { itemText: "ConfigureTags ..."; checkable: false; iconCode: "\uf02b" }
     }
 
     ChoicePopup {
