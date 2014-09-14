@@ -25,7 +25,6 @@ Page {
 
             Switch {
                 id: switchItem
-                checked: _controller.queueType === Controller.QueueTypeToday
                 anchors.left: addIcon.right
                 anchors.right: parent.right
                 anchors.leftMargin: _style.marginSmall
