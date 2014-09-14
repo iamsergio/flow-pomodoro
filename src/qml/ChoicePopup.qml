@@ -43,23 +43,22 @@ Item {
             root.choiceClicked(index)
             root.dismissPopup()
         }
+        Item {
+            id: shadowContainer
+            z: background.z + 1
+            height: Math.min(popupRect.height, parent.height - 100 * _controller.dpiFactor) + 16 * _controller.dpiFactor
+            width:  popupRect.width  + 16 * _controller.dpiFactor
 
-        Flickable {
-            id: flickable
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            width: shadowContainer.width
-            height: Math.min(shadowContainer.height, parent.height - 100 * _controller.dpiFactor)
-            contentHeight: shadowContainer.height
-            clip: true
 
-            Item {
-                id: shadowContainer
-                z: background.z + 1
-
-                anchors.centerIn: parent
-                width:  popupRect.width  + 16 * _controller.dpiFactor
-                height: popupRect.height + 16 * _controller.dpiFactor
+            Flickable {
+                id: flickable
+                width: parent.width
+                height: parent.height - 16 * _controller.dpiFactor
+                contentHeight: popupRect.height
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
 
                 Rectangle {
                     id: popupRect
@@ -146,19 +145,18 @@ Item {
                     }
                 }
             }
-
-            DropShadow {
-                id: shadowEffect
-                anchors.fill: shadowContainer
-                cached: true
-                smooth: true
-                horizontalOffset: 3 * _controller.dpiFactor
-                verticalOffset: 3 * _controller.dpiFactor
-                radius: 8.0
-                samples: 16
-                color: "#80000000"
-                source: shadowContainer
-            }
+        }
+        DropShadow {
+            id: shadowEffect
+            anchors.fill: shadowContainer
+            cached: true
+            smooth: true
+            horizontalOffset: 3 * _controller.dpiFactor
+            verticalOffset: 3 * _controller.dpiFactor
+            radius: 8.0
+            samples: 16
+            color: "#80000000"
+            source: shadowContainer
         }
     }
 }
