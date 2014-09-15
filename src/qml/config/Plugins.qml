@@ -1,5 +1,4 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 
 import Controller 1.0
@@ -28,7 +27,6 @@ Item {
         horizontalAlignment: Text.AlignHCenter
     }
 
-
     ListView {
         anchors.top: smallText1.bottom
         anchors.leftMargin: _style.marginMedium
@@ -49,7 +47,7 @@ Item {
                 text: textRole
             }
 
-            CheckBox {
+            FlowCheckBox {
                 anchors.verticalCenterOffset: -2
                 anchors.verticalCenter: parent.verticalCenter
                 height: row.height
