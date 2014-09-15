@@ -83,7 +83,7 @@ Item {
     property string selectedTaskBorderColor : "black"
 
     property int buttonsRightMargin : 10 * _controller.dpiFactor
-    property int buttonsSpacing : Math.ceil(5 * _controller.dpiFactor)
+    property int buttonsSpacing : Math.ceil(10 * _controller.dpiFactor)
 
     property int pageMargin : Math.ceil(10 * _controller.dpiFactor)
     property int titleFontSize : 24 * _controller.dpiFactor

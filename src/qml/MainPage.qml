@@ -1,6 +1,4 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.1
-import QtQuick.Controls.Styles 1.1
 import Controller 1.0
 import QtGraphicalEffects 1.0
 
@@ -13,157 +11,13 @@ Page {
         anchors.fill: parent
         radius: parent.radius
 
-        Item {
-            id: headerRectangle
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.topMargin: _style.marginMedium
-            anchors.rightMargin: _style.marginSmall
-            anchors.leftMargin: _style.marginSmall
-            height: childrenRect.height
-
-            Switch {
-                id: switchItem
-                anchors.left: addIcon.right
-                anchors.right: parent.right
-                anchors.leftMargin: _style.marginSmall
-                anchors.top: parent.top
-                style: SwitchStyle {
-                    groove:
-                        Rectangle {
-                            property color shadow: control.checked ? Qt.darker(highlight, 1.2): "#999"
-                            property color bg: control.checked ? highlight: "#bbb"
-                            property color highlight: "#bbb"
-
-                            implicitWidth: headerRectangle.width - addIcon.width - _style.marginMedium
-                            implicitHeight: 50 * _controller.dpiFactor
-
-                            border.color: "gray"
-                            color: "red"
-
-                            radius: 2 * _controller.dpiFactor
-                            Behavior on shadow { ColorAnimation{ duration: 80 } }
-                            Behavior on bg { ColorAnimation{ duration: 80 } }
-                            gradient: Gradient {
-                                GradientStop { color: shadow; position: 0 }
-                                GradientStop { color: bg ; position: 0.2 }
-                                GradientStop { color: bg ; position: 1 }
-                            }
-
-                            Rectangle {
-                                color: "#44ffffff"
-                                height: 1
-                                anchors.bottom: parent.bottom
-                                anchors.bottomMargin: -1 * _controller.dpiFactor
-                                width: parent.width - 2 * _controller.dpiFactor
-                                x: 1
-                            }
-
-                            Text {
-                                id: text1
-                                anchors.left: actionIcon.right
-                                anchors.leftMargin: _style.marginSmall
-                                width: parent.width / 3
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: control.checked && false
-                                text: qsTr("Today's tasks")
-                                horizontalAlignment: Text.AlignLeft
-                                color: "#4A4A53"
-                                font.pixelSize: 11 * _controller.dpiFactor
-                            }
-                            Text {
-                                id: text2
-                                anchors.right: parent.right
-                                anchors.leftMargin: _style.marginSmall
-                                width: parent.width / 3
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: !control.checked && false
-                                text: qsTr("Later tasks") + handle.width
-                                color: text1.color
-                                horizontalAlignment: Text.AlignHCenter
-                                font.pixelSize: 11 * _controller.dpiFactor
-                            }
-                            Image {
-                                id: actionIcon
-                                property int margin: _style.marginMedium
-                                width: 16 * _controller.dpiFactor
-                                height: 16 * _controller.dpiFactor
-                                x: (control.checked ? margin : control.width - width - margin) - 2 * _controller.dpiFactor
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.margins: _style.marginMedium
-                                source: control.checked ? "image://icons/stage.png" : "image://icons/archive.png"
-                            }
-
-                        }
-
-                    handle:
-                    Rectangle {
-                        id: handleRect
-                        opacity: control.enabled ? 1.0 : 0.5
-                        implicitWidth: control.width - 16 * _controller.dpiFactor - 2*_style.marginMedium
-                        implicitHeight: control.height - padding.top - padding.bottom
-
-                        border.color: control.activeFocus ? Qt.darker(highlight, 2) : Qt.darker(button, 2)
-                        property color bg: control.activeFocus ? Qt.darker(highlight, 1.2) : button
-                        property color highlight: "#43ACE8"
-                        property color button: "black"
-                        gradient: Gradient {
-                            GradientStop { color: "gray"; position: 0}
-                            GradientStop { color: bg; position: 0.5}
-                            GradientStop { color: bg; position: 1}
-                        }
-
-                        Text {
-                            anchors.centerIn: parent
-                            color: "white"
-                            text: control.checked ? qsTr("Later tasks") : qsTr("Today's tasks")
-                            font.bold: true
-                            font.pixelSize: 14 * _controller.dpiFactor
-                        }
-
-                        Image {
-                            id: icon
-                            width: 16 * _controller.dpiFactor
-                            height: 16 * _controller.dpiFactor
-                            anchors.left: parent.left
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.margins: _style.marginMedium
-                            source: control.checked ? "image://icons/archive.png" : "image://icons/stage.png"
-                        }
-
-                        radius: 2 * _controller.dpiFactor
-                    }
-                }
-
-                Binding {
-                    target: _controller
-                    property: "queueType"
-                    value: switchItem.checked ? Controller.QueueTypeArchive : Controller.QueueTypeToday
-                }
-            }
-
-            FontAwesomeIcon {
-                id: addIcon
-                text: "\uf055" // "\uf0fe"
-                size: 35
-                anchors.verticalCenter: switchItem.verticalCenter
-                anchors.left: parent.left
-                toolTip: qsTr("Add new task")
-                color: "black"
-                onClicked: {
-                    _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
-                }
-            }
-        }
-
         TaskListView {
             id: stagedView
             model: _storage.stagedTasksModel
             anchors.topMargin: _style.marginSmall
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.top: headerRectangle.bottom
+            anchors.top: parent.top
             anchors.bottom: parent.bottom
             visible: _controller.queueType === Controller.QueueTypeToday
             emptyText: qsTr("No queued tasks for today.") + "\n"+ qsTr("Please create new ones or pick some from your archive.")
@@ -175,7 +29,7 @@ Page {
             anchors.margins: _style.marginSmall
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.top: headerRectangle.bottom
+            anchors.top: parent.top
         }
 
         LinearGradient {

@@ -91,18 +91,33 @@ Rectangle {
                 anchors.right: parent.right
                 height: _style.contractedHeight
 
+                FlowSwitch {
+                    id: switchItem
+                    visible: _controller.expanded && _controller.currentPage === Controller.MainPage
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: _style.marginMedium
+                    Binding {
+                        target: _controller
+                        property: "queueType"
+                        value: switchItem.checked ? Controller.QueueTypeArchive
+                                                  : Controller.QueueTypeToday
+                    }
+                }
+
                 Text {
                     id: titleText
                     elide: _controller.currentTask.paused ? Text.ElideLeft : Text.ElideRight
                     color: _style.fontColor
                     font.pixelSize: _controller.currentTask.stopped ? _style.fontSize : _style.currentTaskFontSize
                     font.bold: true
-                    anchors.left: parent.left
+                    anchors.left: switchItem.visible ? switchItem.right : parent.left
                     anchors.leftMargin: _style.marginMedium
                     anchors.right: buttonRow.left
                     anchors.rightMargin: 2 * _controller.dpiFactor
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: -5 * _controller.dpiFactor
+                    anchors.verticalCenterOffset: switchItem.visible ? 0 : -5 * _controller.dpiFactor
+                    horizontalAlignment: switchItem.visible ? Text.AlignHCenter : Text.AlignLeft
                     text: root.titleText
                 }
 
@@ -131,6 +146,19 @@ Rectangle {
                                                                         :  _style.marginMedium
                     spacing: _style.buttonsSpacing
 
+                    FontAwesomeIcon {
+                        id: addIcon
+                        text: "\uf055" // "\uf0fe"
+                        size: 30
+                        anchors.verticalCenter: parent.verticalCenter
+                        toolTip: qsTr("Add new task")
+                        visible: _controller.expanded
+                        color: "white"
+                        onClicked: {
+                            _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
+                        }
+                    }
+
                     FlowCircularProgressIndicator {
                         id: circularIndicator
                         anchors.top: parent.top
@@ -138,12 +166,13 @@ Rectangle {
                         anchors.margins: (mousePressed ? 3 : 5) * _controller.dpiFactor
                     }
 
-                    ClickableImage {
+                    FontAwesomeIcon {
                         id: configureIcon
                         anchors.verticalCenter: buttonRow.verticalCenter
                         toolTip: qsTr("Configure")
                         visible: _controller.expanded
-                        source: "image://icons/configure.png"
+                        text: "\uf013"
+                        size: 30
                         onClicked: {
                             _controller.currentPage = _controller.currentPage == Controller.ConfigurePage ? Controller.MainPage
                                                                                                           : Controller.ConfigurePage

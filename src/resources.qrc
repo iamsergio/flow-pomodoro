@@ -1,17 +1,8 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="/">
-    <file>img/16x16/configure.png</file>
     <file>img/16x16/delete-tag.png</file>
-    <file>img/16x16/archive.png</file>
-    <file>img/16x16/stage.png</file>
-    <file>img/32x32/configure.png</file>
     <file>img/32x32/delete-tag.png</file>
-    <file>img/32x32/archive.png</file>
-    <file>img/32x32/stage.png</file>
-    <file>img/48x48/configure.png</file>
     <file>img/48x48/delete-tag.png</file>
-    <file>img/48x48/archive.png</file>
-    <file>img/48x48/stage.png</file>
 
     <file>translations/flow_pt_PT.qm</file>
 
@@ -27,6 +18,7 @@
     <file>qml/FontAwesomeIcon.qml</file>
     <file>qml/FlowCircularProgressIndicator.qml</file>
     <file>qml/FlowCheckBox.qml</file>
+    <file>qml/FlowSwitch.qml</file>
     <file>qml/InputPopup.qml</file>
     <file>qml/Popup.qml</file>
     <file>qml/PushButton.qml</file>

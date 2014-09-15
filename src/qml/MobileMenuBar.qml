@@ -1,5 +1,6 @@
 import QtQuick 2.1
 import com.kdab.flowpomodoro 1.0
+import Controller 1.0
 
 Rectangle {
     id: root
@@ -13,32 +14,50 @@ Rectangle {
     height: _style.menuBarHeight
     color: _style.menuBarBackgroundColor
 
-    Image {
-        id: image
-        height: parent.height - 2 * _style.menuBarIconMargin
-        visible: source !== ""
-        fillMode: Image.PreserveAspectFit
+    FlowSwitch {
+        id: switchItem
+        visible: _controller.expanded && _controller.currentPage === Controller.MainPage
+        anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: _style.menuBarIconMargin
         anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-        source: root.iconSource
-        smooth: true
+        Binding {
+            target: _controller
+            property: "queueType"
+            value: switchItem.checked ? Controller.QueueTypeArchive
+                                      : Controller.QueueTypeToday
+        }
     }
 
     Text {
         color: _style.menuBarFontColor
         text: root.titleText
+        horizontalAlignment: Text.AlignHCenter
         anchors.leftMargin: _style.menuBarIconMargin
-        anchors.left: image.right
-        anchors.verticalCenter: image.verticalCenter
+        anchors.left: switchItem.visible ? switchItem.right : parent.left
+        anchors.right: progressIndicator.visible ? progressIndicator.left : addIcon.left
+        anchors.verticalCenter: switchItem.verticalCenter
         font.pixelSize: _style.menuBarFontSize
     }
 
     FlowCircularProgressIndicator {
+        id: progressIndicator
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.right: button.left
+        anchors.right: addIcon.left
         anchors.margins: (mousePressed ? 5 : 7) * _controller.dpiFactor
+    }
+
+    FontAwesomeIcon {
+        id: addIcon
+        text: "\uf055" // "\uf0fe"
+        size: 35
+        anchors.verticalCenter: parent.verticalCenter
+        toolTip: qsTr("Add new task")
+        color: _style.fontColor
+        anchors.right: button.left
+        onClicked: {
+            _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
+        }
     }
 
     Rectangle {
