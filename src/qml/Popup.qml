@@ -1,5 +1,4 @@
 import QtQuick 2.0
-import QtGraphicalEffects 1.0
 
 Item {
     id: root
@@ -21,72 +20,53 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        Item {
-            id: shadowContainer
-            z: background.z + 1
-            height: _style.questionDialogHeight
+
+        Rectangle {
+            id: popupRect
             width: parent ? parent.width * 0.90 : 500 * _controller.dpiFactor
+            height: _style.questionDialogHeight
             anchors.centerIn: parent
+            border.color: "gray"
+            border.width: 1 * _controller.dpiFactor
+            //radius: 7 * _controller.dpiFactor
+            color: "white"
+            z : borderImage.z + 1
 
-            Rectangle {
-                id: popupRect
-                width: shadowContainer.width - 16 * _controller.dpiFactor
-                height: shadowContainer.height - 16 * _controller.dpiFactor
-                anchors.centerIn: parent
-                border.color: "gray"
-                border.width: 1 * _controller.dpiFactor
-                radius: 7 * _controller.dpiFactor
-                color: "white"
+            Item {
+                id: contentItem
+                anchors.fill: parent
+            }
 
-                Item {
-                    id: contentItem
-                    anchors.fill: parent
+            Row {
+                id: row
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: _style.dialogButtonsMargin
+                spacing: 4 * _controller.dpiFactor
+
+                PushButton {
+                    id: buttonOk
+                    text: qsTr("OK")
+                    onClicked: {
+                        _controller.onPopupButtonClicked(true)
+                    }
                 }
 
-                Row {
-                    id: row
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: _style.dialogButtonsMargin
-                    spacing: 4 * _controller.dpiFactor
-
-                    PushButton {
-                        id: buttonOk
-                        text: qsTr("OK")
-                        onClicked: {
-                            _controller.onPopupButtonClicked(true)
-                        }
-                    }
-
-                    PushButton {
-                        id: buttonCancel
-                        text: qsTr("Cancel")
-                        onClicked: {
-                            _controller.onPopupButtonClicked(false)
-                        }
+                PushButton {
+                    id: buttonCancel
+                    text: qsTr("Cancel")
+                    onClicked: {
+                        _controller.onPopupButtonClicked(false)
                     }
                 }
             }
         }
-
-        DropShadow {
-            id: shadowEffect
-            anchors.fill: shadowContainer
-            cached: true
-            smooth: true
-            horizontalOffset: 3 * _controller.dpiFactor
-            verticalOffset: 3 * _controller.dpiFactor
-            radius: 8.0
-            samples: 16
-            color: "#80000000"
-            source: shadowContainer
-
-            Behavior on horizontalOffset {
-                NumberAnimation { duration: 300 }
-            }
-            Behavior on verticalOffset {
-                NumberAnimation { duration: 300 }
-            }
+        BorderImage {
+            id: borderImage
+            anchors.fill: popupRect
+            anchors { leftMargin: -6; topMargin: -6; rightMargin: -8; bottomMargin: -8 }
+            border { left: 10; top: 10; right: 10; bottom: 10 }
+            source: "qrc:/img/shadow.png"
         }
     }
 }
