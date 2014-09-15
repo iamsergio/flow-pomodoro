@@ -19,29 +19,5 @@ Popup {
             wrapMode: Text.WordWrap
             text: _controller.popupText
         }
-
-        Row {
-            id: row
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: _style.dialogButtonsMargin
-            spacing: 4 * _controller.dpiFactor
-
-            PushButton {
-                id: buttonOk
-                text: qsTr("OK")
-                onClicked: {
-                    _controller.onPopupButtonClicked(true)
-                }
-            }
-
-            PushButton {
-                id: buttonCancel
-                text: qsTr("Cancel")
-                onClicked: {
-                    _controller.onPopupButtonClicked(false)
-                }
-            }
-        }
     }
 }

@@ -42,6 +42,30 @@ Item {
                     id: contentItem
                     anchors.fill: parent
                 }
+
+                Row {
+                    id: row
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: _style.dialogButtonsMargin
+                    spacing: 4 * _controller.dpiFactor
+
+                    PushButton {
+                        id: buttonOk
+                        text: qsTr("OK")
+                        onClicked: {
+                            _controller.onPopupButtonClicked(true)
+                        }
+                    }
+
+                    PushButton {
+                        id: buttonCancel
+                        text: qsTr("Cancel")
+                        onClicked: {
+                            _controller.onPopupButtonClicked(false)
+                        }
+                    }
+                }
             }
         }
 
@@ -65,5 +89,4 @@ Item {
             }
         }
     }
-
 }
