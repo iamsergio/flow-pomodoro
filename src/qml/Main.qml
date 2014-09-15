@@ -239,44 +239,15 @@ Rectangle {
         }
     }
 
-    Menu {
-        id: globalContextMenu
+    Component {
+        id: globalContextMenuComponent
+        GlobalContextMenu {
+            id: globalContextMenu
+        }
+    }
 
-        MenuItem {
-            visible: _controller.rightClickedTask === null && !_controller.currentTask.stopped
-            text: _controller.currentTask.running ? qsTr("Pause") : qsTr("Resume")
-            onTriggered: {
-                _controller.pausePomodoro()
-            }
-        }
-
-        MenuItem {
-            id: stopMenuItem
-            visible: _controller.rightClickedTask === null && !_controller.currentTask.stopped
-            text: qsTr("Stop")
-            onTriggered: {
-                _controller.stopPomodoro(true)
-            }
-        }
-
-        MenuSeparator {
-            visible: stopMenuItem.visible
-        }
-
-        MenuItem {
-            text: qsTr("About...")
-            visible: _controller.currentPage != Controller.AboutPage
-            onTriggered: {
-                _controller.currentPage = Controller.AboutPage
-                _controller.expanded = true
-            }
-        }
-        MenuItem {
-            text: qsTr("Quit")
-            onTriggered: {
-                Qt.quit()
-            }
-        }
+    Loader {
+        sourceComponent: _controller.isMobile ? null : globalContextMenuComponent
     }
 
     TaskContextMenu {

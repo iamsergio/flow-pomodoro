@@ -14,6 +14,7 @@
     <file>qml/FlowCircularProgressIndicator.qml</file>
     <file>qml/FlowCheckBox.qml</file>
     <file>qml/FlowSwitch.qml</file>
+    <file>qml/GlobalContextMenu.qml</file>
     <file>qml/InputPopup.qml</file>
     <file>qml/Popup.qml</file>
     <file>qml/PushButton.qml</file>

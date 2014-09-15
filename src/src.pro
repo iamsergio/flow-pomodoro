@@ -37,6 +37,7 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/FlowCheckBox.qml \
                qml/FlowSwitch.qml \
                qml/InputPopup.qml \
+               qml/GlobalContextMenu.qml \
                qml/Popup.qml \
                qml/PushButton.qml \
                qml/Main.qml           \
