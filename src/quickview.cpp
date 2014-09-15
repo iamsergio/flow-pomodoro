@@ -23,7 +23,6 @@
 #include "controller.h"
 #include "tooltipcontroller.h"
 #include "storage.h"
-#include "imageprovider.h"
 #include "webdavsyncer.h"
 #include "kernel.h"
 #include "utils.h"
@@ -49,8 +48,6 @@ QuickView::QuickView(QQmlEngine *engine)
     rootContext()->setContextProperty("_toolTipController", new ToolTipController(this));
 
     createStyleComponent();
-    engine->addImageProvider("icons", new ImageProvider(m_controller->isMobile()));
-    printTimeInfo("QuickView: addImageProvider end");
     if (m_useqresources) {
         // So that F5 reloads QML without having to restart the application
         setSource(QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/Main.qml"));

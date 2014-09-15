@@ -5,7 +5,6 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/circularprogressindicator.cpp \
            $$PWD/checkbox.cpp \
            $$PWD/controller.cpp  \
-           $$PWD/imageprovider.cpp \
            $$PWD/jsonstorage.cpp \
            $$PWD/kernel.cpp \
            $$PWD/pluginmodel.cpp \
@@ -26,7 +25,6 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/checkbox.h \
            $$PWD/circularprogressindicator.h \
            $$PWD/controller.h      \
-           $$PWD/imageprovider.h \
            $$PWD/jsonstorage.h      \
            $$PWD/kernel.h \
            $$PWD/genericlistmodel.h \
