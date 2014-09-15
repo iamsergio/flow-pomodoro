@@ -129,7 +129,7 @@ Item {
 
     // Circular Progress Indicator
     property int circularIndicatorBorderWidth: 3 * _controller.dpiFactor
-    property color circularIndicatorForegroundColor: fontColor
+    property color circularIndicatorForegroundColor: "white"
     property color circularIndicatorBackgroundColor: "#222222"
     property color circularIndicatorSelectedBackgroundColor: "#222222"
 
