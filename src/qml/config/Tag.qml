@@ -6,7 +6,7 @@ import ".."
 
 Item {
     id: root
-    height: invisible_helper.childrenRect.height + 2 *  _controller.dpiFactor
+    height: 23 * _controller.dpiFactor
     width: label.contentWidth + taskCountLabel.contentWidth + _style.tagExtraWidth + deleteImage.width
     property QtObject tagObj: null
     property bool beingEdited: false
@@ -76,7 +76,7 @@ Item {
 
             Text {
                 id: label
-                font.pixelSize: invisible_text.font.pixelSize
+                font.pixelSize: _style.tagFontSize
                 color: _style.tagFontColor
                 font.bold: true
                 anchors.left: parent.left
@@ -99,13 +99,14 @@ Item {
                 visible: !root.beingEdited
             }
 
-            ClickableImage {
+            FontAwesomeIcon {
                 id: deleteImage
-                source: "image://icons/delete-tag.png"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
-                anchors.rightMargin: _style.buttonsSpacing
+                anchors.rightMargin: 5 * _controller.dpiFactor
                 visible: !root.beingEdited
+                text: "\uf1f8"
+                size: 14
 
                 function reallyRemove()
                 {

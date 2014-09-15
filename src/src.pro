@@ -29,7 +29,6 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/config/Tag.qml     \
                qml/config/Tags.qml    \
                qml/config/WebDavSync.qml \
-               qml/ClickableImage.qml \
                qml/ConfigurePage.qml  \
                qml/DecentTabView.qml  \
                qml/DefaultStyle.qml   \

@@ -23,22 +23,6 @@ MouseArea {
         horizontalAlignment: Text.AlignHCenter
     }
 
-    Item {
-        id: invisible_helper
-        visible: false
-        Text {
-            id: invisible_text
-            text: "Invisible Item"
-            font.pixelSize: _style.tagFontSize
-            font.bold: _style.tagFontBold
-            color: _style.tagFontColor
-        }
-        ClickableImage {
-            id: invisible_image
-            source: "image://icons/delete-tag.png"
-        }
-    }
-
     Flow {
         anchors.top: parent.top
         anchors.topMargin: _style.marginBig
