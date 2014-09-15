@@ -1,7 +1,6 @@
 import QtQuick 2.0
 
 import Controller 1.0
-import QtQuick.Layouts 1.0
 
 Page {
     id: root
@@ -43,7 +42,7 @@ Page {
             visible: root.showKeyboardBindings
         }
 
-        GridLayout {
+        Grid {
             id: keyGrid
             visible: root.showKeyboardBindings
             anchors.top: keysText.bottom

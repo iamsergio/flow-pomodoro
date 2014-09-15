@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.2
-import QtQuick.Layouts 1.0
 
 import Controller 1.0
 import ".."
@@ -10,7 +9,7 @@ Item {
     id: root
     anchors.fill: parent
 
-    GridLayout {
+    Grid {
         id: grid1
         columns: 2
 
@@ -20,6 +19,7 @@ Item {
         anchors.leftMargin: _style.marginMedium
         anchors.rightMargin: 40 * _controller.dpiFactor
         columnSpacing: _style.marginBig
+        rowSpacing: 5 * _controller.dpiFactor
 
         Text {
             text: qsTr("Protocol")
