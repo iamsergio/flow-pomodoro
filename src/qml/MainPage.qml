@@ -143,12 +143,14 @@ Page {
                 }
             }
 
-            ClickableImage {
+            FontAwesomeIcon {
                 id: addIcon
-                source: "image://icons/add.png"
+                text: "\uf055" // "\uf0fe"
+                size: 35
                 anchors.verticalCenter: switchItem.verticalCenter
                 anchors.left: parent.left
                 toolTip: qsTr("Add new task")
+                color: "black"
                 onClicked: {
                     _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
                 }
