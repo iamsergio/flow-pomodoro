@@ -143,8 +143,8 @@ Item {
             }
             style:
             TextFieldStyle {
-                    // Set text color explicitely, for some reason it defaults to gray on blackberry
-                    textColor: "black"
+                // Set text color explicitely, for some reason it defaults to gray on blackberry
+                textColor: "black"
             }
         }
 
