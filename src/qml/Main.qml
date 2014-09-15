@@ -64,7 +64,7 @@ Rectangle {
                 } else if (mouse.button === Qt.RightButton) {
                     if (_controller.editMode === Controller.EditModeNone) {
                         _controller.requestContextMenu(null) // reset task
-                        globalContextMenu.popup()
+                        globalContextMenu.item.popup()
                     }
                 }
             }
@@ -249,11 +249,11 @@ Rectangle {
     Component {
         id: globalContextMenuComponent
         GlobalContextMenu {
-            id: globalContextMenu
         }
     }
 
     Loader {
+        id: globalContextMenu
         sourceComponent: _controller.isMobile ? null : globalContextMenuComponent
     }
 
