@@ -1,9 +1,6 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.1
-
 import Controller 1.0
 import com.kdab.flowpomodoro 1.0
-
 
 Rectangle {
     id: root
@@ -225,16 +222,26 @@ Rectangle {
                 anchors.bottomMargin: _style.marginMedium
                 sourceComponent: _controller.aboutPageRequested ? aboutPageComponent : null
             }
+        }
 
-            BusyIndicator {
-                anchors.left: parent.left
-                anchors.bottom: parent.bottom
-                width: 20 * _controller.dpiFactor
-                anchors.bottomMargin: _style.marginMedium + 2 * _controller.dpiFactor
-                anchors.leftMargin: _style.pageMargin + 2 * _controller.dpiFactor
-                height: width
-                running: _storage.webDAVSyncSupported && _webdavSync.syncInProgress
-                z: 3
+        FontAwesomeIcon {
+            id: spinnerIcon
+            anchors.left: parent.left
+            anchors.verticalCenter: undefined
+            height: contentHeight
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: _style.marginMedium + 2 * _controller.dpiFactor
+            anchors.leftMargin: _style.pageMargin + 2 * _controller.dpiFactor
+            text: "\uf110"
+            z: 3
+            color: "black"
+            visible: _storage.webDAVSyncSupported && _webdavSync.syncInProgress
+            NumberAnimation on rotation {
+                loops: Animation.Infinite
+                from: 0
+                to: 360
+                duration: 1200
+                running: spinnerIcon.visible
             }
         }
     }
