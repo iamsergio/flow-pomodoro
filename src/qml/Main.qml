@@ -297,7 +297,8 @@ Rectangle {
     }
 
     Loader {
-        sourceComponent: _controller.isMobile ? configureContextMenu : null
+        sourceComponent: (_controller.isMobile && _controller.configurePopupRequested) ? configureContextMenu
+                                                                                       : null
         anchors.fill: parent
         z: main.z + 1
     }
