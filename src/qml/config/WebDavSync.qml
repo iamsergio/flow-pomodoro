@@ -23,6 +23,7 @@ Item {
 
         Text {
             text: qsTr("Protocol")
+            font.pixelSize: 12 * _controller.dpiFactor
         }
 
         ComboBox {
@@ -65,6 +66,7 @@ Item {
 
         Text {
             text: qsTr("Host")
+            font.pixelSize: 12 * _controller.dpiFactor
         }
 
         TextField {
@@ -85,6 +87,7 @@ Item {
 
         Text {
             text: qsTr("Path")
+            font.pixelSize: 12 * _controller.dpiFactor
         }
 
         TextField {
@@ -105,6 +108,7 @@ Item {
 
         Text {
             text: qsTr("Port")
+            font.pixelSize: 12 * _controller.dpiFactor
         }
 
         TextField {
@@ -125,6 +129,7 @@ Item {
 
         Text {
             text: qsTr("User")
+            font.pixelSize: 12 * _controller.dpiFactor
         }
 
         TextField {
@@ -145,6 +150,7 @@ Item {
 
         Text {
             text: qsTr("Password")
+            font.pixelSize: 12 * _controller.dpiFactor
         }
 
         TextField {
@@ -187,6 +193,7 @@ Item {
         anchors.rightMargin: _style.marginMedium
         visible: testButton.enabled
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        font.pixelSize: 12 * _controller.dpiFactor
     }
 
     Connections {
@@ -216,6 +223,7 @@ Item {
         anchors.topMargin: _style.marginSmall
         text: qsTr("Url") + ": " + httpsCombo.currentText + "://" + hostField.text + (pathField.text.charAt(0) == "/" ? pathField.text : "/" + pathField.text) + (portField.text ? ":" + portField.text : "")
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        font.pixelSize: 12 * _controller.dpiFactor
     }
 
     Text {
@@ -226,6 +234,7 @@ Item {
         anchors.topMargin: _style.marginSmall
         text: qsTr("Password will be saved in clear-text.")
         visible: passwordField.text
+        font.pixelSize: 12 * _controller.dpiFactor
     }
 
     Text {
@@ -235,5 +244,6 @@ Item {
         anchors.topMargin: _style.marginSmall
         text: qsTr("OpenSSL not supported.")
         visible: !_controller.openSSLSupported
+        font.pixelSize: 12 * _controller.dpiFactor
     }
 }

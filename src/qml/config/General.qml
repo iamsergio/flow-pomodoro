@@ -23,6 +23,7 @@ Item {
 
         Text {
             text: qsTr("Pomodoro duration")
+            font.pixelSize: 12 * _controller.dpiFactor
         }
 
         SpinBox {
@@ -68,6 +69,7 @@ Item {
 
         Text {
             text: qsTr("Disable pomodoro functionality")
+            font.pixelSize: 12 * _controller.dpiFactor
         }
 
         FlowCheckBox {
