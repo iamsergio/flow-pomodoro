@@ -4,7 +4,7 @@ import Controller 1.0
 Item {
     id: root
     anchors.fill: parent
-    visible: _controller.rightClickedTask !== null
+
     ListModel {
         id: menuModel
         ListElement { itemText: "Edit ..."; checkable: false; iconCode: "\uf044" }

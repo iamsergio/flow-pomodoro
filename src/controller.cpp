@@ -623,13 +623,13 @@ void Controller::setCurrentTabTag(Tag *tag)
 
 void Controller::setRightClickedTask(Task *task)
 {
-    if (m_rightClickedTask != task) {
+    //if (m_rightClickedTask != task) { // m_rightClickedTask is a QPointer and task might have been deleted
         m_rightClickedTask = task;
         if (task)
             setTaskContextMenuRequested(true);
 
         emit rightClickedTaskChanged();
-    }
+    //}
 }
 
 void Controller::toggleConfigurePage()
