@@ -47,6 +47,7 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/MainPage.qml       \
                qml/MobileButton.qml \
                qml/MobileMenuBar.qml \
+               qml/MobileOptionsContextMenu.qml \
                qml/MobileStyle.qml \
                qml/MobileTabView.qml  \
                qml/Page.qml           \

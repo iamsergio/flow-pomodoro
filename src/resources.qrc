@@ -27,6 +27,7 @@
     <file>qml/MobileButton.qml</file>
     <file>qml/MobileStyle.qml</file>
     <file>qml/MobileMenuBar.qml</file>
+    <file>qml/MobileOptionsContextMenu.qml</file>
     <file>qml/MobileTabView.qml</file>
     <file>qml/Page.qml</file>
     <file>qml/RegularText.qml</file>
