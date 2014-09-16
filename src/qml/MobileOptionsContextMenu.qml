@@ -5,9 +5,9 @@ Item {
     visible: _controller.optionsContextMenuVisible
     ListModel {
         id: optionsModel
-        ListElement { itemText: "Configure ..."; checkable: false }
-        ListElement { itemText: "About ..."; checkable: false }
-        ListElement { itemText: "Quit"; checkable: false }
+        ListElement { textRole: "Configure ..."; checkableRole: false; iconRole: ""; checkedRole: false }
+        ListElement { textRole: "About ..."; checkableRole: false; iconRole: ""; checkedRole: false }
+        ListElement { textRole: "Quit"; checkableRole: false; iconRole: ""; checkedRole: false }
     }
 
     ChoicePopup {
