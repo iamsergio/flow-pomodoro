@@ -227,6 +227,7 @@ public Q_SLOTS:
 
     void webDavSync();
     void setRightClickedTask(Task *);
+    void toggleConfigurePage();
 
 private Q_SLOTS:
     void onTimerTick();

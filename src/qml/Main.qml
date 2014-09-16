@@ -12,12 +12,6 @@ Rectangle {
     width: 400 * _controller.dpiFactor
     height: _style.contractedHeight + (_controller.expanded ? _style.pageHeight : 0)
 
-    function toggleConfigure()
-    {
-        _controller.currentPage = _controller.currentPage == Controller.ConfigurePage ? Controller.MainPage
-                                                                                      : Controller.ConfigurePage
-    }
-
     FontLoader {
         source: "/fontawesome-webfont.ttf"
     }
@@ -290,7 +284,7 @@ Rectangle {
                 onChoiceClicked: {
                     _controller.optionsContextMenuVisible = false
                     if (index === 0) {
-                        root.toggleConfigure()
+                        _controller.toggleConfigurePage()
                     } else if (index === 1) {
                         _controller.currentPage = Controller.AboutPage
                     } else if (index === 2) {

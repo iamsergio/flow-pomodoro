@@ -632,6 +632,11 @@ void Controller::setRightClickedTask(Task *task)
     }
 }
 
+void Controller::toggleConfigurePage()
+{
+    setCurrentPage(m_page == ConfigurePage ? MainPage : ConfigurePage);
+}
+
 bool Controller::configurePageRequested() const
 {
     return m_configurePageRequested;
