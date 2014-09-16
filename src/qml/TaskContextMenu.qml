@@ -5,28 +5,20 @@ Item {
     id: root
     anchors.fill: parent
 
-    ListModel {
-        id: menuModel
-        ListElement { itemText: "Edit ..."; checkable: false; iconCode: "\uf044" }
-        ListElement { itemText: "Delete"; checkable: false; iconCode: "\uf014" }
-        ListElement { itemText: "ConfigureTags ..."; checkable: false; iconCode: "\uf02b" }
-    }
-
     ChoicePopup {
         anchors.fill: parent
-        model: menuModel
-        secondaryModel: visible ? _controller.rightClickedTask.checkableTagModel : null
+        model: _controller.rightClickedTask === null ? null : _controller.rightClickedTask.contextMenuModel
         title: _controller.rightClickedTask !== null ? _controller.rightClickedTask.summary : ""
         onChoiceClicked: {
-            if (index === 0) {
-                // Edit
+            if (index === TaskContextMenuModel.OptionTypeEdit) {
                 _controller.editTask(_controller.rightClickedTask, Controller.EditModeInline)
-            } else if (index === 1) {
-                // Delete
+            } else if (index ===  TaskContextMenuModel.OptionTypeDelete) {
                 _controller.removeTask(_controller.rightClickedTask)
-            } else if (index === 2) {
+            } else if (index ===  TaskContextMenuModel.OptionTypeNewTag) {
                 _controller.configureTabIndex = Controller.TagsTab
                 _controller.currentPage = Controller.ConfigurePage
+            } else if (index ===  TaskContextMenuModel.OptionTypeQueue) {
+                console.log("TODO")
             } else {
                 console.warn("Unknown index " + index)
             }

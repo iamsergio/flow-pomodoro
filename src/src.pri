@@ -16,6 +16,7 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/tag.cpp \
            $$PWD/tagref.cpp \
            $$PWD/task.cpp \
+           $$PWD/taskcontextmenumodel.cpp \
            $$PWD/taskfilterproxymodel.cpp \
            $$PWD/tooltipcontroller.cpp \
            $$PWD/utils.cpp
@@ -37,7 +38,8 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/syncable.h \
            $$PWD/tag.h \
            $$PWD/tagref.h \
-           $$PWD/task.h            \
+           $$PWD/task.h \
+           $$PWD/taskcontextmenumodel.h \
            $$PWD/taskfilterproxymodel.h \
            $$PWD/tooltipcontroller.h \
            $$PWD/utils.h

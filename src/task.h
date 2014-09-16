@@ -46,6 +46,7 @@ enum SerializerVersion {
 class CheckableTagModel;
 class QAbstractListModel;
 class Storage;
+class TaskContextMenuModel;
 
 class Task : public QObject, public Syncable {
     Q_OBJECT
@@ -58,6 +59,8 @@ class Task : public QObject, public Syncable {
     Q_PROPERTY(bool paused  READ paused  NOTIFY statusChanged STORED false)
     Q_PROPERTY(bool stopped READ stopped NOTIFY statusChanged STORED false)
     Q_PROPERTY(bool running READ running NOTIFY statusChanged STORED false)
+
+    Q_PROPERTY(TaskContextMenuModel* contextMenuModel READ contextMenuModel CONSTANT)
 public:
     typedef QSharedPointer<Task> Ptr;
     typedef GenericListModel<Ptr> List;
@@ -99,6 +102,8 @@ public:
     QVariantMap toJson() const Q_DECL_OVERRIDE;
     void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
 
+    TaskContextMenuModel *contextMenuModel() const;
+
     bool operator==(const Task &other) const;
 
 Q_SIGNALS:
@@ -128,6 +133,7 @@ private:
     QWeakPointer<Task> m_this;
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
+    TaskContextMenuModel *m_contextMenuModel;
 };
 
 #endif

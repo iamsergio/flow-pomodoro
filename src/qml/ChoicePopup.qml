@@ -3,7 +3,6 @@ import QtQuick 2.0
 Item {
     id: root
     property alias model: repeater.model
-    property alias secondaryModel: secondaryRepeater.model // Was too lazy to create a model that agregates CheckableTagModel with a couple of custom items (Edit/Delete)
     property int delegateHeight: _style.choiceDelegateHeight
     property string title: ""
     signal choiceClicked(var index)
@@ -12,14 +11,10 @@ Item {
 
     function modelCount()
     {
-        var count = 0
-        if (typeof model !== "undefined")
-            count += model.count
+        if (model !== null && typeof model !== "undefined")
+            return model.count
 
-        if (typeof secondaryModel !== "undefined")
-            count += secondaryModel.count
-
-        return count
+        return 0
     }
 
     Rectangle {
@@ -71,7 +66,6 @@ Item {
                 anchors.centerIn: parent
                 border.color: "gray"
                 border.width: 1 * _controller.dpiFactor
-                visible: root.model.count > 0
                 radius: 2 * _controller.dpiFactor
 
                 Column {
@@ -117,30 +111,15 @@ Item {
                             anchors.right: column.right
                             topLineVisible: index > 0
                             height: root.delegateHeight
-                            fontAwesomeIconCode: iconCode
+                            fontAwesomeIconCode: iconRole
+                            checked: checkedRole
                             onClicked: {
-                                if (checkable) {
+                                if (checkableRole) {
                                     root.choiceToggled(index)
                                 } else {
                                     mouseArea.choiceClicked(index)
                                 }
                             }
-                        }
-                    }
-
-                    Repeater {
-                        id: secondaryRepeater
-                        model: root.secondaryModel
-                        Choice {
-                            anchors.left: column.left
-                            anchors.right: column.right
-                            height: root.delegateHeight
-                            topLineVisible: true
-                            checked: checkState
-                            onClicked: {
-                                mouseArea.choiceClicked(index + root.model.count)
-                            }
-
                             onToggled: {
                                 root.choiceToggled(checkState, itemText)
                             }

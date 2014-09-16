@@ -6,7 +6,7 @@ Rectangle {
     property bool checked: false
     property string fontAwesomeIconCode: ""
 
-    color: (itemMouseArea.pressed && !checkable) ? "#E3E3E3" : "white"
+    color: (itemMouseArea.pressed && !checkableRole) ? "#E3E3E3" : "white"
     signal clicked()
     signal toggled(bool checkState, string itemText)
 
@@ -26,7 +26,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: icon.visible ? icon.right : parent.left
         anchors.leftMargin: 15 * _controller.dpiFactor
-        text: itemText
+        text: textRole
         font.pixelSize: 17 * _controller.dpiFactor
     }
 
@@ -45,8 +45,8 @@ Rectangle {
         hoverEnabled: true // Otherwise TaskListView will get the hover and show/hide buttons
         anchors.fill: parent
         onClicked: {
-            if (checkable) {
-                root.toggled(!checkState, itemText)
+            if (checkableRole) {
+                root.toggled(!checkedRole, textRole)
             } else {
                 root.clicked()
             }
@@ -55,13 +55,13 @@ Rectangle {
 
     FlowCheckBox {
         id: checkbox
-        visible: checkable
+        visible: checkableRole
         anchors.right: parent.right
         anchors.rightMargin: 5 * _controller.dpiFactor
         anchors.verticalCenter: parent.verticalCenter
         checked: root.checked
         onToggled: {
-            root.toggled(!checkState, itemText)
+            root.toggled(!checkedRole, textRole)
         }
     }
 }

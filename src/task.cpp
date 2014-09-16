@@ -21,6 +21,7 @@
 #include "task.h"
 #include "settings.h"
 #include "checkabletagmodel.h"
+#include "taskcontextmenumodel.h"
 #include "storage.h"
 #include "kernel.h"
 
@@ -84,6 +85,8 @@ void Task::modelSetup(Storage *storage)
         Q_ASSERT(allTagsModel);
         m_checkableTagModel->setSourceModel(allTagsModel);
     }
+
+    m_contextMenuModel = new TaskContextMenuModel(this, this);
 }
 
 Task::Ptr Task::createTask(Storage *storage, const QString &summary)
@@ -312,6 +315,11 @@ void Task::fromJson(const QVariantMap &map)
 
     setTagList(tags);
     blockSignals(false);
+}
+
+TaskContextMenuModel *Task::contextMenuModel() const
+{
+    return m_contextMenuModel;
 }
 
 bool Task::operator==(const Task &other) const
