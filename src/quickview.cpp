@@ -48,11 +48,14 @@ QuickView::QuickView(QQmlEngine *engine)
     rootContext()->setContextProperty("_toolTipController", new ToolTipController(this));
 
     createStyleComponent();
+
+    QString main = m_controller->isMobile() ? "MainMobile.qml" : "MainDesktop.qml";
+
     if (m_useqresources) {
         // So that F5 reloads QML without having to restart the application
-        setSource(QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/Main.qml"));
+        setSource(QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/" + main));
     } else {
-        setSource(QUrl("qrc:/qml/Main.qml"));
+        setSource(QUrl("qrc:/qml/" + main));
     }
     printTimeInfo("QuickView: Set Source END");
 

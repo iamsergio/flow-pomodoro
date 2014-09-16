@@ -40,7 +40,9 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/GlobalContextMenu.qml \
                qml/Popup.qml \
                qml/PushButton.qml \
-               qml/Main.qml           \
+               qml/Main.qml \
+               qml/MainDesktop.qml \
+               qml/MainMobile.qml \
                qml/MainPage.qml       \
                qml/MobileButton.qml \
                qml/MobileMenuBar.qml \

@@ -6,6 +6,7 @@ Rectangle {
     id: root
 
     property string titleText: _controller.currentTitleText
+    property alias topBarItem: topBar.children
 
     radius: 4
     color: "transparent"
@@ -59,119 +60,19 @@ Rectangle {
                 }
             }
 
-            MobileMenuBar {
-                titleText: root.titleText
-                visible: _controller.isMobile
-                anchors.leftMargin: _style.menuBarMargin
-                anchors.rightMargin: _style.menuBarMargin
-                onButtonClicked: {
-                    _controller.requestContextMenu(null) // reset task
-                    _controller.optionsContextMenuVisible = true
-                }
-            }
-
             Item {
-                id: header
-                visible: !_controller.isMobile
-                anchors.top: parent.top
+                id: topBar
                 anchors.left: parent.left
                 anchors.right: parent.right
+                anchors.top: parent.top
                 height: _style.contractedHeight
-
-                FlowSwitch {
-                    id: switchItem
-                    visible: _controller.expanded && _controller.currentPage === Controller.MainPage
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.leftMargin: _style.marginMedium
-                    Binding {
-                        target: _controller
-                        property: "queueType"
-                        value: switchItem.checked ? Controller.QueueTypeArchive
-                                                  : Controller.QueueTypeToday
-                    }
-                }
-
-                Text {
-                    id: titleText
-                    elide: _controller.currentTask.paused ? Text.ElideLeft : Text.ElideRight
-                    color: _style.fontColor
-                    font.pixelSize: _controller.currentTask.stopped ? _style.fontSize : _style.currentTaskFontSize
-                    font.bold: true
-                    anchors.left: switchItem.visible ? switchItem.right : parent.left
-                    anchors.leftMargin: _style.marginMedium
-                    anchors.right: buttonRow.left
-                    anchors.rightMargin: 2 * _controller.dpiFactor
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: switchItem.visible ? 0 : -5 * _controller.dpiFactor
-                    horizontalAlignment: switchItem.visible ? Text.AlignHCenter : Text.AlignLeft
-                    text: root.titleText
-                }
-
-                Text {
-                    id: focusText
-                    text: qsTr("Click here to start focusing")
-                    font.bold: false
-                    font.pixelSize: _style.clickHereFontSize
-                    color: _style.clickHereFontColor
-                    visible: _controller.currentTask.stopped && !_controller.expanded
-                    anchors.left: titleText.left
-                    anchors.leftMargin: _style.marginSmall
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: _style.marginSmall
-                }
-
-                Row {
-                    z: 2
-                    id: buttonRow
-                    anchors.right: parent.right
-                    anchors.topMargin: 4 * _controller.dpiFactor
-                    anchors.bottomMargin: 4 * _controller.dpiFactor
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: circularIndicator.mousePressed ? _style.marginMedium - 2 * _controller.dpiFactor
-                                                                        :  _style.marginMedium
-                    spacing: _style.buttonsSpacing
-
-                    FontAwesomeIcon {
-                        id: addIcon
-                        text: "\uf055" // "\uf0fe"
-                        size: 30
-                        anchors.verticalCenter: parent.verticalCenter
-                        toolTip: qsTr("Add new task")
-                        visible: _controller.expanded
-                        color: "white"
-                        onClicked: {
-                            _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
-                        }
-                    }
-
-                    FlowCircularProgressIndicator {
-                        id: circularIndicator
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        anchors.margins: (mousePressed ? 3 : 5) * _controller.dpiFactor
-                    }
-
-                    FontAwesomeIcon {
-                        id: configureIcon
-                        anchors.verticalCenter: buttonRow.verticalCenter
-                        toolTip: qsTr("Configure")
-                        visible: _controller.expanded
-                        text: "\uf013"
-                        size: 30
-                        onClicked: {
-                            _controller.currentPage = _controller.currentPage == Controller.ConfigurePage ? Controller.MainPage
-                                                                                                          : Controller.ConfigurePage
-                        }
-                    }
-                }
+                z: 4
             }
 
             MainPage {
                 z: 2
                 id: mainPage
-                anchors.top: header.bottom
+                anchors.top: topBar.bottom
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: _style.marginMedium
             }
@@ -192,7 +93,7 @@ Rectangle {
 
             Loader {
                 // Loader for startup performance optimization on mobile
-                anchors.top: header.bottom
+                anchors.top: topBar.bottom
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -205,7 +106,7 @@ Rectangle {
                 z: 2
                 id: aboutPage
                 // Loader for startup performance optimization on mobile
-                anchors.top: header.bottom
+                anchors.top: topBar.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
@@ -237,17 +138,6 @@ Rectangle {
     }
 
     Component {
-        id: globalContextMenuComponent
-        GlobalContextMenu {
-        }
-    }
-
-    Loader {
-        id: globalContextMenu
-        sourceComponent: _controller.isMobile ? null : globalContextMenuComponent
-    }
-
-    Component {
         id: taskContextMenuComponent
         TaskContextMenu {
             id: taskContextMenu
@@ -260,45 +150,5 @@ Rectangle {
         anchors.fill: parent
         sourceComponent: _controller.taskContextMenuRequested ? taskContextMenuComponent
                                                               : null
-    }
-
-    Component {
-        id: configureContextMenu
-        Item {
-            anchors.fill: parent
-            visible: _controller.optionsContextMenuVisible
-            ListModel {
-                id: optionsModel
-                ListElement { itemText: "Configure ..."; checkable: false }
-                ListElement { itemText: "About ..."; checkable: false }
-                ListElement { itemText: "Quit"; checkable: false }
-            }
-
-            ChoicePopup {
-                anchors.fill: parent
-                model: optionsModel
-                onChoiceClicked: {
-                    _controller.optionsContextMenuVisible = false
-                    if (index === 0) {
-                        _controller.toggleConfigurePage()
-                    } else if (index === 1) {
-                        _controller.currentPage = Controller.AboutPage
-                    } else if (index === 2) {
-                        Qt.quit()
-                    }
-                }
-
-                onDismissPopup: {
-                    _controller.optionsContextMenuVisible = false
-                }
-            }
-        }
-    }
-
-    Loader {
-        sourceComponent: (_controller.isMobile && _controller.configurePopupRequested) ? configureContextMenu
-                                                                                       : null
-        anchors.fill: parent
-        z: main.z + 1
     }
 }
