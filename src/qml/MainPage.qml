@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import Controller 1.0
-import QtGraphicalEffects 1.0
 
 Page {
     id: root
@@ -40,32 +39,9 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
+            height: _style.tagTabHeight
             sourceComponent:  _controller.archiveRequested ? Qt.createComponent("DecentTabView.qml")
                                                            : null
-        }
-
-        LinearGradient {
-            id: rightScrollIndicator
-            anchors.fill: tabView
-            visible: !tabView.atXEnd && tabView.visible
-            start: Qt.point(tabView.width - _style.tagScrollIndicatorFadeWidth, 0)
-            end: Qt.point(tabView.width, 0)
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: "transparent" }
-                GradientStop { position: 1.0; color: _style.queueBackgroundColor }
-            }
-        }
-
-        LinearGradient {
-            id: leftScrollIndicator
-            visible: !tabView.atXBeginning && tabView.visible
-            anchors.fill: tabView
-            start: Qt.point(0, 0)
-            end: Qt.point(_style.tagScrollIndicatorFadeWidth, 0)
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: _style.queueBackgroundColor }
-                GradientStop { position: 1.0; color: "transparent" }
-            }
         }
 
         Component {
