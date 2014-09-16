@@ -65,6 +65,8 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_inlineEditorRequested(false)
     , m_questionPopupRequested(false)
     , m_configurePopupRequested(false)
+    , m_taskContextMenuRequested(false)
+    , m_archiveRequested(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -426,6 +428,10 @@ void Controller::setQueueType(QueueType type)
 {
     if (type != m_queueType) {
         m_queueType = type;
+
+        if (type == QueueTypeArchive)
+            setArchiveRequested(true);
+
         emit queueTypeChanged();
         emit currentTitleTextChanged();
     }
@@ -616,12 +622,13 @@ void Controller::setCurrentTabTag(Tag *tag)
 
 void Controller::setRightClickedTask(Task *task)
 {
-    // We don't have a way to detect when the context menu is closed (QtQuick.Controls bug?)
-    // So comment the guards so we can click on the same task twice.
-    //if (m_rightClickedTask != task) {
+    if (m_rightClickedTask != task) {
         m_rightClickedTask = task;
+        if (task)
+            setTaskContextMenuRequested(true);
+
         emit rightClickedTaskChanged();
-        //}
+    }
 }
 
 bool Controller::configurePageRequested() const
@@ -661,6 +668,22 @@ void Controller::setConfigurePopupRequested(bool requested)
     }
 }
 
+void Controller::setTaskContextMenuRequested(bool requested)
+{
+    if (requested != m_taskContextMenuRequested) {
+        m_taskContextMenuRequested = requested;
+        emit taskContextMenuRequestedChanged();
+    }
+}
+
+void Controller::setArchiveRequested(bool requested)
+{
+    if (requested != m_archiveRequested) {
+        m_archiveRequested = requested;
+        emit archiveRequestedChanged();
+    }
+}
+
 bool Controller::aboutPageRequested() const
 {
     return m_aboutPageRequested;
@@ -676,9 +699,19 @@ bool Controller::questionPopupRequested() const
     return m_questionPopupRequested;
 }
 
+bool Controller::taskContextMenuRequested() const
+{
+   return m_taskContextMenuRequested;
+}
+
 bool Controller::configurePopupRequested() const
 {
     return m_configurePopupRequested;
+}
+
+bool Controller::archiveRequested() const
+{
+    return m_archiveRequested;
 }
 
 void Controller::setAboutPageRequested(bool requested)

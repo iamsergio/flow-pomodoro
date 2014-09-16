@@ -23,13 +23,21 @@ Page {
             emptyText: qsTr("No queued tasks for today.") + "\n"+ qsTr("Please create new ones or pick some from your archive.")
         }
 
-        DecentTabView {
+        Component {
+            id: decentTabViewComponent
+            DecentTabView { }
+        }
+
+        Loader {
             id: tabView
+            // Delayed loading for startup performance improvement
             visible: _controller.queueType !== Controller.QueueTypeToday
             anchors.margins: _style.marginSmall
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
+            sourceComponent:  _controller.archiveRequested ? decentTabViewComponent
+                                                           : null
         }
 
         LinearGradient {

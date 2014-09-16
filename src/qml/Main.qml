@@ -257,10 +257,19 @@ Rectangle {
         sourceComponent: _controller.isMobile ? null : globalContextMenuComponent
     }
 
-    TaskContextMenu {
-        id: taskContextMenu
-        enabled: !_controller.popupVisible
-        visible: _controller.rightClickedTask !== null
+    Component {
+        id: taskContextMenuComponent
+        TaskContextMenu {
+            id: taskContextMenu
+            enabled: !_controller.popupVisible
+            visible: _controller.rightClickedTask !== null
+        }
+    }
+
+    Loader {
+        anchors.fill: parent
+        sourceComponent: _controller.taskContextMenuRequested ? taskContextMenuComponent
+                                                              : null
     }
 
     Component {

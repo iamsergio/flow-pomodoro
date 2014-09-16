@@ -77,6 +77,8 @@ class Controller : public QObject {
     Q_PROPERTY(bool inlineEditorRequested READ inlineEditorRequested NOTIFY inlineEditorRequestedChanged)
     Q_PROPERTY(bool questionPopupRequested READ questionPopupRequested NOTIFY questionPopupRequestedChanged)
     Q_PROPERTY(bool configurePopupRequested READ configurePopupRequested NOTIFY configurePopupRequestedChanged)
+    Q_PROPERTY(bool taskContextMenuRequested READ taskContextMenuRequested NOTIFY taskContextMenuRequestedChanged)
+    Q_PROPERTY(bool archiveRequested READ archiveRequested NOTIFY archiveRequestedChanged)
 
 public:
     enum Page {
@@ -190,8 +192,9 @@ public:
     bool aboutPageRequested() const;
     bool inlineEditorRequested() const;
     bool questionPopupRequested() const;
-
+    bool taskContextMenuRequested() const;
     bool configurePopupRequested() const;
+    bool archiveRequested() const;
 
 public Q_SLOTS:
     void updateWebDavCredentials();
@@ -257,6 +260,8 @@ Q_SIGNALS:
     void inlineEditorRequestedChanged();
     void questionPopupRequestedChanged();
     void configurePopupRequestedChanged();
+    void taskContextMenuRequestedChanged();
+    void archiveRequestedChanged();
 
     // webdav stuff
     void hostChanged();
@@ -279,6 +284,8 @@ private:
     void setInlineEditorRequested(bool);
     void setQuestionPopupRequested(bool);
     void setConfigurePopupRequested(bool);
+    void setTaskContextMenuRequested(bool);
+    void setArchiveRequested(bool);
 
     int m_currentTaskDuration;
     QTimer *m_tickTimer;
@@ -321,6 +328,8 @@ private:
     bool m_inlineEditorRequested;
     bool m_questionPopupRequested;
     bool m_configurePopupRequested;
+    bool m_taskContextMenuRequested;
+    bool m_archiveRequested;
 };
 
 #endif
