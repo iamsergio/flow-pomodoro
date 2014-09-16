@@ -67,6 +67,7 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_configurePopupRequested(false)
     , m_taskContextMenuRequested(false)
     , m_archiveRequested(false)
+    , m_taskListRequested(true)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -684,6 +685,14 @@ void Controller::setArchiveRequested(bool requested)
     }
 }
 
+void Controller::setTaskListRequested(bool requested)
+{
+    if (requested != m_taskListRequested) {
+        m_taskListRequested = requested;
+        emit taskListRequestedChanged();
+    }
+}
+
 bool Controller::aboutPageRequested() const
 {
     return m_aboutPageRequested;
@@ -712,6 +721,11 @@ bool Controller::configurePopupRequested() const
 bool Controller::archiveRequested() const
 {
     return m_archiveRequested;
+}
+
+bool Controller::taskListRequested() const
+{
+    return m_taskListRequested;
 }
 
 void Controller::setAboutPageRequested(bool requested)

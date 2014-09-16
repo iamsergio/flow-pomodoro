@@ -79,6 +79,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool configurePopupRequested READ configurePopupRequested NOTIFY configurePopupRequestedChanged)
     Q_PROPERTY(bool taskContextMenuRequested READ taskContextMenuRequested NOTIFY taskContextMenuRequestedChanged)
     Q_PROPERTY(bool archiveRequested READ archiveRequested NOTIFY archiveRequestedChanged)
+    Q_PROPERTY(bool taskListRequested READ taskListRequested NOTIFY taskListRequestedChanged)
 
 public:
     enum Page {
@@ -195,6 +196,7 @@ public:
     bool taskContextMenuRequested() const;
     bool configurePopupRequested() const;
     bool archiveRequested() const;
+    bool taskListRequested() const;
 
 public Q_SLOTS:
     void updateWebDavCredentials();
@@ -262,6 +264,7 @@ Q_SIGNALS:
     void configurePopupRequestedChanged();
     void taskContextMenuRequestedChanged();
     void archiveRequestedChanged();
+    void taskListRequestedChanged();
 
     // webdav stuff
     void hostChanged();
@@ -286,6 +289,7 @@ private:
     void setConfigurePopupRequested(bool);
     void setTaskContextMenuRequested(bool);
     void setArchiveRequested(bool);
+    void setTaskListRequested(bool);
 
     int m_currentTaskDuration;
     QTimer *m_tickTimer;
@@ -330,6 +334,7 @@ private:
     bool m_configurePopupRequested;
     bool m_taskContextMenuRequested;
     bool m_archiveRequested;
+    bool m_taskListRequested;
 };
 
 #endif

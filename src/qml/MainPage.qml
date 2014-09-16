@@ -11,21 +11,30 @@ Page {
         anchors.fill: parent
         radius: parent.radius
 
-        TaskListView {
-            id: stagedView
-            model: _storage.stagedTasksModel
-            anchors.topMargin: _style.marginSmall
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            visible: _controller.queueType === Controller.QueueTypeToday
-            emptyText: qsTr("No queued tasks for today.") + "\n"+ qsTr("Please create new ones or pick some from your archive.")
+        Component {
+            id: taskListComponent
+            TaskListView {
+                id: stagedView
+                model: _storage.stagedTasksModel
+                emptyText: qsTr("No queued tasks for today.") + "\n"+ qsTr("Please create new ones or pick some from your archive.")
+            }
         }
 
         Component {
             id: decentTabViewComponent
             DecentTabView { }
+        }
+
+        Loader {
+            anchors.topMargin: _style.marginSmall
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            asynchronous: true
+            visible: _controller.queueType === Controller.QueueTypeToday
+            sourceComponent: _controller.taskListRequested ? taskListComponent
+                                                           : null
         }
 
         Loader {
@@ -64,17 +73,25 @@ Page {
             }
         }
 
-        TaskListView {
-            id: archiveView
-            visible: tabView.visible
-            model: _controller.currentTabTag == null ? _storage.untaggedTasksModel : _controller.currentTabTag.taskModel
+        Component {
+            id: archiveViewComponent
+            TaskListView {
+                id: archiveView
+                model: _controller.currentTabTag == null ? _storage.untaggedTasksModel : _controller.currentTabTag.taskModel
+                emptyText: _controller.currentTabTag == null ? qsTr("No archived untagged tasks found.")
+                                                             : qsTr("No archived tasks found with tag %1").arg(_controller.currentTabTag.name)
+            }
+        }
+
+        Loader {
             anchors.topMargin: _style.marginMedium
             anchors.top: tabView.bottom
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            emptyText: _controller.currentTabTag == null ? qsTr("No archived untagged tasks found.")
-                                                         : qsTr("No archived tasks found with tag %1").arg(_controller.currentTabTag.name)
+            visible: tabView.visible
+            sourceComponent: _controller.archiveRequested ? archiveViewComponent
+                                                          : null
         }
     }
 }
