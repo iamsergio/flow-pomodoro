@@ -20,11 +20,6 @@ Page {
             }
         }
 
-        Component {
-            id: decentTabViewComponent
-            DecentTabView { }
-        }
-
         Loader {
             anchors.topMargin: _style.marginSmall
             anchors.left: parent.left
@@ -45,7 +40,7 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
-            sourceComponent:  _controller.archiveRequested ? decentTabViewComponent
+            sourceComponent:  _controller.archiveRequested ? Qt.createComponent("DecentTabView.qml")
                                                            : null
         }
 
