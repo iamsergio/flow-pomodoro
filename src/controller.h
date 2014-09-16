@@ -291,6 +291,7 @@ private:
     void setTaskContextMenuRequested(bool);
     void setArchiveRequested(bool);
     void setTaskListRequested(bool);
+    bool useDelayedLoading() const;
 
     int m_currentTaskDuration;
     QTimer *m_tickTimer;

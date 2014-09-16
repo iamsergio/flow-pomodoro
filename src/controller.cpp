@@ -60,13 +60,13 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_port(80)
     , m_isHttps(false)
     , m_optionsContextMenuVisible(false)
-    , m_configurePageRequested(false)
-    , m_aboutPageRequested(false)
-    , m_inlineEditorRequested(false)
-    , m_questionPopupRequested(false)
-    , m_configurePopupRequested(false)
-    , m_taskContextMenuRequested(false)
-    , m_archiveRequested(false)
+    , m_configurePageRequested(!useDelayedLoading())
+    , m_aboutPageRequested(!useDelayedLoading())
+    , m_inlineEditorRequested(!useDelayedLoading())
+    , m_questionPopupRequested(!useDelayedLoading())
+    , m_configurePopupRequested(!useDelayedLoading())
+    , m_taskContextMenuRequested(!useDelayedLoading())
+    , m_archiveRequested(!useDelayedLoading())
     , m_taskListRequested(true)
 {
     m_tickTimer = new QTimer(this);
@@ -696,6 +696,11 @@ void Controller::setTaskListRequested(bool requested)
         m_taskListRequested = requested;
         emit taskListRequestedChanged();
     }
+}
+
+bool Controller::useDelayedLoading() const
+{
+    return isMobile();
 }
 
 bool Controller::aboutPageRequested() const
