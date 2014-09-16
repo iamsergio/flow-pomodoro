@@ -5,6 +5,10 @@ import com.kdab.flowpomodoro 1.0
 Main {
     id: root
 
+    onRequestGlobalContextMenu: {
+        globalContextMenu.popup()
+    }
+
     topBarItem:
         Item {
         id: header

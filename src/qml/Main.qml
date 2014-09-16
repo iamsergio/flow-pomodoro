@@ -7,6 +7,7 @@ Rectangle {
 
     property string titleText: _controller.currentTitleText
     property alias topBarItem: topBar.children
+    signal requestGlobalContextMenu()
 
     radius: 4
     color: "transparent"
@@ -55,7 +56,7 @@ Rectangle {
                 } else if (mouse.button === Qt.RightButton) {
                     if (_controller.editMode === Controller.EditModeNone) {
                         _controller.requestContextMenu(null) // reset task
-                        globalContextMenu.item.popup()
+                        root.requestGlobalContextMenu()
                     }
                 }
             }
