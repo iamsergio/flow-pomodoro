@@ -160,6 +160,17 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             spacing: _style.buttonsSpacing
 
+            /*FontAwesomeIcon {
+                id: deleteIcon
+                toolTip: qsTr("Delete task")
+                size: 30
+                text: "\uf014"
+                visible: root.buttonsVisible
+                onClicked: {
+                    _controller.removeTask(taskObj)
+                }
+            }*/
+
             FontAwesomeIcon {
                 id: archiveIcon
                 toolTip: (taskObj !== null && taskObj.staged) ? qsTr("Archive task") : qsTr("Queue for today")
