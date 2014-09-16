@@ -12,10 +12,6 @@ Rectangle {
     width: 400 * _controller.dpiFactor
     height: _style.contractedHeight + (_controller.expanded ? _style.pageHeight : 0)
 
-    FontLoader {
-        source: "/fontawesome-webfont.ttf"
-    }
-
     Connections {
         target: _controller
         onExpandedChanged: {

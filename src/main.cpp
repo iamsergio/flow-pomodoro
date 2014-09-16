@@ -33,6 +33,7 @@ typedef QGuiApplication Application;
 #endif
 
 #include <QDebug>
+#include <QFontDatabase>
 
 #ifdef FLOW_DBUS
 # include <QDBusConnection>
@@ -113,6 +114,8 @@ int main(int argc, char *argv[])
     printTimeInfo("main: created QApplication");
     app.setOrganizationName("KDAB");
     app.setApplicationName("flow");
+
+    QFontDatabase::addApplicationFont(":/fontawesome-webfont.ttf");
 
     QTranslator translator;
     translator.load(QString(":/translations/flow_%1").arg(QLocale::system().name())); // export LANG="pt_PT" to change
