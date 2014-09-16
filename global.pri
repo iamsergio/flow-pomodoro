@@ -15,7 +15,7 @@ INCLUDEPATH += src
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
-CONFIG += debug c++11
+CONFIG += c++11
 
 # Features:
 DEFINES += NO_WEBDAV # Will uncomment when UI is ready

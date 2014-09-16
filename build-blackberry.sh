@@ -2,7 +2,7 @@
 
 mkdir build_dir-blackberry &> /dev/null
 cd build_dir-blackberry
-qmake ../flow.pro
+qmake CONFIG+=release ../flow.pro
 make -j8
 
 echo "Making package..."
