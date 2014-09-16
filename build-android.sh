@@ -1,11 +1,11 @@
 #!/bin/sh
 
 # Source android env, change this to your script:
-source /data/qt5-android-5.3.source debug
+source /data/qt5-android-5.3.source
 
 mkdir build_dir-android &> /dev/null
 cd build_dir-android
-qmake ../flow.pro
+qmake CONFIG+=release ../flow.pro
 make -j8
 make install INSTALL_ROOT=android-build
 
