@@ -68,6 +68,7 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_taskContextMenuRequested(!useDelayedLoading())
     , m_archiveRequested(!useDelayedLoading())
     , m_taskListRequested(true)
+    , m_startupFinished(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -92,6 +93,7 @@ Controller::Controller(QQmlContext *context, Storage *storage,
             Qt::QueuedConnection);
 
     qApp->installEventFilter(this);
+    QMetaObject::invokeMethod(this, "setStartupFinished", Qt::QueuedConnection);
 }
 
 Controller::~Controller()
@@ -703,6 +705,12 @@ bool Controller::useDelayedLoading() const
     return isMobile();
 }
 
+void Controller::setStartupFinished()
+{
+    m_startupFinished = true;
+    emit startupFinishedChanged();
+}
+
 bool Controller::aboutPageRequested() const
 {
     return m_aboutPageRequested;
@@ -736,6 +744,11 @@ bool Controller::archiveRequested() const
 bool Controller::taskListRequested() const
 {
     return m_taskListRequested;
+}
+
+bool Controller::startupFinished() const
+{
+    return m_startupFinished;
 }
 
 void Controller::setAboutPageRequested(bool requested)

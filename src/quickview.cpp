@@ -49,8 +49,9 @@ QuickView::QuickView(QQmlEngine *engine)
 
     createStyleComponent();
 
-    QString main = m_controller->isMobile() ? "MainMobile.qml" : "MainDesktop.qml";
+    QString main = m_controller->isMobile() ? "LoadingScreen.qml" : "MainDesktop.qml";
 
+    printTimeInfo("QuickView: Set Source START");
     if (m_useqresources) {
         // So that F5 reloads QML without having to restart the application
         setSource(QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/" + main));

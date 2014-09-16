@@ -80,6 +80,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool taskContextMenuRequested READ taskContextMenuRequested NOTIFY taskContextMenuRequestedChanged)
     Q_PROPERTY(bool archiveRequested READ archiveRequested NOTIFY archiveRequestedChanged)
     Q_PROPERTY(bool taskListRequested READ taskListRequested NOTIFY taskListRequestedChanged)
+    Q_PROPERTY(bool startupFinished READ startupFinished NOTIFY startupFinishedChanged)
 
 public:
     enum Page {
@@ -197,6 +198,7 @@ public:
     bool configurePopupRequested() const;
     bool archiveRequested() const;
     bool taskListRequested() const;
+    bool startupFinished() const;
 
 public Q_SLOTS:
     void updateWebDavCredentials();
@@ -231,6 +233,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void onTimerTick();
+    void setStartupFinished();
 
 Q_SIGNALS:
     void pomodoroFunctionalityDisabledChanged();
@@ -266,6 +269,7 @@ Q_SIGNALS:
     void taskContextMenuRequestedChanged();
     void archiveRequestedChanged();
     void taskListRequestedChanged();
+    void startupFinishedChanged();
 
     // webdav stuff
     void hostChanged();
@@ -337,6 +341,7 @@ private:
     bool m_taskContextMenuRequested;
     bool m_archiveRequested;
     bool m_taskListRequested;
+    bool m_startupFinished;
 };
 
 #endif

@@ -23,16 +23,9 @@ Rectangle {
         }
     }
 
-    Component {
-        id: questionPopupComponent
-        QuestionPopup {
-            anchors.fill: parent
-        }
-    }
-
     Loader {
         // Delayed loading for startup performance on mobile
-        sourceComponent: _controller.questionPopupRequested ? questionPopupComponent : null
+        sourceComponent: _controller.questionPopupRequested ? Qt.createComponent("QuestionPopup.qml") : null
         anchors.fill: parent
         z: main.z + 1
     }
@@ -78,20 +71,6 @@ Rectangle {
                 anchors.bottomMargin: _style.marginMedium
             }
 
-            Component {
-                id: configurePageComponent
-                ConfigurePage {
-                    anchors.fill: parent
-                }
-            }
-
-            Component {
-                id: aboutPageComponent
-                AboutPage {
-                    anchors.fill: parent
-                }
-            }
-
             Loader {
                 // Loader for startup performance optimization on mobile
                 anchors.top: topBar.bottom
@@ -99,7 +78,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottomMargin: _style.marginMedium
-                sourceComponent: _controller.configurePageRequested ? configurePageComponent : null
+                sourceComponent: _controller.configurePageRequested ? Qt.createComponent("ConfigurePage.qml") : null
                 z: 2
             }
 
@@ -112,7 +91,7 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: _style.marginMedium
-                sourceComponent: _controller.aboutPageRequested ? aboutPageComponent : null
+                sourceComponent: _controller.aboutPageRequested ? Qt.createComponent("AboutPage.qml") : null
             }
         }
 
@@ -138,18 +117,11 @@ Rectangle {
         }
     }
 
-    Component {
-        id: taskContextMenuComponent
-        TaskContextMenu {
-            id: taskContextMenu
-            enabled: !_controller.popupVisible
-            visible: _controller.rightClickedTask !== null
-        }
-    }
-
     Loader {
         anchors.fill: parent
-        sourceComponent: _controller.taskContextMenuRequested ? taskContextMenuComponent
+        enabled: !_controller.popupVisible
+        visible: _controller.rightClickedTask !== null
+        sourceComponent: _controller.taskContextMenuRequested ? Qt.createComponent("TaskContextMenu.qml")
                                                               : null
     }
 }

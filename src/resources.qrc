@@ -19,6 +19,7 @@
     <file>qml/Popup.qml</file>
     <file>qml/PushButton.qml</file>
     <file>qml/QuestionPopup.qml</file>
+    <file>qml/LoadingScreen.qml</file>
     <file>qml/Main.qml</file>
     <file>qml/MainDesktop.qml</file>
     <file>qml/MainMobile.qml</file>
