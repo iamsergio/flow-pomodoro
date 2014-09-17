@@ -4,6 +4,7 @@ import com.kdab.flowpomodoro 1.0
 
 Main {
     id: root
+    anchors.fill: parent
     topBarItem:
         MobileMenuBar {
         titleText: root.titleText

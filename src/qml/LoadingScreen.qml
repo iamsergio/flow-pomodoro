@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Rectangle {
     id: root
-    color: "yellow"
+    color: _style.queueBackgroundColor
 
     Loader {
         id: loader

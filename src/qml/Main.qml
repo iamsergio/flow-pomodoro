@@ -9,7 +9,7 @@ Rectangle {
     property alias topBarItem: topBar.children
     signal requestGlobalContextMenu()
 
-    radius: 4
+    radius: _controller.isMobile ? 0 : 4
     color: "transparent"
     width: 400 * _controller.dpiFactor
     height: _style.contractedHeight + (_controller.expanded ? _style.pageHeight : 0)

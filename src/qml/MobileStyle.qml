@@ -6,6 +6,7 @@ DefaultStyle {
     pageMargin: 0
     fontColor: "#F3F3F3"
 
+    backgroundColor: "transparent"
     tagTabHeight: 35 * _controller.dpiFactor
     tagTabWidth: 80 * _controller.dpiFactor
     choiceDelegateHeight: 45 * _controller.dpiFactor
