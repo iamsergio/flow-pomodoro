@@ -35,13 +35,13 @@ Item {
 
             FontAwesomeIcon {
                 id: iconItem
-                size: 55
+                size: 45
                 color: "black"
                 text: root.icon
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.topMargin: 30 * _controller.dpiFactor
-                anchors.leftMargin: 30 * _controller.dpiFactor
+                anchors.topMargin: 15 * _controller.dpiFactor
+                anchors.leftMargin: 15 * _controller.dpiFactor
                 anchors.verticalCenter: undefined
             }
 
@@ -50,7 +50,7 @@ Item {
                 anchors.top: parent.top
                 anchors.topMargin: 15 * _controller.dpiFactor
                 anchors.left: iconItem.right
-                anchors.leftMargin: 10 * _controller.dpiFactor
+                anchors.leftMargin: 5 * _controller.dpiFactor
                 anchors.right: parent.right
             }
 
