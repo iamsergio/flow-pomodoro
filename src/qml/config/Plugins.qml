@@ -14,6 +14,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         wrapMode: Text.WordWrap
+        font.pixelSize: 13 * _controller.dpiFactor
         text: qsTr("Plugins disable certain distractions when a task is running. Distractions are re-enabled when the task stops.") +
               "\n" + (_pluginModel.count > 0 ? qsTr("The following plugins were found:") : "")
     }
@@ -23,6 +24,7 @@ Item {
         anchors.centerIn: parent
         text: qsTr("no plugins were found")
         horizontalAlignment: Text.AlignHCenter
+        font.pixelSize: 13 * _controller.dpiFactor
     }
 
     ListView {
