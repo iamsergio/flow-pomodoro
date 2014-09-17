@@ -3,6 +3,7 @@ import QtQuick 2.0
 Popup {
     id: root
     visible: _controller.popupVisible
+    icon: "\uf059"
 
     contentItem:
     Item {
@@ -17,6 +18,7 @@ Popup {
             font.pixelSize: _style.dialogFontSize
             wrapMode: Text.WordWrap
             text: _controller.popupText
+            horizontalAlignment: Text.AlignHCenter
         }
     }
 }

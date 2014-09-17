@@ -3,6 +3,7 @@ import QtQuick 2.0
 Item {
     id: root
     property alias contentItem: contentItem.children
+    property alias icon: iconItem.text
 
     signal clicked()
 
@@ -32,9 +33,25 @@ Item {
             color: "white"
             z : borderImage.z + 1
 
+            FontAwesomeIcon {
+                id: iconItem
+                size: 55
+                color: "black"
+                text: root.icon
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.topMargin: 30 * _controller.dpiFactor
+                anchors.leftMargin: 30 * _controller.dpiFactor
+                anchors.verticalCenter: undefined
+            }
+
             Item {
                 id: contentItem
-                anchors.fill: parent
+                anchors.top: parent.top
+                anchors.topMargin: 15 * _controller.dpiFactor
+                anchors.left: iconItem.right
+                anchors.leftMargin: 10 * _controller.dpiFactor
+                anchors.right: parent.right
             }
 
             Row {
