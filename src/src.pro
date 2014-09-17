@@ -49,7 +49,8 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/MobileMenuBar.qml \
                qml/MobileOptionsContextMenu.qml \
                qml/MobileStyle.qml \
-               qml/MobileTabView.qml  \
+               qml/MobileTabView.qml \
+               qml/NewTagDialog.qml \
                qml/Page.qml           \
                qml/QuestionPopup.qml  \
                qml/RegularText.qml    \

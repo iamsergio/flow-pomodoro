@@ -5,7 +5,7 @@ Item {
     property alias contentItem: contentItem.children
     property alias icon: iconItem.text
 
-    signal clicked()
+    signal clicked(bool okClicked)
 
     onVisibleChanged: {
         if (visible)
@@ -52,6 +52,7 @@ Item {
                 anchors.left: iconItem.right
                 anchors.leftMargin: 5 * _controller.dpiFactor
                 anchors.right: parent.right
+                anchors.bottom: row.top
             }
 
             Row {
@@ -65,7 +66,7 @@ Item {
                     id: buttonOk
                     text: qsTr("OK")
                     onClicked: {
-                        _controller.onPopupButtonClicked(true)
+                        root.clicked(true)
                     }
                 }
 
@@ -73,7 +74,7 @@ Item {
                     id: buttonCancel
                     text: qsTr("Cancel")
                     onClicked: {
-                        _controller.onPopupButtonClicked(false)
+                        root.clicked(false)
                     }
                 }
             }

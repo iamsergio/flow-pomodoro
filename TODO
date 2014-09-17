@@ -13,9 +13,6 @@
 - Put on playstores
 - Need icon
 - When editing a task, show it on top, so it's visible
-- Finish InputDialog.qml
-- Icons for QuestionDialog and InputDialog
-- Replace "Configure Tags" with "Create New Tag"
 
 Future TODOs:
 -------------
@@ -25,3 +22,4 @@ Future TODOs:
 - Import from flat-file
 - Fullscreen pomodoro indicator on mobile
 - Pre-compile qml
+- Grep for TODOs

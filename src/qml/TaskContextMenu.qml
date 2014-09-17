@@ -15,14 +15,15 @@ Item {
             } else if (index ===  TaskContextMenuModel.OptionTypeDelete) {
                 _controller.removeTask(_controller.rightClickedTask)
             } else if (index ===  TaskContextMenuModel.OptionTypeNewTag) {
-                _controller.configureTabIndex = Controller.TagsTab
-                _controller.currentPage = Controller.ConfigurePage
+                _controller.newTagDialogVisible = true
             } else if (index ===  TaskContextMenuModel.OptionTypeQueue) {
                 _controller.rightClickedTask.staged = !_controller.rightClickedTask.staged
             } else {
                 console.warn("Unknown index " + index)
             }
-            _controller.setRightClickedTask(null)
+
+            if (index !== TaskContextMenuModel.OptionTypeNewTag)
+                _controller.setRightClickedTask(null)
         }
 
         onChoiceToggled: {

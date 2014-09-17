@@ -7,7 +7,7 @@ Rectangle {
     property string fontAwesomeIconCode: ""
 
     color: (itemMouseArea.pressed && !checkableRole) ? "#E3E3E3" : "white"
-    signal clicked()
+    signal clicked(bool dismiss)
     signal toggled(bool checkState, string itemText)
 
     Text {
@@ -48,7 +48,7 @@ Rectangle {
             if (checkableRole) {
                 root.toggled(!checkedRole, textRole)
             } else {
-                root.clicked()
+                root.clicked(dismissRole)
             }
         }
     }

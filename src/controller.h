@@ -70,6 +70,7 @@ class Controller : public QObject {
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
     Q_PROPERTY(QString currentTitleText READ currentTitleText NOTIFY currentTitleTextChanged)
     Q_PROPERTY(QString version READ version CONSTANT)
+    Q_PROPERTY(bool newTagDialogVisible READ newTagDialogVisible WRITE setNewTagDialogVisible NOTIFY newTagDialogVisibleChanged)
 
     Q_PROPERTY(bool optionsContextMenuVisible READ optionsContextMenuVisible WRITE setOptionsContextMenuVisible NOTIFY optionsContextMenuVisibleChanged)
     Q_PROPERTY(bool configurePageRequested READ configurePageRequested NOTIFY configurePageRequestedChanged)
@@ -189,6 +190,7 @@ public:
 
     bool optionsContextMenuVisible() const;
     void setOptionsContextMenuVisible(int);
+    bool newTagDialogVisible() const;
 
     bool configurePageRequested() const;
     bool aboutPageRequested() const;
@@ -199,6 +201,7 @@ public:
     bool archiveRequested() const;
     bool taskListRequested() const;
     bool startupFinished() const;
+    void setNewTagDialogVisible(bool visible);
 
 public Q_SLOTS:
     void updateWebDavCredentials();
@@ -270,6 +273,7 @@ Q_SIGNALS:
     void archiveRequestedChanged();
     void taskListRequestedChanged();
     void startupFinishedChanged();
+    void newTagDialogVisibleChanged();
 
     // webdav stuff
     void hostChanged();
@@ -342,6 +346,8 @@ private:
     bool m_archiveRequested;
     bool m_taskListRequested;
     bool m_startupFinished;
+
+    bool m_newTagDialogVisible;
 };
 
 #endif

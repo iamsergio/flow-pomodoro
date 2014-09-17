@@ -21,4 +21,8 @@ Popup {
             horizontalAlignment: Text.AlignHCenter
         }
     }
+
+    onClicked: {
+        _controller.onPopupButtonClicked(okClicked)
+    }
 }

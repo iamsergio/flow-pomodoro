@@ -32,10 +32,11 @@ Item {
             root.dismissPopup()
         }
 
-        function choiceClicked(index)
+        function choiceClicked(index, dismiss)
         {
             root.choiceClicked(index)
-            root.dismissPopup()
+            if (dismiss)
+                root.dismissPopup()
         }
 
         BorderImage {
@@ -117,7 +118,7 @@ Item {
                                 if (checkableRole) {
                                     root.choiceToggled(index)
                                 } else {
-                                    mouseArea.choiceClicked(index)
+                                    mouseArea.choiceClicked(index, dismiss)
                                 }
                             }
                             onToggled: {

@@ -2,8 +2,8 @@ import QtQuick 2.0
 
 Popup {
     id: root
-    visible: _controller.popupVisible
     property alias text: textItem.text
+    property alias enteredText: textInput.text
 
     contentItem:
     Item {
@@ -11,8 +11,10 @@ Popup {
 
         Text {
             id: textItem
-            anchors.horizontalCenter: parent.horizontalCenter
-            font.pixelSize: 15 * _controller.dpiFactor
+            anchors.left: textInput.left
+            anchors.right: parent.right
+            anchors.leftMargin: -2 * _controller.dpiFactor
+            font.pixelSize: 18 * _controller.dpiFactor
             anchors.top: parent.top
             anchors.topMargin: _controller.marginSmall
         }
@@ -22,9 +24,7 @@ Popup {
             focus: true
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: -10 * _controller.dpiFactor
             width: 0.70 * parent.width
-            text: qsTr("Teste")
         }
 
         Rectangle {

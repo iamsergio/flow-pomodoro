@@ -34,7 +34,8 @@ public:
     enum Role {
         TextRole = Qt::UserRole + 1,
         IconRole,
-        CheckableRole
+        CheckableRole,
+        DismissRole
     };
 
     enum OptionType {
@@ -49,6 +50,7 @@ public:
     struct Option {
         QString text;
         QString icon;
+        bool dismiss;
     };
 
     explicit TaskContextMenuModel(Task *task, QObject *parent = 0);

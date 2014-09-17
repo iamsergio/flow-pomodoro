@@ -30,20 +30,25 @@ TaskContextMenuModel::TaskContextMenuModel(Task *task, QObject *parent)
     Option option;
     option.text = tr("Edit ...");
     option.icon = "\uf044";
+    option.dismiss = true;
     m_staticOptions.insert(OptionTypeEdit, option);
 
     option.text = tr("Delete");
     option.icon = "\uf014";
+    option.dismiss = true;
     m_staticOptions.insert(OptionTypeDelete, option);
 
-    option.text = tr("Configure Tags");
+    option.text = tr("New Tag ...");
     option.icon = "\uf02b";
+    option.dismiss = false;
     m_staticOptions.insert(OptionTypeNewTag, option);
 
     m_moveToTodayOption.text = tr("Move to today's queue");
     m_moveToTodayOption.icon = "\uf06a";
+    m_moveToTodayOption.dismiss = true;
     m_archiveOption.text = tr("Move to later queue");
     m_archiveOption.icon = "\uf187";
+    m_archiveOption.dismiss = true;
 
     connect(this, &TaskContextMenuModel::rowsInserted, this, &TaskContextMenuModel::countChanged);
     connect(this, &TaskContextMenuModel::rowsRemoved, this, &TaskContextMenuModel::countChanged);
@@ -86,6 +91,8 @@ QVariant TaskContextMenuModel::staticData(OptionType optionType, int role) const
         return option.text;
     else if (role == IconRole)
         return option.icon;
+    else if (role == DismissRole)
+        return option.dismiss;
 
     return QVariant();
 }
@@ -114,6 +121,8 @@ QVariant TaskContextMenuModel::data(const QModelIndex &index, int role) const
         return "";
     case CheckableRole:
         return true;
+    case DismissRole:
+        return false;
     case Qt::CheckStateRole:
         return tagIndex.data(Qt::CheckStateRole);
     }
@@ -127,6 +136,7 @@ QHash<int, QByteArray> TaskContextMenuModel::roleNames() const
     roles.insert(TextRole, "textRole");
     roles.insert(IconRole, "iconRole");
     roles.insert(CheckableRole, "checkableRole");
+    roles.insert(DismissRole, "dismissRole");
     roles.insert(Qt::CheckStateRole, "checkedRole");
 
     return roles;

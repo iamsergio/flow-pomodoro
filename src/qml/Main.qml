@@ -117,6 +117,11 @@ Rectangle {
         }
     }
 
+    NewTagDialog { // TODO: Delay load
+        anchors.fill: parent
+        z: 2
+    }
+
     Loader {
         anchors.fill: parent
         enabled: !_controller.popupVisible

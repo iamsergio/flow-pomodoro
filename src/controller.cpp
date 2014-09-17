@@ -69,6 +69,7 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_archiveRequested(!useDelayedLoading())
     , m_taskListRequested(true)
     , m_startupFinished(false)
+    , m_newTagDialogVisible(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -229,6 +230,7 @@ void Controller::onPopupButtonClicked(bool okClicked)
     if (!m_popupCallbackOwner) {
         qWarning() << "Null callback owner." << m_popupOkCallback;
         setPopupVisible(false);
+        setNewTagDialogVisible(false);
         return;
     }
 
@@ -240,6 +242,7 @@ void Controller::onPopupButtonClicked(bool okClicked)
     }
 
     setPopupVisible(false);
+    setNewTagDialogVisible(false);
 }
 
 bool Controller::expanded() const
@@ -605,6 +608,11 @@ void Controller::setOptionsContextMenuVisible(int visible)
     }
 }
 
+bool Controller::newTagDialogVisible() const
+{
+    return m_newTagDialogVisible;
+}
+
 void Controller::setCurrentTabTag(Tag *tag)
 {
     if (m_currentTabTag != tag) {
@@ -703,6 +711,14 @@ void Controller::setTaskListRequested(bool requested)
 bool Controller::useDelayedLoading() const
 {
     return isMobile();
+}
+
+void Controller::setNewTagDialogVisible(bool visible)
+{
+    if (visible != m_newTagDialogVisible) {
+        m_newTagDialogVisible = visible;
+        emit newTagDialogVisibleChanged();
+    }
 }
 
 void Controller::setStartupFinished()
