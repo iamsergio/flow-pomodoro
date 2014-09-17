@@ -26,6 +26,7 @@ Popup {
             font.pixelSize: 14 * _controller.dpiFactor
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: 10 * _controller.dpiFactor
             width: 0.70 * parent.width
         }
 
