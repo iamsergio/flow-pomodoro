@@ -31,7 +31,7 @@ Rectangle {
     Text {
         color: _style.menuBarFontColor
         text: root.titleText
-        horizontalAlignment: Text.AlignHCenter
+        horizontalAlignment: switchItem.visible ? Text.AlignHCenter : Text.AlignLeft
         anchors.leftMargin: _style.menuBarIconMargin
         anchors.left: switchItem.visible ? switchItem.right : parent.left
         anchors.right: progressIndicator.visible ? progressIndicator.left : addIcon.left
