@@ -14,5 +14,6 @@ InputPopup {
 
         _controller.newTagDialogVisible = false
         enteredText = ""
+        Qt.inputMethod.hide()
     }
 }

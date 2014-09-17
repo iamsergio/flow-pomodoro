@@ -4,6 +4,7 @@ Item {
     id: root
     property alias contentItem: contentItem.children
     property alias icon: iconItem.text
+    property bool centerPopup: true
 
     signal clicked(bool okClicked)
 
@@ -26,9 +27,12 @@ Item {
             id: popupRect
             width: parent ? parent.width * 0.90 : 500 * _controller.dpiFactor
             height: _style.questionDialogHeight
-            anchors.centerIn: parent
+            anchors.verticalCenter: root.centerPopup ? parent.verticalCenter : undefined
+            anchors.top: root.centerPopup ? undefined : parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
             border.color: "gray"
             border.width: 1 * _controller.dpiFactor
+            anchors.topMargin: root.centerPopup ? 0 : _style.menuBarHeight + _style.marginSmall
             //radius: 7 * _controller.dpiFactor
             color: "white"
             z : borderImage.z + 1

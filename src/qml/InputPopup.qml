@@ -2,6 +2,7 @@ import QtQuick 2.0
 
 Popup {
     id: root
+    centerPopup: false
     property alias text: textItem.text
     property alias enteredText: textInput.text
 
@@ -13,8 +14,8 @@ Popup {
             id: textItem
             anchors.left: textInput.left
             anchors.right: parent.right
-            anchors.leftMargin: -2 * _controller.dpiFactor
-            font.pixelSize: 18 * _controller.dpiFactor
+            anchors.leftMargin: -4 * _controller.dpiFactor
+            font.pixelSize: 19 * _controller.dpiFactor
             anchors.top: parent.top
             anchors.topMargin: _controller.marginSmall
         }
@@ -22,6 +23,7 @@ Popup {
         TextInput {
             id: textInput
             focus: true
+            font.pixelSize: 14 * _controller.dpiFactor
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             width: 0.70 * parent.width
@@ -34,5 +36,10 @@ Popup {
             anchors.left: textInput.left
             color: "black"
         }
+    }
+
+    onVisibleChanged: {
+        if (visible)
+            textInput.forceActiveFocus()
     }
 }
