@@ -113,11 +113,14 @@ QUrl QuickView::styleFileName() const
 
 void QuickView::createStyleComponent()
 {
+    printTimeInfo("QuickView: create style component START");
     QQmlComponent *styleComponent = new QQmlComponent(engine(),
                                                       styleFileName(),
                                                       QQmlComponent::PreferSynchronous,
                                                       this);
+    printTimeInfo("QuickView: create style component END");
     QObject *styleObject = styleComponent->create();
+    printTimeInfo("QuickView: created style item");
 
     if (styleObject) {
         QQuickItem *item = qobject_cast<QQuickItem*>(styleObject);
@@ -128,7 +131,7 @@ void QuickView::createStyleComponent()
         qWarning() << styleComponent->errorString();
         Q_ASSERT(false);
     }
-    printTimeInfo("QuickView: created style component");
+    printTimeInfo("QuickView: createStyleComponent END");
 }
 
 void QuickView::keyReleaseEvent(QKeyEvent *event)
