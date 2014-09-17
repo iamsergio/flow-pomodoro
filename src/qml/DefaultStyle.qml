@@ -28,7 +28,7 @@ Item {
     property int tagTextLeftMargin: 5 * _controller.dpiFactor
     property int tagExtraWidth: 14 * _controller.dpiFactor
     property int tagSpacing: 5 * _controller.dpiFactor
-    property int tagsRightMargin: 40 * _controller.dpiFactor
+    property int tagsRightMargin: 10 * _controller.dpiFactor
 
 
     // tags in task list
