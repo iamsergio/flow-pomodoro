@@ -18,7 +18,7 @@ Item {
                 _controller.configureTabIndex = Controller.TagsTab
                 _controller.currentPage = Controller.ConfigurePage
             } else if (index ===  TaskContextMenuModel.OptionTypeQueue) {
-                console.log("TODO")
+                _controller.rightClickedTask.staged = !_controller.rightClickedTask.staged
             } else {
                 console.warn("Unknown index " + index)
             }
