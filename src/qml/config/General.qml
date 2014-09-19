@@ -81,5 +81,22 @@ Item {
                 value: disablePomodoroCheckBox.checked
             }
         }
+
+        Text {
+            visible: _controller.isAndroid
+            text: qsTr("Keep screen on during pomodoro")
+            font.pixelSize: 12 * _controller.dpiFactor
+        }
+
+        FlowCheckBox {
+            id: keepScreenOn
+            visible: _controller.isAndroid
+            checked: _controller.pomodoroFunctionalityDisabled
+            Binding {
+                target: _controller
+                property: "keepScreenOnDuringPomodoro"
+                value: keepScreenOn.checked
+            }
+        }
     }
 }

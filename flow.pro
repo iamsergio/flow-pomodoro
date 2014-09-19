@@ -3,4 +3,7 @@ SUBDIRS += src plugins
 
 include ("global.pri")
 
-OTHER_FILES += android/AndroidManifest.xml
+android {
+    OTHER_FILES += android/AndroidManifest.xml
+    DISTFILES += android/src/com/kdab/flowpomodoro/MainActivity.java
+}

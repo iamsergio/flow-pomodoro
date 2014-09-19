@@ -59,6 +59,7 @@ class Controller : public QObject {
     Q_PROPERTY(qreal dpiFactor READ dpiFactor CONSTANT)
     Q_PROPERTY(bool isMobile READ isMobile CONSTANT)
     Q_PROPERTY(bool isIOS READ isIOS CONSTANT)
+    Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT)
     Q_PROPERTY(bool openSSLSupported READ openSSLSupported CONSTANT)
     Q_PROPERTY(bool hackingMenuSupported READ hackingMenuSupported CONSTANT)
 
@@ -71,6 +72,7 @@ class Controller : public QObject {
     Q_PROPERTY(QString currentTitleText READ currentTitleText NOTIFY currentTitleTextChanged)
     Q_PROPERTY(QString version READ version CONSTANT)
     Q_PROPERTY(bool newTagDialogVisible READ newTagDialogVisible WRITE setNewTagDialogVisible NOTIFY newTagDialogVisibleChanged)
+    Q_PROPERTY(bool keepScreenOnDuringPomodoro READ keepScreenOnDuringPomodoro WRITE setKeepScreenOnDuringPomodoro NOTIFY keepScreenOnDuringPomodoroChanged)
 
     Q_PROPERTY(bool optionsContextMenuVisible READ optionsContextMenuVisible WRITE setOptionsContextMenuVisible NOTIFY optionsContextMenuVisibleChanged)
     Q_PROPERTY(bool configurePageRequested READ configurePageRequested NOTIFY configurePageRequestedChanged)
@@ -168,6 +170,7 @@ public:
 
     bool isMobile() const;
     bool isIOS() const;
+    bool isAndroid() const;
     bool openSSLSupported() const;
     bool hackingMenuSupported() const;
 
@@ -202,6 +205,9 @@ public:
     bool taskListRequested() const;
     bool startupFinished() const;
     void setNewTagDialogVisible(bool visible);
+
+    void setKeepScreenOnDuringPomodoro(bool);
+    bool keepScreenOnDuringPomodoro() const;
 
 public Q_SLOTS:
     void updateWebDavCredentials();
@@ -274,6 +280,7 @@ Q_SIGNALS:
     void taskListRequestedChanged();
     void startupFinishedChanged();
     void newTagDialogVisibleChanged();
+    void keepScreenOnDuringPomodoroChanged();
 
     // webdav stuff
     void hostChanged();
@@ -348,6 +355,7 @@ private:
     bool m_startupFinished;
 
     bool m_newTagDialogVisible;
+    bool m_keepScreenOnDuringPomodoro;
 };
 
 #endif

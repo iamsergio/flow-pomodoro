@@ -11,6 +11,10 @@
     error("QtQuickControls module was not found")
 }
 
+android {
+    QT += androidextras
+}
+
 INCLUDEPATH += src
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

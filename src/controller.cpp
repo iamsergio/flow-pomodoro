@@ -24,6 +24,7 @@
 #include "storage.h"
 #include "kernel.h"
 #include "webdavsyncer.h"
+#include "utils.h"
 
 #include <QTimer>
 #include <QScreen>
@@ -70,6 +71,7 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_taskListRequested(true)
     , m_startupFinished(false)
     , m_newTagDialogVisible(false)
+    , m_keepScreenOnDuringPomodoro(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -78,9 +80,9 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     m_afterAddingTimer->setSingleShot(true);
     m_afterAddingTimer->setInterval(AfterAddingTimeout);
 
-    m_defaultPomodoroDuration = m_settings->value("defaultPomodoroDuration", /*default=*/QVariant(25)).toInt();
+    m_defaultPomodoroDuration = m_settings->value("defaultPomodoroDuration", /*default=*/ QVariant(25)).toInt();
     m_pomodoroFunctionalityDisabled = m_settings->value("pomodoroFunctionalityDisabled", /*default=*/ false).toBool();
-
+    setKeepScreenOnDuringPomodoro(m_settings->value("keepScreenOnDuringPomodoro", /*default=*/ true).toInt());
 
     m_host = m_settings->value("webdavHost").toString();
     m_user = m_settings->value("webdavUser").toString();
@@ -307,6 +309,7 @@ void Controller::setTaskStatus(TaskStatus status)
         emit currentTaskDurationChanged();
         emit currentTaskChanged();
         emit currentTitleTextChanged();
+        ::keepScreenOn(m_keepScreenOnDuringPomodoro && status == TaskStarted);
     }
 }
 
@@ -455,6 +458,15 @@ bool Controller::isMobile() const
 bool Controller::isIOS() const
 {
 #ifdef Q_OS_IOS
+    return true;
+#else
+    return false;
+#endif
+}
+
+bool Controller::isAndroid() const
+{
+#ifdef Q_OS_ANDROID
     return true;
 #else
     return false;
@@ -645,6 +657,21 @@ void Controller::setRightClickedTask(Task *task)
 void Controller::toggleConfigurePage()
 {
     setCurrentPage(m_page == ConfigurePage ? MainPage : ConfigurePage);
+}
+
+void Controller::setKeepScreenOnDuringPomodoro(bool keep)
+{
+    if (keep != m_keepScreenOnDuringPomodoro) {
+        m_keepScreenOnDuringPomodoro = keep;
+        m_settings->setValue("keepScreenOnDuringPomodoro", keep);
+        emit keepScreenOnDuringPomodoroChanged();
+        ::keepScreenOn(m_keepScreenOnDuringPomodoro && status == TaskStarted);
+    }
+}
+
+bool Controller::keepScreenOnDuringPomodoro() const
+{
+    return m_keepScreenOnDuringPomodoro;
 }
 
 bool Controller::configurePageRequested() const
