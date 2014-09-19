@@ -52,6 +52,7 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/MobileTabView.qml \
                qml/NewTagDialog.qml \
                qml/Page.qml           \
+               qml/PomodoroOverlay.qml \
                qml/QuestionPopup.qml  \
                qml/RegularText.qml    \
                qml/SmallText.qml      \

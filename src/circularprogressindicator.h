@@ -35,7 +35,9 @@ class CircularProgressIndicator : public QQuickPaintedItem
     Q_PROPERTY(int minimumValue READ minimumValue WRITE setMinimumValue NOTIFY minimumValueChanged)
     Q_PROPERTY(int maximumValue READ maximumValue WRITE setMaximumValue NOTIFY maximumValueChanged)
     Q_PROPERTY(bool showStopIcon READ showStopIcon WRITE setShowStopIcon NOTIFY showStopIconChanged)
-
+    Q_PROPERTY(int fontPixelSize READ fontPixelSize WRITE setFontPixelSize NOTIFY fontPixelSizeChanged)
+    Q_PROPERTY(int innerBorderWidth READ innerBorderWidth WRITE setInnerBorderWidth NOTIFY innerBorderWidthChanged)
+    Q_PROPERTY(int innerSpacing READ innerSpacing WRITE setInnerSpacing NOTIFY innerSpacingChanged)
 public:
     explicit CircularProgressIndicator(QQuickItem *parent = 0);
     void paint(QPainter *painter) Q_DECL_OVERRIDE;
@@ -64,6 +66,15 @@ public:
     void setShowStopIcon(bool);
     bool showStopIcon() const;
 
+    void setFontPixelSize(int);
+    int fontPixelSize() const;
+
+    int innerBorderWidth() const;
+    void setInnerBorderWidth(int);
+
+    int innerSpacing() const;
+    void setInnerSpacing(int);
+
 Q_SIGNALS:
     void dpiFactorChanged();
     void foregroundColorChanged();
@@ -75,6 +86,9 @@ Q_SIGNALS:
     void maximumValueChanged();
     void outterBorderWidthChanged();
     void showStopIconChanged();
+    void fontPixelSizeChanged();
+    void innerBorderWidthChanged();
+    void innerSpacingChanged();
 
 private:
     int m_dpiFactor;
@@ -86,6 +100,9 @@ private:
     int m_maximumValue;
     int m_outterBorderWidth;
     bool m_showStopIcon;
+    int m_fontPixelSize;
+    int m_innerBorderWidth;
+    int m_innerSpacing;
 };
 
 #endif

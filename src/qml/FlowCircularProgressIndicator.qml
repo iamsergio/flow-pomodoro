@@ -12,18 +12,24 @@ CircularProgressIndicator {
     backgroundColor: _style.circularIndicatorBackgroundColor
     dpiFactor: _controller.dpiFactor
     outterBorderWidth: _style.circularIndicatorBorderWidth
-    visible: !_controller.currentTask.stopped
+    innerBorderWidth: 2 * _controller.dpiFactor
+    innerSpacing: 3 * _controller.dpiFactor
     value: _controller.currentTaskDuration - _controller.remainingMinutes
     minimumValue: 0
     maximumValue: _controller.currentTaskDuration
     showStopIcon: containsMouse
+    fontPixelSize: 11 * _controller.dpiFactor
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
             root.clicked()
-            _controller.stopPomodoro()
+            if (showStopIcon) {
+                _controller.stopPomodoro()
+            } else if (!_controller.showPomodoroOverlay) {
+                _controller.showPomodoroOverlay = true;
+            }
         }
     }
 }

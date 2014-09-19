@@ -87,6 +87,7 @@ Main {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.margins: (mousePressed ? 3 : 5) * _controller.dpiFactor
+                visible: !_controller.currentTask.stopped
             }
 
             FontAwesomeIcon {

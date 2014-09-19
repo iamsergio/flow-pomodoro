@@ -72,6 +72,7 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_startupFinished(false)
     , m_newTagDialogVisible(false)
     , m_keepScreenOnDuringPomodoro(false)
+    , m_showPomodoroOverlay(false)
 {
     m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
@@ -310,6 +311,7 @@ void Controller::setTaskStatus(TaskStatus status)
         emit currentTaskChanged();
         emit currentTitleTextChanged();
         ::keepScreenOn(m_keepScreenOnDuringPomodoro && status == TaskStarted);
+        setShowPomodoroOverlay(status == TaskStarted);
     }
 }
 
@@ -674,6 +676,11 @@ bool Controller::keepScreenOnDuringPomodoro() const
     return m_keepScreenOnDuringPomodoro;
 }
 
+bool Controller::showPomodoroOverlay() const
+{
+    return m_showPomodoroOverlay;
+}
+
 bool Controller::configurePageRequested() const
 {
     return m_configurePageRequested;
@@ -738,6 +745,14 @@ void Controller::setTaskListRequested(bool requested)
 bool Controller::useDelayedLoading() const
 {
     return isMobile();
+}
+
+void Controller::setShowPomodoroOverlay(bool show)
+{
+    if (show != m_showPomodoroOverlay) {
+        m_showPomodoroOverlay = show;
+        emit showPomodoroOverlayChanged();
+    }
 }
 
 void Controller::setNewTagDialogVisible(bool visible)

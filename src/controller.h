@@ -62,6 +62,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT)
     Q_PROPERTY(bool openSSLSupported READ openSSLSupported CONSTANT)
     Q_PROPERTY(bool hackingMenuSupported READ hackingMenuSupported CONSTANT)
+    Q_PROPERTY(bool showPomodoroOverlay READ showPomodoroOverlay WRITE setShowPomodoroOverlay NOTIFY showPomodoroOverlayChanged)
 
     Q_PROPERTY(bool isHttps READ isHttps WRITE setIsHttps NOTIFY isHttpsChanged)
     Q_PROPERTY(int port READ port WRITE setPort NOTIFY portChanged)
@@ -209,6 +210,9 @@ public:
     void setKeepScreenOnDuringPomodoro(bool);
     bool keepScreenOnDuringPomodoro() const;
 
+    bool showPomodoroOverlay() const;
+    void setShowPomodoroOverlay(bool);
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);
@@ -281,6 +285,7 @@ Q_SIGNALS:
     void startupFinishedChanged();
     void newTagDialogVisibleChanged();
     void keepScreenOnDuringPomodoroChanged();
+    void showPomodoroOverlayChanged();
 
     // webdav stuff
     void hostChanged();
@@ -356,6 +361,7 @@ private:
 
     bool m_newTagDialogVisible;
     bool m_keepScreenOnDuringPomodoro;
+    bool m_showPomodoroOverlay;
 };
 
 #endif

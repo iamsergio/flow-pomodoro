@@ -21,4 +21,6 @@ Main {
                                                              : null
         anchors.fill: parent
     }
+
+    PomodoroOverlay {}
 }

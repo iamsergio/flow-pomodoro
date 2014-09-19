@@ -31,6 +31,9 @@ CircularProgressIndicator::CircularProgressIndicator(QQuickItem *parent)
     , m_maximumValue(100)
     , m_outterBorderWidth(3)
     , m_showStopIcon(false)
+    , m_fontPixelSize(12)
+    , m_innerBorderWidth(4)
+    , m_innerSpacing(4)
 {
 }
 
@@ -57,14 +60,17 @@ void CircularProgressIndicator::paint(QPainter *painter)
         painter->drawEllipse(rect);
     }
 
-    int a = 4 * m_dpiFactor;
+    int a = m_innerSpacing;
     rect.adjust(a, a, -a, -a);
+    QPen borderPen(m_foregroundColor);
+    borderPen.setWidth(0);
+    painter->setPen(borderPen);
     painter->setBrush(foregroundBrush);
     int zeroHours = 90 * 16;
     qreal currentPercentage = (1.0 * m_value - m_minimumValue) / (m_maximumValue - m_minimumValue);
     painter->drawPie(rect, zeroHours, -360 * currentPercentage * 16);
 
-    a = 2 * m_dpiFactor;
+    a = m_innerBorderWidth;
     rect.adjust(a, a, -a, -a);
 
     painter->setPen(m_backgroundColor);
@@ -84,7 +90,7 @@ void CircularProgressIndicator::paint(QPainter *painter)
         painter->setPen(m_foregroundColor);
         QFont font = painter->font();
         font.setBold(true);
-        font.setPixelSize(12 * m_dpiFactor);
+        font.setPixelSize(m_fontPixelSize);
         painter->setFont(font);
         a = -2 * m_dpiFactor; // Make rect bigger
         rect.adjust(a, a, -a, -a);
@@ -153,7 +159,7 @@ void CircularProgressIndicator::setOutterBorderWidth(int width)
     if (width != m_outterBorderWidth) {
         m_outterBorderWidth = width;
         update();
-        emit outterBorderWidth();
+        emit outterBorderWidthChanged();
     }
 }
 
@@ -216,4 +222,46 @@ void CircularProgressIndicator::setShowStopIcon(bool show)
 bool CircularProgressIndicator::showStopIcon() const
 {
     return m_showStopIcon;
+}
+
+void CircularProgressIndicator::setFontPixelSize(int size)
+{
+    if (m_fontPixelSize != size) {
+        m_fontPixelSize = size;
+        update();
+        emit fontPixelSizeChanged();
+    }
+}
+
+int CircularProgressIndicator::fontPixelSize() const
+{
+    return m_fontPixelSize;
+}
+
+int CircularProgressIndicator::innerBorderWidth() const
+{
+    return m_innerBorderWidth;
+}
+
+void CircularProgressIndicator::setInnerBorderWidth(int width)
+{
+    if (width != m_innerBorderWidth) {
+        m_innerBorderWidth = width;
+        update();
+        emit innerBorderWidthChanged();
+    }
+}
+
+int CircularProgressIndicator::innerSpacing() const
+{
+    return m_innerSpacing;
+}
+
+void CircularProgressIndicator::setInnerSpacing(int spacing)
+{
+    if (spacing != m_innerSpacing) {
+        m_innerSpacing = spacing;
+        update();
+        emit innerSpacingChanged();
+    }
 }

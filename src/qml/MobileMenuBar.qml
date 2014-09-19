@@ -44,6 +44,8 @@ Rectangle {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: addIcon.left
+        visible: !_controller.currentTask.stopped
+        showStopIcon: false
         anchors.margins: (mousePressed ? 5 : 7) * _controller.dpiFactor
     }
 
