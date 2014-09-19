@@ -665,7 +665,7 @@ void Controller::setKeepScreenOnDuringPomodoro(bool keep)
         m_keepScreenOnDuringPomodoro = keep;
         m_settings->setValue("keepScreenOnDuringPomodoro", keep);
         emit keepScreenOnDuringPomodoroChanged();
-        ::keepScreenOn(m_keepScreenOnDuringPomodoro && status == TaskStarted);
+        ::keepScreenOn(m_keepScreenOnDuringPomodoro && currentTask()->status() == TaskStarted);
     }
 }
 
