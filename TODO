@@ -4,9 +4,7 @@
 - WebDav sync
   . Add timestamp to lock file
   . Enable it by default
-- Unit-tests
-  . WebDav unit-tests
-  . ModelStack unit-tests
+  . unit-tests
 - Konversation plugin
 - git link in about page
 - Test iPhone
