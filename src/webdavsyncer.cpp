@@ -338,7 +338,10 @@ public:
     {
         QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
         qDebug() << Q_FUNC_INFO;
-        emit m_syncer->testSettingsFinished(reply->error() == 0, reply->errorString());
+        if (reply->error() == 0)
+            emit m_syncer->testSettingsFinished(true, QString()); // reply->errorString is "Unknown error" if success
+        else
+            emit m_syncer->testSettingsFinished(false, reply->errorString());
         reply->deleteLater();
     }
 };
