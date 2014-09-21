@@ -74,7 +74,7 @@ CODECFORSRC  = UTF-8
 
 linux:!android {
     QMAKE_POST_LINK += "$$PWD/runqmllint.sh $$PWD/qml"
-    QMAKE_POST_LINK += "; $$PWD/validate_qrc.sh"
+    QMAKE_POST_LINK += "; $$PWD/validate_qrc.sh $$PWD/"
 }
 
 DESTDIR = ../

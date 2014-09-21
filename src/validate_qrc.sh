@@ -1,3 +1,5 @@
+cd $1
+
 for i in qml/*.qml; do
     if ! grep $i resources.qrc &> /dev/null ; then
         echo "error:" $i not in resources.qrc
