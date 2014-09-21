@@ -13,7 +13,7 @@
 
 int main(int argc, char *argv[])
 { 
-    QGuiApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
     app.setAttribute(Qt::AA_Use96Dpi, true);
     bool success = true;
 
@@ -47,5 +47,5 @@ int main(int argc, char *argv[])
     if (!success)
         qWarning() << "\nSome tests failed!!!";
 
-    return success;
+    return success ? 0 : -1;
 }
