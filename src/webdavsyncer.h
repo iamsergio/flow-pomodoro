@@ -33,13 +33,14 @@ class DownloadDataState;
 class CleanupState;
 class Storage;
 class Controller;
+class Kernel;
 
 class WebDAVSyncer : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool syncInProgress READ syncInProgress NOTIFY syncInProgressChanged)
 public:
-    explicit WebDAVSyncer(const RuntimeConfiguration &, Storage *storage);
+    explicit WebDAVSyncer(Kernel *kernel);
     bool syncInProgress() const;
     void setConnectionSettings(bool https, int port, const QString &host, const QString &path,
                                const QString &user, const QString &password);

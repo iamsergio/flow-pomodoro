@@ -27,6 +27,7 @@
 #include <QSharedPointer>
 
 class TaskFilterProxyModel;
+class Kernel;
 
 class Tag : public QObject, public Syncable
 {
@@ -39,7 +40,7 @@ public:
     typedef QSharedPointer<Tag> Ptr;
     typedef GenericListModel<Tag::Ptr> List;
 
-    explicit Tag(const QString &name);
+    explicit Tag(Kernel *kernel, const QString &name);
     ~Tag();
 
     int taskCount() const;
@@ -74,6 +75,7 @@ private:
     int m_taskCount;
     bool m_beingEdited;
     TaskFilterProxyModel *m_taskModel; // All unstaged tasks with this tag
+    Kernel *m_kernel;
 };
 
 bool operator==(const Tag::Ptr &, const Tag::Ptr &);

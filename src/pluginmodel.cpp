@@ -22,7 +22,9 @@
 #include "settings.h"
 #include "kernel.h"
 
-PluginModel::PluginModel(QObject *parent) : QAbstractListModel(parent)
+PluginModel::PluginModel(Kernel *kernel, QObject *parent)
+    : QAbstractListModel(parent)
+    , m_kernel(kernel)
 {
     connect(this, &PluginModel::rowsInserted, this, &PluginModel::countChanged);
     connect(this, &PluginModel::rowsRemoved, this, &PluginModel::countChanged);
@@ -91,9 +93,9 @@ void PluginModel::setPluginEnabled(bool enabled, int i)
     PluginInterface *plugin = m_plugins.at(i);
     plugin->setEnabled(enabled);
     const QString pluginName = dynamic_cast<QObject*>(plugin)->metaObject()->className();
-    Kernel::instance()->settings()->beginGroup("plugins");
-    Kernel::instance()->settings()->setValue(pluginName + ".enabled", enabled);
-    Kernel::instance()->settings()->endGroup();
+    m_kernel->settings()->beginGroup("plugins");
+    m_kernel->settings()->setValue(pluginName + ".enabled", enabled);
+    m_kernel->settings()->endGroup();
     plugin->setEnabled(enabled);
 
     emit dataChanged(index(0, 0), index(rowCount()-1, 0));

@@ -25,19 +25,19 @@
 #include <QJsonDocument>
 #include <QTemporaryFile>
 
-JsonStorage::JsonStorage(const RuntimeConfiguration &config, QObject *parent)
-    : Storage(config, parent)
+JsonStorage::JsonStorage(Kernel *kernel, QObject *parent)
+    : Storage(kernel, parent)
 {
 }
 
 JsonStorage::~JsonStorage()
 {
-    if (saveScheduled() && m_config.saveEnabled())
+    if (saveScheduled() && m_kernel->runtimeConfiguration().saveEnabled())
         save_impl();
 }
 
 Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
-                                               QString &errorMsg, Storage *storage)
+                                               QString &errorMsg, Kernel *kernel)
 {
     Data result;
     errorMsg.clear();
@@ -62,17 +62,17 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
     }
 
     foreach (const QVariant &t, tagList) {
-        Tag::Ptr tag = Tag::Ptr(new Tag(QString()));
+        Tag::Ptr tag = Tag::Ptr(new Tag(kernel, QString()));
         tag->fromJson(t.toMap());
         if (!tag->name().isEmpty() && !Storage::itemListContains<Tag::Ptr>(result.tags, tag)) {
-            if (storage) // Reuse tags from given storage
-                tag = storage->tag(tag->name());
+            if (kernel) // Reuse tags from given storage
+                tag = kernel->storage()->tag(tag->name());
             result.tags << tag;
         }
     }
 
     foreach (const QVariant &t, taskList) {
-        Task::Ptr task = Task::createTask(storage);
+        Task::Ptr task = Task::createTask(kernel);
         Q_ASSERT(task);
         task->fromJson(t.toMap());
         if (task)
@@ -84,7 +84,7 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
 
 void JsonStorage::load_impl()
 {
-    const QString dataFileName = m_config.dataFileName();
+    const QString dataFileName = m_kernel->runtimeConfiguration().dataFileName();
     qDebug() << "JsonStorage::load_impl Loading from" << dataFileName;
     if (!QFile::exists(dataFileName)) // Nothing to load
         return;
@@ -101,7 +101,7 @@ void JsonStorage::load_impl()
     file.close();
 
     QString errorMsg;
-    Data data = deserializeJsonData(serializedData, errorMsg, this);
+    Data data = deserializeJsonData(serializedData, errorMsg, m_kernel);
 
     if (!errorMsg.isEmpty()) {
         qWarning() << "Error parsing json file" << dataFileName;
@@ -122,7 +122,7 @@ void JsonStorage::load_impl()
 void JsonStorage::save_impl()
 {
     QByteArray serializedData = serializeToJsonData(m_data);
-    QString tmpDataFileName = m_config.dataFileName() + "~";;
+    QString tmpDataFileName = m_kernel->runtimeConfiguration().dataFileName() + "~";;
 
     QFile temporaryFile(tmpDataFileName); // not using QTemporaryFile so the backup stays next to the main one
     if (!temporaryFile.open(QIODevice::WriteOnly)) {
@@ -131,7 +131,7 @@ void JsonStorage::save_impl()
         return;
     }
 
-    const QString dataFileName = m_config.dataFileName();
+    const QString dataFileName = m_kernel->runtimeConfiguration().dataFileName();
     temporaryFile.write(serializedData, serializedData.count());
     if (QFile::exists(dataFileName) && !QFile::remove(dataFileName)) {
         qWarning() << "Could not update (remove error)" << dataFileName

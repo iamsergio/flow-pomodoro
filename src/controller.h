@@ -29,6 +29,7 @@
 
 class QTimer;
 class Storage;
+class Kernel;
 class Settings;
 class QQmlContext;
 
@@ -122,7 +123,7 @@ public:
     };
     Q_ENUMS(QueueType)
 
-    explicit Controller(QQmlContext *context, Storage *storage,
+    explicit Controller(QQmlContext *context, Kernel *, Storage *storage,
                         Settings *settings, QObject *parent = 0);
     ~Controller();
 
@@ -313,6 +314,7 @@ private:
     void setTaskListRequested(bool);
     bool useDelayedLoading() const;
 
+    Kernel *m_kernel;
     int m_currentTaskDuration;
     QTimer *m_tickTimer;
     QTimer *m_afterAddingTimer;

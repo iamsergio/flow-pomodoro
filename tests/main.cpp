@@ -44,8 +44,6 @@ int main(int argc, char *argv[])
     TestWebDav test9;
     success &= QTest::qExec(&test9, argc, argv) == 0;
 
-    delete Kernel::instance(); // Otherwise it's deleted by QGuiApplication and we hang deep in qml engine land for some reason
-
     if (!success)
         qWarning() << "\nSome tests failed!!!";
 

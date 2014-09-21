@@ -22,8 +22,9 @@
 #define _PLUGIN_MODEL_H
 
 #include "plugininterface.h"
-
 #include <QAbstractListModel>
+
+class Kernel;
 
 class PluginModel : public QAbstractListModel {
     Q_OBJECT
@@ -35,7 +36,7 @@ public:
         EnabledRole
     };
 
-    explicit PluginModel(QObject *parent = 0);
+    explicit PluginModel(Kernel *kernel, QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     QHash<int,QByteArray> roleNames() const Q_DECL_OVERRIDE;
@@ -52,6 +53,7 @@ Q_SIGNALS:
     void countChanged();
 private:
     PluginInterface::List m_plugins;
+    Kernel *m_kernel;
 };
 
 #endif

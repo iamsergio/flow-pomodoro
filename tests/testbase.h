@@ -44,7 +44,7 @@ public:
         config.setSettings(new Settings("unit-test-settings.ini"));
         config.setSaveEnabled(false);
         config.setWebDAVFileName("unit-test-flow.dat");
-        m_kernel = Kernel::instance(config);
+        m_kernel = new Kernel(config, this);
         m_storage = m_kernel->storage();
         m_controller = m_kernel->controller();
     }
@@ -84,7 +84,7 @@ public:
         config.setSaveEnabled(false);
         config.setWebDAVFileName("unit-test-flow.dat");
 
-        m_kernel = Kernel::instance(config);
+        m_kernel = new Kernel(config);
         m_storage = m_kernel->storage();
         m_controller = m_kernel->controller();
         if (load)

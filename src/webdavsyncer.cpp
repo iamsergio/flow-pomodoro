@@ -93,7 +93,7 @@ private:
     void onDownloadLockFileFinished()
     {
         QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-        QByteArray ourInstanceId = Kernel::instance()->storage()->instanceId();
+        QByteArray ourInstanceId = m_syncer->m_storage->instanceId();
 
         if (reply->error() == QNetworkReply::ContentNotFoundError) {
             QNetworkReply *reply2 = m_syncer->m_webdav->put(lockFileName(), ourInstanceId);
@@ -158,11 +158,11 @@ public:
 
 private:
     template <typename T>
-    static GenericListModel<T> merge(GenericListModel<T> &localList,
+    static GenericListModel<T> merge(Storage *storage,
+                                     GenericListModel<T> &localList,
                                      GenericListModel<T> &serverList)
     {
         GenericListModel<T> finalList;
-        Storage *storage = Kernel::instance()->storage();
 
         // Case 1: Present locally, not present on server
         const GenericListModel<T> localTasksCopy = localList; // GenericListModel doesn't let use use iterators
@@ -244,15 +244,16 @@ private:
         qDebug() << Q_FUNC_INFO << "Merging";
         Storage::Data finalData;
 
-        TagList localTags = m_syncer->m_storage->tags();
-        TaskList localTasks = m_syncer->m_storage->tasks();
+        Storage *storage = m_syncer->m_storage;
+        TagList localTags = storage->tags();
+        TaskList localTasks = storage->tasks();
 
-        finalData.tags = merge<Tag::Ptr>(localTags, serverData.tags);
-        finalData.tasks = merge<Task::Ptr>(localTasks, serverData.tasks);
-        finalData.instanceId = m_syncer->m_storage->data().instanceId;
+        finalData.tags = merge<Tag::Ptr>(storage, localTags, serverData.tags);
+        finalData.tasks = merge<Task::Ptr>(storage, localTasks, serverData.tasks);
+        finalData.instanceId = storage->data().instanceId;
 
-        m_syncer->m_storage->setData(finalData);
-        QByteArray newData = JsonStorage::serializeToJsonData(m_syncer->m_storage->data()); // should be the same as finalData
+        storage->setData(finalData);
+        QByteArray newData = JsonStorage::serializeToJsonData(storage->data()); // should be the same as finalData
         QNetworkReply *reply2 = m_syncer->m_webdav->put("/flow.dat", newData);
         connect(reply2, &QNetworkReply::finished, this, &DownloadDataState::onUploadFinished);
     }
@@ -352,13 +353,13 @@ public:
 };
 
 
-WebDAVSyncer::WebDAVSyncer(const RuntimeConfiguration &config, Storage *parent)
-    : QObject(parent)
+WebDAVSyncer::WebDAVSyncer(Kernel *kernel)
+    : QObject(kernel)
     , m_webdav(0)
     , m_stateMachine(new QStateMachine(this))
-    , m_storage(parent)
+    , m_storage(kernel->storage())
     , m_syncInProgress(false)
-    , m_config(config)
+    , m_config(kernel->runtimeConfiguration())
 {
     m_initialState = new InitialState(this);
     QState *acquireLockState = new AcquireLockState(this);

@@ -30,13 +30,14 @@
     int Tag::tagCount = 0;
 #endif
 
-Tag::Tag(const QString &_name)
+Tag::Tag(Kernel *kernel, const QString &_name)
     : QObject()
     , Syncable()
     , m_name(_name.trimmed())
     , m_taskCount(0)
     , m_beingEdited(false)
     , m_taskModel(Q_NULLPTR)
+    , m_kernel(kernel)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     //Kernel::instance()->storage()->monitorTag(this);
@@ -100,7 +101,7 @@ QAbstractItemModel *Tag::taskModel()
     if (!m_taskModel) {
         m_taskModel = new TaskFilterProxyModel(this);
         m_taskModel->setTagName(m_name);
-        m_taskModel->setSourceModel(Kernel::instance()->storage()->archivedTasksModel());
+        m_taskModel->setSourceModel(m_kernel->storage()->archivedTasksModel());
         m_taskModel->setObjectName(QString("Tasks with tag %1 model").arg(m_name));
 
         connect(this, &Tag::taskCountChanged,

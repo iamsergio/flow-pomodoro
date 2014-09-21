@@ -26,6 +26,7 @@
 #include "archivedtasksfiltermodel.h"
 #include "taskfilterproxymodel.h"
 #include "webdavsyncer.h"
+#include "runtimeconfiguration.h"
 
 static QVariant tagsDataFunction(const TagList &list, int index, int role)
 {
@@ -39,7 +40,6 @@ static QVariant tagsDataFunction(const TagList &list, int index, int role)
     }
 }
 
-
 static QVariant tasksDataFunction(const TaskList &list, int index, int role)
 {
     switch (role) {
@@ -52,9 +52,9 @@ static QVariant tasksDataFunction(const TaskList &list, int index, int role)
     }
 }
 
-Storage::Storage(const RuntimeConfiguration &config, QObject *parent)
+Storage::Storage(Kernel *kernel, QObject *parent)
     : QObject(parent)
-    , m_config(config)
+    , m_kernel(kernel)
     , m_savingDisabled(0)
     , m_taskFilterModel(new TaskFilterProxyModel(this))
     , m_untaggedTasksModel(new TaskFilterProxyModel(this))
@@ -156,7 +156,7 @@ void Storage::load()
 
 void Storage::save()
 {
-    if (!m_config.saveEnabled()) // Unit-tests don't save
+    if (!m_kernel->runtimeConfiguration().saveEnabled()) // Unit-tests don't save
         return;
 
     m_savingInProgress = true;
@@ -224,7 +224,7 @@ Tag::Ptr Storage::createTag(const QString &tagName)
         return m_data.tags.at(index);
     }
 
-    Tag::Ptr tag = Tag::Ptr(new Tag(trimmedName));
+    Tag::Ptr tag = Tag::Ptr(new Tag(m_kernel, trimmedName));
     m_data.tags << tag;
 
     return tag;
@@ -243,7 +243,7 @@ int Storage::indexOfTag(const QString &name) const
 
 QString Storage::dataFile() const
 {
-    return Kernel::instance()->runtimeConfiguration().dataFileName();
+    return m_kernel->runtimeConfiguration().dataFileName();
 }
 
 QAbstractItemModel *Storage::tagsModel() const
@@ -399,13 +399,13 @@ Task::Ptr Storage::taskAt(int proxyIndex) const
 
 Task::Ptr Storage::addTask(const QString &taskText)
 {
-    Task::Ptr task = Task::createTask(this, taskText);
+    Task::Ptr task = Task::createTask(m_kernel, taskText);
     return addTask(task);
 }
 
 Task::Ptr Storage::prependTask(const QString &taskText)
 {
-    Task::Ptr task = Task::createTask(this, taskText);
+    Task::Ptr task = Task::createTask(m_kernel, taskText);
     connectTask(task);
     m_data.tasks.prepend(task);
     return task;

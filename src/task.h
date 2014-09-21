@@ -46,6 +46,7 @@ enum SerializerVersion {
 class CheckableTagModel;
 class QAbstractListModel;
 class Storage;
+class Kernel;
 class TaskContextMenuModel;
 
 class Task : public QObject, public Syncable {
@@ -65,7 +66,7 @@ public:
     typedef QSharedPointer<Task> Ptr;
     typedef GenericListModel<Ptr> List;
 
-    static Task::Ptr createTask(Storage *storage, const QString &name = QString());
+    static Task::Ptr createTask(Kernel *kernel, const QString &name = QString());
 
     bool staged() const;
     void setStaged(bool);
@@ -105,6 +106,7 @@ public:
     TaskContextMenuModel *contextMenuModel() const;
 
     bool operator==(const Task &other) const;
+    Kernel *kernel() const;
 
 Q_SIGNALS:
     void summaryChanged();
@@ -119,8 +121,8 @@ private Q_SLOTS:
     void onEdited();
 
 private:
-    explicit Task(Storage *storage, const QString &name = QString());
-    void modelSetup(Storage *storage);
+    explicit Task(Kernel *kernel, const QString &name = QString());
+    void modelSetup();
     void setModificationDate(const QDateTime &);
     void setCreationDate(const QDateTime &);
 
@@ -134,6 +136,7 @@ private:
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
     TaskContextMenuModel *m_contextMenuModel;
+    Kernel *m_kernel;
 };
 
 #endif

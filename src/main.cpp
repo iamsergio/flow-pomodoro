@@ -23,6 +23,7 @@
 #include "kernel.h"
 #include "dbus/flow.h"
 #include "utils.h"
+#include "runtimeconfiguration.h"
 
 #ifdef QT_WIDGETS_LIB
 # include <QApplication>
@@ -43,6 +44,7 @@ typedef QGuiApplication Application;
 #include <QStandardPaths>
 #include <QTranslator>
 #include <QScreen>
+#include <QDir>
 
 void initDBus(Controller *controller)
 {
@@ -102,6 +104,26 @@ void windowsMessageHandler(QtMsgType type, const QMessageLogContext &context, co
     out << level << msg << "(" << context.file << ":" << context.line << " " << context.function << ")\r\n";
 }
 
+static QString defaultDataFileName()
+{
+#if defined(Q_OS_ANDROID) && defined(DEVELOPER_MODE)
+    return "/storage/sdcard0/flow.dat";
+#endif
+    QString filename;
+    QString directory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    if (!QFile::exists(directory)) {
+        QDir dir(directory);
+        if (!dir.mkpath(directory)) {
+            qWarning() << "Failed to create directory" << directory;
+            qFatal("Bailing out...");
+            return QString();
+        }
+    }
+
+    filename += directory + "/flow.dat";
+    return filename;
+}
+
 int main(int argc, char *argv[])
 {
     printTimeInfo("main");
@@ -122,9 +144,12 @@ int main(int argc, char *argv[])
     app.installTranslator(&translator);
     printTimeInfo("main: installed QTranslator");
 
-    Kernel *kernel = Kernel::instance();
+    RuntimeConfiguration defaultConfig;
+    defaultConfig.setDataFileName(defaultDataFileName());
+    Kernel *kernel = new Kernel(defaultConfig, qApp);
+
     printTimeInfo("main: created Kernel::instance()");
-    QuickView window(kernel->qmlEngine());
+    QuickView window(kernel);
     printTimeInfo("main: created QuickView");
     initDBus(kernel->controller());
     printTimeInfo("main: initialized dbus");

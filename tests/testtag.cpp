@@ -95,9 +95,8 @@ void TestTag::testTaskCount()
 
 void TestTag::testJson()
 {
-    Tag::Ptr tag1 = Tag::Ptr(new Tag("tag1"));
-    Tag::Ptr tag2 = Tag::Ptr(new Tag("tag2"));
-
+    Tag::Ptr tag1 = Tag::Ptr(new Tag(m_kernel, "tag1"));
+    Tag::Ptr tag2 = Tag::Ptr(new Tag(m_kernel, "tag2"));
     QVariantMap map = tag1->toJson();
     tag2->fromJson(map);
 

@@ -47,7 +47,7 @@ TagRef TagRef::operator=(const TagRef &other)
 // Temporary is a performance optimization, we don't want to emit uneeded signals
 // when temporaries are constructed while appending TagRefs into a list
 TagRef::TagRef(const QPointer<Task> &task, const QString &tagName, bool temporary)
-    : m_tag(Kernel::instance()->storage()->tag(tagName))
+    : m_tag(task->kernel()->storage()->tag(tagName))
     , m_task(task)
     , m_temporary(temporary)
 {

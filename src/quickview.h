@@ -25,12 +25,13 @@
 #include <QUrl>
 
 class Controller;
+class Kernel;
 class QKeyEvent;
 
 class QuickView : public QQuickView {
     Q_OBJECT
 public:
-    explicit QuickView(QQmlEngine *engine);
+    explicit QuickView(Kernel *kernel);
 
 protected:
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
@@ -42,6 +43,7 @@ private:
 
     Controller *m_controller;
     const bool m_useqresources;
+    Kernel *m_kernel;
 };
 
 #endif

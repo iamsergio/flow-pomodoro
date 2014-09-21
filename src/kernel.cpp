@@ -79,47 +79,6 @@ static void registerQmlTypes()
     qmlRegisterType<CheckBoxImpl>("com.kdab.flowpomodoro", 1, 0, "CheckBoxPrivate");
 }
 
-static QString defaultDataFileName()
-{
-#if defined(Q_OS_ANDROID) && defined(DEVELOPER_MODE)
-    return "/storage/sdcard0/flow.dat";
-#endif
-    QString filename;
-    QString directory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    if (!QFile::exists(directory)) {
-        QDir dir(directory);
-        if (!dir.mkpath(directory)) {
-            qWarning() << "Failed to create directory" << directory;
-            qFatal("Bailing out...");
-            return QString();
-        }
-    }
-
-    filename += directory + "/flow.dat";
-    return filename;
-}
-
-QPointer<Kernel> Kernel::s_kernel;
-
-Kernel *Kernel::instance()
-{
-    if (!s_kernel) {
-        RuntimeConfiguration defaultConfig;
-        defaultConfig.setDataFileName(defaultDataFileName());
-        s_kernel = new Kernel(defaultConfig, qApp);
-    }
-
-    return s_kernel;
-}
-
-Kernel *Kernel::instance(const RuntimeConfiguration &config)
-{
-    if (!s_kernel)
-        s_kernel = new Kernel(config, qApp);
-
-    return s_kernel;
-}
-
 Kernel::~Kernel()
 {
     delete m_settings;
@@ -128,13 +87,13 @@ Kernel::~Kernel()
 Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     : QObject(parent)
     , m_runtimeConfiguration(config)
-    , m_storage(new JsonStorage(config, this))
+    , m_storage(new JsonStorage(this, this))
     , m_qmlEngine(new QQmlEngine(0)) // leak the engine, no point in wasting shutdown time. Also we get a qmldebug server crash if it's parented to qApp, which Kernel is
     , m_settings(config.settings() ? config.settings() : new Settings(this))
-    , m_controller(new Controller(m_qmlEngine->rootContext(), m_storage, m_settings, this))
+    , m_controller(new Controller(m_qmlEngine->rootContext(), this, m_storage, m_settings, this))
     , m_pluginModel(new PluginModel(this))
 #ifndef NO_WEBDAV
-    , m_webDavSyncer(new WebDAVSyncer(config, m_storage))
+    , m_webDavSyncer(new WebDAVSyncer(this))
 #endif
 {
     registerQmlTypes();

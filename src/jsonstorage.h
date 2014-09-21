@@ -22,14 +22,16 @@
 
 #include "storage.h"
 
+class Kernel;
+
 class JsonStorage : public Storage
 {
     Q_OBJECT
 public:
-    explicit JsonStorage(const RuntimeConfiguration &, QObject *parent);
+    explicit JsonStorage(Kernel *kernel, QObject *parent);
     ~JsonStorage();
 
-    static Data deserializeJsonData(const QByteArray &serializedData, QString &error, Storage *storage = 0);
+    static Data deserializeJsonData(const QByteArray &serializedData, QString &error, Kernel *kernel = 0);
     static QByteArray serializeToJsonData(const Storage::Data &);
 
 protected:

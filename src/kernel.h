@@ -37,8 +37,7 @@ class Kernel : public QObject
 {
     Q_OBJECT
 public:
-    static Kernel *instance();
-    static Kernel *instance(const RuntimeConfiguration &); // Overload used by unit-tests
+    explicit Kernel(const RuntimeConfiguration &, QObject *parent = 0);
     ~Kernel();
     Storage* storage() const;
     Controller *controller() const;
@@ -59,7 +58,6 @@ private:
     void loadPlugins();
     void notifyPlugins(TaskStatus newStatus);
 
-    explicit Kernel(const RuntimeConfiguration &, QObject *parent = 0);
     RuntimeConfiguration m_runtimeConfiguration;
     Storage *m_storage;
     QQmlEngine *m_qmlEngine;

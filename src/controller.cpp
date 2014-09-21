@@ -39,9 +39,10 @@ enum {
     TickInterval = 1000*60 // Ticks every minute
 };
 
-Controller::Controller(QQmlContext *context, Storage *storage,
+Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
                        Settings *settings, QObject *parent)
     : QObject(parent)
+    , m_kernel(kernel)
     , m_currentTaskDuration(0)
     , m_tickTimer(new QTimer(this))
     , m_afterAddingTimer(new QTimer(this))
@@ -51,7 +52,7 @@ Controller::Controller(QQmlContext *context, Storage *storage,
     , m_popupVisible(false)
     , m_editMode(EditModeNone)
     , m_tagEditStatus(TagEditStatusNone)
-    , m_invalidTask(Task::createTask(storage))
+    , m_invalidTask(Task::createTask(kernel))
     , m_configureTabIndex(0)
     , m_queueType(QueueTypeToday)
     , m_storage(storage)
@@ -837,7 +838,7 @@ void Controller::onTimerTick()
 void Controller::updateWebDavCredentials()
 {
 #ifndef NO_WEBDAV
-    Kernel::instance()->webdavSyncer()->setConnectionSettings(m_isHttps, m_port, m_host, m_path, m_user, m_password);
+    m_kernel->webdavSyncer()->setConnectionSettings(m_isHttps, m_port, m_host, m_path, m_user, m_password);
 #endif
 }
 
@@ -1125,7 +1126,7 @@ void Controller::removeTask(Task *task)
 void Controller::webDavSync()
 {
 #ifndef NO_WEBDAV
-    Kernel::instance()->webdavSyncer()->sync();
+    m_kernel->webdavSyncer()->sync();
 #else
     qDebug() << "WebDAV sync not supported";
 #endif

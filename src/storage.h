@@ -23,12 +23,12 @@
 #include "task.h"
 #include "tag.h"
 #include "genericlistmodel.h"
-#include "runtimeconfiguration.h"
 
 #include <QTimer>
 #include <QObject>
 #include <QUuid>
 
+class Kernel;
 class SortedTagsModel;
 class ArchivedTasksFilterModel;
 class TaskFilterProxyModel;
@@ -70,7 +70,7 @@ public:
         QByteArray instanceId;
     };
 
-    explicit Storage(const RuntimeConfiguration &, QObject *parent = 0);
+    explicit Storage(Kernel *kernel, QObject *parent = 0);
     ~Storage();
 
     const TagList& tags() const;
@@ -153,7 +153,7 @@ private Q_SLOTS:
 protected:
     Task::Ptr addTask(const Task::Ptr &task);
     Data m_data;
-    RuntimeConfiguration m_config;
+    Kernel *m_kernel;
     virtual void load_impl() = 0;
     virtual void save_impl() = 0;
 

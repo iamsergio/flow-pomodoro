@@ -36,14 +36,15 @@
 #include <QQuickItem>
 #include <QGuiApplication>
 
-QuickView::QuickView(QQmlEngine *engine)
-    : QQuickView(engine, 0)
-    , m_controller(Kernel::instance()->controller())
+QuickView::QuickView(Kernel *kernel)
+    : QQuickView(kernel->qmlEngine(), 0)
+    , m_controller(kernel->controller())
 #ifdef DEVELOPER_MODE
     , m_useqresources(!m_controller->isMobile())
 #else
     , m_useqresources(false)
 #endif
+    , m_kernel(kernel)
 {
     rootContext()->setContextProperty("_toolTipController", new ToolTipController(this));
 
@@ -140,7 +141,7 @@ void QuickView::keyReleaseEvent(QKeyEvent *event)
         event->accept();
         reloadQML();
     } else if (m_useqresources && event->key() == Qt::Key_F4) {
-        Kernel::instance()->storage()->dumpDebugInfo();
+        m_kernel->storage()->dumpDebugInfo();
         qDebug() << "Active focus belongs to" << activeFocusItem();
         qDebug() << "TagEditStatus:" << m_controller->tagEditStatus();
     } else {

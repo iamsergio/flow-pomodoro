@@ -45,7 +45,7 @@ static QVariant dataFunction(const TagRef::List &list, int index, int role)
     }
 }
 
-Task::Task(Storage *storage, const QString &summary)
+Task::Task(Kernel *kernel, const QString &summary)
     : QObject()
     , Syncable()
     , m_summary(summary.isEmpty() ? tr("New Task") : summary)
@@ -53,15 +53,17 @@ Task::Task(Storage *storage, const QString &summary)
     , m_staged(false)
     , m_creationDate(QDateTime::currentDateTimeUtc())
     , m_modificationDate(m_creationDate)
+    , m_kernel(kernel)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     m_checkableTagModel = new CheckableTagModel(this);
 
-    modelSetup(storage);
+    modelSetup();
 }
 
-void Task::modelSetup(Storage *storage)
+void Task::modelSetup()
 {
+    Storage *storage = m_kernel->storage();
     m_tags.setDataFunction(&dataFunction);
     m_tags.insertRole("tag", Q_NULLPTR, TagRole);
     m_tags.insertRole("task", Q_NULLPTR, TaskRole);
@@ -89,9 +91,9 @@ void Task::modelSetup(Storage *storage)
     m_contextMenuModel = new TaskContextMenuModel(this, this);
 }
 
-Task::Ptr Task::createTask(Storage *storage, const QString &summary)
+Task::Ptr Task::createTask(Kernel *kernel, const QString &summary)
 {
-    Task::Ptr task = Task::Ptr(new Task(storage, summary));
+    Task::Ptr task = Task::Ptr(new Task(kernel, summary));
     task->setWeakPointer(task);
     return task;
 }
@@ -325,6 +327,11 @@ TaskContextMenuModel *Task::contextMenuModel() const
 bool Task::operator==(const Task &other) const
 {
     return m_uuid == other.uuid();
+}
+
+Kernel *Task::kernel() const
+{
+    return m_kernel;
 }
 
 void Task::onEdited()
