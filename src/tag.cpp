@@ -98,7 +98,7 @@ QAbstractItemModel *Tag::taskModel()
 {
     // Delayed initialization do avoid deadlock accessing Kernel::instance()->storage() when TaskStorage is being constructed
     // TODO: this should be ok now
-    if (!m_taskModel) {
+    if (!m_taskModel && m_kernel) {
         m_taskModel = new TaskFilterProxyModel(this);
         m_taskModel->setTagName(m_name);
         m_taskModel->setSourceModel(m_kernel->storage()->archivedTasksModel());

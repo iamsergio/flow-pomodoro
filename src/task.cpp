@@ -58,7 +58,8 @@ Task::Task(Kernel *kernel, const QString &summary)
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     m_checkableTagModel = new CheckableTagModel(this);
 
-    modelSetup();
+    if (kernel)
+        modelSetup();
 }
 
 void Task::modelSetup()
