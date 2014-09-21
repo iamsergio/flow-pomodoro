@@ -23,6 +23,7 @@ RuntimeConfiguration::RuntimeConfiguration()
     : m_pluginsSupported(true)
     , m_settings(0)
     , m_saveEnabled(true)
+    , m_webDAVFileName("flow.dat")
 {
 }
 
@@ -64,4 +65,14 @@ bool RuntimeConfiguration::saveEnabled() const
 void RuntimeConfiguration::setSaveEnabled(bool enabled)
 {
     m_saveEnabled = enabled;
+}
+
+QString RuntimeConfiguration::webDAVFileName() const
+{
+    return m_webDAVFileName;
+}
+
+void RuntimeConfiguration::setWebDAVFileName(const QString &name)
+{
+    m_webDAVFileName = name;
 }

@@ -20,6 +20,7 @@
 #ifndef WEBDAVSYNCER_H
 #define WEBDAVSYNCER_H
 
+#include "runtimeconfiguration.h"
 #include <QObject>
 
 #ifndef NO_WEBDAV
@@ -37,7 +38,7 @@ class WebDAVSyncer : public QObject
     Q_OBJECT
     Q_PROPERTY(bool syncInProgress READ syncInProgress NOTIFY syncInProgressChanged)
 public:
-    explicit WebDAVSyncer(Storage *storage);
+    explicit WebDAVSyncer(const RuntimeConfiguration &, Storage *storage);
     bool syncInProgress() const;
     void setConnectionSettings(bool https, int port, const QString &host, const QString &path,
                                const QString &user, const QString &password);
@@ -65,6 +66,7 @@ private:
     Storage *m_storage;
     Controller *m_controller;
     bool m_syncInProgress;
+    RuntimeConfiguration m_config;
 
     friend class InitialState;
     friend class AcquireLockState;

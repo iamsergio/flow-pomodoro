@@ -17,13 +17,7 @@ Item {
                 _storage.removeDuplicateData()
             }
         }
-        PushButton {
-            visible: _storage.webDAVSyncSupported
-            text: qsTr("WebDAV Sync")
-            onClicked: {
-                _controller.webDavSync()
-            }
-        }
+
         PushButton {
             text: qsTr("Dump debug info")
             onClicked: {

@@ -147,7 +147,7 @@ public:
         m_data.clear();
         m_buffer = new QBuffer(&m_data);
         m_buffer->open(QIODevice::WriteOnly);
-        QNetworkReply *reply = m_syncer->m_webdav->get("/flow.dat", m_buffer);
+        QNetworkReply *reply = m_syncer->m_webdav->get("/" + m_syncer->m_config.webDAVFileName(), m_buffer);
         connect(reply, &QNetworkReply::finished, this, &DownloadDataState::onDataDownloadFinished);
     }
 
@@ -347,12 +347,13 @@ public:
 };
 
 
-WebDAVSyncer::WebDAVSyncer(Storage *parent)
+WebDAVSyncer::WebDAVSyncer(const RuntimeConfiguration &config, Storage *parent)
     : QObject(parent)
     , m_webdav(0)
     , m_stateMachine(new QStateMachine(this))
     , m_storage(parent)
     , m_syncInProgress(false)
+    , m_config(config)
 {
     QState *initialState = new InitialState(this);
     QState *acquireLockState = new AcquireLockState(this);

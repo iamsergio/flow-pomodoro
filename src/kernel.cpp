@@ -134,7 +134,7 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     , m_controller(new Controller(m_qmlEngine->rootContext(), m_storage, m_settings, this))
     , m_pluginModel(new PluginModel(this))
 #ifndef NO_WEBDAV
-    , m_webDavSyncer(new WebDAVSyncer(m_storage))
+    , m_webDavSyncer(new WebDAVSyncer(config, m_storage))
 #endif
 {
     registerQmlTypes();
