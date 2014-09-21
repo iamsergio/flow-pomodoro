@@ -184,13 +184,26 @@ Item {
         }
     }
 
+    PushButton {
+        anchors.top: testButton.top
+        anchors.left: testButton.right
+        anchors.leftMargin: _style.marginSmall
+        text: qsTr("Sync")
+        enabled: testButton.enabled
+        onClicked: {
+            testSettingsText.text = ""
+            _webdavSync.sync()
+        }
+    }
+
     Text {
         id: testSettingsText
-        anchors.verticalCenter: testButton.verticalCenter
-        anchors.left: testButton.right
+        anchors.left: testButton.left
         anchors.leftMargin: _style.marginMedium
         anchors.right: parent.right
         anchors.rightMargin: _style.marginMedium
+        anchors.top: testButton.bottom
+        anchors.topMargin: _style.marginSmall
         visible: testButton.enabled
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         font.pixelSize: 12 * _controller.dpiFactor
@@ -216,7 +229,7 @@ Item {
 
     Text {
         id: urlText
-        anchors.top: testButton.bottom
+        anchors.top: testSettingsText.bottom
         anchors.left: grid1.left
         anchors.right: parent.right
         anchors.rightMargin: _style.marginSmall
