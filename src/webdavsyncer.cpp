@@ -37,6 +37,11 @@ public:
         : QState()
         , m_syncer(syncer) { }
 
+    QString lockFileName() const
+    {
+        return "/" + m_syncer->m_config.webDAVFileName() + ".lock";
+    }
+
 protected:
     WebDAVSyncer *m_syncer;
 };
@@ -81,7 +86,7 @@ public:
         qDebug() << "Entered AcquireLockState";
         m_buffer = new QBuffer(&m_lockFileContents);
         m_buffer->open(QIODevice::WriteOnly);
-        QNetworkReply *reply = m_syncer->m_webdav->get("/flow.lock", m_buffer);
+        QNetworkReply *reply = m_syncer->m_webdav->get(lockFileName(), m_buffer);
         connect(reply, &QNetworkReply::finished, this, &AcquireLockState::onDownloadLockFileFinished);
     }
 private:
@@ -91,7 +96,7 @@ private:
         QByteArray ourInstanceId = Kernel::instance()->storage()->instanceId();
 
         if (reply->error() == QNetworkReply::ContentNotFoundError) {
-            QNetworkReply *reply2 = m_syncer->m_webdav->put("/flow.lock", ourInstanceId);
+            QNetworkReply *reply2 = m_syncer->m_webdav->put(lockFileName(), ourInstanceId);
             connect(reply2, &QNetworkReply::finished, this, &AcquireLockState::onLockAcquired);
         } else if (reply->error() == 0) {
             // Lock file already present. Check if it's ours:
@@ -291,7 +296,7 @@ public:
     {
         SyncState::onEntry(event);
         qDebug() << "Entered CleanupState";
-        QNetworkReply *reply = m_syncer->m_webdav->remove("/flow.lock");
+        QNetworkReply *reply = m_syncer->m_webdav->remove(lockFileName());
         connect(reply, &QNetworkReply::finished, this, &CleanupState::onLockRemoved);
     }
 

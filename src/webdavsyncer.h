@@ -73,6 +73,7 @@ private:
     friend class DownloadDataState;
     friend class CleanupState;
     friend class TestSettingsState;
+    friend class SyncState;
 };
 
 #endif // NO_WEBDAV
