@@ -30,6 +30,14 @@ Settings::Settings(QObject *parent)
 {
 }
 
+Settings::Settings(const QString &filename, QObject *parent)
+    : QSettings(filename, QSettings::IniFormat, parent)
+    , m_syncScheduled(false)
+    , m_needsSync(false)
+{
+
+}
+
 void Settings::setValue(const QString &key, const QVariant &value)
 {
     QSettings::setValue(key, value);

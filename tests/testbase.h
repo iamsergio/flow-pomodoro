@@ -29,6 +29,7 @@
 #include "task.h"
 #include "controller.h"
 #include "tagref.h"
+#include "settings.h"
 #include <QtTest/QtTest>
 
 class TestBase : public QObject
@@ -37,17 +38,19 @@ public:
 
     TestBase()
     {
-        m_kernel = Kernel::instance();
-        m_storage = m_kernel->storage();
-        m_controller = m_kernel->controller();
         RuntimeConfiguration config;
         config.setDataFileName("data.dat");
         config.setPluginsSupported(false);
-        m_kernel->setRuntimeConfiguration(config);
+        config.setSettings(new Settings("unit-test-settings.ini"));
+        config.setSaveEnabled(false);
+        m_kernel = Kernel::instance(config);
+        m_storage = m_kernel->storage();
+        m_controller = m_kernel->controller();
     }
 
     ~TestBase()
     {
+        QFile::remove("unit-test-settings.ini");
     }
 
     bool checkStorageConsistency()
@@ -76,13 +79,25 @@ public:
         RuntimeConfiguration config;
         config.setDataFileName("data_files/" + dataFilename);
         config.setPluginsSupported(false);
+        config.setSettings(new Settings("unit-test-settings.ini"));
+        config.setSaveEnabled(false);
 
-        m_kernel = Kernel::instance();
-        m_kernel->setRuntimeConfiguration(config);
+        m_kernel = Kernel::instance(config);
         m_storage = m_kernel->storage();
         m_controller = m_kernel->controller();
         if (load)
             m_kernel->storage()->load();
+    }
+
+    void waitForIt()
+    {
+        QTestEventLoop::instance().enterLoop(10);
+        QVERIFY(!QTestEventLoop::instance().timeout());
+    }
+
+    void stopWaiting()
+    {
+        QTestEventLoop::instance().exitLoop();
     }
 
 protected:

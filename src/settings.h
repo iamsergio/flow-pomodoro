@@ -27,6 +27,7 @@ class Settings : public QSettings {
     Q_OBJECT
 public:
     explicit Settings(QObject *parent = 0);
+    explicit Settings(const QString &filename, QObject *parent = 0); // Overload for unit-tests
     void setValue(const QString &key, const QVariant &value);
     void scheduleSync();
     bool needsSync() const;

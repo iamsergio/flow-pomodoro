@@ -38,13 +38,13 @@ class Kernel : public QObject
     Q_OBJECT
 public:
     static Kernel *instance();
+    static Kernel *instance(const RuntimeConfiguration &); // Overload used by unit-tests
     ~Kernel();
     Storage* storage() const;
     Controller *controller() const;
     QQmlContext *qmlContext() const;
     QQmlEngine *qmlEngine() const;
     Settings *settings() const;
-    void setRuntimeConfiguration(const RuntimeConfiguration &); // So unit-tests can use another configuration
     RuntimeConfiguration runtimeConfiguration() const;
 
 #ifndef NO_WEBDAV
@@ -59,16 +59,18 @@ private:
     void loadPlugins();
     void notifyPlugins(TaskStatus newStatus);
 
-    explicit Kernel(QObject *parent = 0);
+    explicit Kernel(const RuntimeConfiguration &, QObject *parent = 0);
+    RuntimeConfiguration m_runtimeConfiguration;
     Storage *m_storage;
     QQmlEngine *m_qmlEngine;
     Settings *m_settings;
     Controller *m_controller;
     PluginModel *m_pluginModel;
-    RuntimeConfiguration m_runtimeConfiguration;
 #ifndef NO_WEBDAV
     WebDAVSyncer *m_webDavSyncer;
 #endif
+
+    static QPointer<Kernel> s_kernel; // QPointer, so unit-tests can delete and recreate
 };
 
 #endif

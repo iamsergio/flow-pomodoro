@@ -1,0 +1,44 @@
+{
+    "JsonSerializerVersion": 1,
+    "instanceId": "{3c16d5d6-3505-46ed-a9a4-ac9a4e378ae6}",
+    "tags": [
+        {
+            "name": "work",
+            "revision": 0,
+            "revisionOnWebDAVServer": -1,
+            "uuid": "{000abc73-1c23-4788-bda7-ef45dfc20c40}"
+        },
+        {
+            "name": "personal",
+            "revision": 0,
+            "revisionOnWebDAVServer": -1,
+            "uuid": "{0c73b70f-b483-4ee4-97f3-1eb839faa63a}"
+        },
+        {
+            "name": "family",
+            "revision": 0,
+            "revisionOnWebDAVServer": -1,
+            "uuid": "{be85158f-7889-46c5-a986-7fbd75e4cda9}"
+        },
+        {
+            "name": "bills",
+            "revision": 0,
+            "revisionOnWebDAVServer": -1,
+            "uuid": "{12204ca9-df4c-4575-a11a-2dc0fc1b0410}"
+        },
+        {
+            "name": "books",
+            "revision": 0,
+            "revisionOnWebDAVServer": -1,
+            "uuid": "{7fe3bf40-1731-45ac-9b01-f5997d0eb0ca}"
+        },
+        {
+            "name": "movies",
+            "revision": 0,
+            "revisionOnWebDAVServer": -1,
+            "uuid": "{941232a1-7cbb-408d-8727-ac12ee85ca9f}"
+        }
+    ],
+    "tasks": [
+    ]
+}

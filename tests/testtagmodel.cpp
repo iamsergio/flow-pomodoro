@@ -26,8 +26,7 @@ TestTagModel::TestTagModel()
 
 void TestTagModel::initTestCase()
 {
-    m_storage->clearTags();
-    m_storage->clearTasks();
+    createNewKernel("empty.dat");
 }
 
 void TestTagModel::cleanupTestCase()

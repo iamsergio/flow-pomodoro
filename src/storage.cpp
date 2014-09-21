@@ -52,8 +52,9 @@ static QVariant tasksDataFunction(const TaskList &list, int index, int role)
     }
 }
 
-Storage::Storage(QObject *parent)
+Storage::Storage(const RuntimeConfiguration &config, QObject *parent)
     : QObject(parent)
+    , m_config(config)
     , m_savingDisabled(0)
     , m_taskFilterModel(new TaskFilterProxyModel(this))
     , m_untaggedTasksModel(new TaskFilterProxyModel(this))
@@ -155,6 +156,9 @@ void Storage::load()
 
 void Storage::save()
 {
+    if (!m_config.saveEnabled()) // Unit-tests don't save
+        return;
+
     m_savingInProgress = true;
     m_savingDisabled += 1;
     save_impl();

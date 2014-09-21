@@ -99,32 +99,44 @@ static QString defaultDataFileName()
     return filename;
 }
 
+QPointer<Kernel> Kernel::s_kernel;
+
 Kernel *Kernel::instance()
 {
-    // QPointer, so unit-tests can delete and recreate
-    static QPointer<Kernel> kernel;
-    if (!kernel)
-        kernel = new Kernel(qApp);
+    if (!s_kernel) {
+        RuntimeConfiguration defaultConfig;
+        defaultConfig.setDataFileName(defaultDataFileName());
+        s_kernel = new Kernel(defaultConfig, qApp);
+    }
 
-    return kernel;
+    return s_kernel;
+}
+
+Kernel *Kernel::instance(const RuntimeConfiguration &config)
+{
+    if (!s_kernel)
+        s_kernel = new Kernel(config, qApp);
+
+    return s_kernel;
 }
 
 Kernel::~Kernel()
 {
+    delete m_settings;
 }
 
-Kernel::Kernel(QObject *parent)
+Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     : QObject(parent)
-    , m_storage(new JsonStorage(this))
+    , m_runtimeConfiguration(config)
+    , m_storage(new JsonStorage(config, this))
     , m_qmlEngine(new QQmlEngine(0)) // leak the engine, no point in wasting shutdown time. Also we get a qmldebug server crash if it's parented to qApp, which Kernel is
-    , m_settings(new Settings(this))
+    , m_settings(config.settings() ? config.settings() : new Settings(this))
     , m_controller(new Controller(m_qmlEngine->rootContext(), m_storage, m_settings, this))
     , m_pluginModel(new PluginModel(this))
 #ifndef NO_WEBDAV
     , m_webDavSyncer(new WebDAVSyncer(m_storage))
 #endif
 {
-    m_runtimeConfiguration.setDataFileName(defaultDataFileName());
     registerQmlTypes();
     qmlContext()->setContextProperty("_controller", m_controller);
     qmlContext()->setContextProperty("_storage", m_storage);
@@ -163,11 +175,6 @@ QQmlEngine *Kernel::qmlEngine() const
 Settings *Kernel::settings() const
 {
     return m_settings;
-}
-
-void Kernel::setRuntimeConfiguration(const RuntimeConfiguration &config)
-{
-    m_runtimeConfiguration = config;
 }
 
 RuntimeConfiguration Kernel::runtimeConfiguration() const

@@ -22,6 +22,8 @@
 
 #include <QString>
 
+class Settings;
+
 class RuntimeConfiguration
 {
 public:
@@ -33,10 +35,17 @@ public:
     void setPluginsSupported(bool); // default true
     bool pluginsSupported() const;
 
+    Settings *settings() const;
+    void setSettings(Settings *);
+
+    bool saveEnabled() const;
+    void setSaveEnabled(bool);
+
 private:
     QString m_dataFileName;
     bool m_pluginsSupported;
-
+    Settings *m_settings;
+    bool m_saveEnabled;
 };
 
 #endif

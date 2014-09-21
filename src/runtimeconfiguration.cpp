@@ -21,6 +21,8 @@
 
 RuntimeConfiguration::RuntimeConfiguration()
     : m_pluginsSupported(true)
+    , m_settings(0)
+    , m_saveEnabled(true)
 {
 }
 
@@ -42,4 +44,24 @@ void RuntimeConfiguration::setPluginsSupported(bool supported)
 bool RuntimeConfiguration::pluginsSupported() const
 {
     return m_pluginsSupported;
+}
+
+Settings *RuntimeConfiguration::settings() const
+{
+    return m_settings;
+}
+
+void RuntimeConfiguration::setSettings(Settings *settings)
+{
+    m_settings = settings;
+}
+
+bool RuntimeConfiguration::saveEnabled() const
+{
+    return m_saveEnabled;
+}
+
+void RuntimeConfiguration::setSaveEnabled(bool enabled)
+{
+    m_saveEnabled = enabled;
 }

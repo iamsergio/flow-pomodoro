@@ -25,19 +25,14 @@
 #include <QJsonDocument>
 #include <QTemporaryFile>
 
-static QString tmpDataFileName()
-{
-    return Kernel::instance()->runtimeConfiguration().dataFileName() + "~";
-}
-
-JsonStorage::JsonStorage(QObject *parent)
-    : Storage(parent)
+JsonStorage::JsonStorage(const RuntimeConfiguration &config, QObject *parent)
+    : Storage(config, parent)
 {
 }
 
 JsonStorage::~JsonStorage()
 {
-    if (saveScheduled())
+    if (saveScheduled() && m_config.saveEnabled())
         save_impl();
 }
 
@@ -89,7 +84,7 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
 
 void JsonStorage::load_impl()
 {
-    const QString dataFileName = Kernel::instance()->runtimeConfiguration().dataFileName();
+    const QString dataFileName = m_config.dataFileName();
     qDebug() << "JsonStorage::load_impl Loading from" << dataFileName;
     if (!QFile::exists(dataFileName)) // Nothing to load
         return;
@@ -127,25 +122,26 @@ void JsonStorage::load_impl()
 void JsonStorage::save_impl()
 {
     QByteArray serializedData = serializeToJsonData(m_data);
+    QString tmpDataFileName = m_config.dataFileName() + "~";;
 
-    QFile temporaryFile(tmpDataFileName()); // not using QTemporaryFile so the backup stays next to the main one
+    QFile temporaryFile(tmpDataFileName); // not using QTemporaryFile so the backup stays next to the main one
     if (!temporaryFile.open(QIODevice::WriteOnly)) {
-        qWarning() << "Could not open" << tmpDataFileName() << "for writing"
+        qWarning() << "Could not open" << tmpDataFileName << "for writing"
                    << temporaryFile.errorString() << temporaryFile.error();
         return;
     }
 
-    const QString dataFileName = Kernel::instance()->runtimeConfiguration().dataFileName();
+    const QString dataFileName = m_config.dataFileName();
     temporaryFile.write(serializedData, serializedData.count());
     if (QFile::exists(dataFileName) && !QFile::remove(dataFileName)) {
         qWarning() << "Could not update (remove error)" << dataFileName
-                   << "backup file is at" << tmpDataFileName();
+                   << "backup file is at" << tmpDataFileName;
         return;
     }
 
     if (!temporaryFile.copy(dataFileName)) {
         qWarning() << "Could not update" << dataFileName
-                   << "backup file is at" << tmpDataFileName();
+                   << "backup file is at" << tmpDataFileName;
         return;
     }
 }
