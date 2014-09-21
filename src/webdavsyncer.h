@@ -27,6 +27,7 @@
 
 class QWebdav;
 class QStateMachine;
+class QState;
 class AcquireLockState;
 class DownloadDataState;
 class CleanupState;
@@ -42,6 +43,8 @@ public:
     bool syncInProgress() const;
     void setConnectionSettings(bool https, int port, const QString &host, const QString &path,
                                const QString &user, const QString &password);
+
+    void upload(const QString &filename, const QByteArray &contents); // Used by unit-tests
 
 public Q_SLOTS:
     void sync();
@@ -59,6 +62,10 @@ Q_SIGNALS:
     void cleanupFinished();
     void syncInProgressChanged();
     void testSettingsFinished(bool success, const QString &errorMessage);
+    void uploadFinished(bool success, const QString &errorMessage);
+
+private Q_SLOTS:
+    void onUploadFinished();
 
 private:
     QWebdav *m_webdav;
@@ -67,6 +74,7 @@ private:
     Controller *m_controller;
     bool m_syncInProgress;
     RuntimeConfiguration m_config;
+    QState *m_initialState;
 
     friend class InitialState;
     friend class AcquireLockState;

@@ -360,28 +360,28 @@ WebDAVSyncer::WebDAVSyncer(const RuntimeConfiguration &config, Storage *parent)
     , m_syncInProgress(false)
     , m_config(config)
 {
-    QState *initialState = new InitialState(this);
+    m_initialState = new InitialState(this);
     QState *acquireLockState = new AcquireLockState(this);
     QState *downloadState = new DownloadDataState(this);
     QState *cleanupState = new CleanupState(this);
     QState *testSettingsState = new TestSettingsState(this);
-    m_stateMachine->addState(initialState);
+    m_stateMachine->addState(m_initialState);
     m_stateMachine->addState(acquireLockState);
     m_stateMachine->addState(downloadState);
     m_stateMachine->addState(cleanupState);
     m_stateMachine->addState(testSettingsState);
 
-    initialState->addTransition(this, SIGNAL(startSync()), acquireLockState); // Try to acquire the lock
-    initialState->addTransition(this, SIGNAL(testSettingsStarted()), testSettingsState);
-    acquireLockState->addTransition(this, SIGNAL(webdavAlreadyLocked()), initialState); // We can't lock, go back to beginning
+    m_initialState->addTransition(this, SIGNAL(startSync()), acquireLockState); // Try to acquire the lock
+    m_initialState->addTransition(this, SIGNAL(testSettingsStarted()), testSettingsState);
+    acquireLockState->addTransition(this, SIGNAL(webdavAlreadyLocked()), m_initialState); // We can't lock, go back to beginning
     acquireLockState->addTransition(this, SIGNAL(lockAcquired()), downloadState);
     downloadState->addTransition(this, SIGNAL(downloadError()), cleanupState);
     downloadState->addTransition(this, SIGNAL(uploadError()), cleanupState);
     downloadState->addTransition(this, SIGNAL(uploadFinished()), cleanupState);
-    cleanupState->addTransition(this, SIGNAL(cleanupFinished()), initialState);
-    testSettingsState->addTransition(this, SIGNAL(testSettingsFinished(bool,QString)), initialState);
+    cleanupState->addTransition(this, SIGNAL(cleanupFinished()), m_initialState);
+    testSettingsState->addTransition(this, SIGNAL(testSettingsFinished(bool,QString)), m_initialState);
 
-    m_stateMachine->setInitialState(initialState);
+    m_stateMachine->setInitialState(m_initialState);
     m_stateMachine->setObjectName("State Machine");
     m_stateMachine->start();
 }
@@ -403,6 +403,25 @@ void WebDAVSyncer::setConnectionSettings(bool https, int port,
     m_webdav = new QWebdav(this);
     m_webdav->setConnectionSettings(https ? QWebdav::HTTPS : QWebdav::HTTP, host,
                                     path, user, password, port);
+}
+
+void WebDAVSyncer::upload(const QString &filename, const QByteArray &contents)
+{
+    Q_ASSERT(!m_stateMachine->configuration().contains(m_initialState));
+    QNetworkReply *reply = m_webdav->put("/" + filename, contents);
+    connect(reply, &QNetworkReply::finished, this, &WebDAVSyncer::onUploadFinished);
+}
+
+void WebDAVSyncer::onUploadFinished()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    qDebug() << Q_FUNC_INFO;
+    if (reply->error() == 0) {
+        emit uploadFinished(true, QString());
+    } else {
+        emit uploadFinished(false, reply->errorString());
+    }
+    reply->deleteLater();
 }
 
 void WebDAVSyncer::sync()
