@@ -427,5 +427,6 @@ void WebDAVSyncer::testSettings()
         return;
     }
 
-    emit testSettingsStarted();
+    // Delayed, because on unit-tests the transition wouldn't be triggered, since we need one event loop processing to get in InitialState
+    QMetaObject::invokeMethod(this, "testSettingsStarted", Qt::QueuedConnection);
 }

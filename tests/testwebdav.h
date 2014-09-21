@@ -23,15 +23,24 @@
 #include "testbase.h"
 #include <QObject>
 
+class WebDavSyncer;
+
 class TestWebDav : public TestBase
 {
     Q_OBJECT
 public:
     explicit TestWebDav();
 
+protected Q_SLOTS:
+    void onTestSettingsFinished(bool, const QString &);
+
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
+    void testConnect();
+
+private:
+    WebDAVSyncer *m_webdav;
 };
 
 #endif
