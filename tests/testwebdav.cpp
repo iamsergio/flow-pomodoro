@@ -26,33 +26,113 @@ TestWebDav::TestWebDav()
 {
 }
 
+static Kernel * newKernel(const QString &name)
+{
+    RuntimeConfiguration config;
+    config.setDataFileName("data_files/" + name + ".dat");
+    config.setPluginsSupported(false);
+    config.setSettings(new Settings(QString("%1.ini").arg(name)));
+    config.setSaveEnabled(false);
+    config.setWebDAVFileName("unit-test-flow.dat");
+
+    Kernel *kernel = new Kernel(config);
+    kernel->storage()->load();
+
+    kernel->controller()->setIsHttps(false);
+    kernel->controller()->setPort(55580);
+    kernel->controller()->setHost("rpi");
+    kernel->controller()->setPath("/uploads");
+    kernel->controller()->setUser("admin");
+    kernel->controller()->setPassword("12345");
+
+    return kernel;
+}
+
 void TestWebDav::initTestCase()
 {
-    createNewKernel("empty.dat");
-    m_webdav = m_kernel->webdavSyncer();
+    createNewKernel("kernelA.dat");
+    m_kernel->controller()->setIsHttps(false);
+    m_kernel->controller()->setPort(55580);
+    m_kernel->controller()->setHost("rpi");
+    m_kernel->controller()->setPath("/uploads");
+    m_kernel->controller()->setUser("admin");
+    m_kernel->controller()->setPassword("12345");
 
-    m_controller->setIsHttps(false);
-    m_controller->setPort(55580);
-    m_controller->setHost("rpi");
-    m_controller->setPath("/uploads");
-    m_controller->setUser("admin");
-    m_controller->setPassword("12345");
-    connect(m_webdav, &WebDAVSyncer::testSettingsFinished,
-            this, &TestWebDav::onTestSettingsFinished);
+    m_kernel2 = newKernel("kernelB");
+
+    connect(m_kernel->webdavSyncer(), &WebDAVSyncer::testSettingsFinished,
+            this, &TestWebDav::onSyncFinished);
+    connect(m_kernel2->webdavSyncer(), &WebDAVSyncer::testSettingsFinished,
+            this, &TestWebDav::onSyncFinished);
+    connect(m_kernel->webdavSyncer(), &WebDAVSyncer::syncFinished,
+            this, &TestWebDav::onSyncFinished);
+    connect(m_kernel2->webdavSyncer(), &WebDAVSyncer::syncFinished,
+            this, &TestWebDav::onSyncFinished);
 }
 
 void TestWebDav::cleanupTestCase()
 {
+    QFile::remove("kernelA.ini");
+    QFile::remove("kernelB.ini");
 }
 
 void TestWebDav::testConnect()
 {
-    m_webdav->testSettings();
+    m_kernel->webdavSyncer()->testSettings();
     waitForIt();
 }
 
-void TestWebDav::onTestSettingsFinished(bool success, const QString &errorMsg)
+static void validateSync(QStringList tasks, Storage *storage)
 {
+    if (storage->tasks().count() != tasks.count()) {
+        qDebug() << "Storage:" << storage->objectName();
+        QCOMPARE(storage->tasks().count(), tasks.count());
+    }
+    foreach (const Task::Ptr &task, storage->tasks()) {
+        if (!tasks.contains(task->summary())) {
+            qDebug() << "Storage:" << storage->objectName();
+            QVERIFY(false);
+        }
+        tasks.removeOne(task->summary());
+    }
+}
+
+void TestWebDav::testSync()
+{
+    WebDAVSyncer *syncer1 = m_kernel->webdavSyncer();
+    WebDAVSyncer *syncer2 = m_kernel2->webdavSyncer();
+    Storage *storage1 = m_kernel->storage();
+    Storage *storage2 = m_kernel2->storage();
+    storage1->setObjectName("storage1");
+    storage2->setObjectName("storage2");
+
+    //--------------------------------------------------------------------------
+    // Warm up
+    syncer1->sync();
+    waitForIt();
+
+    syncer2->sync();
+    waitForIt();
+    //--------------------------------------------------------------------------
+    // Case 1: client A creates task, syncs, B syncs and gets task.
+    storage1->addTask("task1");
+    syncer1->sync();
+    waitForIt();
+    syncer2->sync();
+    waitForIt();
+
+    validateSync(QStringList{ "task1" }, storage1);
+    validateSync(QStringList{ "task1" }, storage2);
+
+
+
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+}
+
+void TestWebDav::onSyncFinished(bool success, const QString &errorMsg)
+{
+    qDebug();
     if (!errorMsg.isEmpty()) {
         qWarning() << errorMsg;
         QVERIFY(false);

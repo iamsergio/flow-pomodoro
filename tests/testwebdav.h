@@ -32,14 +32,16 @@ public:
     explicit TestWebDav();
 
 protected Q_SLOTS:
-    void onTestSettingsFinished(bool, const QString &);
+    void onSyncFinished(bool, const QString &);
 
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     void testConnect();
+    void testSync();
 
 private:
+    Kernel *m_kernel2;
     WebDAVSyncer *m_webdav;
 };
 

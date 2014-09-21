@@ -254,7 +254,7 @@ private:
 
         storage->setData(finalData);
         QByteArray newData = JsonStorage::serializeToJsonData(storage->data()); // should be the same as finalData
-        QNetworkReply *reply2 = m_syncer->m_webdav->put("/flow.dat", newData);
+        QNetworkReply *reply2 = m_syncer->m_webdav->put("/" + m_syncer->m_config.webDAVFileName(), newData);
         connect(reply2, &QNetworkReply::finished, this, &DownloadDataState::onUploadFinished);
     }
 
@@ -307,6 +307,7 @@ public:
         reply->deleteLater();
         qDebug() << Q_FUNC_INFO;
         emit m_syncer->cleanupFinished();
+        emit m_syncer->syncFinished(true, QString());
     }
 };
 

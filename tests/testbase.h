@@ -27,6 +27,7 @@
 #include "runtimeconfiguration.h"
 #include "tag.h"
 #include "task.h"
+#include "webdavsyncer.h"
 #include "controller.h"
 #include "tagref.h"
 #include "settings.h"
