@@ -187,9 +187,9 @@ void TestWebDav::testSync()
 
     syncer2->sync();
     waitForIt();
-    //syncer1->sync();
-    //waitForIt();
-    ///validateSync(expected, storage1);
+    syncer1->sync();
+    waitForIt();
+    validateSync(QStringList(), storage1);
     validateSync(QStringList(), storage2);
     //--------------------------------------------------------------------------
 
