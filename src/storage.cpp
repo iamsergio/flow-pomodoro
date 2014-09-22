@@ -269,7 +269,10 @@ bool Storage::containsTag(const QString &name) const
 
 void Storage::clearTags()
 {
-    m_data.tags.clear();
+    // Don't use clear here
+    foreach (const Tag::Ptr &tag, m_data.tags) {
+        removeTag(tag->name());
+    }
 }
 
 bool Storage::renameTag(const QString &oldName, const QString &newName)
@@ -353,7 +356,10 @@ int Storage::indexOfTask(const Task::Ptr &task) const
 
 void Storage::clearTasks()
 {
-    m_data.tasks.clear();
+    // Don't use clear() here
+    foreach (const Task::Ptr &task, m_data.tasks) {
+        removeTask(task);
+    }
 }
 
 void Storage::setDisableSaving(bool disable)
