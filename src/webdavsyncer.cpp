@@ -409,9 +409,17 @@ void WebDAVSyncer::setConnectionSettings(bool https, int port,
 
 void WebDAVSyncer::upload(const QString &filename, const QByteArray &contents)
 {
-    Q_ASSERT(!m_stateMachine->configuration().contains(m_initialState));
+    Q_ASSERT(m_stateMachine->configuration().contains(m_initialState));
     QNetworkReply *reply = m_webdav->put("/" + filename, contents);
     connect(reply, &QNetworkReply::finished, this, &WebDAVSyncer::onUploadFinished);
+}
+
+void WebDAVSyncer::remove(const QString &filename)
+{
+    Q_ASSERT(m_stateMachine->configuration().contains(m_initialState));
+    Q_ASSERT(m_webdav);
+    QNetworkReply *reply = m_webdav->remove("/" + filename);
+    connect(reply, &QNetworkReply::finished, this, &WebDAVSyncer::onRemoveFinished);
 }
 
 void WebDAVSyncer::onUploadFinished()
@@ -422,6 +430,18 @@ void WebDAVSyncer::onUploadFinished()
         emit uploadFinished(true, QString());
     } else {
         emit uploadFinished(false, reply->errorString());
+    }
+    reply->deleteLater();
+}
+
+void WebDAVSyncer::onRemoveFinished()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    qDebug() << Q_FUNC_INFO;
+    if (reply->error() == 0) {
+        emit removeFinished(true, QString());
+    } else {
+        emit removeFinished(false, reply->errorString());
     }
     reply->deleteLater();
 }

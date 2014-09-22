@@ -50,6 +50,9 @@ static Kernel * newKernel(const QString &name)
 
 void TestWebDav::initTestCase()
 {
+    QFile::remove("unit-test-settings.ini");
+    QFile::remove("kernelB.ini");
+
     createNewKernel("kernelA.dat");
     m_kernel->controller()->setIsHttps(false);
     m_kernel->controller()->setPort(55580);
@@ -68,6 +71,8 @@ void TestWebDav::initTestCase()
             this, &TestWebDav::onSyncFinished);
     connect(m_kernel2->webdavSyncer(), &WebDAVSyncer::syncFinished,
             this, &TestWebDav::onSyncFinished);
+    connect(m_kernel->webdavSyncer(), &WebDAVSyncer::removeFinished,
+            this, &TestWebDav::onRemoveFinished);
 }
 
 void TestWebDav::cleanupTestCase()
@@ -99,6 +104,10 @@ static void validateSync(QStringList tasks, Storage *storage)
 
 void TestWebDav::testSync()
 {
+    // Clean the previous one first, if any
+    m_kernel->webdavSyncer()->remove("/" + m_kernel->runtimeConfiguration().webDAVFileName());
+    waitForIt();
+
     WebDAVSyncer *syncer1 = m_kernel->webdavSyncer();
     WebDAVSyncer *syncer2 = m_kernel2->webdavSyncer();
     Storage *storage1 = m_kernel->storage();
@@ -124,7 +133,10 @@ void TestWebDav::testSync()
     validateSync(QStringList{ "task1" }, storage1);
     validateSync(QStringList{ "task1" }, storage2);
 
-
+    // Sync again, nothing should change
+    syncer1->sync();
+    waitForIt();
+    validateSync(QStringList{ "task1" }, storage1);
 
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
@@ -139,5 +151,10 @@ void TestWebDav::onSyncFinished(bool success, const QString &errorMsg)
     }
 
     QVERIFY(success);
+    stopWaiting();
+}
+
+void TestWebDav::onRemoveFinished(bool, const QString &)
+{
     stopWaiting();
 }

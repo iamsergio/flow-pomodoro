@@ -45,7 +45,9 @@ public:
     void setConnectionSettings(bool https, int port, const QString &host, const QString &path,
                                const QString &user, const QString &password);
 
-    void upload(const QString &filename, const QByteArray &contents); // Used by unit-tests
+    // Used by unit-tests:
+    void upload(const QString &filename, const QByteArray &contents);
+    void remove(const QString &filename);
 
 public Q_SLOTS:
     void sync();
@@ -64,9 +66,11 @@ Q_SIGNALS:
     void syncInProgressChanged();
     void testSettingsFinished(bool success, const QString &errorMessage);
     void uploadFinished(bool success, const QString &errorMessage);
+    void removeFinished(bool success, const QString &errorMessage);
 
 private Q_SLOTS:
     void onUploadFinished();
+    void onRemoveFinished();
 
 private:
     QWebdav *m_webdav;

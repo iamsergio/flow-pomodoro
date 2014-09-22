@@ -33,6 +33,7 @@ public:
 
 protected Q_SLOTS:
     void onSyncFinished(bool, const QString &);
+    void onRemoveFinished(bool, const QString &);
 
 private Q_SLOTS:
     void initTestCase();
