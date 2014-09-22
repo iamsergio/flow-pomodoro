@@ -55,6 +55,7 @@ Task::Task(Kernel *kernel, const QString &summary)
     , m_modificationDate(m_creationDate)
     , m_kernel(kernel)
 {
+    Q_ASSERT(kernel);
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     m_checkableTagModel = new CheckableTagModel(this);
 

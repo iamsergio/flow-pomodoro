@@ -87,18 +87,43 @@ void TestWebDav::testConnect()
     waitForIt();
 }
 
-static void validateSync(QStringList tasks, Storage *storage)
-{
-    if (storage->tasks().count() != tasks.count()) {
-        qDebug() << "Storage:" << storage->objectName();
-        QCOMPARE(storage->tasks().count(), tasks.count());
+struct TTask {
+    typedef QList<TTask> List;
+    QString uid;
+    QString summary;
+    bool operator==(const TTask &other) const
+    {
+        return uid == other.uid && summary == other.summary;
     }
+};
+
+static void validateSync(TTask::List expectedTasks, Storage *storage)
+{
+    qDebug() << "Tasks on storage:" << storage->objectName();
     foreach (const Task::Ptr &task, storage->tasks()) {
-        if (!tasks.contains(task->summary())) {
-            qDebug() << "Storage:" << storage->objectName();
+        qDebug() << task->uuid() << task->summary();
+    }
+
+    qDebug() << "Expected tasks:";
+    foreach (const TTask &ttask, expectedTasks) {
+        qDebug() << ttask.uid << ttask.summary;
+    }
+
+    if (storage->tasks().count() != expectedTasks.count()) {
+        QCOMPARE(storage->tasks().count(), expectedTasks.count());
+    }
+
+    foreach (const Task::Ptr &task, storage->tasks()) {
+        const TTask actual = {task->uuid(), task->summary()};
+        if (!expectedTasks.contains(actual)) {
+            qDebug() << "Storage:" << storage->objectName() << "; culprit="
+                     << task->summary() << "; revision=" << task->revision()
+                     << "; revision on server=" << task->revisionOnWebDAVServer()
+                     << "; uid=" << task->uuid();
             QVERIFY(false);
         }
-        tasks.removeOne(task->summary());
+
+        expectedTasks.removeOne(actual);
     }
 }
 
@@ -106,6 +131,8 @@ void TestWebDav::testSync()
 {
     // Clean the previous one first, if any
     m_kernel->webdavSyncer()->remove("/" + m_kernel->runtimeConfiguration().webDAVFileName());
+    waitForIt();
+    m_kernel->webdavSyncer()->remove("/" + m_kernel->runtimeConfiguration().webDAVFileName() + ".locl");
     waitForIt();
 
     WebDAVSyncer *syncer1 = m_kernel->webdavSyncer();
@@ -124,16 +151,23 @@ void TestWebDav::testSync()
     waitForIt();
     //--------------------------------------------------------------------------
     // Case 1: client A creates task, syncs, B syncs and gets task.
-    storage1->addTask("task1");
+    Task::Ptr task1 = storage1->addTask("task1");
+    QString uid1 = task1->uuid();
     syncer1->sync();
     waitForIt();
     syncer2->sync();
     waitForIt();
 
-    QStringList expected = { "task1" };
+    TTask ttask;
+    TTask::List expected;
+
+    ttask.summary = task1->summary();
+    ttask.uid = uid1;
+    expected << ttask;
 
     validateSync(expected, storage1);
     validateSync(expected, storage2);
+
 
     // Sync again, nothing should change
     syncer1->sync();
@@ -142,12 +176,17 @@ void TestWebDav::testSync()
     //--------------------------------------------------------------------------
     // Case 1a: Client A creates another task
     Task::Ptr task2 = storage1->addTask("task2");
+    QString uid2 = task2->uuid();
+
     syncer1->sync();
     waitForIt();
     syncer2->sync();
     waitForIt();
 
-    expected << "task2";
+    ttask.summary = task2->summary();
+    ttask.uid = uid2;
+
+    expected << ttask;
 
     validateSync(expected, storage1);
     validateSync(expected, storage2);
@@ -165,17 +204,18 @@ void TestWebDav::testSync()
     validateSync(expected, storage2);
     //--------------------------------------------------------------------------
     // Case 3: Client A creates a task, syncs, Client B creates a task before syncing, then syncs
-    storage1->addTask("Task3A");
+    QString uuid3a = storage1->addTask("Task3A")->uuid();
     syncer1->sync();
     waitForIt();
-
-    expected << "Task3A";
+    ttask = {uuid3a, "Task3A" };
+    expected << ttask;
     validateSync(expected, storage1);
 
-    storage2->addTask("Task3B");
+    QString uuid3b = storage2->addTask("Task3B")->uuid();
     syncer2->sync();
     waitForIt();
-    expected << "Task3B";
+    ttask = {uuid3b, "Task3B"};
+    expected << ttask;
     validateSync(expected, storage2);
     syncer1->sync();
     waitForIt();
@@ -183,16 +223,52 @@ void TestWebDav::testSync()
     //--------------------------------------------------------------------------
     // Case 4: Client B deletes all
     storage2->clearTasks();
-    validateSync(QStringList(), storage2);
+    validateSync(TTask::List(), storage2);
 
     syncer2->sync();
     waitForIt();
     syncer1->sync();
     waitForIt();
-    validateSync(QStringList(), storage1);
-    validateSync(QStringList(), storage2);
+    validateSync(TTask::List(), storage1);
+    validateSync(TTask::List(), storage2);
+    //--------------------------------------------------------------------------
+    // Add some tasks again
+    uid1 = storage1->addTask("Task1")->uuid();
+    uid2 = storage1->addTask("Task2")->uuid();
+    QString uid3 = storage1->addTask("Task3")->uuid();
+    syncer1->sync();
+    waitForIt();
+    syncer2->sync();
+    waitForIt();
+    expected.clear();
+    expected << TTask({uid1, "Task1"}) << TTask({uid2, "Task2"}) << TTask({uid3, "Task3"});
+    validateSync(expected, storage1);
+    validateSync(expected, storage2);
+    //--------------------------------------------------------------------------
+    // Case 5: Client A edits one task, client B edits another task
+    task1 = storage1->taskAt(0);
+    task2 = storage2->taskAt(1);
+    QCOMPARE(task1->revision(), 0);
+    task1->setSummary("Hello1");
+    QCOMPARE(task1->revision(), 1);
+    syncer1->sync();
+    waitForIt();
+    QCOMPARE(task1->revision(), 1);
+    QCOMPARE(task2->revision(), 0);
+    task2->setSummary("Hello2");
+    QCOMPARE(task2->revision(), 1);
+    syncer2->sync();
+    waitForIt();
+    QCOMPARE(task2->revision(), 1);
+    syncer1->sync(); // Fetch client B's change
+    waitForIt();
+    expected.clear();
+    expected << TTask({uid1, "Hello1"}) << TTask({uid2, "Hello2"}) << TTask({uid3, "Task3"});
+    validateSync(expected, storage1);
+    validateSync(expected, storage2);
     //--------------------------------------------------------------------------
 
+    // TODO: Test concurrency
 }
 
 void TestWebDav::onSyncFinished(bool success, const QString &errorMsg)

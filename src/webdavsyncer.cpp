@@ -158,10 +158,11 @@ public:
 
 private:
     template <typename T>
-    static GenericListModel<T> merge(Storage *storage,
+    static GenericListModel<T> merge(Kernel *kernel,
                                      GenericListModel<T> &localList,
                                      GenericListModel<T> &serverList)
     {
+        Storage *storage = kernel->storage();
         GenericListModel<T> finalList;
 
         // Case 1: Present locally, not present on server
@@ -186,7 +187,6 @@ private:
                 int localRevision = localItem->revision();
                 T serverItem = serverList.at(index);
                 int serverRevision = serverItem->revision();
-
                 if (localRevision == serverRevision) {
                     finalList << localItem;
                 } else if (localRevision > serverRevision) {
@@ -234,7 +234,7 @@ private:
         Storage::Data serverData;
         if (reply->error() == 0) {
             QString errorMsg;
-            serverData = JsonStorage::deserializeJsonData(m_data, errorMsg);
+            serverData = JsonStorage::deserializeJsonData(m_data, errorMsg, m_syncer->m_kernel);
             if (!errorMsg.isEmpty()) {
                 emit m_syncer->downloadError();
                 return;
@@ -248,8 +248,8 @@ private:
         TagList localTags = storage->tags();
         TaskList localTasks = storage->tasks();
 
-        finalData.tags = merge<Tag::Ptr>(storage, localTags, serverData.tags);
-        finalData.tasks = merge<Task::Ptr>(storage, localTasks, serverData.tasks);
+        finalData.tags = merge<Tag::Ptr>(m_syncer->m_kernel, localTags, serverData.tags);
+        finalData.tasks = merge<Task::Ptr>(m_syncer->m_kernel, localTasks, serverData.tasks);
         finalData.instanceId = storage->data().instanceId;
 
         storage->setData(finalData);
@@ -361,6 +361,7 @@ WebDAVSyncer::WebDAVSyncer(Kernel *kernel)
     , m_storage(kernel->storage())
     , m_syncInProgress(false)
     , m_config(kernel->runtimeConfiguration())
+    , m_kernel(kernel)
 {
     m_initialState = new InitialState(this);
     QState *acquireLockState = new AcquireLockState(this);

@@ -39,6 +39,7 @@ JsonStorage::~JsonStorage()
 Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
                                                QString &errorMsg, Kernel *kernel)
 {
+    Q_ASSERT(kernel);
     Data result;
     errorMsg.clear();
     QJsonParseError jsonError;

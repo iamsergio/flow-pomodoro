@@ -39,6 +39,7 @@ Tag::Tag(Kernel *kernel, const QString &_name)
     , m_taskModel(Q_NULLPTR)
     , m_kernel(kernel)
 {
+    Q_ASSERT(kernel);
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     //Kernel::instance()->storage()->monitorTag(this);
 #if defined(QT_TESTLIB_LIB)

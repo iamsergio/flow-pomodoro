@@ -80,6 +80,7 @@ private:
     bool m_syncInProgress;
     RuntimeConfiguration m_config;
     QState *m_initialState;
+    Kernel *m_kernel;
 
     friend class InitialState;
     friend class AcquireLockState;
