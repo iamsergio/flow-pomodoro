@@ -130,16 +130,69 @@ void TestWebDav::testSync()
     syncer2->sync();
     waitForIt();
 
-    validateSync(QStringList{ "task1" }, storage1);
-    validateSync(QStringList{ "task1" }, storage2);
+    QStringList expected = { "task1" };
+
+    validateSync(expected, storage1);
+    validateSync(expected, storage2);
 
     // Sync again, nothing should change
     syncer1->sync();
     waitForIt();
-    validateSync(QStringList{ "task1" }, storage1);
+    validateSync(expected, storage1);
+    //--------------------------------------------------------------------------
+    // Case 1a: Client A creates another task
+    Task::Ptr task2 = storage1->addTask("task2");
+    syncer1->sync();
+    waitForIt();
+    syncer2->sync();
+    waitForIt();
 
+    expected << "task2";
+
+    validateSync(expected, storage1);
+    validateSync(expected, storage2);
     //--------------------------------------------------------------------------
+    // Case 2: Client A removes a task
+    storage1->removeTask(task2);
+    syncer1->sync();
+    waitForIt();
+    syncer2->sync();
+    waitForIt();
+
+    expected.removeLast();
+
+    validateSync(expected, storage1);
+    validateSync(expected, storage2);
     //--------------------------------------------------------------------------
+    // Case 3: Client A creates a task, syncs, Client B creates a task before syncing, then syncs
+    storage1->addTask("Task3A");
+    syncer1->sync();
+    waitForIt();
+
+    expected << "Task3A";
+    validateSync(expected, storage1);
+
+    storage2->addTask("Task3B");
+    syncer2->sync();
+    waitForIt();
+    expected << "Task3B";
+    validateSync(expected, storage2);
+    syncer1->sync();
+    waitForIt();
+    validateSync(expected, storage1);
+    //--------------------------------------------------------------------------
+    // Case 4: Client B deletes all
+    storage2->clearTasks();
+    validateSync(QStringList(), storage2);
+
+    syncer2->sync();
+    waitForIt();
+    //syncer1->sync();
+    //waitForIt();
+    ///validateSync(expected, storage1);
+    validateSync(QStringList(), storage2);
+    //--------------------------------------------------------------------------
+
 }
 
 void TestWebDav::onSyncFinished(bool success, const QString &errorMsg)
