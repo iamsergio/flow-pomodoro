@@ -267,7 +267,18 @@ void TestWebDav::testSync()
     validateSync(expected, storage1);
     validateSync(expected, storage2);
     //--------------------------------------------------------------------------
-
+    // Both remove the same task
+    storage1->removeTask(storage1->taskAt(0));
+    storage2->removeTask(storage2->taskAt(0));
+    syncer1->sync();
+    waitForIt();
+    syncer2->sync();
+    waitForIt();
+    expected.clear();
+    expected << TTask({uid2, "Hello2"}) << TTask({uid3, "Task3"});
+    validateSync(expected, storage1);
+    validateSync(expected, storage2);
+    //--------------------------------------------------------------------------
     // TODO: Test concurrency
 }
 
