@@ -127,7 +127,7 @@ static void validateSync(TTask::List expectedTasks, Storage *storage)
     }
 }
 
-void TestWebDav::testSync()
+void TestWebDav::testSyncTasks()
 {
     // Clean the previous one first, if any
     m_kernel->webdavSyncer()->remove("/" + m_kernel->runtimeConfiguration().webDAVFileName());

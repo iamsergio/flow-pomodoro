@@ -39,7 +39,7 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     void testConnect();
-    void testSync();
+    void testSyncTasks();
 
 private:
     Kernel *m_kernel2;
