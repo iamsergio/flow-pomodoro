@@ -33,10 +33,10 @@ public:
     int revisionOnWebDAVServer() const;
     void setRevisionOnWebDAVServer(int);
     QString uuid() const;
+    void setUuid(const QString &uuid);
 
     virtual void fromJson(const QVariantMap &);
 protected:
-    void setUuid(const QString &uuid);
     void setRevision(int);
     virtual QVariantMap toJson() const;
     int m_revision;

@@ -143,13 +143,14 @@ void Storage::load()
     m_createNonExistentTags = false;
 
     if (m_data.tags.isEmpty()) {
-        // Create default tags
-        createTag(tr("work"));
-        createTag(tr("personal"));
-        createTag(tr("family"));
-        createTag(tr("bills"));
-        createTag(tr("books"));
-        createTag(tr("movies"));
+        // Create default tags. We always use the same uuids for these so we don't get
+        // duplicates when synching with other devices
+        createTag(tr("work"), "{bb2ab284-8bb7-4aec-a452-084d64e85697}");
+        createTag(tr("personal"), "{73533168-9a57-4fc0-ba9a-9120bbadcb6c}");
+        createTag(tr("family"), "{4e81dd75-84c4-4359-912c-f3ead717f694}");
+        createTag(tr("bills"), "{4b4ae5fb-f35d-4389-9417-96b7ddcb3b8f}");
+        createTag(tr("books"), "{b2697470-f457-461c-9310-7d4b56aea395}");
+        createTag(tr("movies"), "{387be44a-1eb7-4895-954a-cf5bc82d8f03}");
     }
     m_loadingInProgress = false;
 }
@@ -210,7 +211,7 @@ Tag::Ptr Storage::tag(const QString &name, bool create)
     return (tag || !create) ? tag : createTag(name);
 }
 
-Tag::Ptr Storage::createTag(const QString &tagName)
+Tag::Ptr Storage::createTag(const QString &tagName, const QString &uid)
 {
     QString trimmedName = tagName.trimmed();
     if (trimmedName.isEmpty()) {
@@ -225,8 +226,10 @@ Tag::Ptr Storage::createTag(const QString &tagName)
     }
 
     Tag::Ptr tag = Tag::Ptr(new Tag(m_kernel, trimmedName));
-    m_data.tags << tag;
+    if (!uid.isEmpty())
+        tag->setUuid(uid);
 
+    m_data.tags << tag;
     return tag;
 }
 

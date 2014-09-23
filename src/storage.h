@@ -127,7 +127,7 @@ public:
 //------------------------------------------------------------------------------
 // Stuff for tags
     Q_INVOKABLE bool removeTag(const QString &tagName);
-    Q_INVOKABLE Tag::Ptr createTag(const QString &tagName);
+    Q_INVOKABLE Tag::Ptr createTag(const QString &tagName, const QString &uid = QString());
     Tag::Ptr tag(const QString &name, bool create = true);
     QAbstractItemModel *tagsModel() const;
     QString deletedTagName() const;
