@@ -188,7 +188,7 @@ private:
                 T serverItem = serverList.at(index);
                 int serverRevision = serverItem->revision();
                 if (localRevision == serverRevision) {
-                    finalList << localItem;
+                    finalList << serverItem;
                 } else if (localRevision > serverRevision) {
                     finalList << localItem;
                 } else {

@@ -279,6 +279,20 @@ void TestWebDav::testSync()
     validateSync(expected, storage1);
     validateSync(expected, storage2);
     //--------------------------------------------------------------------------
+    // Both edit the same task now. We don't have a conflict dialog, first to sync wins.
+    storage1->taskAt(0)->setSummary("Edited1");
+    storage2->taskAt(0)->setSummary("Edited2");
+    syncer1->sync();
+    waitForIt();
+    syncer2->sync();
+    waitForIt();
+    syncer1->sync();
+    waitForIt();
+    expected.clear();
+    expected << TTask({uid2, "Edited1"}) << TTask({uid3, "Task3"});
+    validateSync(expected, storage1);
+    validateSync(expected, storage2);
+    //--------------------------------------------------------------------------
     // TODO: Test concurrency
 }
 
