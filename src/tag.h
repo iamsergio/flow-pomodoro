@@ -80,4 +80,13 @@ private:
 
 bool operator==(const Tag::Ptr &, const Tag::Ptr &);
 
+inline QDebug operator<<(QDebug dbg, const Tag::Ptr &tag)
+{
+    if (!tag)
+        return dbg;
+
+    dbg.nospace() << "Tag: uuid=" << tag->uuid() << "; name=" << tag->name();
+    return dbg.space();
+}
+
 #endif

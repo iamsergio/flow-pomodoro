@@ -37,7 +37,7 @@ JsonStorage::~JsonStorage()
 }
 
 Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
-                                               QString &errorMsg, Kernel *kernel)
+                                               QString &errorMsg, Kernel *kernel, bool reuseTags)
 {
     Q_ASSERT(kernel);
     Data result;
@@ -66,7 +66,7 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
         Tag::Ptr tag = Tag::Ptr(new Tag(kernel, QString()));
         tag->fromJson(t.toMap());
         if (!tag->name().isEmpty() && !Storage::itemListContains<Tag::Ptr>(result.tags, tag)) {
-            if (kernel) // Reuse tags from given storage
+            if (reuseTags) // Reuse tags from given storage
                 tag = kernel->storage()->tag(tag->name());
             result.tags << tag;
         }

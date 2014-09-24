@@ -139,4 +139,13 @@ private:
     Kernel *m_kernel;
 };
 
+inline QDebug operator<<(QDebug dbg, const Task::Ptr &task)
+{
+    if (!task)
+        return dbg;
+
+    dbg.nospace() << "Task: uuid=" << task->uuid() << "; summary=" << task->summary();
+    return dbg.space();
+}
+
 #endif

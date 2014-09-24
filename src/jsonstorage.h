@@ -31,7 +31,8 @@ public:
     explicit JsonStorage(Kernel *kernel, QObject *parent);
     ~JsonStorage();
 
-    static Data deserializeJsonData(const QByteArray &serializedData, QString &error, Kernel *kernel);
+    static Data deserializeJsonData(const QByteArray &serializedData, QString &error,
+                                    Kernel *kernel, bool reuseTags = true);
     static QByteArray serializeToJsonData(const Storage::Data &);
 
 protected:

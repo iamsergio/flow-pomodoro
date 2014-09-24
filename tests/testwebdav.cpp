@@ -63,6 +63,9 @@ void TestWebDav::initTestCase()
 
     m_kernel2 = newKernel("kernelB");
 
+    m_kernel->storage()->setObjectName("storage1");
+    m_kernel2->storage()->setObjectName("storage2");
+
     connect(m_kernel->webdavSyncer(), &WebDAVSyncer::testSettingsFinished,
             this, &TestWebDav::onSyncFinished);
     connect(m_kernel2->webdavSyncer(), &WebDAVSyncer::testSettingsFinished,
@@ -167,8 +170,6 @@ void TestWebDav::testSyncTasks()
     WebDAVSyncer *syncer2 = m_kernel2->webdavSyncer();
     Storage *storage1 = m_kernel->storage();
     Storage *storage2 = m_kernel2->storage();
-    storage1->setObjectName("storage1");
-    storage2->setObjectName("storage2");
 
     //--------------------------------------------------------------------------
     // Warm up
@@ -328,7 +329,10 @@ void TestWebDav::testSyncTags()
 {
     Storage *storage1 = m_kernel->storage();
     Storage *storage2 = m_kernel2->storage();
-
+    WebDAVSyncer *syncer1 = m_kernel->webdavSyncer();
+    WebDAVSyncer *syncer2 = m_kernel2->webdavSyncer();
+    //--------------------------------------------------------------------------
+    // Warm up
     SSyncable::List expected = { { "{bb2ab284-8bb7-4aec-a452-084d64e85697}", "work" },
                                  { "{73533168-9a57-4fc0-ba9a-9120bbadcb6c}", "personal" },
                                  { "{4e81dd75-84c4-4359-912c-f3ead717f694}", "family" },
@@ -338,6 +342,21 @@ void TestWebDav::testSyncTags()
 
     validateTags(expected, storage1);
     validateTags(expected, storage2);
+    //--------------------------------------------------------------------------
+    // Both client A and B create a TagX
+    // Unlike tasks, we don't allow two tags with the same name, they will have to be merged.
+    Tag::Ptr tag = storage1->createTag("TagX");
+    storage2->createTag("TagX");
+    syncer1->sync();
+    waitForIt();
+    syncer2->sync();
+    waitForIt();
+
+    expected << SSyncable({tag->uuid(), tag->name()});
+
+    validateTags(expected, storage1);
+    validateTags(expected, storage2);
+    //--------------------------------------------------------------------------
 }
 
 void TestWebDav::onSyncFinished(bool success, const QString &errorMsg)

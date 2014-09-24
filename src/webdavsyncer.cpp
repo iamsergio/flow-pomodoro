@@ -165,17 +165,34 @@ private:
         Storage *storage = kernel->storage();
         GenericListModel<T> finalList;
 
+/*
+        foreach (const T &t, localList) {
+            qDebug() << "Local: " << t;
+        }
+
+        foreach (const T &t, serverList) {
+            qDebug() << "Remote: " << t;
+        } */
+
         // Case 1: Present locally, not present on server
         const GenericListModel<T> localTasksCopy = localList; // GenericListModel doesn't let use use iterators
         for (int i = 0; i < localTasksCopy.count(); ++i) {
             T localItem = localTasksCopy.at(i);
             if (localItem->revisionOnWebDAVServer() == -1) {
                 // This is a new local task/tag that should be created on server
+                int index = Storage::indexOfItem(serverList, localItem);
+                if (index != -1) {
+                    T serverItem = serverList.at(index);
+                    if (serverItem->uuid() != localItem->uuid()) {
+                        // In this situation two clients create the same tag concurrently, they have diff uid
+                        // so use uuid from the server
+                        localItem->setUuid(serverItem->uuid());
+                    }
+                    serverList.removeAt(index); // Shouldn't be necessary, but just in case
+                }
+
                 finalList << localItem;
                 localList.removeAll(localItem);
-                int index = Storage::indexOfItem(serverList, localItem);
-                if (index != -1)
-                    serverList.removeAt(index); // Shouldn't be necessary, but just in case
             } else if (!Storage::itemListContains(serverList, localItem)) {
                 // This task/tag was deleted on server, should be deleted here.
                 // It has revisionOnWebDAVServer != -1, so it was known by the server at some point
@@ -234,20 +251,19 @@ private:
         Storage::Data serverData;
         if (reply->error() == 0) {
             QString errorMsg;
-            serverData = JsonStorage::deserializeJsonData(m_data, errorMsg, m_syncer->m_kernel);
+            serverData = JsonStorage::deserializeJsonData(m_data, errorMsg, m_syncer->m_kernel, /*reuseTags=*/ false);
             if (!errorMsg.isEmpty()) {
                 emit m_syncer->downloadError();
                 return;
             }
         }
 
-        qDebug() << Q_FUNC_INFO << "Merging";
         Storage::Data finalData;
 
         Storage *storage = m_syncer->m_storage;
         TagList localTags = storage->tags();
         TaskList localTasks = storage->tasks();
-
+        qDebug() << Q_FUNC_INFO << "Merging" << m_syncer->m_kernel->storage()->objectName();
         finalData.tags = merge<Tag::Ptr>(m_syncer->m_kernel, localTags, serverData.tags);
         finalData.tasks = merge<Task::Ptr>(m_syncer->m_kernel, localTasks, serverData.tasks);
         finalData.instanceId = storage->data().instanceId;
