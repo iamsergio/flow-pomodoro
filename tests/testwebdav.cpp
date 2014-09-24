@@ -87,17 +87,17 @@ void TestWebDav::testConnect()
     waitForIt();
 }
 
-struct TTask {
-    typedef QList<TTask> List;
+struct SSyncable {
+    typedef QList<SSyncable> List;
     QString uid;
-    QString summary;
-    bool operator==(const TTask &other) const
+    QString text;
+    bool operator==(const SSyncable &other) const
     {
-        return uid == other.uid && summary == other.summary;
+        return uid == other.uid && text == other.text;
     }
 };
 
-static void validateSync(TTask::List expectedTasks, Storage *storage)
+static void validateSync(SSyncable::List expectedTasks, Storage *storage)
 {
     qDebug() << "Tasks on storage:" << storage->objectName();
     foreach (const Task::Ptr &task, storage->tasks()) {
@@ -105,8 +105,8 @@ static void validateSync(TTask::List expectedTasks, Storage *storage)
     }
 
     qDebug() << "Expected tasks:";
-    foreach (const TTask &ttask, expectedTasks) {
-        qDebug() << ttask.uid << ttask.summary;
+    foreach (const SSyncable &syncable, expectedTasks) {
+        qDebug() << syncable.uid << syncable.text;
     }
 
     if (storage->tasks().count() != expectedTasks.count()) {
@@ -114,7 +114,7 @@ static void validateSync(TTask::List expectedTasks, Storage *storage)
     }
 
     foreach (const Task::Ptr &task, storage->tasks()) {
-        const TTask actual = {task->uuid(), task->summary()};
+        const SSyncable actual = {task->uuid(), task->summary()};
         if (!expectedTasks.contains(actual)) {
             qDebug() << "Storage:" << storage->objectName() << "; culprit="
                      << task->summary() << "; revision=" << task->revision()
@@ -158,12 +158,12 @@ void TestWebDav::testSyncTasks()
     syncer2->sync();
     waitForIt();
 
-    TTask ttask;
-    TTask::List expected;
+    SSyncable syncable;
+    SSyncable::List expected;
 
-    ttask.summary = task1->summary();
-    ttask.uid = uid1;
-    expected << ttask;
+    syncable.text = task1->summary();
+    syncable.uid = uid1;
+    expected << syncable;
 
     validateSync(expected, storage1);
     validateSync(expected, storage2);
@@ -183,10 +183,10 @@ void TestWebDav::testSyncTasks()
     syncer2->sync();
     waitForIt();
 
-    ttask.summary = task2->summary();
-    ttask.uid = uid2;
+    syncable.text = task2->summary();
+    syncable.uid = uid2;
 
-    expected << ttask;
+    expected << syncable;
 
     validateSync(expected, storage1);
     validateSync(expected, storage2);
@@ -207,15 +207,13 @@ void TestWebDav::testSyncTasks()
     QString uuid3a = storage1->addTask("Task3A")->uuid();
     syncer1->sync();
     waitForIt();
-    ttask = {uuid3a, "Task3A" };
-    expected << ttask;
+    expected << SSyncable({uuid3a, "Task3A" });
     validateSync(expected, storage1);
 
     QString uuid3b = storage2->addTask("Task3B")->uuid();
     syncer2->sync();
     waitForIt();
-    ttask = {uuid3b, "Task3B"};
-    expected << ttask;
+    expected << SSyncable({uuid3b, "Task3B"});
     validateSync(expected, storage2);
     syncer1->sync();
     waitForIt();
@@ -223,14 +221,14 @@ void TestWebDav::testSyncTasks()
     //--------------------------------------------------------------------------
     // Case 4: Client B deletes all
     storage2->clearTasks();
-    validateSync(TTask::List(), storage2);
+    validateSync(SSyncable::List(), storage2);
 
     syncer2->sync();
     waitForIt();
     syncer1->sync();
     waitForIt();
-    validateSync(TTask::List(), storage1);
-    validateSync(TTask::List(), storage2);
+    validateSync(SSyncable::List(), storage1);
+    validateSync(SSyncable::List(), storage2);
     //--------------------------------------------------------------------------
     // Add some tasks again
     uid1 = storage1->addTask("Task1")->uuid();
@@ -241,7 +239,7 @@ void TestWebDav::testSyncTasks()
     syncer2->sync();
     waitForIt();
     expected.clear();
-    expected << TTask({uid1, "Task1"}) << TTask({uid2, "Task2"}) << TTask({uid3, "Task3"});
+    expected << SSyncable({uid1, "Task1"}) << SSyncable({uid2, "Task2"}) << SSyncable({uid3, "Task3"});
     validateSync(expected, storage1);
     validateSync(expected, storage2);
     //--------------------------------------------------------------------------
@@ -263,7 +261,7 @@ void TestWebDav::testSyncTasks()
     syncer1->sync(); // Fetch client B's change
     waitForIt();
     expected.clear();
-    expected << TTask({uid1, "Hello1"}) << TTask({uid2, "Hello2"}) << TTask({uid3, "Task3"});
+    expected << SSyncable({uid1, "Hello1"}) << SSyncable({uid2, "Hello2"}) << SSyncable({uid3, "Task3"});
     validateSync(expected, storage1);
     validateSync(expected, storage2);
     //--------------------------------------------------------------------------
@@ -275,7 +273,7 @@ void TestWebDav::testSyncTasks()
     syncer2->sync();
     waitForIt();
     expected.clear();
-    expected << TTask({uid2, "Hello2"}) << TTask({uid3, "Task3"});
+    expected << SSyncable({uid2, "Hello2"}) << SSyncable({uid3, "Task3"});
     validateSync(expected, storage1);
     validateSync(expected, storage2);
     //--------------------------------------------------------------------------
@@ -289,11 +287,22 @@ void TestWebDav::testSyncTasks()
     syncer1->sync();
     waitForIt();
     expected.clear();
-    expected << TTask({uid2, "Edited1"}) << TTask({uid3, "Task3"});
+    expected << SSyncable({uid2, "Edited1"}) << SSyncable({uid3, "Task3"});
     validateSync(expected, storage1);
     validateSync(expected, storage2);
     //--------------------------------------------------------------------------
     // TODO: Test concurrency
+    //--------------------------------------------------------------------------
+    checkStorageConsistency();
+}
+
+void TestWebDav::testSyncTags()
+{
+    Storage *storage1 = m_kernel->storage();
+    //Storage *storage2 = m_kernel2->storage();
+    foreach ( const Tag::Ptr &tag, storage1->tags()) {
+        qDebug() << "Tag: " << tag->name();
+    }
 }
 
 void TestWebDav::onSyncFinished(bool success, const QString &errorMsg)
