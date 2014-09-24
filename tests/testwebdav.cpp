@@ -127,6 +127,34 @@ static void validateSync(SSyncable::List expectedTasks, Storage *storage)
     }
 }
 
+static void validateTags(SSyncable::List expectedTags, Storage *storage)
+{
+    qDebug() << "Tags on storage:" << storage->objectName();
+    foreach (const Tag::Ptr &tag, storage->tags())
+        qDebug() << tag->uuid() << tag->name();
+
+    qDebug() << "Expected tags:";
+    foreach (const SSyncable &syncable, expectedTags)
+        qDebug() << syncable.uid << syncable.text;
+
+    if (storage->tags().count() != expectedTags.count())
+        QCOMPARE(storage->tags().count(), expectedTags.count());
+
+
+    foreach (const Tag::Ptr &tag, storage->tags()) {
+        const SSyncable actual = {tag->uuid(), tag->name()};
+        if (!expectedTags.contains(actual)) {
+            qDebug() << "Storage:" << storage->objectName() << "; culprit="
+                     << tag->name() << "; revision=" << tag->revision()
+                     << "; revision on server=" << tag->revisionOnWebDAVServer()
+                     << "; uid=" << tag->uuid();
+            QVERIFY(false);
+        }
+
+        expectedTags.removeOne(actual);
+    }
+}
+
 void TestWebDav::testSyncTasks()
 {
     // Clean the previous one first, if any
@@ -299,10 +327,17 @@ void TestWebDav::testSyncTasks()
 void TestWebDav::testSyncTags()
 {
     Storage *storage1 = m_kernel->storage();
-    //Storage *storage2 = m_kernel2->storage();
-    foreach ( const Tag::Ptr &tag, storage1->tags()) {
-        qDebug() << "Tag: " << tag->name();
-    }
+    Storage *storage2 = m_kernel2->storage();
+
+    SSyncable::List expected = { { "{bb2ab284-8bb7-4aec-a452-084d64e85697}", "work" },
+                                 { "{73533168-9a57-4fc0-ba9a-9120bbadcb6c}", "personal" },
+                                 { "{4e81dd75-84c4-4359-912c-f3ead717f694}", "family" },
+                                 { "{4b4ae5fb-f35d-4389-9417-96b7ddcb3b8f}", "bills" },
+                                 { "{b2697470-f457-461c-9310-7d4b56aea395}", "books" },
+                                 { "{387be44a-1eb7-4895-954a-cf5bc82d8f03}", "movies" } };
+
+    validateTags(expected, storage1);
+    validateTags(expected, storage2);
 }
 
 void TestWebDav::onSyncFinished(bool success, const QString &errorMsg)
