@@ -21,6 +21,9 @@
 #include "taskfilterproxymodel.h"
 #include "archivedtasksfiltermodel.h"
 #include "taskfilterproxymodel.h"
+#if defined(UNIT_TEST_RUN)
+# include "assertingproxymodel.h"
+#endif
 #include "storage.h"
 #include "kernel.h"
 
@@ -108,6 +111,10 @@ QAbstractItemModel *Tag::taskModel()
         connect(this, &Tag::taskCountChanged,
                 m_taskModel, &TaskFilterProxyModel::invalidateFilter,
                 Qt::QueuedConnection);
+#if defined(UNIT_TEST_RUN)
+        AssertingProxyModel *assert = new AssertingProxyModel(this);
+        assert->setSourceModel(m_taskModel);
+#endif
     }
 
     return m_taskModel;

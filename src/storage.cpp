@@ -28,6 +28,10 @@
 #include "webdavsyncer.h"
 #include "runtimeconfiguration.h"
 
+#if defined(UNIT_TEST_RUN)
+# include "assertingproxymodel.h"
+#endif
+
 static QVariant tagsDataFunction(const TagList &list, int index, int role)
 {
     switch (role) {
@@ -104,6 +108,24 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     m_archivedTasksModel->setAcceptArchived(true);
     m_untaggedTasksModel->setFilterUntagged(true);
     m_untaggedTasksModel->setObjectName("Untagged and archived tasks model");
+
+#if defined(UNIT_TEST_RUN)
+    AssertingProxyModel *assert = new AssertingProxyModel(this);
+    assert->setSourceModel(tasksModel);
+    assert = new AssertingProxyModel(this);
+    assert->setSourceModel(tagsModel);
+    assert = new AssertingProxyModel(this);
+    assert->setSourceModel(m_stagedTasksModel);
+    assert = new AssertingProxyModel(this);
+    assert->setSourceModel(m_archivedTasksModel);
+    assert = new AssertingProxyModel(this);
+    assert->setSourceModel(m_untaggedTasksModel);
+    assert = new AssertingProxyModel(this);
+    assert->setSourceModel(m_taskFilterModel);
+    assert = new AssertingProxyModel(this);
+    assert->setSourceModel(m_sortedTagModel);
+#endif
+
 }
 
 Storage::~Storage()

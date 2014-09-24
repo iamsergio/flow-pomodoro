@@ -7,7 +7,10 @@ include("../src/src.pri")
 
 INCLUDEPATH += $$PWD/../src/
 
-SOURCES += main.cpp \
+DEFINES += UNIT_TEST_RUN
+
+SOURCES += assertingproxymodel.cpp \
+           main.cpp \
            modelsignalspy.cpp \
            signalspy.cpp \
            testarchivedtasksmodel.cpp \
@@ -20,7 +23,8 @@ SOURCES += main.cpp \
            testtagmodel.cpp \
            testwebdav.cpp
 
-HEADERS += modelsignalspy.h \
+HEADERS += assertingproxymodel.h \
+           modelsignalspy.h \
            signalspy.h \
            testarchivedtasksmodel.h \
            testcheckabletagmodel.h \

@@ -22,6 +22,9 @@
 #include "settings.h"
 #include "checkabletagmodel.h"
 #include "taskcontextmenumodel.h"
+#if defined(UNIT_TEST_RUN)
+# include "assertingproxymodel.h"
+#endif
 #include "storage.h"
 #include "kernel.h"
 
@@ -91,6 +94,15 @@ void Task::modelSetup()
     }
 
     m_contextMenuModel = new TaskContextMenuModel(this, this);
+
+#if defined(UNIT_TEST_RUN)
+    AssertingProxyModel *assert = new AssertingProxyModel(this);
+    assert->setSourceModel(m_contextMenuModel);
+    assert = new AssertingProxyModel(this);
+    assert->setSourceModel(m_checkableTagModel);
+    assert = new AssertingProxyModel(this);
+    assert->setSourceModel(m_tags);
+#endif
 }
 
 Task::Ptr Task::createTask(Kernel *kernel, const QString &summary)
