@@ -41,6 +41,7 @@ Tag::Tag(Kernel *kernel, const QString &_name)
     , m_beingEdited(false)
     , m_taskModel(Q_NULLPTR)
     , m_kernel(kernel)
+    , m_dontUpdateRevision(false)
 {
     Q_ASSERT(kernel);
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
@@ -81,6 +82,8 @@ void Tag::setName(const QString &name)
 {
     if (name.trimmed().toLower() != m_name.toLower() && !name.isEmpty()) {
         m_name = name.trimmed(); // We preserve original case
+        if (!m_dontUpdateRevision)
+            m_revision++;
         emit nameChanged();
     }
 }
@@ -134,7 +137,9 @@ void Tag::fromJson(const QVariantMap &map)
     if (name.isEmpty()) {
         qWarning() << Q_FUNC_INFO << "empty tag name";
     } else {
+        m_dontUpdateRevision = true;
         setName(name);
+        m_dontUpdateRevision = false;
     }
 }
 

@@ -333,6 +333,7 @@ void TestWebDav::testSyncTags()
     WebDAVSyncer *syncer2 = m_kernel2->webdavSyncer();
     //--------------------------------------------------------------------------
     // Warm up
+    qDebug() << "Warm up";
     SSyncable::List expected = { { "{bb2ab284-8bb7-4aec-a452-084d64e85697}", "work" },
                                  { "{73533168-9a57-4fc0-ba9a-9120bbadcb6c}", "personal" },
                                  { "{4e81dd75-84c4-4359-912c-f3ead717f694}", "family" },
@@ -345,6 +346,7 @@ void TestWebDav::testSyncTags()
     //--------------------------------------------------------------------------
     // Both client A and B create a TagX
     // Unlike tasks, we don't allow two tags with the same name, they will have to be merged.
+    qDebug() << "Both creating tag";
     Tag::Ptr tag = storage1->createTag("TagX");
     storage2->createTag("TagX");
     syncer1->sync();
@@ -356,6 +358,53 @@ void TestWebDav::testSyncTags()
 
     validateTags(expected, storage1);
     validateTags(expected, storage2);
+    //--------------------------------------------------------------------------
+    // Client A creates a tag
+    qDebug() << "Creating tag";
+    tag = storage1->createTag("Tag2");
+    syncer1->sync();
+    waitForIt();
+    syncer2->sync();
+    waitForIt();
+    syncer1->sync();
+    waitForIt();
+    expected << SSyncable({tag->uuid(), tag->name()});
+    validateTags(expected, storage1);
+    validateTags(expected, storage2);
+    //--------------------------------------------------------------------------
+    // Client A renames a tag
+    qDebug() << "Renaming tag";
+    tag = storage1->tag("Tag2");
+    QCOMPARE(tag->revision(), 0);
+    storage1->renameTag("Tag2", "Tag2a");
+    QCOMPARE(tag->revision(), 1);
+
+    expected.removeLast();
+    expected << SSyncable({tag->uuid(), "Tag2a"});
+    validateTags(expected, storage1);
+
+    syncer1->sync();
+    waitForIt();
+
+    validateTags(expected, storage1);
+
+
+    syncer2->sync();
+    waitForIt();
+
+    validateTags(expected, storage2);
+    //--------------------------------------------------------------------------
+    // Client A removes a tag
+    storage1->removeTag("Tag2a");
+    syncer1->sync();
+    waitForIt();
+    syncer2->sync();
+    waitForIt();
+    expected.removeLast();
+    validateTags(expected, storage1);
+    validateTags(expected, storage2);
+    //--------------------------------------------------------------------------
+
     //--------------------------------------------------------------------------
 }
 

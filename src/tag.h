@@ -76,6 +76,7 @@ private:
     bool m_beingEdited;
     TaskFilterProxyModel *m_taskModel; // All unstaged tasks with this tag
     Kernel *m_kernel;
+    bool m_dontUpdateRevision;
 };
 
 bool operator==(const Tag::Ptr &, const Tag::Ptr &);
