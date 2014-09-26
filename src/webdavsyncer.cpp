@@ -165,14 +165,17 @@ private:
         Storage *storage = kernel->storage();
         GenericListModel<T> finalList;
 
-/*
+#ifdef UNIT_TEST_RUN
+        qDebug();
         foreach (const T &t, localList) {
             qDebug() << "Local: " << t;
         }
 
         foreach (const T &t, serverList) {
             qDebug() << "Remote: " << t;
-        } */
+        }
+        qDebug();
+#endif
 
         // Case 1: Present locally, not present on server
         const GenericListModel<T> localTasksCopy = localList; // GenericListModel doesn't let use use iterators
