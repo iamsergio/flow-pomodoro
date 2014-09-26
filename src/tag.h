@@ -86,7 +86,9 @@ inline QDebug operator<<(QDebug dbg, const Tag::Ptr &tag)
     if (!tag)
         return dbg;
 
-    dbg.nospace() << "Tag: uuid=" << tag->uuid() << "; name=" << tag->name();
+    dbg.nospace() << "Tag: uuid=" << tag->uuid()
+                  << "; name=" << tag->name()
+                  << "; rev=" << tag->revision();
     return dbg.space();
 }
 
