@@ -145,7 +145,7 @@ void Tag::fromJson(const QVariantMap &map)
 
 bool Tag::operator==(const Tag &other) const
 {
-    return other.m_name.toLower() == m_name.toLower();
+    return m_uuid == other.uuid() || m_name == other.m_name;
 }
 
 bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
