@@ -41,10 +41,15 @@ private Q_SLOTS:
     void testConnect();
     void testSyncTasks();
     void testSyncTags();
+    void testTasksAndTags();
 
 private:
     Kernel *m_kernel2;
     WebDAVSyncer *m_webdav;
+    Storage *m_storage1;
+    Storage *m_storage2;
+    WebDAVSyncer *m_syncer1;
+    WebDAVSyncer *m_syncer2;
 };
 
 #endif

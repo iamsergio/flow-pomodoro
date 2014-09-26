@@ -63,18 +63,24 @@ void TestWebDav::initTestCase()
 
     m_kernel2 = newKernel("kernelB");
 
-    m_kernel->storage()->setObjectName("storage1");
-    m_kernel2->storage()->setObjectName("storage2");
+    m_storage1 = m_kernel->storage();
+    m_storage2 = m_kernel2->storage();
 
-    connect(m_kernel->webdavSyncer(), &WebDAVSyncer::testSettingsFinished,
+    m_storage1->setObjectName("m_storage1");
+    m_storage2->setObjectName("m_storage2");
+
+    m_syncer1 = m_kernel->webdavSyncer();
+    m_syncer2 = m_kernel2->webdavSyncer();
+
+    connect(m_syncer1, &WebDAVSyncer::testSettingsFinished,
             this, &TestWebDav::onSyncFinished);
-    connect(m_kernel2->webdavSyncer(), &WebDAVSyncer::testSettingsFinished,
+    connect(m_syncer2, &WebDAVSyncer::testSettingsFinished,
             this, &TestWebDav::onSyncFinished);
-    connect(m_kernel->webdavSyncer(), &WebDAVSyncer::syncFinished,
+    connect(m_syncer1, &WebDAVSyncer::syncFinished,
             this, &TestWebDav::onSyncFinished);
-    connect(m_kernel2->webdavSyncer(), &WebDAVSyncer::syncFinished,
+    connect(m_syncer2, &WebDAVSyncer::syncFinished,
             this, &TestWebDav::onSyncFinished);
-    connect(m_kernel->webdavSyncer(), &WebDAVSyncer::removeFinished,
+    connect(m_syncer1, &WebDAVSyncer::removeFinished,
             this, &TestWebDav::onRemoveFinished);
 }
 
@@ -166,25 +172,20 @@ void TestWebDav::testSyncTasks()
     m_kernel->webdavSyncer()->remove("/" + m_kernel->runtimeConfiguration().webDAVFileName() + ".locl");
     waitForIt();
 
-    WebDAVSyncer *syncer1 = m_kernel->webdavSyncer();
-    WebDAVSyncer *syncer2 = m_kernel2->webdavSyncer();
-    Storage *storage1 = m_kernel->storage();
-    Storage *storage2 = m_kernel2->storage();
-
     //--------------------------------------------------------------------------
     // Warm up
-    syncer1->sync();
+    m_syncer1->sync();
     waitForIt();
 
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
     //--------------------------------------------------------------------------
     // Case 1: client A creates task, syncs, B syncs and gets task.
-    Task::Ptr task1 = storage1->addTask("task1");
+    Task::Ptr task1 = m_storage1->addTask("task1");
     QString uid1 = task1->uuid();
-    syncer1->sync();
+    m_syncer1->sync();
     waitForIt();
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
 
     SSyncable syncable;
@@ -194,22 +195,22 @@ void TestWebDav::testSyncTasks()
     syncable.uid = uid1;
     expected << syncable;
 
-    validateSync(expected, storage1);
-    validateSync(expected, storage2);
+    validateSync(expected, m_storage1);
+    validateSync(expected, m_storage2);
 
 
     // Sync again, nothing should change
-    syncer1->sync();
+    m_syncer1->sync();
     waitForIt();
-    validateSync(expected, storage1);
+    validateSync(expected, m_storage1);
     //--------------------------------------------------------------------------
     // Case 1a: Client A creates another task
-    Task::Ptr task2 = storage1->addTask("task2");
+    Task::Ptr task2 = m_storage1->addTask("task2");
     QString uid2 = task2->uuid();
 
-    syncer1->sync();
+    m_syncer1->sync();
     waitForIt();
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
 
     syncable.text = task2->summary();
@@ -217,108 +218,108 @@ void TestWebDav::testSyncTasks()
 
     expected << syncable;
 
-    validateSync(expected, storage1);
-    validateSync(expected, storage2);
+    validateSync(expected, m_storage1);
+    validateSync(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Case 2: Client A removes a task
-    storage1->removeTask(task2);
-    syncer1->sync();
+    m_storage1->removeTask(task2);
+    m_syncer1->sync();
     waitForIt();
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
 
     expected.removeLast();
 
-    validateSync(expected, storage1);
-    validateSync(expected, storage2);
+    validateSync(expected, m_storage1);
+    validateSync(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Case 3: Client A creates a task, syncs, Client B creates a task before syncing, then syncs
-    QString uuid3a = storage1->addTask("Task3A")->uuid();
-    syncer1->sync();
+    QString uuid3a = m_storage1->addTask("Task3A")->uuid();
+    m_syncer1->sync();
     waitForIt();
     expected << SSyncable({uuid3a, "Task3A" });
-    validateSync(expected, storage1);
+    validateSync(expected, m_storage1);
 
-    QString uuid3b = storage2->addTask("Task3B")->uuid();
-    syncer2->sync();
+    QString uuid3b = m_storage2->addTask("Task3B")->uuid();
+    m_syncer2->sync();
     waitForIt();
     expected << SSyncable({uuid3b, "Task3B"});
-    validateSync(expected, storage2);
-    syncer1->sync();
+    validateSync(expected, m_storage2);
+    m_syncer1->sync();
     waitForIt();
-    validateSync(expected, storage1);
+    validateSync(expected, m_storage1);
     //--------------------------------------------------------------------------
     // Case 4: Client B deletes all
-    storage2->clearTasks();
-    validateSync(SSyncable::List(), storage2);
+    m_storage2->clearTasks();
+    validateSync(SSyncable::List(), m_storage2);
 
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
-    syncer1->sync();
+    m_syncer1->sync();
     waitForIt();
-    validateSync(SSyncable::List(), storage1);
-    validateSync(SSyncable::List(), storage2);
+    validateSync(SSyncable::List(), m_storage1);
+    validateSync(SSyncable::List(), m_storage2);
     //--------------------------------------------------------------------------
     // Add some tasks again
-    uid1 = storage1->addTask("Task1")->uuid();
-    uid2 = storage1->addTask("Task2")->uuid();
-    QString uid3 = storage1->addTask("Task3")->uuid();
-    syncer1->sync();
+    uid1 = m_storage1->addTask("Task1")->uuid();
+    uid2 = m_storage1->addTask("Task2")->uuid();
+    QString uid3 = m_storage1->addTask("Task3")->uuid();
+    m_syncer1->sync();
     waitForIt();
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
     expected.clear();
     expected << SSyncable({uid1, "Task1"}) << SSyncable({uid2, "Task2"}) << SSyncable({uid3, "Task3"});
-    validateSync(expected, storage1);
-    validateSync(expected, storage2);
+    validateSync(expected, m_storage1);
+    validateSync(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Case 5: Client A edits one task, client B edits another task
-    task1 = storage1->taskAt(0);
-    task2 = storage2->taskAt(1);
+    task1 = m_storage1->taskAt(0);
+    task2 = m_storage2->taskAt(1);
     QCOMPARE(task1->revision(), 0);
     task1->setSummary("Hello1");
     QCOMPARE(task1->revision(), 1);
-    syncer1->sync();
+    m_syncer1->sync();
     waitForIt();
     QCOMPARE(task1->revision(), 1);
     QCOMPARE(task2->revision(), 0);
     task2->setSummary("Hello2");
     QCOMPARE(task2->revision(), 1);
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
     QCOMPARE(task2->revision(), 1);
-    syncer1->sync(); // Fetch client B's change
+    m_syncer1->sync(); // Fetch client B's change
     waitForIt();
     expected.clear();
     expected << SSyncable({uid1, "Hello1"}) << SSyncable({uid2, "Hello2"}) << SSyncable({uid3, "Task3"});
-    validateSync(expected, storage1);
-    validateSync(expected, storage2);
+    validateSync(expected, m_storage1);
+    validateSync(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Both remove the same task
-    storage1->removeTask(storage1->taskAt(0));
-    storage2->removeTask(storage2->taskAt(0));
-    syncer1->sync();
+    m_storage1->removeTask(m_storage1->taskAt(0));
+    m_storage2->removeTask(m_storage2->taskAt(0));
+    m_syncer1->sync();
     waitForIt();
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
     expected.clear();
     expected << SSyncable({uid2, "Hello2"}) << SSyncable({uid3, "Task3"});
-    validateSync(expected, storage1);
-    validateSync(expected, storage2);
+    validateSync(expected, m_storage1);
+    validateSync(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Both edit the same task now. We don't have a conflict dialog, first to sync wins.
-    storage1->taskAt(0)->setSummary("Edited1");
-    storage2->taskAt(0)->setSummary("Edited2");
-    syncer1->sync();
+    m_storage1->taskAt(0)->setSummary("Edited1");
+    m_storage2->taskAt(0)->setSummary("Edited2");
+    m_syncer1->sync();
     waitForIt();
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
-    syncer1->sync();
+    m_syncer1->sync();
     waitForIt();
     expected.clear();
     expected << SSyncable({uid2, "Edited1"}) << SSyncable({uid3, "Task3"});
-    validateSync(expected, storage1);
-    validateSync(expected, storage2);
+    validateSync(expected, m_storage1);
+    validateSync(expected, m_storage2);
     //--------------------------------------------------------------------------
     // TODO: Test concurrency
     //--------------------------------------------------------------------------
@@ -327,10 +328,6 @@ void TestWebDav::testSyncTasks()
 
 void TestWebDav::testSyncTags()
 {
-    Storage *storage1 = m_kernel->storage();
-    Storage *storage2 = m_kernel2->storage();
-    WebDAVSyncer *syncer1 = m_kernel->webdavSyncer();
-    WebDAVSyncer *syncer2 = m_kernel2->webdavSyncer();
     //--------------------------------------------------------------------------
     // Warm up
     qDebug() << "Warm up";
@@ -341,71 +338,93 @@ void TestWebDav::testSyncTags()
                                  { "{b2697470-f457-461c-9310-7d4b56aea395}", "books" },
                                  { "{387be44a-1eb7-4895-954a-cf5bc82d8f03}", "movies" } };
 
-    validateTags(expected, storage1);
-    validateTags(expected, storage2);
+    validateTags(expected, m_storage1);
+    validateTags(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Both client A and B create a TagX
     // Unlike tasks, we don't allow two tags with the same name, they will have to be merged.
     qDebug() << "Both creating tag";
-    Tag::Ptr tag = storage1->createTag("TagX");
-    storage2->createTag("TagX");
-    syncer1->sync();
+    Tag::Ptr tag = m_storage1->createTag("TagX");
+    m_storage2->createTag("TagX");
+    m_syncer1->sync();
     waitForIt();
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
 
     expected << SSyncable({tag->uuid(), tag->name()});
 
-    validateTags(expected, storage1);
-    validateTags(expected, storage2);
+    validateTags(expected, m_storage1);
+    validateTags(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Client A creates a tag
     qDebug() << "Creating tag";
-    tag = storage1->createTag("Tag2");
-    syncer1->sync();
+    tag = m_storage1->createTag("Tag2");
+    m_syncer1->sync();
     waitForIt();
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
-    syncer1->sync();
+    m_syncer1->sync();
     waitForIt();
     expected << SSyncable({tag->uuid(), tag->name()});
-    validateTags(expected, storage1);
-    validateTags(expected, storage2);
+    validateTags(expected, m_storage1);
+    validateTags(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Client A renames a tag
     qDebug() << "Renaming tag";
-    tag = storage1->tag("Tag2");
+    tag = m_storage1->tag("Tag2");
     QCOMPARE(tag->revision(), 0);
-    storage1->renameTag("Tag2", "Tag2a");
+    m_storage1->renameTag("Tag2", "Tag2a");
     QCOMPARE(tag->revision(), 1);
 
     expected.removeLast();
     expected << SSyncable({tag->uuid(), "Tag2a"});
-    validateTags(expected, storage1);
+    validateTags(expected, m_storage1);
 
-    syncer1->sync();
+    m_syncer1->sync();
     waitForIt();
 
-    validateTags(expected, storage1);
+    validateTags(expected, m_storage1);
 
-
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
 
-    validateTags(expected, storage2);
+    validateTags(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Client A removes a tag
-    storage1->removeTag("Tag2a");
-    syncer1->sync();
+    m_storage1->removeTag("Tag2a");
+    m_syncer1->sync();
     waitForIt();
-    syncer2->sync();
+    m_syncer2->sync();
     waitForIt();
     expected.removeLast();
-    validateTags(expected, storage1);
-    validateTags(expected, storage2);
+    validateTags(expected, m_storage1);
+    validateTags(expected, m_storage2);
     //--------------------------------------------------------------------------
+    // Client A renames tag, Client B removes it
+    m_storage1->renameTag("TagX", "TagX2");
+    QVERIFY(m_storage2->removeTag("TagX"));
+    m_syncer2->sync();
+    waitForIt();
 
+    m_syncer1->sync();
+    waitForIt();
+
+    expected.removeLast();
+    validateTags(expected, m_storage1);
+    validateTags(expected, m_storage2);
     //--------------------------------------------------------------------------
+}
+
+void TestWebDav::testTasksAndTags()
+{
+    m_storage1->clearTags();
+    m_storage1->clearTasks();
+    m_storage2->clearTags();
+    m_storage2->clearTasks();
+
+    SSyncable::List expected;
+    validateTags(expected, m_storage1);
+    validateTags(expected, m_storage2);
 }
 
 void TestWebDav::onSyncFinished(bool success, const QString &errorMsg)
