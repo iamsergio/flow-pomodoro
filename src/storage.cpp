@@ -225,8 +225,6 @@ bool Storage::removeTag(const QString &tagName)
 Tag::Ptr Storage::tag(const QString &name, bool create)
 {
     Tag::Ptr tag = m_data.tags.value(indexOfTag(name));
-
-    create = create;
     return (tag || !create) ? tag : createTag(name);
 }
 
