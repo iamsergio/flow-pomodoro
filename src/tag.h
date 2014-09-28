@@ -55,6 +55,7 @@ public:
     void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
 
     bool operator==(const Tag &other) const;
+    Kernel *kernel() const;
 
 #if defined(QT_TESTLIB_LIB)
     static int tagCount;

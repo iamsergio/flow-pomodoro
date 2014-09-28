@@ -48,6 +48,11 @@ public:
         m_kernel = new Kernel(config, this);
         m_storage = m_kernel->storage();
         m_controller = m_kernel->controller();
+
+        if (Storage::storageCount != 1) {
+            qWarning() << "Storage count is " << Storage::storageCount;
+            Q_ASSERT(false);
+        }
     }
 
     ~TestBase()
@@ -55,10 +60,26 @@ public:
         QFile::remove("unit-test-settings.ini");
     }
 
-    bool checkStorageConsistency()
+    bool checkStorageConsistency(int expectedTagCount = -1)
     {
         const Tag::List tags = m_storage->tags();
+        expectedTagCount = expectedTagCount == -1 ? tags.count() : expectedTagCount;
+
+        if (expectedTagCount != Tag::tagCount) {
+            qWarning() << "Actual tag count is" << Tag::tagCount
+                       << "; expected:" << expectedTagCount
+                       << "; storageCount:" << Storage::storageCount
+                       << "; task count is" << Task::taskCount;
+            return false;
+        }
+
+        foreach (const Tag::Ptr &tag, m_storage->tags())
+            if (!tag->kernel())
+                return false;
+
         foreach (const Task::Ptr &task, m_storage->tasks()) {
+            if (!task->kernel())
+                return false;
             foreach (const TagRef &tagref, task->tags()) {
                 Tag::Ptr tag = m_storage->tag(tagref.tagName(), /*create=*/ false);
                 if (!tags.contains(tag)) {

@@ -38,6 +38,7 @@ void TestTag::initTestCase()
 
     QCOMPARE(m_tagA->taskCount(), 0);
     QCOMPARE(m_tagB->taskCount(), 0);
+    QVERIFY(checkStorageConsistency());
 }
 
 void TestTag::cleanupTestCase()
@@ -59,12 +60,14 @@ void TestTag::testSetName()
     m_tagA->setName("tagA ");
     QCOMPARE(m_tagA->name(), QString("tagA"));
     QCOMPARE(m_spyA.caughtSignals(), {"nameChanged"});
+    QVERIFY(checkStorageConsistency());
 }
 
 void TestTag::testTaskCount()
 {
     m_spyA.clear();
     m_storage->clearTasks();
+    QVERIFY(checkStorageConsistency());
 
     Task::Ptr task1 = m_storage->addTask("task1");
     Task::Ptr task2 = m_storage->addTask("task2");
@@ -72,6 +75,7 @@ void TestTag::testTaskCount()
     task1->addTag("tagA");
     task1->addTag("tagB");
     task2->addTag("tagA");
+    QVERIFY(checkStorageConsistency());
 
     QCOMPARE(m_tagA->taskCount(), 2);
     QCOMPARE(m_tagB->taskCount(), 1);
@@ -83,13 +87,17 @@ void TestTag::testTaskCount()
     // Remove task and see if count changes
     m_spyA.clear();
     m_storage->removeTask(task1);
+    task1.clear();
     QCOMPARE(m_storage->tasks().count(), 1);
     QCOMPARE(m_tagA->taskCount(), 1);
+    QVERIFY(checkStorageConsistency());
 
     // Remove tag
     QCOMPARE(task2->tags().count(), 1);
     m_storage->removeTag(m_tagA->name());
+    m_tagA.clear();
     QCOMPARE(task2->tags().count(), 0);
+    QCOMPARE(m_storage->tags().count(), 2);
     QVERIFY(checkStorageConsistency());
 }
 

@@ -146,6 +146,11 @@ bool Tag::operator==(const Tag &other) const
     return m_uuid == other.uuid() || m_name == other.m_name;
 }
 
+Kernel *Tag::kernel() const
+{
+    return m_kernel;
+}
+
 bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
 {
     return (!tag1 && !tag2) || (tag1 && tag2 && *tag1 == *tag2);

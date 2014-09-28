@@ -448,15 +448,15 @@ void TestWebDav::testTasksAndTags()
     expectedTags << SSyncable({tag1->uuid(), "Tag1"});
     validateTags(expectedTags, m_storage1);
     validateTags(expectedTags, m_storage2);
-    QVERIFY(checkStorageConsistency());
+    QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
     //--------------------------------------------------------------------------
     // Tag1 is removed
     QCOMPARE(task1->tags().count(), 1);
     QVERIFY(m_storage1->removeTag("Tag1"));
+    tag1.clear();
     QCOMPARE(task1->tags().count(), 0);
 
     QCOMPARE(m_storage1->tags().count(), 0);
-    QVERIFY(checkStorageConsistency());
     qDebug() << "sync";
     m_syncer1->sync();
     waitForIt();
@@ -470,6 +470,7 @@ void TestWebDav::testTasksAndTags()
 
     validateSync(expectedTasks, m_storage1);
     validateSync(expectedTasks, m_storage2);
+    QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
 
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
