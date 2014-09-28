@@ -176,9 +176,7 @@ private:
 #endif
 
         // Case 1: Present locally, not present on server
-        const GenericListModel<T> localTasksCopy = localList; // GenericListModel doesn't let use use iterators
-        for (int i = 0; i < localTasksCopy.count(); ++i) {
-            T localItem = localTasksCopy.at(i);
+        foreach (const T &localItem, localList) {
             if (localItem->revisionOnWebDAVServer() == -1) {
                 // This is a new local task/tag that should be created on server
                 int index = Storage::indexOfItem(serverList, localItem);
@@ -225,8 +223,7 @@ private:
         Q_ASSERT(localList.isEmpty());
 
         // New tasks/tags on server, not locally
-        for (int i = 0; i < serverList.count(); ++i) {
-            T serverItem = serverList.at(i);
+        foreach (const T &serverItem, serverList) {
             if (storage->data().deletedItemUids.contains(serverItem->uuid())) {
                 storage->data().deletedItemUids.removeAll(serverItem->uuid());
             } else if (!Storage::itemListContains(finalList, serverItem)) {

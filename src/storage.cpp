@@ -320,8 +320,8 @@ bool Storage::renameTag(const QString &oldName, const QString &newName)
 
 void Storage::onTagAboutToBeRemoved(const QString &tagName)
 {
-    for (int i = 0; i < m_data.tasks.count(); ++i)
-        m_data.tasks.at(i)->removeTag(tagName);
+    foreach (const Task::Ptr &task, m_data.tasks)
+        task->removeTag(tagName);
 }
 
 TaskFilterProxyModel *Storage::taskFilterModel() const
