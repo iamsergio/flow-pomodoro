@@ -367,6 +367,12 @@ void Task::setKernel(Kernel *kernel)
 {
     Q_ASSERT(kernel && !m_kernel);
     m_kernel = kernel;
+
+    for (int i = 0; i < m_tags.count(); ++i) {
+        TagRef tagRef(this, m_tags.at(i).tagName(), m_kernel->storage());
+        m_tags.replace(i, tagRef); // operator[] is private
+    }
+
     modelSetup();
 }
 

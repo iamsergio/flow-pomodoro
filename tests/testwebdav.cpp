@@ -429,31 +429,39 @@ void TestWebDav::testTasksAndTags()
     SSyncable::List expectedTags;
     validateTags(expectedTasks, m_storage1);
     validateTags(expectedTags, m_storage2);
+
+    qDebug() << "tagcount1" << Tag::tagCount;
+
     //--------------------------------------------------------------------------
     // Client A creates Task1, tagged with Tag1
     Task::Ptr task1 = m_storage1->addTask("Task1");
-    Tag::Ptr tag1 = m_storage1->createTag("Tag1");
+    QString uid = m_storage1->createTag("Tag1")->uuid();
     task1->addTag("Tag1");
-    Q_UNUSED(tag1);
+    qDebug() << "tagcount2" << Tag::tagCount;
 
     m_syncer1->sync();
     waitForIt();
+    qDebug() << "tagcount3" << Tag::tagCount;
     m_syncer2->sync();
     waitForIt();
+    qDebug() << "tagcount4" << Tag::tagCount;
 
     expectedTasks << SSyncable({task1->uuid(), "Task1"});
     validateSync(expectedTasks, m_storage1);
     validateSync(expectedTasks, m_storage2);
 
-    expectedTags << SSyncable({tag1->uuid(), "Tag1"});
+    expectedTags << SSyncable({uid, "Tag1"});
     validateTags(expectedTags, m_storage1);
     validateTags(expectedTags, m_storage2);
+    QCOMPARE(task1, m_storage1->taskAt(0));
+    QCOMPARE(static_cast<void*>(task1.data()), static_cast<void*>(m_storage1->taskAt(0).data()));
+    qDebug() << "Count1" << m_storage1->tags().count();
+    qDebug() << "Count2" << m_storage2->tags().count();
     QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
     //--------------------------------------------------------------------------
     // Tag1 is removed
     QCOMPARE(task1->tags().count(), 1);
     QVERIFY(m_storage1->removeTag("Tag1"));
-    tag1.clear();
     QCOMPARE(task1->tags().count(), 0);
 
     QCOMPARE(m_storage1->tags().count(), 0);

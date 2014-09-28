@@ -155,10 +155,15 @@ Storage::Data Storage::data() const
 
 void Storage::setData(Storage::Data &data)
 {
+    Tag::List newTags;
     foreach (const Tag::Ptr &tag, data.tags) {
-        if (!tag->kernel())
-            tag->setKernel(m_kernel);
+        if (tag->kernel())
+            newTags << tag;
+        else
+            newTags << createTag(tag->name(), tag->uuid());
     }
+
+    data.tags = newTags;
 
     foreach (const Task::Ptr &task, data.tasks) {
         if (!task->kernel())

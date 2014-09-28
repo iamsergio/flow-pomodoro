@@ -41,6 +41,7 @@ public:
 
     Tag::Ptr tag() const;
     Storage *storage() const;
+    void setStorage(Storage *);
     QString tagName() const;
 
     QPointer<Task> m_task;

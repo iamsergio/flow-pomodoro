@@ -36,7 +36,11 @@ TagRef::TagRef(const TagRef &other)
 
 TagRef TagRef::operator=(const TagRef &other)
 {
-    Q_ASSERT(m_storage == other.m_storage);
+    if (m_storage != other.m_storage && m_storage) {
+        qWarning() << "Invalid storages" << m_storage << other.m_storage;
+        Q_ASSERT(false);
+    }
+
     decrementCount();
 
     m_task = other.m_task;
@@ -49,7 +53,6 @@ TagRef TagRef::operator=(const TagRef &other)
     return *this;
 }
 
-
 // Temporary is a performance optimization, we don't want to emit uneeded signals
 // when temporaries are constructed while appending TagRefs into a list
 TagRef::TagRef(const QPointer<Task> &task, const QString &tagName,
@@ -60,6 +63,7 @@ TagRef::TagRef(const QPointer<Task> &task, const QString &tagName,
     , m_storage(storage)
 {
     Q_ASSERT(!tagName.isEmpty());
+
     if (m_storage) {
         m_tag = m_storage->tag(tagName); // Create if it doesn't exist
 
@@ -82,6 +86,15 @@ Tag::Ptr TagRef::tag() const
 Storage *TagRef::storage() const
 {
     return m_storage;
+}
+
+void TagRef::setStorage(Storage *storage)
+{
+    Q_ASSERT(storage && !m_storage);
+    m_storage = storage;
+    m_tag = m_storage->tag(m_tagName);
+    if (!m_temporary)
+        incrementCount();
 }
 
 QString TagRef::tagName() const

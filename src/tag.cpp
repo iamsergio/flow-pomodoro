@@ -44,7 +44,6 @@ Tag::Tag(Kernel *kernel, const QString &_name)
     , m_dontUpdateRevision(false)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-    //Kernel::instance()->storage()->monitorTag(this);
 #if defined(QT_TESTLIB_LIB)
     tagCount++;
 #endif
