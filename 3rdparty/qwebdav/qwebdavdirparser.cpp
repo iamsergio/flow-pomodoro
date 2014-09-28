@@ -189,9 +189,7 @@ void QWebdavDirParser::replyFinished()
 #endif
 
     if (m_reply!=reply) {
-#ifdef DEBUG_WEBDAV
-    qDebug() << "QWebdavDirParser::replyFinished()  wrong reply : m_reply!=reply";
-#endif
+        qWarning() << "QWebdavDirParser::replyFinished()  wrong reply : m_reply!=reply";
         QMetaObject::invokeMethod(this,"replyDeleteLater", Qt::QueuedConnection, Q_ARG(QNetworkReply*, reply));
         return;
     }
@@ -210,9 +208,7 @@ void QWebdavDirParser::replyFinished()
             QString errStr = m_reply->errorString();
             errStr = errStr.right(errStr.size()-errStr.indexOf("server replied:")+1);
             emit errorChanged(errStr);
-    #ifdef DEBUG_WEBDAV
-            qDebug() << "   Reply has error. Error:" << m_reply->errorString() << "Code:" << m_reply->error();
-    #endif
+            qWarning() << "   Reply has error. Error:" << m_reply->errorString() << "Code:" << m_reply->error();
         }
         else {
             QByteArray data = m_reply->readAll();
@@ -382,9 +378,7 @@ void QWebdavDirParser::davParsePropstats(const QString &path, const QDomNodeList
         QDomElement status = propstat.namedItem( "status" ).toElement();
 
         if ( status.isNull() ) {
-#ifdef DEBUG_WEBDAV
-            qDebug() << "Error, no status code in this propstat";
-#endif
+            qWarning() << "Error, no status code in this propstat";
             return;
         }
 
@@ -399,9 +393,7 @@ void QWebdavDirParser::davParsePropstats(const QString &path, const QDomNodeList
         QDomElement prop = propstat.namedItem( "prop" ).toElement();
 
         if ( prop.isNull() ) {
-#ifdef DEBUG_WEBDAV
-            qDebug() << "Error: no prop segment in this propstat.";
-#endif
+            qWarning() << "Error: no prop segment in this propstat.";
             return;
         }
 
@@ -459,10 +451,8 @@ void QWebdavDirParser::davParsePropstats(const QString &path, const QDomNodeList
                 else if ( property.tagName() == "getetag" )
                     entityTag = property.text();
 #endif
-#ifdef DEBUG_WEBDAV
                 else
-                    qDebug() << "Found unknown WEBDAV property: " << property.tagName() << property.text();
-#endif
+                    qWarning() << "Found unknown WEBDAV property: " << property.tagName() << property.text();
         }
     }
 
@@ -533,10 +523,7 @@ QDateTime QWebdavDirParser::parseDateTime(const QString &input, const QString &t
     time = usLocal.toTime(input.mid(17, 8) , "hh:mm:ss");
     datetime = QDateTime(date, time);
 
-#ifdef DEBUG_WEBDAV
-    if(!datetime.isValid())
-        qDebug() << "QWebdavDirParser::parseDateTime() | Unknown date time format:" << input;
-#endif
-
+    if (!datetime.isValid())
+        qWarning() << "QWebdavDirParser::parseDateTime() | Unknown date time format:" << input;
     return datetime;
 }

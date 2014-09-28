@@ -213,9 +213,7 @@ void QWebdav::replyError(QNetworkReply::NetworkError)
     if (reply==0)
         return;
 
-#ifdef DEBUG_WEBDAV
-    qDebug() << "QWebdav::replyError()  reply->url() == " << reply->url().toString(QUrl::RemoveUserInfo);
-#endif
+    qWarning() << "QWebdav::replyError()  reply->url() == " << reply->url().toString(QUrl::RemoveUserInfo);
 
     if ( reply->error() == QNetworkReply::OperationCanceledError) {
         QIODevice* dataIO = m_inDataDevices.value(reply, 0);
@@ -256,9 +254,7 @@ void QWebdav::provideAuthenication(QNetworkReply *reply, QAuthenticator *authent
 #ifndef QT_NO_OPENSSL
 void QWebdav::sslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
 {
-#ifdef DEBUG_WEBDAV
-    qDebug() << "QWebdav::sslErrors()   reply->url == " << reply->url().toString(QUrl::RemoveUserInfo);
-#endif
+    qWarning() << "QWebdav::sslErrors()   reply->url == " << reply->url().toString(QUrl::RemoveUserInfo);
 
     QSslCertificate sslcert = errors[0].certificate();
 
