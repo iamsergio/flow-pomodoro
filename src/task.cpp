@@ -31,6 +31,10 @@
 #include <QQmlEngine>
 #include <QUuid>
 
+#if defined(UNIT_TEST_RUN)
+    int Task::taskCount;
+#endif
+
 enum {
     TagRole = Qt::UserRole,
     TaskRole
@@ -65,6 +69,11 @@ Task::Task(Kernel *kernel, const QString &summary)
     connect(this, &Task::descriptionChanged, &Task::onEdited);
     connect(this, &Task::statusChanged, &Task::onEdited);
     connect(this, &Task::stagedChanged, &Task::onEdited);
+
+#if defined(UNIT_TEST_RUN)
+    taskCount++;
+#endif
+
 
     if (kernel)
         modelSetup();
@@ -101,6 +110,13 @@ void Task::modelSetup()
     assert->setSourceModel(m_checkableTagModel);
     assert = new AssertingProxyModel(this);
     assert->setSourceModel(m_tags);
+#endif
+}
+
+Task::~Task()
+{
+#if defined(UNIT_TEST_RUN)
+    taskCount--;
 #endif
 }
 

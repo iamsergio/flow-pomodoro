@@ -66,6 +66,8 @@ public:
     typedef QSharedPointer<Task> Ptr;
     typedef GenericListModel<Ptr> List;
 
+    ~Task();
+
     static Task::Ptr createTask(Kernel *kernel, const QString &name = QString());
 
     bool staged() const;
@@ -108,6 +110,10 @@ public:
     bool operator==(const Task &other) const;
     Kernel *kernel() const;
     Storage *storage() const;
+
+#if defined(UNIT_TEST_RUN)
+    static int taskCount;
+#endif
 
 Q_SIGNALS:
     void summaryChanged();
