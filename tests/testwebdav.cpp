@@ -106,7 +106,7 @@ struct SSyncable {
     }
 };
 
-static void validateSync(SSyncable::List expectedTasks, Storage *storage)
+static void validateTasks(SSyncable::List expectedTasks, Storage *storage)
 {
     qDebug() << "Tasks on storage:" << storage->objectName();
     foreach (const Task::Ptr &task, storage->tasks()) {
@@ -195,14 +195,14 @@ void TestWebDav::testSyncTasks()
     syncable.uid = uid1;
     expected << syncable;
 
-    validateSync(expected, m_storage1);
-    validateSync(expected, m_storage2);
+    validateTasks(expected, m_storage1);
+    validateTasks(expected, m_storage2);
 
 
     // Sync again, nothing should change
     m_syncer1->sync();
     waitForIt();
-    validateSync(expected, m_storage1);
+    validateTasks(expected, m_storage1);
     //--------------------------------------------------------------------------
     // Case 1a: Client A creates another task
     Task::Ptr task2 = m_storage1->addTask("task2");
@@ -218,8 +218,8 @@ void TestWebDav::testSyncTasks()
 
     expected << syncable;
 
-    validateSync(expected, m_storage1);
-    validateSync(expected, m_storage2);
+    validateTasks(expected, m_storage1);
+    validateTasks(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Case 2: Client A removes a task
     m_storage1->removeTask(task2);
@@ -230,35 +230,35 @@ void TestWebDav::testSyncTasks()
 
     expected.removeLast();
 
-    validateSync(expected, m_storage1);
-    validateSync(expected, m_storage2);
+    validateTasks(expected, m_storage1);
+    validateTasks(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Case 3: Client A creates a task, syncs, Client B creates a task before syncing, then syncs
     QString uuid3a = m_storage1->addTask("Task3A")->uuid();
     m_syncer1->sync();
     waitForIt();
     expected << SSyncable({uuid3a, "Task3A" });
-    validateSync(expected, m_storage1);
+    validateTasks(expected, m_storage1);
 
     QString uuid3b = m_storage2->addTask("Task3B")->uuid();
     m_syncer2->sync();
     waitForIt();
     expected << SSyncable({uuid3b, "Task3B"});
-    validateSync(expected, m_storage2);
+    validateTasks(expected, m_storage2);
     m_syncer1->sync();
     waitForIt();
-    validateSync(expected, m_storage1);
+    validateTasks(expected, m_storage1);
     //--------------------------------------------------------------------------
     // Case 4: Client B deletes all
     m_storage2->clearTasks();
-    validateSync(SSyncable::List(), m_storage2);
+    validateTasks(SSyncable::List(), m_storage2);
 
     m_syncer2->sync();
     waitForIt();
     m_syncer1->sync();
     waitForIt();
-    validateSync(SSyncable::List(), m_storage1);
-    validateSync(SSyncable::List(), m_storage2);
+    validateTasks(SSyncable::List(), m_storage1);
+    validateTasks(SSyncable::List(), m_storage2);
     //--------------------------------------------------------------------------
     // Add some tasks again
     uid1 = m_storage1->addTask("Task1")->uuid();
@@ -270,8 +270,8 @@ void TestWebDav::testSyncTasks()
     waitForIt();
     expected.clear();
     expected << SSyncable({uid1, "Task1"}) << SSyncable({uid2, "Task2"}) << SSyncable({uid3, "Task3"});
-    validateSync(expected, m_storage1);
-    validateSync(expected, m_storage2);
+    validateTasks(expected, m_storage1);
+    validateTasks(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Case 5: Client A edits one task, client B edits another task
     task1 = m_storage1->taskAt(0);
@@ -292,8 +292,8 @@ void TestWebDav::testSyncTasks()
     waitForIt();
     expected.clear();
     expected << SSyncable({uid1, "Hello1"}) << SSyncable({uid2, "Hello2"}) << SSyncable({uid3, "Task3"});
-    validateSync(expected, m_storage1);
-    validateSync(expected, m_storage2);
+    validateTasks(expected, m_storage1);
+    validateTasks(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Both remove the same task
     m_storage1->removeTask(m_storage1->taskAt(0));
@@ -304,8 +304,8 @@ void TestWebDav::testSyncTasks()
     waitForIt();
     expected.clear();
     expected << SSyncable({uid2, "Hello2"}) << SSyncable({uid3, "Task3"});
-    validateSync(expected, m_storage1);
-    validateSync(expected, m_storage2);
+    validateTasks(expected, m_storage1);
+    validateTasks(expected, m_storage2);
     //--------------------------------------------------------------------------
     // Both edit the same task now. We don't have a conflict dialog, first to sync wins.
     m_storage1->taskAt(0)->setSummary("Edited1");
@@ -318,8 +318,8 @@ void TestWebDav::testSyncTasks()
     waitForIt();
     expected.clear();
     expected << SSyncable({uid2, "Edited1"}) << SSyncable({uid3, "Task3"});
-    validateSync(expected, m_storage1);
-    validateSync(expected, m_storage2);
+    validateTasks(expected, m_storage1);
+    validateTasks(expected, m_storage2);
     //--------------------------------------------------------------------------
     // TODO: Test concurrency
     //--------------------------------------------------------------------------
@@ -447,8 +447,8 @@ void TestWebDav::testTasksAndTags()
     qDebug() << "tagcount4" << Tag::tagCount;
 
     expectedTasks << SSyncable({task1->uuid(), "Task1"});
-    validateSync(expectedTasks, m_storage1);
-    validateSync(expectedTasks, m_storage2);
+    validateTasks(expectedTasks, m_storage1);
+    validateTasks(expectedTasks, m_storage2);
 
     expectedTags << SSyncable({uid, "Tag1"});
     validateTags(expectedTags, m_storage1);
@@ -476,10 +476,9 @@ void TestWebDav::testTasksAndTags()
     expectedTags.clear();
     validateTags(expectedTags, m_storage1);
 
-    validateSync(expectedTasks, m_storage1);
-    validateSync(expectedTasks, m_storage2);
+    validateTasks(expectedTasks, m_storage1);
+    validateTasks(expectedTasks, m_storage2);
     QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
-
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
 }
