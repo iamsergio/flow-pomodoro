@@ -26,7 +26,7 @@ TestTagModel::TestTagModel()
 
 void TestTagModel::initTestCase()
 {
-    createNewKernel("empty.dat");
+    createNewKernel("default.dat");
 }
 
 void TestTagModel::cleanupTestCase()

@@ -44,6 +44,7 @@ private Q_SLOTS:
     void testTasksAndTags();
 
 private:
+    void validateSync(const QString &filename);
     Kernel *m_kernel2;
     WebDAVSyncer *m_webdav;
     Storage *m_storage1;

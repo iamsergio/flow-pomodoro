@@ -19,6 +19,7 @@
 
 #include "testwebdav.h"
 #include "webdavsyncer.h"
+#include "jsonstorage.h"
 
 TestWebDav::TestWebDav()
     : TestBase()
@@ -425,38 +426,23 @@ void TestWebDav::testTasksAndTags()
     m_syncer1->sync();
     waitForIt();
 
-    SSyncable::List expectedTasks;
-    SSyncable::List expectedTags;
-    validateTags(expectedTasks, m_storage1);
-    validateTags(expectedTags, m_storage2);
-
-    qDebug() << "tagcount1" << Tag::tagCount;
-
+    validateSync("empty.dat");
     //--------------------------------------------------------------------------
     // Client A creates Task1, tagged with Tag1
     Task::Ptr task1 = m_storage1->addTask("Task1");
-    QString uid = m_storage1->createTag("Tag1")->uuid();
+    task1->setUuid("{f6d334d3-57f0-418f-b44b-7513d8e5e087}");
+    m_storage1->createTag("Tag1");
     task1->addTag("Tag1");
-    qDebug() << "tagcount2" << Tag::tagCount;
 
     m_syncer1->sync();
     waitForIt();
-    qDebug() << "tagcount3" << Tag::tagCount;
+
     m_syncer2->sync();
     waitForIt();
-    qDebug() << "tagcount4" << Tag::tagCount;
+    validateSync("testSyncTags1.dat");
 
-    expectedTasks << SSyncable({task1->uuid(), "Task1"});
-    validateTasks(expectedTasks, m_storage1);
-    validateTasks(expectedTasks, m_storage2);
-
-    expectedTags << SSyncable({uid, "Tag1"});
-    validateTags(expectedTags, m_storage1);
-    validateTags(expectedTags, m_storage2);
     QCOMPARE(task1, m_storage1->taskAt(0));
     QCOMPARE(static_cast<void*>(task1.data()), static_cast<void*>(m_storage1->taskAt(0).data()));
-    qDebug() << "Count1" << m_storage1->tags().count();
-    qDebug() << "Count2" << m_storage2->tags().count();
     QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
     //--------------------------------------------------------------------------
     // Tag1 is removed
@@ -465,7 +451,7 @@ void TestWebDav::testTasksAndTags()
     QCOMPARE(task1->tags().count(), 0);
 
     QCOMPARE(m_storage1->tags().count(), 0);
-    qDebug() << "sync";
+
     m_syncer1->sync();
     waitForIt();
     QCOMPARE(m_storage1->tags().count(), 0);
@@ -473,14 +459,63 @@ void TestWebDav::testTasksAndTags()
     m_syncer2->sync();
     waitForIt();
 
-    expectedTags.clear();
-    validateTags(expectedTags, m_storage1);
+    validateSync("testSyncTags2.dat");
 
-    validateTasks(expectedTasks, m_storage1);
-    validateTasks(expectedTasks, m_storage2);
     QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
     //--------------------------------------------------------------------------
+
+
+    //JsonStorage *jsonStorage = static_cast<JsonStorage*>(m_storage1);
+    //qDebug() << "dummping: " << jsonStorage->serializeToJsonData(m_storage1->data());
     //--------------------------------------------------------------------------
+}
+
+void compareTasks(const Task::Ptr &task1, const Task::Ptr &task2)
+{
+    if (!(*task1.data() == *task2)) {
+        qDebug() << "Compared tasks are not the same"
+                 << task1 << task2 << task2->kernel()->storage();
+
+        QVERIFY(false);
+    }
+}
+
+void compareTags(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
+{
+    if (!(*tag1.data() == *tag2)) {
+        qDebug() << "Compared tags are not the same"
+                 << tag1 << tag1 << tag2->kernel()->storage();
+
+        QVERIFY(false);
+    }
+}
+
+void TestWebDav::validateSync(const QString &filename)
+{
+    qDebug() << "Validating sync for " << filename;
+    QFile file("data_files/" + filename);
+    QVERIFY(file.open(QIODevice::ReadOnly));
+    QByteArray serializedData = file.readAll();
+    file.close();
+
+    QString error;
+    Storage::Data data =  JsonStorage::deserializeJsonData(serializedData, error, 0);
+    QVERIFY(error.isEmpty());
+
+    QCOMPARE(data.tags.count(), m_storage1->tags().count());
+    QCOMPARE(data.tags.count(), m_storage1->tags().count());
+    QCOMPARE(data.tasks.count(), m_storage1->tasks().count());
+    QCOMPARE(data.tasks.count(), m_storage1->tasks().count());
+
+    for (int i = 0; i < data.tags.count(); ++i) {
+        compareTags(data.tags.at(i), m_storage1->tags().at(i));
+        compareTags(data.tags.at(i), m_storage2->tags().at(i));
+    }
+
+    for (int i = 0; i < data.tasks.count(); ++i) {
+        compareTasks(data.tasks.at(i), m_storage1->tasks().at(i));
+        compareTasks(data.tasks.at(i), m_storage2->tasks().at(i));
+    }
 }
 
 void TestWebDav::onSyncFinished(bool success, const QString &errorMsg)
