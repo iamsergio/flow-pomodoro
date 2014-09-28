@@ -65,6 +65,7 @@ void AssertingProxyModel::onLayoutChanged()
 
 void AssertingProxyModel::onRowsAboutToBeInserted(const QModelIndex &parent, int start, int end)
 {
+    Q_UNUSED(parent);
     Q_ASSERT(m_expectingSignal.isEmpty());
     Q_ASSERT(!parent.isValid());
     Q_ASSERT(start <= end);
@@ -86,6 +87,7 @@ void AssertingProxyModel::onRowsInserted()
 
 void AssertingProxyModel::onRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
+    Q_UNUSED(parent);
     Q_ASSERT(m_expectingSignal.isEmpty());
     Q_ASSERT(!parent.isValid());
     Q_ASSERT(start <= end);
@@ -107,6 +109,9 @@ void AssertingProxyModel::onRowsRemoved()
 
 void AssertingProxyModel::onDataChanged(const QModelIndex &left, const QModelIndex &right)
 {
+    Q_UNUSED(left);
+    Q_UNUSED(right);
+
     Q_ASSERT(m_expectingSignal.isEmpty());
     Q_ASSERT(left.isValid());
     Q_ASSERT(right.isValid());
