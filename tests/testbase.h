@@ -91,6 +91,11 @@ public:
                     return false;
                 }
 
+                if (!tagref.storage()) {
+                    qWarning() << "Tagref not associated with any storage";
+                    return false;
+                }
+
                 if (!tagref.m_task && tag) {
                     qWarning() << "Null task or tag in TagRef";
                     return false;
