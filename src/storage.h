@@ -85,8 +85,6 @@ public:
     // Temporary disable saving. For performance purposes
     void setDisableSaving(bool);
 
-    void setCreateNonExistentTags(bool);
-
     bool savingInProgress() const;
     bool loadingInProgress() const;
 
@@ -168,7 +166,6 @@ private:
     TaskFilterProxyModel *m_untaggedTasksModel;
     ArchivedTasksFilterModel *m_stagedTasksModel;
     ArchivedTasksFilterModel *m_archivedTasksModel;
-    bool m_createNonExistentTags;
     bool m_savingInProgress;
     bool m_loadingInProgress;
 };

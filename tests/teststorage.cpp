@@ -94,7 +94,6 @@ void TestStorage::testContainsTag()
 void TestStorage::testTag()
 {
     m_storage->clearTags();
-    m_storage->setCreateNonExistentTags(true);
 
     Tag::Ptr tag = m_storage->tag("tag1");
     QVERIFY(tag);
@@ -120,8 +119,7 @@ void TestStorage::testTag()
     QVERIFY(!tag);
     QCOMPARE(m_storage->tags().count(), 3);
 
-    m_storage->setCreateNonExistentTags(false);
-    tag = m_storage->tag("Foo");
+    tag = m_storage->tag("Foo", false);
     QVERIFY(!tag);
     tag = m_storage->tag("tag2");
     QVERIFY(tag->name() == "tag2");

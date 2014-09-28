@@ -84,7 +84,6 @@ void TestTask::testAddAndRemoveTag()
     m_task1->setTagList(TagRef::List());
     m_storage->clearTasks();
     m_storage->clearTags();
-    m_storage->setCreateNonExistentTags(true);
     m_spy.clear();
     QCOMPARE(Tag::tagCount, 0);
     m_task1->addTag("tagA");
@@ -113,7 +112,6 @@ void TestTask::testAddAndRemoveTag()
 
     QCOMPARE(Tag::tagCount, m_storage->tags().count());
     QCOMPARE(Tag::tagCount, 3);
-    m_storage->setCreateNonExistentTags(true);
     QVERIFY(checkStorageConsistency());
 }
 

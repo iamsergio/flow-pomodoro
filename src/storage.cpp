@@ -64,7 +64,6 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     , m_untaggedTasksModel(new TaskFilterProxyModel(this))
     , m_stagedTasksModel(new ArchivedTasksFilterModel(this))
     , m_archivedTasksModel(new ArchivedTasksFilterModel(this))
-    , m_createNonExistentTags(false)
     , m_savingInProgress(false)
     , m_loadingInProgress(false)
 {
@@ -159,10 +158,8 @@ void Storage::load()
 {
     m_loadingInProgress = true;
     m_savingDisabled += 1;
-    m_createNonExistentTags = true;
     load_impl();
     m_savingDisabled += -1;
-    m_createNonExistentTags = false;
 
     if (m_data.tags.isEmpty()) {
         // Create default tags. We always use the same uuids for these so we don't get
@@ -229,7 +226,7 @@ Tag::Ptr Storage::tag(const QString &name, bool create)
 {
     Tag::Ptr tag = m_data.tags.value(indexOfTag(name));
 
-    create = create && m_createNonExistentTags;
+    create = create;
     return (tag || !create) ? tag : createTag(name);
 }
 
@@ -390,11 +387,6 @@ void Storage::clearTasks()
 void Storage::setDisableSaving(bool disable)
 {
     m_savingDisabled += (disable ? 1 : -1);
-}
-
-void Storage::setCreateNonExistentTags(bool enable)
-{
-    m_createNonExistentTags = enable;
 }
 
 bool Storage::savingInProgress() const

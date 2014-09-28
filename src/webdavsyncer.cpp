@@ -59,7 +59,6 @@ public:
         SyncState::onEntry(event);
         // qDebug() << "Entered InitialState, where we idle.";
         m_syncer->m_syncInProgress = false;
-        m_syncer->m_storage->setCreateNonExistentTags(false);
         emit m_syncer->syncInProgressChanged();
     }
 
@@ -67,7 +66,6 @@ public:
     {
         SyncState::onExit(event);
         m_syncer->m_syncInProgress = true;
-        m_syncer->m_storage->setCreateNonExistentTags(true);
         emit m_syncer->syncInProgressChanged();
     }
 };
