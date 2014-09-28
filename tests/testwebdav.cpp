@@ -323,7 +323,7 @@ void TestWebDav::testSyncTasks()
     //--------------------------------------------------------------------------
     // TODO: Test concurrency
     //--------------------------------------------------------------------------
-    checkStorageConsistency();
+    QVERIFY(checkStorageConsistency());
 }
 
 void TestWebDav::testSyncTags()
@@ -422,9 +422,57 @@ void TestWebDav::testTasksAndTags()
     m_storage2->clearTags();
     m_storage2->clearTasks();
 
-    SSyncable::List expected;
-    validateTags(expected, m_storage1);
-    validateTags(expected, m_storage2);
+    m_syncer1->sync();
+    waitForIt();
+
+    SSyncable::List expectedTasks;
+    SSyncable::List expectedTags;
+    validateTags(expectedTasks, m_storage1);
+    validateTags(expectedTags, m_storage2);
+    //--------------------------------------------------------------------------
+    // Client A creates Task1, tagged with Tag1
+    Task::Ptr task1 = m_storage1->addTask("Task1");
+    Tag::Ptr tag1 = m_storage1->createTag("Tag1");
+    task1->addTag("Tag1");
+    Q_UNUSED(tag1);
+
+    m_syncer1->sync();
+    waitForIt();
+    m_syncer2->sync();
+    waitForIt();
+
+    expectedTasks << SSyncable({task1->uuid(), "Task1"});
+    validateSync(expectedTasks, m_storage1);
+    validateSync(expectedTasks, m_storage2);
+
+    expectedTags << SSyncable({tag1->uuid(), "Tag1"});
+    validateTags(expectedTags, m_storage1);
+    validateTags(expectedTags, m_storage2);
+    QVERIFY(checkStorageConsistency());
+    //--------------------------------------------------------------------------
+    // Tag1 is removed
+    QCOMPARE(task1->tags().count(), 1);
+    QVERIFY(m_storage1->removeTag("Tag1"));
+    QCOMPARE(task1->tags().count(), 0);
+
+    QCOMPARE(m_storage1->tags().count(), 0);
+    QVERIFY(checkStorageConsistency());
+    qDebug() << "sync";
+    m_syncer1->sync();
+    waitForIt();
+    QCOMPARE(m_storage1->tags().count(), 0);
+
+    m_syncer2->sync();
+    waitForIt();
+
+    expectedTags.clear();
+    validateTags(expectedTags, m_storage1);
+
+    validateSync(expectedTasks, m_storage1);
+    validateSync(expectedTasks, m_storage2);
+
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 }
 
 void TestWebDav::onSyncFinished(bool success, const QString &errorMsg)

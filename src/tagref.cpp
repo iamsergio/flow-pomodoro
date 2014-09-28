@@ -25,18 +25,24 @@
 TagRef::TagRef(const TagRef &other)
 {
     m_task = other.m_task;
-    m_tag = other.m_tag;
+    m_tagName = other.m_tagName;
     m_temporary = false;
-    Q_ASSERT(m_tag);
+    m_tag = other.m_tag;
+    m_storage = other.m_storage;
+
+    Q_ASSERT(!m_tagName.isEmpty());
     incrementCount();
 }
 
 TagRef TagRef::operator=(const TagRef &other)
 {
+    Q_ASSERT(m_storage == other.m_storage);
     decrementCount();
 
     m_task = other.m_task;
+    m_tagName = other.m_tagName;
     m_tag = other.m_tag;
+    m_storage = other.m_storage;
 
     incrementCount();
 
@@ -46,14 +52,20 @@ TagRef TagRef::operator=(const TagRef &other)
 
 // Temporary is a performance optimization, we don't want to emit uneeded signals
 // when temporaries are constructed while appending TagRefs into a list
-TagRef::TagRef(const QPointer<Task> &task, const QString &tagName, bool temporary)
-    : m_tag(task->kernel()->storage()->tag(tagName))
-    , m_task(task)
+TagRef::TagRef(const QPointer<Task> &task, const QString &tagName,
+               Storage *storage, bool temporary)
+    : m_task(task)
+    , m_tagName(tagName)
     , m_temporary(temporary)
+    , m_storage(storage)
 {
-    Q_ASSERT(m_tag);
-    if (!temporary)
-        incrementCount();
+    Q_ASSERT(!tagName.isEmpty());
+    if (m_storage) {
+        m_tag = m_storage->tag(tagName); // Create if it doesn't exist
+
+        if (!temporary)
+            incrementCount();
+    }
 }
 
 TagRef::~TagRef()
@@ -62,23 +74,42 @@ TagRef::~TagRef()
         decrementCount();
 }
 
+Tag::Ptr TagRef::tag() const
+{
+    return m_tag;
+}
+
+Storage *TagRef::storage() const
+{
+    return m_storage;
+}
+
+QString TagRef::tagName() const
+{
+    return m_tag ? m_tag->name() : m_tagName;
+}
+
 void TagRef::incrementCount()
 {
-    m_tag->incrementTaskCount(1);
+    Tag::Ptr tag = this->tag();
+    if (!tag)
+        return;
 
-    if (m_task)
-        QObject::connect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
+    tag->incrementTaskCount(1);
+    QObject::connect(tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
 }
 
 void TagRef::decrementCount()
 {
-    m_tag->incrementTaskCount(-1);
+    Tag::Ptr tag = this->tag();
+    if (!tag)
+        return;
 
-    if (m_task)
-        QObject::disconnect(m_tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
+    tag->incrementTaskCount(-1);
+    QObject::disconnect(tag.data(), &Tag::nameChanged, m_task.data(), &Task::changed);
 }
 
 bool operator==(const TagRef &tagRef, const QString &name)
 {
-    return tagRef.m_tag->name() == name;
+    return tagRef.tagName() == name;
 }

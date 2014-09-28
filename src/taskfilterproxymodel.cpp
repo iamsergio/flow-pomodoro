@@ -76,13 +76,8 @@ bool TaskFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &s
     TagRef::List tags = task->tags();
     for (int i = 0; i < tags.count(); ++i) {
         const TagRef &tagref = tags.at(i);
-        if (tagref.m_tag) {
-            if (tagref.m_tag->name() == m_tagText)
-                return true;
-        } else {
-            qWarning() << Q_FUNC_INFO << "ignoring null tag";
-            Q_ASSERT(false);
-        }
+        if (tagref.tagName() == m_tagText)
+            return true;
     }
 
     return false;

@@ -254,7 +254,7 @@ private:
         Storage::Data serverData;
         if (reply->error() == 0) {
             QString errorMsg;
-            serverData = JsonStorage::deserializeJsonData(m_data, errorMsg, m_syncer->m_kernel, /*reuseTags=*/ false);
+            serverData = JsonStorage::deserializeJsonData(m_data, errorMsg, 0);
             if (!errorMsg.isEmpty()) {
                 emit m_syncer->downloadError();
                 return;

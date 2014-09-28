@@ -40,7 +40,7 @@ static QVariant dataFunction(const TagRef::List &list, int index, int role)
 {
     switch (role) {
     case TagRole:
-        return QVariant::fromValue<Tag*>(list.at(index).m_tag.data());
+        return QVariant::fromValue<Tag*>(list.at(index).tag().data());
     case TaskRole:
         return QVariant::fromValue<Task*>(list.at(index).m_task.data());
     default:
@@ -58,9 +58,13 @@ Task::Task(Kernel *kernel, const QString &summary)
     , m_modificationDate(m_creationDate)
     , m_kernel(kernel)
 {
-    Q_ASSERT(kernel);
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-    m_checkableTagModel = new CheckableTagModel(this);
+
+    connect(this, &Task::summaryChanged, &Task::onEdited);
+    connect(this, &Task::tagsChanged, &Task::onEdited);
+    connect(this, &Task::descriptionChanged, &Task::onEdited);
+    connect(this, &Task::statusChanged, &Task::onEdited);
+    connect(this, &Task::stagedChanged, &Task::onEdited);
 
     if (kernel)
         modelSetup();
@@ -69,15 +73,13 @@ Task::Task(Kernel *kernel, const QString &summary)
 void Task::modelSetup()
 {
     Storage *storage = m_kernel->storage();
+
+    m_checkableTagModel = new CheckableTagModel(this);
+
     m_tags.setDataFunction(&dataFunction);
     m_tags.insertRole("tag", Q_NULLPTR, TagRole);
     m_tags.insertRole("task", Q_NULLPTR, TaskRole);
 
-    connect(this, &Task::summaryChanged, &Task::onEdited);
-    connect(this, &Task::tagsChanged, &Task::onEdited);
-    connect(this, &Task::descriptionChanged, &Task::onEdited);
-    connect(this, &Task::statusChanged, &Task::onEdited);
-    connect(this, &Task::stagedChanged, &Task::onEdited);
     QAbstractItemModel *tagsModel = m_tags; // android doesn't build if you use m_tags directly in the connect statement
     connect(tagsModel, &QAbstractListModel::modelReset, this, &Task::tagsChanged);
     connect(tagsModel, &QAbstractListModel::rowsInserted, this, &Task::tagsChanged);
@@ -85,14 +87,11 @@ void Task::modelSetup()
     connect(tagsModel, &QAbstractListModel::layoutChanged, this, &Task::tagsChanged);
     connect(tagsModel, &QAbstractListModel::dataChanged, this, &Task::tagsChanged);
 
-    if (storage) { // Can be null when creating temporary tasks for webdav sync
-        auto roleNames = storage->tagsModel()->roleNames();
-        roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
-        QAbstractItemModel *allTagsModel = storage->tagsModel();
-        Q_ASSERT(allTagsModel);
-        m_checkableTagModel->setSourceModel(allTagsModel);
-    }
-
+    auto roleNames = storage->tagsModel()->roleNames();
+    roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
+    QAbstractItemModel *allTagsModel = storage->tagsModel();
+    Q_ASSERT(allTagsModel);
+    m_checkableTagModel->setSourceModel(allTagsModel);
     m_contextMenuModel = new TaskContextMenuModel(this, this);
 
 #if defined(UNIT_TEST_RUN)
@@ -160,8 +159,8 @@ int Task::indexOfTag(const QString &name) const
 {
     QString trimmedName = name.toLower().trimmed();
     for (int i = 0; i < m_tags.count(); ++i) {
-        Q_ASSERT(m_tags.at(i).m_tag);
-        if (m_tags.at(i).m_tag->name().toLower() == trimmedName)
+        Q_ASSERT(m_tags.at(i).storage());
+        if (m_tags.at(i).tagName().toLower() == trimmedName)
             return i;
     }
 
@@ -181,7 +180,7 @@ void Task::setTagList(const TagRef::List &list)
     // Filter out duplicated tags
     QStringList addedTags;
     foreach (const TagRef &ref, list) {
-        QString name = ref.m_tag->name().toLower();
+        QString name = ref.tagName().toLower();
         if (!addedTags.contains(name) && !name.isEmpty()) {
             addedTags << name;
             m_tags << ref;
@@ -206,7 +205,7 @@ void Task::addTag(const QString &tagName)
         return;
 
     if (!containsTag(trimmedName)) {
-        m_tags.append(TagRef(this, trimmedName, /*temporary=*/ true));
+        m_tags.append(TagRef(this, trimmedName, storage(), /*temporary=*/ true));
         emit tagToggled(trimmedName);
     }
 }
@@ -287,7 +286,7 @@ QVariantMap Task::toJson() const
     map.insert("description", m_description);
     QVariantList tags;
     for (int i = 0; i < m_tags.count(); ++i)
-        tags << m_tags.at(i).m_tag->name();
+        tags << m_tags.at(i).tagName();
     map.insert("tags", tags);
     map.insert("creationTimestamp", m_creationDate.toMSecsSinceEpoch());
 
@@ -326,7 +325,7 @@ void Task::fromJson(const QVariantMap &map)
     TagRef::List tags;
     foreach (const QVariant &tag, tagsVariant) {
         if (!tag.toString().isEmpty())
-            tags << TagRef(this, tag.toString());
+            tags << TagRef(this, tag.toString(), storage());
     }
 
     setTagList(tags);
@@ -346,6 +345,11 @@ bool Task::operator==(const Task &other) const
 Kernel *Task::kernel() const
 {
     return m_kernel;
+}
+
+Storage *Task::storage() const
+{
+    return m_kernel ? m_kernel->storage() : 0;
 }
 
 void Task::onEdited()

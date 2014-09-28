@@ -44,7 +44,9 @@ int main(int argc, char *argv[])
     TestWebDav test9;
     success &= QTest::qExec(&test9, argc, argv) == 0;
 
-    if (!success)
+    if (success)
+        qDebug() << "Success!";
+    else
         qWarning() << "\nSome tests failed!!!";
 
     return success ? 0 : -1;

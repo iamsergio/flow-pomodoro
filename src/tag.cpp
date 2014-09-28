@@ -43,7 +43,6 @@ Tag::Tag(Kernel *kernel, const QString &_name)
     , m_kernel(kernel)
     , m_dontUpdateRevision(false)
 {
-    Q_ASSERT(kernel);
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     //Kernel::instance()->storage()->monitorTag(this);
 #if defined(QT_TESTLIB_LIB)
@@ -103,7 +102,6 @@ void Tag::setBeingEdited(bool yes)
 
 QAbstractItemModel *Tag::taskModel()
 {
-    // Delayed initialization do avoid deadlock accessing Kernel::instance()->storage() when TaskStorage is being constructed
     // TODO: this should be ok now
     if (!m_taskModel && m_kernel) {
         m_taskModel = new TaskFilterProxyModel(this);

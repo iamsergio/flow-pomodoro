@@ -32,7 +32,7 @@ public:
     ~JsonStorage();
 
     static Data deserializeJsonData(const QByteArray &serializedData, QString &error,
-                                    Kernel *kernel, bool reuseTags = true);
+                                    Kernel *kernel);
     static QByteArray serializeToJsonData(const Storage::Data &);
 
 protected:

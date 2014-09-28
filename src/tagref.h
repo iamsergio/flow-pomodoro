@@ -25,7 +25,7 @@
 #include <QPointer>
 
 class Task;
-class Kernel;
+class Storage;
 
 class TagRef
 {
@@ -35,17 +35,23 @@ public:
     TagRef(const TagRef &other);
     TagRef operator=(const TagRef &);
     TagRef(const QPointer<Task> &task,
-           const QString &tagName, bool temporary = false);
+           const QString &tagName, Storage *storage,
+           bool temporary = false);
     ~TagRef();
 
-    Tag::Ptr m_tag;
+    Tag::Ptr tag() const;
+    Storage *storage() const;
+    QString tagName() const;
+
     QPointer<Task> m_task;
 private:
     TagRef();
     void incrementCount();
     void decrementCount();
+    QString m_tagName;
     bool m_temporary;
-
+    Storage *m_storage;
+    Tag::Ptr m_tag;
 };
 
 #endif

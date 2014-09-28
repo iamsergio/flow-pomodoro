@@ -37,9 +37,8 @@ JsonStorage::~JsonStorage()
 }
 
 Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
-                                               QString &errorMsg, Kernel *kernel, bool reuseTags)
+                                               QString &errorMsg, Kernel *kernel)
 {
-    Q_ASSERT(kernel);
     Data result;
     errorMsg.clear();
     QJsonParseError jsonError;
@@ -66,7 +65,7 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
         Tag::Ptr tag = Tag::Ptr(new Tag(kernel, QString()));
         tag->fromJson(t.toMap());
         if (!tag->name().isEmpty() && !Storage::itemListContains<Tag::Ptr>(result.tags, tag)) {
-            if (reuseTags) // Reuse tags from given storage
+            if (kernel) // Reuse tags from given storage
                 tag = kernel->storage()->tag(tag->name());
             result.tags << tag;
         }
@@ -87,8 +86,10 @@ void JsonStorage::load_impl()
 {
     const QString dataFileName = m_kernel->runtimeConfiguration().dataFileName();
     qDebug() << "JsonStorage::load_impl Loading from" << dataFileName;
-    if (!QFile::exists(dataFileName)) // Nothing to load
+    if (!QFile::exists(dataFileName)) { // Nothing to load
+        qDebug() << "JsonStorage::load_impl():" << dataFileName << "does not exist yet.";
         return;
+    }
 
     QFile file(dataFileName);
     if (!file.open(QIODevice::ReadOnly)) {

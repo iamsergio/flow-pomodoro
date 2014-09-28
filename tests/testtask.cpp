@@ -49,11 +49,11 @@ void TestTask::testSetTags()
 {
     m_spy.clear();
     TagRef::List tags;
-    tags << TagRef(m_task1.data(), "tagA")
-         << TagRef(m_task1.data(), "tagB")
-         << TagRef(m_task1.data(), "tagC")
-         << TagRef(m_task1.data(), "tagC") // Duplicated, won't be added
-         << TagRef(m_task1.data(), " TagC "); // Also won't be added
+    tags << TagRef(m_task1.data(), "tagA", m_storage)
+         << TagRef(m_task1.data(), "tagB", m_storage)
+         << TagRef(m_task1.data(), "tagC", m_storage)
+         << TagRef(m_task1.data(), "tagC", m_storage) // Duplicated, won't be added
+         << TagRef(m_task1.data(), " TagC ", m_storage); // Also won't be added
 
     m_task1->setTagList(tags);
     QCOMPARE(3, m_task1->tags().count());
@@ -123,7 +123,7 @@ void TestTask::testJson()
     task->setDescription("some description");
     task->setStaged(true);
     TagRef::List tags;
-    tags << TagRef(m_task1.data(), "tagA");
+    tags << TagRef(m_task1.data(), "tagA", m_storage);
     task->setTagList(tags);
 
     QVariantMap map = task->toJson();
@@ -134,5 +134,5 @@ void TestTask::testJson()
     QCOMPARE(task->description(), task2->description());
     QCOMPARE(task->staged(), task2->staged());
     QCOMPARE(task->tags().count(), task2->tags().count());
-    QCOMPARE(task->tags().at(0).m_tag->name(), task2->tags().at(0).m_tag->name());
+    QCOMPARE(task->tags().at(0).tagName(), task2->tags().at(0).tagName());
 }

@@ -60,12 +60,13 @@ public:
         const Tag::List tags = m_storage->tags();
         foreach (const Task::Ptr &task, m_storage->tasks()) {
             foreach (const TagRef &tagref, task->tags()) {
-                if (!tags.contains(tagref.m_tag)) {
+                Tag::Ptr tag = m_storage->tag(tagref.tagName(), /*create=*/ false);
+                if (!tags.contains(tag)) {
                     qWarning() << "Found unknown tag";
                     return false;
                 }
 
-                if (!tagref.m_task && tagref.m_tag) {
+                if (!tagref.m_task && tag) {
                     qWarning() << "Null task or tag in TagRef";
                     return false;
                 }

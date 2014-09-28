@@ -107,6 +107,7 @@ public:
 
     bool operator==(const Task &other) const;
     Kernel *kernel() const;
+    Storage *storage() const;
 
 Q_SIGNALS:
     void summaryChanged();
