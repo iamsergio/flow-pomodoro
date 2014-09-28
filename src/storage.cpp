@@ -30,6 +30,7 @@
 
 #if defined(UNIT_TEST_RUN)
 # include "assertingproxymodel.h"
+  int Storage::storageCount = 0;
 #endif
 
 static QVariant tagsDataFunction(const TagList &list, int index, int role)
@@ -123,12 +124,18 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     assert->setSourceModel(m_taskFilterModel);
     assert = new AssertingProxyModel(this);
     assert->setSourceModel(m_sortedTagModel);
+    storageCount++;
+    qDebug() << "Created storage" << this << "; count is now" << storageCount;
 #endif
 
 }
 
 Storage::~Storage()
 {
+#if defined(UNIT_TEST_RUN)
+    storageCount--;
+    qDebug() << "Deleted storage" << this << "; count is now" << storageCount;
+#endif
 }
 
 const TagList& Storage::tags() const

@@ -30,6 +30,7 @@ void TestCheckableTagModel::initTestCase()
 
 void TestCheckableTagModel::cleanupTestCase()
 {
+    delete m_kernel;
 }
 
 void TestCheckableTagModel::testHasTags()

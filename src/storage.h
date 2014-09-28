@@ -136,6 +136,10 @@ public:
 
     Q_INVOKABLE QString dataFile() const;
 
+#if defined(UNIT_TEST_RUN)
+    static int storageCount;
+#endif
+
 public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);
     void dumpDebugInfo();

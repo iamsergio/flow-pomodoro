@@ -31,7 +31,7 @@ void TestTagModel::initTestCase()
 
 void TestTagModel::cleanupTestCase()
 {
-
+    delete m_kernel;
 }
 
 void TestTagModel::testFromFile_data()
