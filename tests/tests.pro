@@ -1,6 +1,6 @@
 TEMPLATE = app
 QT += testlib
-CONFIG += testcase
+CONFIG += testcase debug
 
 include ("../global.pri")
 include("../src/src.pri")
