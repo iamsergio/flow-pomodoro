@@ -56,6 +56,7 @@ public:
 
     bool operator==(const Tag &other) const;
     Kernel *kernel() const;
+    void setKernel(Kernel *kernel);
 
 #if defined(QT_TESTLIB_LIB)
     static int tagCount;

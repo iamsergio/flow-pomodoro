@@ -109,6 +109,7 @@ public:
 
     bool operator==(const Task &other) const;
     Kernel *kernel() const;
+    void setKernel(Kernel *);
     Storage *storage() const;
 
 #if defined(UNIT_TEST_RUN)

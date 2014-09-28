@@ -323,7 +323,7 @@ void TestWebDav::testSyncTasks()
     //--------------------------------------------------------------------------
     // TODO: Test concurrency
     //--------------------------------------------------------------------------
-    QVERIFY(checkStorageConsistency());
+    QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
 }
 
 void TestWebDav::testSyncTags()

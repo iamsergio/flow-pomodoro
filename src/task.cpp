@@ -363,6 +363,13 @@ Kernel *Task::kernel() const
     return m_kernel;
 }
 
+void Task::setKernel(Kernel *kernel)
+{
+    Q_ASSERT(kernel && !m_kernel);
+    m_kernel = kernel;
+    modelSetup();
+}
+
 Storage *Task::storage() const
 {
     return m_kernel ? m_kernel->storage() : 0;

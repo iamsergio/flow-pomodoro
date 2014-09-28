@@ -153,8 +153,18 @@ Storage::Data Storage::data() const
     return m_data;
 }
 
-void Storage::setData(const Storage::Data &data)
+void Storage::setData(Storage::Data &data)
 {
+    foreach (const Tag::Ptr &tag, data.tags) {
+        if (!tag->kernel())
+            tag->setKernel(m_kernel);
+    }
+
+    foreach (const Task::Ptr &task, data.tasks) {
+        if (!task->kernel())
+            task->setKernel(m_kernel);
+    }
+
     QByteArray oldInstanceId = m_data.instanceId;
     m_data = data;
     if (m_data.instanceId.isEmpty())

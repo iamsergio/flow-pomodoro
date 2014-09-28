@@ -151,6 +151,12 @@ Kernel *Tag::kernel() const
     return m_kernel;
 }
 
+void Tag::setKernel(Kernel *kernel)
+{
+    Q_ASSERT(kernel && !m_kernel);
+    m_kernel = kernel;
+}
+
 bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
 {
     return (!tag1 && !tag2) || (tag1 && tag2 && *tag1 == *tag2);

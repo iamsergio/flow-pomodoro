@@ -76,7 +76,7 @@ public:
     const TagList& tags() const;
     TaskList tasks() const;
     Storage::Data data() const;
-    void setData(const Storage::Data &data);
+    void setData(Data &data);
 
     int serializerVersion() const;
 

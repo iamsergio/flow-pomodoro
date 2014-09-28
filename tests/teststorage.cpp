@@ -206,6 +206,7 @@ void TestStorage::testPreserveInstanceId()
     m_storage->setData(data);
     QCOMPARE(data.instanceId, QByteArray("1"));
 
-    m_storage->setData(Storage::Data());
+    Storage::Data data2;
+    m_storage->setData(data2);
     QCOMPARE(data.instanceId, QByteArray("1")); // instanceId is never overwritten
 }

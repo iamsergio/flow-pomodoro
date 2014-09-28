@@ -74,12 +74,16 @@ public:
         }
 
         foreach (const Tag::Ptr &tag, m_storage->tags())
-            if (!tag->kernel())
+            if (!tag->kernel()) {
+                qWarning() << "Invalid storage for tag " << tag->name();
                 return false;
+            }
 
         foreach (const Task::Ptr &task, m_storage->tasks()) {
-            if (!task->kernel())
+            if (!task->kernel()) {
+                qWarning() << "Invalid storage for task " << task->summary();
                 return false;
+            }
             foreach (const TagRef &tagref, task->tags()) {
                 Tag::Ptr tag = m_storage->tag(tagref.tagName(), /*create=*/ false);
                 if (!tags.contains(tag)) {
