@@ -14,17 +14,19 @@ Main {
         id: header
         anchors.fill: parent
 
-        FlowSwitch {
-            id: switchItem
-            visible: _controller.expanded && _controller.currentPage === Controller.MainPage
+        FontAwesomeIcon {
+            id: addIcon
+            text: "\uf055" // "\uf0fe"
+            size: 30
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: _style.marginMedium
-            Binding {
-                target: _controller
-                property: "queueType"
-                value: switchItem.checked ? Controller.QueueTypeArchive
-                                          : Controller.QueueTypeToday
+
+            toolTip: qsTr("Add new task")
+            visible: _controller.expanded
+            color: "white"
+            onClicked: {
+                _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
             }
         }
 
@@ -34,7 +36,7 @@ Main {
             color: _style.fontColor
             font.pixelSize: _controller.currentTask.stopped ? _style.fontSize : _style.currentTaskFontSize
             font.bold: true
-            anchors.left: switchItem.visible ? switchItem.right : parent.left
+            anchors.left: addIcon.visible ? addIcon.right : parent.left
             anchors.leftMargin: _style.marginMedium
             anchors.right: buttonRow.left
             anchors.rightMargin: 2 * _controller.dpiFactor
@@ -69,16 +71,15 @@ Main {
                                                                 :  _style.marginMedium
             spacing: _style.buttonsSpacing
 
-            FontAwesomeIcon {
-                id: addIcon
-                text: "\uf055" // "\uf0fe"
-                size: 30
+            FlowSwitch {
+                id: switchItem
+                visible: _controller.expanded && _controller.currentPage === Controller.MainPage
                 anchors.verticalCenter: parent.verticalCenter
-                toolTip: qsTr("Add new task")
-                visible: _controller.expanded
-                color: "white"
-                onClicked: {
-                    _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
+                Binding {
+                    target: _controller
+                    property: "queueType"
+                    value: switchItem.checked ? Controller.QueueTypeArchive
+                                              : Controller.QueueTypeToday
                 }
             }
 
