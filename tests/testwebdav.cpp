@@ -460,10 +460,25 @@ void TestWebDav::testTasksAndTags()
     waitForIt();
 
     validateSync("testSyncTags2.dat");
-
     QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
     //--------------------------------------------------------------------------
+    // Create 4 tags
+    m_storage1->createTag("Tag1");
+    m_storage1->createTag("Tag2");
+    m_storage2->createTag("Tag3");
+    m_storage2->createTag("Tag4");
 
+    m_syncer1->sync();
+    waitForIt();
+
+    m_syncer2->sync();
+    waitForIt();
+
+    m_syncer1->sync();
+    waitForIt();
+
+    validateSync("testSyncTags3.dat");
+    QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
 
     //JsonStorage *jsonStorage = static_cast<JsonStorage*>(m_storage1);
     //qDebug() << "dummping: " << jsonStorage->serializeToJsonData(m_storage1->data());
@@ -483,11 +498,22 @@ void compareTasks(const Task::Ptr &task1, const Task::Ptr &task2)
 void compareTags(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
 {
     if (!(*tag1.data() == *tag2)) {
-        qDebug() << "Compared tags are not the same"
-                 << tag1 << tag1 << tag2->kernel()->storage();
+        qDebug() << "Compared tags are not the same\n"
+                 << tag1 << "\n" << tag2 << "\n" << tag2->kernel()->storage();
 
         QVERIFY(false);
     }
+}
+
+static bool tagLessThan(const Tag::Ptr tag1, const Tag::Ptr tag2)
+{
+    return tag1->name() < tag2->name();
+}
+
+static Tag::List sortTags(TagList tags)
+{
+    qSort(tags.begin(), tags.end(), tagLessThan);
+    return tags;
 }
 
 void TestWebDav::validateSync(const QString &filename)
@@ -503,13 +529,18 @@ void TestWebDav::validateSync(const QString &filename)
     QVERIFY(error.isEmpty());
 
     QCOMPARE(data.tags.count(), m_storage1->tags().count());
-    QCOMPARE(data.tags.count(), m_storage1->tags().count());
+    QCOMPARE(data.tags.count(), m_storage2->tags().count());
     QCOMPARE(data.tasks.count(), m_storage1->tasks().count());
-    QCOMPARE(data.tasks.count(), m_storage1->tasks().count());
+    QCOMPARE(data.tasks.count(), m_storage2->tasks().count());
 
-    for (int i = 0; i < data.tags.count(); ++i) {
-        compareTags(data.tags.at(i), m_storage1->tags().at(i));
-        compareTags(data.tags.at(i), m_storage2->tags().at(i));
+
+    Tag::List sortedServerTags = sortTags(data.tags);
+    Tag::List sortedStorage1Tags = sortTags(m_storage1->tags());
+    Tag::List sortedStorage2Tags = sortTags(m_storage2->tags());
+
+    for (int i = 0; i < sortedServerTags.count(); ++i) {
+        compareTags(sortedServerTags.at(i), sortedStorage1Tags.at(i));
+        compareTags(sortedServerTags.at(i), sortedStorage2Tags.at(i));
     }
 
     for (int i = 0; i < data.tasks.count(); ++i) {
