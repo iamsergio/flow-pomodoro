@@ -107,7 +107,7 @@ void TestTask::testAddAndRemoveTag()
     m_task1->removeTag(" ");
     m_task1->removeTag("taga");
     QCOMPARE(m_task1->tags().count(), 0);
-    expectedSignals = { "changed", "tagsChanged", "changed", "tagsChanged", "changed", "tagsChanged" };
+    expectedSignals = QStringList({ "changed", "tagsChanged", "changed", "tagsChanged", "changed", "tagsChanged" });
     QCOMPARE(m_spy.caughtSignals(), expectedSignals);
 
     QCOMPARE(Tag::tagCount, m_storage->tags().count());
