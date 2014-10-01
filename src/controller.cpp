@@ -75,7 +75,6 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_keepScreenOnDuringPomodoro(false)
     , m_showPomodoroOverlay(false)
 {
-    m_tickTimer = new QTimer(this);
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
     connect(m_afterAddingTimer, &QTimer::timeout, this, &Controller::firstSecondsAfterAddingChanged);
