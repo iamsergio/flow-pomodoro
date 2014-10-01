@@ -74,6 +74,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_newTagDialogVisible(false)
     , m_keepScreenOnDuringPomodoro(false)
     , m_showPomodoroOverlay(false)
+    , m_pomodoroStartTimeStamp(0)
 {
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
@@ -134,6 +135,7 @@ void Controller::startPomodoro(Task *t)
     m_currentTask = task;
 
     m_elapsedMinutes = 0;
+    m_pomodoroStartTimeStamp = QDateTime::currentMSecsSinceEpoch();
     m_currentTaskDuration = m_defaultPomodoroDuration;
 
     setExpanded(false);
@@ -153,6 +155,7 @@ void Controller::stopPomodoro()
 
     m_tickTimer->stop();
     m_elapsedMinutes = 0;
+    m_pomodoroStartTimeStamp = 0;
     setTaskStatus(TaskStopped);
     m_currentTask.clear();
     emit invalidateTaskModel();
@@ -824,8 +827,9 @@ Task *Controller::currentTask() const
 
 void Controller::onTimerTick()
 {
-    //qDebug() << "Timer ticked";
-    m_elapsedMinutes++;
+    // qDebug() << "Timer ticked" << "old=" << m_pomodoroStartTimeStamp
+    // << "; delta=" << (QDateTime::currentMSecsSinceEpoch() - m_pomodoroStartTimeStamp);
+    m_elapsedMinutes += (QDateTime::currentMSecsSinceEpoch() - m_pomodoroStartTimeStamp) / 60000;
     emit remainingMinutesChanged();
 
     if (remainingMinutes() == 0) {

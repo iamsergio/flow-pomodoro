@@ -364,6 +364,8 @@ private:
     bool m_newTagDialogVisible;
     bool m_keepScreenOnDuringPomodoro;
     bool m_showPomodoroOverlay;
+
+    qint64 m_pomodoroStartTimeStamp;
 };
 
 #endif
