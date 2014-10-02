@@ -545,13 +545,9 @@ void TestWebDav::testTasksAndTags()
 
 void compareTasks(const Task::Ptr &task1, const Task::Ptr &task2)
 {
-    Task *t1 = task1.data();
-    Task *t2 = task2.data();
-
-    if (t1->summary() != t2->summary() || t1->uuid() != t2->uuid()) {
+    if (task1->summary() != task2->summary() || task1->uuid() != task2->uuid()) {
         qDebug() << "Compared tasks are not the same\n"
                  << task1 << "\n" << task2 << "\n" << task2->kernel()->storage();
-
         QVERIFY(false);
     }
 }
