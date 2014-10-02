@@ -831,8 +831,7 @@ void Controller::onTimerTick()
     // << "; delta=" << (QDateTime::currentMSecsSinceEpoch() - m_pomodoroStartTimeStamp);
     m_elapsedMinutes += (QDateTime::currentMSecsSinceEpoch() - m_pomodoroStartTimeStamp) / 60000;
     emit remainingMinutesChanged();
-
-    if (remainingMinutes() == 0) {
+    if (remainingMinutes() <= 0) {
         stopPomodoro();
         emit taskFinished();
     }
