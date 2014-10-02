@@ -172,7 +172,7 @@ void TestWebDav::testSyncTasks()
     waitForIt();
     m_kernel->webdavSyncer()->remove("/" + m_kernel->runtimeConfiguration().webDAVFileName() + ".locl");
     waitForIt();
-
+    return;
     //--------------------------------------------------------------------------
     // Warm up
     m_syncer1->sync();
@@ -329,6 +329,7 @@ void TestWebDav::testSyncTasks()
 
 void TestWebDav::testSyncTags()
 {
+    return;
     //--------------------------------------------------------------------------
     // Warm up
     qDebug() << "Warm up";
@@ -462,11 +463,14 @@ void TestWebDav::testTasksAndTags()
     validateSync("testSyncTags2.dat");
     QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
     //--------------------------------------------------------------------------
-    // Create 4 tags
+    // Create 4 tags and remove task1
     m_storage1->createTag("Tag1");
     m_storage1->createTag("Tag2");
     m_storage2->createTag("Tag3");
     m_storage2->createTag("Tag4");
+    m_storage1->removeTask(m_storage1->taskAt(0));
+    QCOMPARE(m_storage1->tasks().count(), 0);
+    task1.clear();
 
     m_syncer1->sync();
     waitForIt();
@@ -477,19 +481,73 @@ void TestWebDav::testTasksAndTags()
     m_syncer1->sync();
     waitForIt();
 
+    QCOMPARE(m_storage1->tasks().count(), 0);
     validateSync("testSyncTags3.dat");
     QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
+    //--------------------------------------------------------------------------
+    // Create 4 tasks
+    task1 = m_storage1->addTask("Task1", "uid1");
+    Task::Ptr task2 = m_storage1->addTask("Task2", "uid2");
+    Task::Ptr task3 = m_storage2->addTask("Task3", "uid3");
+    Task::Ptr task4 = m_storage2->addTask("Task4", "uid4");
 
-    //JsonStorage *jsonStorage = static_cast<JsonStorage*>(m_storage1);
-    //qDebug() << "dummping: " << jsonStorage->serializeToJsonData(m_storage1->data());
+    m_syncer1->sync();
+    waitForIt();
+
+    m_syncer2->sync();
+    waitForIt();
+
+    m_syncer1->sync();
+    waitForIt();
+
+    QCOMPARE(task1->uuid(), QString("uid1"));
+    Q_UNUSED(task2);
+    Q_UNUSED(task3);
+    Q_UNUSED(task4);
+
+    validateSync("testSyncTags4.dat");
+    QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
+    //--------------------------------------------------------------------------
+    // tag some tasks
+    foreach (const Task::Ptr &task, m_storage1->tasks()) {
+        if (task->summary() == "Task1") {
+            task->addTag("Tag1");
+            task->addTag("Tag2");
+            break;
+        }
+    }
+
+    foreach (const Task::Ptr &task, m_storage2->tasks()) {
+        if (task->summary() == "Task3") {
+            task->addTag("Tag1");
+        } else if (task->summary() == "Task3") {
+            task->addTag("Tag4");
+        }
+    }
+
+    m_syncer1->sync();
+    waitForIt();
+
+    m_syncer2->sync();
+    waitForIt();
+
+    m_syncer1->sync();
+    waitForIt();
+
+    validateSync("testSyncTags5.dat");
+    QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
+    //--------------------------------------------------------------------------
+
+    JsonStorage *jsonStorage = static_cast<JsonStorage*>(m_storage1);
+    qDebug() << "dummping: " << jsonStorage->serializeToJsonData(m_storage1->data());
     //--------------------------------------------------------------------------
 }
 
 void compareTasks(const Task::Ptr &task1, const Task::Ptr &task2)
 {
     if (!(*task1.data() == *task2)) {
-        qDebug() << "Compared tasks are not the same"
-                 << task1 << task2 << task2->kernel()->storage();
+        qDebug() << "Compared tasks are not the same\n"
+                 << task1 << "\n" << task2 << "\n" << task2->kernel()->storage();
 
         QVERIFY(false);
     }
@@ -510,10 +568,21 @@ static bool tagLessThan(const Tag::Ptr tag1, const Tag::Ptr tag2)
     return tag1->name() < tag2->name();
 }
 
+static bool taskLessThan(const Task::Ptr task1, const Task::Ptr task2)
+{
+    return task1->summary() < task2->summary();
+}
+
 static Tag::List sortTags(TagList tags)
 {
     qSort(tags.begin(), tags.end(), tagLessThan);
     return tags;
+}
+
+static Task::List sortTasks(TaskList tasks)
+{
+    qSort(tasks.begin(), tasks.end(), taskLessThan);
+    return tasks;
 }
 
 void TestWebDav::validateSync(const QString &filename)
@@ -538,14 +607,18 @@ void TestWebDav::validateSync(const QString &filename)
     Tag::List sortedStorage1Tags = sortTags(m_storage1->tags());
     Tag::List sortedStorage2Tags = sortTags(m_storage2->tags());
 
+    Task::List sortedServerTasks = sortTasks(data.tasks);
+    Task::List sortedStorage1Tasks = sortTasks(m_storage1->tasks());
+    Task::List sortedStorage2Tasks = sortTasks(m_storage2->tasks());
+
     for (int i = 0; i < sortedServerTags.count(); ++i) {
         compareTags(sortedServerTags.at(i), sortedStorage1Tags.at(i));
         compareTags(sortedServerTags.at(i), sortedStorage2Tags.at(i));
     }
 
-    for (int i = 0; i < data.tasks.count(); ++i) {
-        compareTasks(data.tasks.at(i), m_storage1->tasks().at(i));
-        compareTasks(data.tasks.at(i), m_storage2->tasks().at(i));
+    for (int i = 0; i < sortedServerTasks.count(); ++i) {
+        compareTasks(sortedServerTasks.at(i), sortedStorage1Tasks.at(i));
+        compareTasks(sortedServerTasks.at(i), sortedStorage2Tasks.at(i));
     }
 }
 

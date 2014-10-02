@@ -1,0 +1,80 @@
+{
+    "JsonSerializerVersion": 1,
+    "instanceId": "{639bc60a-a0dc-4462-857b-eedc55c444d7}",
+    "tags": [
+        {
+            "name": "Tag1",
+            "revision": 0,
+            "revisionOnWebDAVServer": 0,
+            "uuid": "{d2388301-dcab-4a95-bd65-5cd2ca73c528}"
+        },
+        {
+            "name": "Tag2",
+            "revision": 0,
+            "revisionOnWebDAVServer": 0,
+            "uuid": "{fae0f4a7-a36c-4549-8105-b9dde831d4a7}"
+        },
+        {
+            "name": "Tag3",
+            "revision": 0,
+            "revisionOnWebDAVServer": 0,
+            "uuid": "{9eb53d87-b507-45a7-ba80-ce0e71abd5ef}"
+        },
+        {
+            "name": "Tag4",
+            "revision": 0,
+            "revisionOnWebDAVServer": 0,
+            "uuid": "{fc8d234b-c6ae-494d-ad78-baa26c7de3bc}"
+        }
+    ],
+    "tasks": [
+        {
+            "creationTimestamp": 1412255315258,
+            "description": "",
+            "modificationTimestamp": 1412255315258,
+            "revision": 0,
+            "revisionOnWebDAVServer": 0,
+            "staged": false,
+            "summary": "Task1",
+            "tags": [
+            ],
+            "uuid": "uid1"
+        },
+        {
+            "creationTimestamp": 1412255315259,
+            "description": "",
+            "modificationTimestamp": 1412255315259,
+            "revision": 0,
+            "revisionOnWebDAVServer": 0,
+            "staged": false,
+            "summary": "Task2",
+            "tags": [
+            ],
+            "uuid": "uid2"
+        },
+        {
+            "creationTimestamp": 1412255315260,
+            "description": "",
+            "modificationTimestamp": 1412255315260,
+            "revision": 0,
+            "revisionOnWebDAVServer": 0,
+            "staged": false,
+            "summary": "Task3",
+            "tags": [
+            ],
+            "uuid": "uid3"
+        },
+        {
+            "creationTimestamp": 1412255315260,
+            "description": "",
+            "modificationTimestamp": 1412255315260,
+            "revision": 0,
+            "revisionOnWebDAVServer": 0,
+            "staged": false,
+            "summary": "Task4",
+            "tags": [
+            ],
+            "uuid": "uid4"
+        }
+    ]
+}
