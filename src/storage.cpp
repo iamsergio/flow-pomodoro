@@ -440,9 +440,9 @@ Task::Ptr Storage::taskAt(int proxyIndex) const
     return m_data.tasks.value(proxyRowToSource(proxyIndex));
 }
 
-Task::Ptr Storage::addTask(const QString &taskText)
+Task::Ptr Storage::addTask(const QString &taskText, const QString &uid)
 {
-    Task::Ptr task = Task::createTask(m_kernel, taskText);
+    Task::Ptr task = Task::createTask(m_kernel, taskText, uid);
     return addTask(task);
 }
 

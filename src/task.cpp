@@ -120,10 +120,12 @@ Task::~Task()
 #endif
 }
 
-Task::Ptr Task::createTask(Kernel *kernel, const QString &summary)
+Task::Ptr Task::createTask(Kernel *kernel, const QString &summary, const QString &uid)
 {
     Task::Ptr task = Task::Ptr(new Task(kernel, summary));
     task->setWeakPointer(task);
+    if (!uid.isEmpty())
+        task->setUuid(uid);
     return task;
 }
 

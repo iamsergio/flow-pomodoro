@@ -68,7 +68,9 @@ public:
 
     ~Task();
 
-    static Task::Ptr createTask(Kernel *kernel, const QString &name = QString());
+    static Task::Ptr createTask(Kernel *kernel,
+                                const QString &name = QString(),
+                                const QString &uid = QString());
 
     bool staged() const;
     void setStaged(bool);

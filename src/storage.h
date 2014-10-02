@@ -117,7 +117,7 @@ public:
     ArchivedTasksFilterModel* stagedTasksModel() const;
     ArchivedTasksFilterModel* archivedTasksModel() const;
     Task::Ptr taskAt(int proxyIndex) const;
-    Task::Ptr addTask(const QString &taskText);
+    Task::Ptr addTask(const QString &taskText, const QString &uid = QString());
     Task::Ptr prependTask(const QString &taskText);
     void removeTask(const Task::Ptr &task);
     int indexOfTask(const Task::Ptr &) const;
