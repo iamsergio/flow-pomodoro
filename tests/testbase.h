@@ -68,8 +68,7 @@ public:
         if (expectedTagCount != Tag::tagCount) {
             qWarning() << "Actual tag count is" << Tag::tagCount
                        << "; expected:" << expectedTagCount
-                       << "; storageCount:" << Storage::storageCount
-                       << "; task count is" << Task::taskCount;
+                       << "; storageCount:" << Storage::storageCount;
             return false;
         }
 
