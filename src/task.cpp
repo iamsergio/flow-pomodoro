@@ -383,6 +383,25 @@ Storage *Task::storage() const
     return m_kernel ? m_kernel->storage() : 0;
 }
 
+bool Task::equals(Task *other) const
+{
+    if (!Syncable::equals(other))
+        return false;
+
+    if (m_summary != other->summary() || m_description != other->description())
+        return false;
+
+    if (m_tags.count() != other->tags().count())
+        return false;
+
+    for (int i = 0; i < m_tags.count(); ++i) {
+        if (!m_tags.at(i).tag()->equals(other->tags().at(i).tag().data()))
+            return false;
+    }
+
+    return true;
+}
+
 void Task::onEdited()
 {
     m_modificationDate = QDateTime::currentDateTimeUtc();

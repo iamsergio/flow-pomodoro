@@ -62,6 +62,8 @@ public:
     static int tagCount;
 #endif
 
+    bool equals(Tag *) const;
+
 public Q_SLOTS:
     void onTaskStagedChanged();
 

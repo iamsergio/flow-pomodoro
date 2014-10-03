@@ -37,6 +37,7 @@ public:
 
     virtual void fromJson(const QVariantMap &);
 protected:
+    bool equals(Syncable *) const;
     void setRevision(int);
     virtual QVariantMap toJson() const;
     int m_revision;

@@ -114,6 +114,8 @@ public:
     void setKernel(Kernel *);
     Storage *storage() const;
 
+    bool equals(Task *) const;
+
 #if defined(UNIT_TEST_RUN)
     static int taskCount;
 #endif

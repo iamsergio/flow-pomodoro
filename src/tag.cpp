@@ -158,6 +158,11 @@ void Tag::setKernel(Kernel *kernel)
     m_kernel = kernel;
 }
 
+bool Tag::equals(Tag *other) const
+{
+    return Syncable::equals(other) && m_name.trimmed().toLower() == other->name().trimmed().toLower();
+}
+
 bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
 {
     return (!tag1 && !tag2) || (tag1 && tag2 && *tag1 == *tag2);

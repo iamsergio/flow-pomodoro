@@ -69,6 +69,11 @@ void Syncable::setUuid(const QString &uuid)
     m_uuid = uuid;
 }
 
+bool Syncable::equals(Syncable *other) const
+{
+    return other && m_uuid == other->uuid();
+}
+
 void Syncable::setRevision(int revision)
 {
     m_revision = revision;
