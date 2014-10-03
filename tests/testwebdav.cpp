@@ -487,9 +487,9 @@ void TestWebDav::testTasksAndTags()
     //--------------------------------------------------------------------------
     // Create 4 tasks
     task1 = m_storage1->addTask("Task1", "uid1");
-    Task::Ptr task2 = m_storage1->addTask("Task2", "uid2");
-    Task::Ptr task3 = m_storage2->addTask("Task3", "uid3");
-    Task::Ptr task4 = m_storage2->addTask("Task4", "uid4");
+    m_storage1->addTask("Task2", "uid2");
+    m_storage2->addTask("Task3", "uid3");
+    m_storage2->addTask("Task4", "uid4");
 
     m_syncer1->sync();
     waitForIt();
@@ -501,12 +501,10 @@ void TestWebDav::testTasksAndTags()
     waitForIt();
 
     QCOMPARE(task1->uuid(), QString("uid1"));
-    Q_UNUSED(task2);
-    Q_UNUSED(task3);
-    Q_UNUSED(task4);
 
     validateSync("testSyncTags4.dat");
     QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
+    task1.clear();
     //--------------------------------------------------------------------------
     // tag some tasks
     foreach (const Task::Ptr &task, m_storage1->tasks()) {
@@ -537,10 +535,91 @@ void TestWebDav::testTasksAndTags()
     validateSync("testSyncTags5.dat");
     QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
     //--------------------------------------------------------------------------
+    // Both clients add a tag to the same task!
+    foreach (const Task::Ptr &task, m_storage1->tasks()) {
+        if (task->summary() == "Task1") {
+            task->addTag("Tag3");
+            break;
+        }
+    }
+
+    foreach (const Task::Ptr &task, m_storage2->tasks()) {
+        if (task->summary() == "Task1") {
+            task->addTag("Tag4");
+            break;
+        }
+    }
+
+    m_syncer1->sync();
+    waitForIt();
+
+    m_syncer2->sync();
+    waitForIt();
+
+    m_syncer1->sync();
+    waitForIt();
+
+    validateSync("testSyncTags6.dat");
+    QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
+    //--------------------------------------------------------------------------
+    // Both clients remove a tag
+    foreach (const Task::Ptr &task, m_storage1->tasks()) {
+        if (task->summary() == "Task1") {
+            task->removeTag("Tag3");
+            break;
+        }
+    }
+
+    foreach (const Task::Ptr &task, m_storage2->tasks()) {
+        if (task->summary() == "Task1") {
+            task->removeTag("Tag3");
+            break;
+        }
+    }
+
+    m_syncer1->sync();
+    waitForIt();
+
+    m_syncer2->sync();
+    waitForIt();
+
+    m_syncer1->sync();
+    waitForIt();
+
+    validateSync("testSyncTags7.dat");
+    QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
+    //--------------------------------------------------------------------------
+    // Tag rename!
+    QCOMPARE(Tag::tagCount, 8);
+    QVERIFY(m_storage1->renameTag("Tag1", "TagX"));
+    QCOMPARE(Tag::tagCount, 8);
+
+    m_syncer1->sync();
+    waitForIt();
+    QCOMPARE(Tag::tagCount, 8);
+
+    m_syncer2->sync();
+    waitForIt();
+    QCOMPARE(Tag::tagCount, 8);
+
+    validateSync("testSyncTags8.dat");
+    QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
+    //--------------------------------------------------------------------------
+    // One client renames a tag, other client uses the tag
+
+
 
     JsonStorage *jsonStorage = static_cast<JsonStorage*>(m_storage1);
     qDebug() << "dummping: " << jsonStorage->serializeToJsonData(m_storage1->data());
     //--------------------------------------------------------------------------
+/*
+    foreach (const Task::Ptr &task, m_storage2->tasks()) {
+        if (task->summary() == "Task2") {
+            task->addTag("Tag1");
+            break;
+        }
+    }
+*/
 }
 
 void compareTasks(const Task::Ptr &task1, const Task::Ptr &task2)

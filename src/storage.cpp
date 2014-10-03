@@ -319,6 +319,10 @@ void Storage::clearTags()
 
 bool Storage::renameTag(const QString &oldName, const QString &newName)
 {
+    // For renaming we remove and create instead of simply renaming.
+    // Webdav sync isn't prepared for a simple rename, because the task json
+    // references the tag name, not the tag uid
+
     QString trimmedNewName = newName.trimmed();
     if (oldName == newName || trimmedNewName.isEmpty())
         return true;
@@ -326,15 +330,24 @@ bool Storage::renameTag(const QString &oldName, const QString &newName)
     if (indexOfTag(trimmedNewName) != -1)
         return false; // New name already exists
 
-    Tag::Ptr tag = m_data.tags.value(indexOfTag(oldName));
-    if (!tag) {
+    Tag::Ptr oldTag = tag(oldName, /*create=*/ false);
+    if (!oldTag) {
         qWarning() << "Could not find tag with name" << oldName;
         return false;
     }
 
-    tag->setName(trimmedNewName);
-    scheduleSave();
+    if (!createTag(trimmedNewName, oldTag->uuid()))
+        return false;
 
+    foreach (const Task::Ptr &task, m_data.tasks) {
+        if (task->containsTag(oldName))
+            task->addTag(trimmedNewName);
+    }
+
+    if (!removeTag(oldName))
+        return false;
+
+    scheduleSave();
     return true;
 }
 

@@ -46,6 +46,7 @@ Tag::Tag(Kernel *kernel, const QString &_name)
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 #if defined(QT_TESTLIB_LIB)
     tagCount++;
+    // qDebug() << "[TAG] CTOR " << ((void*)this) << m_name;
 #endif
 }
 
@@ -53,6 +54,7 @@ Tag::~Tag()
 {
 #if defined(QT_TESTLIB_LIB)
     tagCount--;
+    // qDebug() << "[TAG] DTOR " << ((void*)this) << m_name;
 #endif
 }
 
