@@ -432,7 +432,7 @@ void TestWebDav::testTasksAndTags()
     // Client A creates Task1, tagged with Tag1
     Task::Ptr task1 = m_storage1->addTask("Task1");
     task1->setUuid("{f6d334d3-57f0-418f-b44b-7513d8e5e087}");
-    m_storage1->createTag("Tag1");
+    m_storage1->createTag("Tag1", "{6636d886-aadb-4f64-b15a-fdeae17291fe}");
     task1->addTag("Tag1");
 
     m_syncer1->sync();
@@ -464,10 +464,10 @@ void TestWebDav::testTasksAndTags()
     QVERIFY(checkStorageConsistency(m_storage1->tags().count() + m_storage2->tags().count()));
     //--------------------------------------------------------------------------
     // Create 4 tags and remove task1
-    m_storage1->createTag("Tag1");
-    m_storage1->createTag("Tag2");
-    m_storage2->createTag("Tag3");
-    m_storage2->createTag("Tag4");
+    m_storage1->createTag("Tag1", "{f5a8e407-2363-4643-ab0e-376ddccf3da0}");
+    m_storage1->createTag("Tag2", "{ec93efa9-db27-40b9-8866-d30c3e2658e7}");
+    m_storage2->createTag("Tag3", "{9c9d4d03-f0cc-4b2a-a6ba-f8edffd1f71d}");
+    m_storage2->createTag("Tag4", "{23683e4c-d36a-49dd-ae53-d218a99614a7}");
     m_storage1->removeTask(m_storage1->taskAt(0));
     QCOMPARE(m_storage1->tasks().count(), 0);
     task1.clear();
@@ -554,9 +554,10 @@ void compareTasks(const Task::Ptr &task1, const Task::Ptr &task2)
 
 void compareTags(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
 {
-    if (!(*tag1.data() == *tag2)) {
+    if (tag1->uuid() != tag2->uuid() || tag1->name() != tag2->name()) {
         qDebug() << "Compared tags are not the same\n"
-                 << tag1 << "\n" << tag2 << "\n" << tag2->kernel()->storage();
+                 << "Server tag:" << tag1 << "\nLocal tag:"
+                 << tag2 << "\n" << tag2->kernel()->storage();
 
         QVERIFY(false);
     }

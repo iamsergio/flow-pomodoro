@@ -6,25 +6,25 @@
             "name": "Tag1",
             "revision": 0,
             "revisionOnWebDAVServer": 0,
-            "uuid": "{d2388301-dcab-4a95-bd65-5cd2ca73c528}"
+            "uuid": "{f5a8e407-2363-4643-ab0e-376ddccf3da0}"
         },
         {
             "name": "Tag2",
             "revision": 0,
             "revisionOnWebDAVServer": 0,
-            "uuid": "{fae0f4a7-a36c-4549-8105-b9dde831d4a7}"
+            "uuid": "{ec93efa9-db27-40b9-8866-d30c3e2658e7}"
         },
         {
             "name": "Tag3",
             "revision": 0,
             "revisionOnWebDAVServer": 0,
-            "uuid": "{9eb53d87-b507-45a7-ba80-ce0e71abd5ef}"
+            "uuid": "{9c9d4d03-f0cc-4b2a-a6ba-f8edffd1f71d}"
         },
         {
             "name": "Tag4",
             "revision": 0,
             "revisionOnWebDAVServer": 0,
-            "uuid": "{fc8d234b-c6ae-494d-ad78-baa26c7de3bc}"
+            "uuid": "{23683e4c-d36a-49dd-ae53-d218a99614a7}"
         }
     ],
     "tasks": [
