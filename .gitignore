@@ -24,3 +24,8 @@ data.dat
 /src/android-libflow.so-deployment-settings.json
 app_process
 /build-tests*
+flow.exe*
+flow.ilk
+flow.pdb
+Makefile*
+build-src*
