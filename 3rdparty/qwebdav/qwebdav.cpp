@@ -213,7 +213,9 @@ void QWebdav::replyError(QNetworkReply::NetworkError)
     if (reply==0)
         return;
 
-    qWarning() << "QWebdav::replyError()  reply->url() == " << reply->url().toString(QUrl::RemoveUserInfo);
+    if (reply->error() != QNetworkReply::ContentNotFoundError)
+        qWarning() << "QWebdav::replyError()  reply->url(); " << reply->url().toString(QUrl::RemoveUserInfo)
+                   << "; error=" << reply->error() << "; errorMsg=" << reply->errorString();
 
     if ( reply->error() == QNetworkReply::OperationCanceledError) {
         QIODevice* dataIO = m_inDataDevices.value(reply, 0);
