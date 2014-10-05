@@ -40,6 +40,10 @@
 #include <QQmlContext>
 #include <QPluginLoader>
 #include <QDir>
+#include <QWindow>
+#ifdef QT_WIDGETS_LIB
+#include <QSystemTrayIcon>
+#endif
 
 static void registerQmlTypes()
 {
@@ -109,6 +113,8 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     QMetaObject::invokeMethod(m_storage, "load", Qt::QueuedConnection); // Schedule a load. Don't do it directly, it will deadlock in instance()
     QMetaObject::invokeMethod(this, "maybeLoadPlugins", Qt::QueuedConnection);
     QMetaObject::invokeMethod(m_controller, "updateWebDavCredentials", Qt::QueuedConnection);
+
+    setupSystray();
 }
 
 Storage *Kernel::storage() const
@@ -156,6 +162,15 @@ void Kernel::notifyPlugins(TaskStatus newStatus)
     }
 }
 
+void Kernel::setupSystray()
+{
+#ifdef QT_WIDGETS_LIB
+    m_systrayIcon = new QSystemTrayIcon(QIcon(":/img/icon.png"), this);
+    m_systrayIcon->show();
+    connect(m_systrayIcon, &QSystemTrayIcon::activated, this, &Kernel::onSystrayActivated);
+#endif
+}
+
 void Kernel::loadPlugins()
 {
     QStringList paths = QCoreApplication::libraryPaths();
@@ -201,4 +216,15 @@ void Kernel::maybeLoadPlugins()
 {
     if (!m_controller->isMobile() && m_runtimeConfiguration.pluginsSupported())
         loadPlugins();
+}
+
+void Kernel::onSystrayActivated()
+{
+    QWindow *window = QGuiApplication::topLevelWindows().value(0);
+    if (!window) {
+        qWarning() << "Kernel::onSystrayActivated() window not found";
+        return;
+    }
+
+    emit systrayClicked();
 }

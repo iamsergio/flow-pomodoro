@@ -32,6 +32,7 @@ class WebDAVSyncer;
 class PluginModel;
 class QQmlEngine;
 class QQmlContext;
+class QSystemTrayIcon;
 
 class Kernel : public QObject
 {
@@ -50,13 +51,18 @@ public:
     WebDAVSyncer *webdavSyncer() const;
 #endif
 
+Q_SIGNALS:
+    void systrayClicked();
+
 private Q_SLOTS:
     void onTaskStatusChanged();
     void maybeLoadPlugins();
+    void onSystrayActivated();
 
 private:
     void loadPlugins();
     void notifyPlugins(TaskStatus newStatus);
+    void setupSystray();
 
     RuntimeConfiguration m_runtimeConfiguration;
     Storage *m_storage;
@@ -66,6 +72,9 @@ private:
     PluginModel *m_pluginModel;
 #ifndef NO_WEBDAV
     WebDAVSyncer *m_webDavSyncer;
+#endif
+#ifdef QT_WIDGETS_LIB
+    QSystemTrayIcon *m_systrayIcon;
 #endif
 
     static QPointer<Kernel> s_kernel; // QPointer, so unit-tests can delete and recreate

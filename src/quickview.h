@@ -36,6 +36,9 @@ public:
 protected:
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
+private Q_SLOTS:
+    void toggleVisible();
+
 private:
     void reloadQML();
     QUrl styleFileName() const;

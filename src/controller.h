@@ -218,6 +218,8 @@ public:
     bool syncAtStartup() const;
     void setSyncAtStartup(bool);
 
+    Q_INVOKABLE bool systemTrayAvailable() const;
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);

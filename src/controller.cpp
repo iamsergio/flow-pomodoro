@@ -32,6 +32,9 @@
 #include <QQmlExpression>
 #include <QQmlContext>
 #include <QKeyEvent>
+#ifdef QT_WIDGETS_LIB
+#include <QSystemTrayIcon>
+#endif
 #include <qglobal.h>
 
 enum {
@@ -772,6 +775,15 @@ void Controller::setSyncAtStartup(bool sync)
         m_settings->setValue("syncAtStartup", sync);
         emit syncAtStartupChanged();
     }
+}
+
+bool Controller::systemTrayAvailable() const
+{
+#ifdef QT_WIDGETS_LIB
+    return QSystemTrayIcon::isSystemTrayAvailable();
+#else
+    return false;
+#endif
 }
 
 void Controller::setNewTagDialogVisible(bool visible)
