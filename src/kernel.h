@@ -32,6 +32,7 @@ class WebDAVSyncer;
 class PluginModel;
 class QQmlEngine;
 class QQmlContext;
+class QMenu;
 
 #ifdef QT_WIDGETS_LIB
 #include <QSystemTrayIcon>
@@ -78,6 +79,7 @@ private:
 #endif
 #ifdef QT_WIDGETS_LIB
     QSystemTrayIcon *m_systrayIcon;
+    QMenu *m_trayMenu;
 #endif
 
     static QPointer<Kernel> s_kernel; // QPointer, so unit-tests can delete and recreate

@@ -42,6 +42,12 @@
 #include <QDir>
 #include <QWindow>
 
+#ifdef QT_WIDGETS_LIB
+#include <QSystemTrayIcon>
+#include <QAction>
+#include <QMenu>
+#endif
+
 static void registerQmlTypes()
 {
     qmlRegisterUncreatableType<QAbstractItemModel>("Controller",
@@ -83,6 +89,7 @@ static void registerQmlTypes()
 Kernel::~Kernel()
 {
     delete m_settings;
+    delete m_trayMenu;
 }
 
 Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
@@ -163,6 +170,13 @@ void Kernel::setupSystray()
 {
 #ifdef QT_WIDGETS_LIB
     m_systrayIcon = new QSystemTrayIcon(QIcon(":/img/icon.png"), this);
+
+    QAction *quitAction = new QAction(tr("&Quit"), this);
+    connect(quitAction, &QAction::triggered, qApp, &QGuiApplication::quit);
+    m_trayMenu = new QMenu();
+    m_trayMenu->addAction(quitAction);
+    m_systrayIcon->setContextMenu(m_trayMenu);
+
     m_systrayIcon->show();
     connect(m_systrayIcon, &QSystemTrayIcon::activated, this, &Kernel::onSystrayActivated);
 #endif
