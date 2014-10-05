@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Replace with your own script
+source /data/qt5-blackberry-5.3.source
+
 mkdir build_dir-blackberry &> /dev/null
 cd build_dir-blackberry
 qmake CONFIG+=release ../flow.pro
