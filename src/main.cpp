@@ -146,15 +146,15 @@ int main(int argc, char *argv[])
 
     RuntimeConfiguration defaultConfig;
     defaultConfig.setDataFileName(defaultDataFileName());
-    Kernel *kernel = new Kernel(defaultConfig, qApp);
+    Kernel kernel(defaultConfig);
 
     printTimeInfo("main: created Kernel::instance()");
-    QuickView window(kernel);
+    QuickView window(&kernel);
     printTimeInfo("main: created QuickView");
-    initDBus(kernel->controller());
+    initDBus(kernel.controller());
     printTimeInfo("main: initialized dbus");
 
-    if (kernel->controller()->isMobile()) {
+    if (kernel.controller()->isMobile()) {
         window.showMaximized(); // Don't use fullscreen on android
 
         QScreen *screen = QGuiApplication::primaryScreen();
