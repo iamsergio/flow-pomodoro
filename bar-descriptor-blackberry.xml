@@ -26,6 +26,11 @@
     <asset path="/data/extra2/installation/qt/blackberry-5.3/plugins">runtime/qt/plugins</asset>
     <asset path="/data/extra2/installation/qt/blackberry-5.3/qml">runtime/qt/qml</asset>
     
+    <asset path="../src/img/icon.png">icon.png</asset>
+    <icon>
+        <image>icon.png</image>
+    </icon>
+
     <action system="true">run_native</action>
     <asset path="flow" entry="true" type="Qnx/Elf">src</asset>
     <author>KDAB</author>
