@@ -195,7 +195,7 @@ public:
     QString version() const;
 
     bool optionsContextMenuVisible() const;
-    void setOptionsContextMenuVisible(int);
+    void setOptionsContextMenuVisible(bool);
     bool newTagDialogVisible() const;
 
     bool configurePageRequested() const;

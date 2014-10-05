@@ -618,7 +618,7 @@ bool Controller::optionsContextMenuVisible() const
     return m_optionsContextMenuVisible;
 }
 
-void Controller::setOptionsContextMenuVisible(int visible)
+void Controller::setOptionsContextMenuVisible(bool visible)
 {
     if (visible != m_optionsContextMenuVisible) {
         m_optionsContextMenuVisible = visible;
