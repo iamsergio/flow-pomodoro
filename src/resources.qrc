@@ -1,7 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="/">
     <file>translations/flow_pt_PT.qm</file>
-
+    <file>img/icon.png</file>
     <file>fontawesome-webfont.ttf</file>
 
     <file>qml/AboutPage.qml</file>
