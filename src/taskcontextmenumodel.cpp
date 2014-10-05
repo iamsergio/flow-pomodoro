@@ -29,7 +29,7 @@ TaskContextMenuModel::TaskContextMenuModel(Task *task, QObject *parent)
 
     Option option;
     option.text = tr("Edit ...");
-    option.icon = QChar(61508);
+    option.icon = QChar(61508); // visual studio doesn't like escaped \u unicode
     option.dismiss = true;
     m_staticOptions.insert(OptionTypeEdit, option);
 
