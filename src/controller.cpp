@@ -779,7 +779,7 @@ void Controller::setSyncAtStartup(bool sync)
 
 bool Controller::systemTrayAvailable() const
 {
-#ifdef QT_WIDGETS_LIB
+#if defined(QT_WIDGETS_LIB)
     return QSystemTrayIcon::isSystemTrayAvailable();
 #else
     return false;

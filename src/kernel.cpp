@@ -171,12 +171,13 @@ void Kernel::setupSystray()
 #ifdef QT_WIDGETS_LIB
     m_systrayIcon = new QSystemTrayIcon(QIcon(":/img/icon.png"), this);
 
+# if !defined(Q_OS_MAC)
     QAction *quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, &QAction::triggered, qApp, &QGuiApplication::quit);
     m_trayMenu = new QMenu();
     m_trayMenu->addAction(quitAction);
     m_systrayIcon->setContextMenu(m_trayMenu);
-
+# endif
     m_systrayIcon->show();
     connect(m_systrayIcon, &QSystemTrayIcon::activated, this, &Kernel::onSystrayActivated);
 #endif
