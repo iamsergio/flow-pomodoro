@@ -29,25 +29,25 @@ TaskContextMenuModel::TaskContextMenuModel(Task *task, QObject *parent)
 
     Option option;
     option.text = tr("Edit ...");
-    option.icon = "\uf044";
+    option.icon = QChar(61508);
     option.dismiss = true;
     m_staticOptions.insert(OptionTypeEdit, option);
 
     option.text = tr("Delete");
-    option.icon = "\uf014";
+    option.icon = QChar(61460);
     option.dismiss = true;
     m_staticOptions.insert(OptionTypeDelete, option);
 
     option.text = tr("New Tag ...");
-    option.icon = "\uf02b";
+    option.icon = QChar(61483);
     option.dismiss = false;
     m_staticOptions.insert(OptionTypeNewTag, option);
 
     m_moveToTodayOption.text = tr("Move to today's queue");
-    m_moveToTodayOption.icon = "\uf06a";
+    m_moveToTodayOption.icon = QChar(61546);
     m_moveToTodayOption.dismiss = true;
     m_archiveOption.text = tr("Move to later queue");
-    m_archiveOption.icon = "\uf187";
+    m_archiveOption.icon = QChar(61831);
     m_archiveOption.dismiss = true;
 
     connect(this, &TaskContextMenuModel::rowsInserted, this, &TaskContextMenuModel::countChanged);
