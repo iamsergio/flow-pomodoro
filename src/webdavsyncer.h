@@ -49,6 +49,8 @@ public:
     void upload(const QString &filename, const QByteArray &contents);
     void remove(const QString &filename);
 
+    bool syncedAtStartup() const;
+
 public Q_SLOTS:
     void sync();
     void testSettings();
@@ -81,6 +83,7 @@ private:
     RuntimeConfiguration m_config;
     QState *m_initialState;
     Kernel *m_kernel;
+    bool m_syncedAtStartup;
 
     friend class InitialState;
     friend class AcquireLockState;

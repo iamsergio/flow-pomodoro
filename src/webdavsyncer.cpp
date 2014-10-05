@@ -376,6 +376,7 @@ WebDAVSyncer::WebDAVSyncer(Kernel *kernel)
     , m_syncInProgress(false)
     , m_config(kernel->runtimeConfiguration())
     , m_kernel(kernel)
+    , m_syncedAtStartup(false)
 {
     m_initialState = new InitialState(this);
     QState *acquireLockState = new AcquireLockState(this);
@@ -437,6 +438,11 @@ void WebDAVSyncer::remove(const QString &filename)
     connect(reply, &QNetworkReply::finished, this, &WebDAVSyncer::onRemoveFinished);
 }
 
+bool WebDAVSyncer::syncedAtStartup() const
+{
+    return m_syncedAtStartup;
+}
+
 void WebDAVSyncer::onUploadFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
@@ -464,12 +470,12 @@ void WebDAVSyncer::onRemoveFinished()
 void WebDAVSyncer::sync()
 {
     if (!m_webdav) {
-        qWarning() << "m_webdav is null";
-        Q_ASSERT(false);
+        qWarning() << "Webdav not configured";
         return;
     }
 
     if (!m_storage->savingInProgress() && !m_storage->loadingInProgress()) {
+        m_syncedAtStartup = true;
         emit startSync();
     } else {
         qWarning() << "Will not sync while saving or loading";

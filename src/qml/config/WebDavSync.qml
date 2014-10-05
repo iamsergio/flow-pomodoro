@@ -169,6 +169,21 @@ Item {
                     textColor: "black"
             }
         }
+
+        Text {
+            text: qsTr("Sync at startup")
+            font.pixelSize: 12 * _controller.dpiFactor
+        }
+
+        FlowCheckBox {
+            id: syncAtStartupCheckBox
+            checked: _controller.syncAtStartup
+            Binding {
+                target: _controller
+                property: "syncAtStartup"
+                value: syncAtStartupCheckBox.checked
+            }
+        }
     }
 
     PushButton {
@@ -199,7 +214,7 @@ Item {
     Text {
         id: testSettingsText
         anchors.left: testButton.left
-        anchors.leftMargin: _style.marginMedium
+        anchors.leftMargin: _style.marginSmall
         anchors.right: parent.right
         anchors.rightMargin: _style.marginMedium
         anchors.top: testButton.bottom

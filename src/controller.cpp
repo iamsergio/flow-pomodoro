@@ -61,6 +61,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_settings(settings)
     , m_port(80)
     , m_isHttps(false)
+    , m_syncAtStartup(false)
     , m_optionsContextMenuVisible(false)
     , m_configurePageRequested(!useDelayedLoading())
     , m_aboutPageRequested(!useDelayedLoading())
@@ -84,6 +85,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
 
     m_defaultPomodoroDuration = m_settings->value("defaultPomodoroDuration", /*default=*/ QVariant(25)).toInt();
     m_pomodoroFunctionalityDisabled = m_settings->value("pomodoroFunctionalityDisabled", /*default=*/ false).toBool();
+    m_syncAtStartup = m_settings->value("syncAtStartup", /*default=*/ false).toBool();
     setKeepScreenOnDuringPomodoro(m_settings->value("keepScreenOnDuringPomodoro", /*default=*/ true).toInt());
 
     m_host = m_settings->value("webdavHost").toString();
@@ -758,6 +760,20 @@ void Controller::setShowPomodoroOverlay(bool show)
     }
 }
 
+bool Controller::syncAtStartup() const
+{
+    return m_syncAtStartup;
+}
+
+void Controller::setSyncAtStartup(bool sync)
+{
+    if (m_syncAtStartup != sync) {
+        m_syncAtStartup = sync;
+        m_settings->setValue("syncAtStartup", sync);
+        emit syncAtStartupChanged();
+    }
+}
+
 void Controller::setNewTagDialogVisible(bool visible)
 {
     if (visible != m_newTagDialogVisible) {
@@ -840,7 +856,11 @@ void Controller::onTimerTick()
 void Controller::updateWebDavCredentials()
 {
 #ifndef NO_WEBDAV
-    m_kernel->webdavSyncer()->setConnectionSettings(m_isHttps, m_port, m_host, m_path, m_user, m_password);
+    WebDAVSyncer *webdav = m_kernel->webdavSyncer();
+    webdav->setConnectionSettings(m_isHttps, m_port, m_host, m_path, m_user, m_password);
+    if (m_syncAtStartup && !webdav->syncedAtStartup()) {
+        webdav->sync();
+    }
 #endif
 }
 
