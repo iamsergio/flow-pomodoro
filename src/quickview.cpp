@@ -85,7 +85,7 @@ QuickView::QuickView(Kernel *kernel)
     connect(m_controller, &Controller::requestActivateWindow, this, &QuickView::requestActivate);
     printTimeInfo("QuickView: CTOR END");
 
-    connect(kernel, &Kernel::systrayClicked, this, &QuickView::toggleVisible);
+    connect(kernel, &Kernel::systrayLeftClicked, this, &QuickView::toggleVisible);
 }
 
 void QuickView::reloadQML()

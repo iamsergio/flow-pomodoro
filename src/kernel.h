@@ -32,7 +32,10 @@ class WebDAVSyncer;
 class PluginModel;
 class QQmlEngine;
 class QQmlContext;
-class QSystemTrayIcon;
+
+#ifdef QT_WIDGETS_LIB
+#include <QSystemTrayIcon>
+#endif
 
 class Kernel : public QObject
 {
@@ -52,12 +55,12 @@ public:
 #endif
 
 Q_SIGNALS:
-    void systrayClicked();
+    void systrayLeftClicked();
 
 private Q_SLOTS:
     void onTaskStatusChanged();
     void maybeLoadPlugins();
-    void onSystrayActivated();
+    void onSystrayActivated(QSystemTrayIcon::ActivationReason reason);
 
 private:
     void loadPlugins();

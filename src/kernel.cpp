@@ -41,9 +41,6 @@
 #include <QPluginLoader>
 #include <QDir>
 #include <QWindow>
-#ifdef QT_WIDGETS_LIB
-#include <QSystemTrayIcon>
-#endif
 
 static void registerQmlTypes()
 {
@@ -218,13 +215,15 @@ void Kernel::maybeLoadPlugins()
         loadPlugins();
 }
 
-void Kernel::onSystrayActivated()
+void Kernel::onSystrayActivated(QSystemTrayIcon::ActivationReason reason)
 {
-    QWindow *window = QGuiApplication::topLevelWindows().value(0);
-    if (!window) {
-        qWarning() << "Kernel::onSystrayActivated() window not found";
-        return;
-    }
+    if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::DoubleClick) {
+        QWindow *window = QGuiApplication::topLevelWindows().value(0);
+        if (!window) {
+            qWarning() << "Kernel::onSystrayActivated() window not found";
+            return;
+        }
 
-    emit systrayClicked();
+        emit systrayLeftClicked();
+    }
 }
