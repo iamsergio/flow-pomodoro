@@ -61,7 +61,9 @@ Q_SIGNALS:
 private Q_SLOTS:
     void onTaskStatusChanged();
     void maybeLoadPlugins();
+#if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
     void onSystrayActivated(QSystemTrayIcon::ActivationReason reason);
+#endif
 
 private:
     void loadPlugins();
@@ -77,7 +79,7 @@ private:
 #ifndef NO_WEBDAV
     WebDAVSyncer *m_webDavSyncer;
 #endif
-#ifdef QT_WIDGETS_LIB
+#if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
     QSystemTrayIcon *m_systrayIcon;
     QMenu *m_trayMenu;
 #endif

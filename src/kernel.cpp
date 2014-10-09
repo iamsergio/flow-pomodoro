@@ -89,7 +89,9 @@ static void registerQmlTypes()
 Kernel::~Kernel()
 {
     delete m_settings;
+#if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
     delete m_trayMenu;
+#endif
 }
 
 Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
@@ -168,7 +170,7 @@ void Kernel::notifyPlugins(TaskStatus newStatus)
 
 void Kernel::setupSystray()
 {
-#ifdef QT_WIDGETS_LIB
+#if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
     m_systrayIcon = new QSystemTrayIcon(QIcon(":/img/icon.png"), this);
 
 # if !defined(Q_OS_MAC)
@@ -230,6 +232,7 @@ void Kernel::maybeLoadPlugins()
         loadPlugins();
 }
 
+#if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
 void Kernel::onSystrayActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::DoubleClick) {
@@ -242,3 +245,4 @@ void Kernel::onSystrayActivated(QSystemTrayIcon::ActivationReason reason)
         emit systrayLeftClicked();
     }
 }
+#endif
