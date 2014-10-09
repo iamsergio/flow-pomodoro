@@ -43,7 +43,7 @@ Rectangle {
         id: progressIndicator
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.right: addIcon.left
+        anchors.right: switchItem.left
         visible: !_controller.currentTask.stopped
         showStopIcon: false
         anchors.margins: (mousePressed ? 5 : 7) * _controller.dpiFactor
