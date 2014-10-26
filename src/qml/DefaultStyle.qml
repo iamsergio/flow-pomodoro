@@ -74,7 +74,7 @@ Item {
     property color queueBackgroundColor : Qt.rgba(0.9, 0.9, 0.5, 1)
 
     property bool deleteAnimationEnabled : true
-    property int deleteAnimationDuration : 350
+    property int deleteAnimationDuration : 300
 
     property int pageHeight : 500 * _controller.dpiFactor
     property int contractedHeight: menuBarHeight

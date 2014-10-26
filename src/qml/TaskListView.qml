@@ -29,32 +29,17 @@ ListView {
         modelIndex: index
 
         onDeleteClicked: {
-            if (_style.deleteAnimationEnabled) {
-                visible = false
-                animatedTask.y = y
-                animatedTask.taskSummary = taskObj.summary
-                animation.running = true
-            }
             _controller.removeTask(taskObj)
         }
     }
 
     displaced: Transition {
-        NumberAnimation { properties: "x,y"; duration: 200 }
+        NumberAnimation { properties: "x,y"; duration: 300 }
     }
 
-    Task { // Task for the dropping animation
-        y: 200
-        id: animatedTask
-        width : parent.width
-        anchors.left: parent.left
-        visible: animation.running
-        NumberAnimation on y {
-            id: animation
-            running: false
-            to: root.height
-            duration: _style.deleteAnimationDuration
-        }
+    remove: Transition {
+        enabled: _style.deleteAnimationEnabled
+        NumberAnimation { property: "opacity"; to: 0; duration: 500 }
     }
 
     Text {
