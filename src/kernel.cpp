@@ -106,6 +106,7 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     , m_webDavSyncer(new WebDAVSyncer(this))
 #endif
 {
+    m_qmlEngine->rootContext()->setObjectName("QQmlContext"); // GammaRay convenience
     registerQmlTypes();
     qmlContext()->setContextProperty("_controller", m_controller);
     qmlContext()->setContextProperty("_storage", m_storage);
