@@ -61,6 +61,7 @@ Task::Task(Kernel *kernel, const QString &summary)
     , m_staged(false)
     , m_creationDate(QDateTime::currentDateTimeUtc())
     , m_modificationDate(m_creationDate)
+    , m_contextMenuModel(0)
     , m_kernel(kernel)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
