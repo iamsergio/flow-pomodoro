@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("KDAB");
     app.setApplicationName("flow");
 
-    QFontDatabase::addApplicationFont(":/fontawesome-webfont.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/fontawesome-webfont.ttf");
 
     QTranslator translator;
     translator.load(QString(":/translations/flow_%1").arg(QLocale::system().name())); // export LANG="pt_PT" to change
