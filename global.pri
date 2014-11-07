@@ -15,6 +15,11 @@ android {
     QT += androidextras
 }
 
+win32 {
+	# Some Qt 5.4 madness going on here, link explicitly
+	LIBS += Shell32.lib
+}
+
 INCLUDEPATH += src
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
