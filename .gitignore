@@ -29,3 +29,4 @@ flow.ilk
 flow.pdb
 Makefile*
 build-src*
+/cov-int
