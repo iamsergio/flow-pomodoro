@@ -20,6 +20,7 @@ Rectangle {
         anchors.horizontalCenterOffset: - Math.ceil(separator.width / 2.0)
         Text {
             id: tagText
+            renderType: _controller.textRenderType
             text: root.text
             color: _style.tagTabTextColor
             font.bold: true
@@ -27,6 +28,7 @@ Rectangle {
         }
         Text {
             id: countText
+            renderType: _controller.textRenderType
             text: root.taskCount > 0 ? " (" + root.taskCount + ")" : ""
             color: _style.tagTabTextColor
             anchors.verticalCenter: tagText.verticalCenter

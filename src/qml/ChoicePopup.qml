@@ -80,6 +80,7 @@ Item {
                         height: root.delegateHeight
                         visible: root.title
                         Text {
+                            renderType: _controller.textRenderType
                             text: root.title
                             anchors.fill: parent
                             elide: Text.ElideRight

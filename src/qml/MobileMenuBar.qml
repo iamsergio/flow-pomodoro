@@ -29,6 +29,7 @@ Rectangle {
     }
 
     Text {
+        renderType: _controller.textRenderType
         color: _style.menuBarFontColor
         text: root.titleText
         horizontalAlignment: addIcon.visible ? Text.AlignHCenter : Text.AlignLeft

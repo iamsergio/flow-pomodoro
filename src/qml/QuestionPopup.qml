@@ -9,6 +9,7 @@ Popup {
     Item {
         anchors.fill: parent
         Text {
+            renderType: _controller.textRenderType
             anchors.left: parent.left
             anchors.leftMargin: _style.marginMedium
             anchors.right: parent.right

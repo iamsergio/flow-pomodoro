@@ -14,6 +14,7 @@ Item {
 
     Text {
         id: icon
+        renderType: _controller.textRenderType
         anchors.fill: parent
         font.pixelSize: 20 * _controller.dpiFactor
         font.family: "FontAwesome"

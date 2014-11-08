@@ -12,6 +12,7 @@ Rectangle {
 
     Text {
         id: icon
+        renderType: _controller.textRenderType
         anchors.left: parent.left
         text: root.fontAwesomeIconCode
         font.pixelSize: 20 * _controller.dpiFactor
@@ -23,6 +24,7 @@ Rectangle {
 
     Text {
         color: "black"
+        renderType: _controller.textRenderType
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: icon.visible ? icon.right : parent.left
         anchors.leftMargin: 15 * _controller.dpiFactor

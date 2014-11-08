@@ -24,6 +24,7 @@ Rectangle {
         }
 
         Text {
+            renderType: _controller.textRenderType
             color: "white"
             font.pixelSize: circularIndicator.fontPixelSize / 3
             anchors.left: parent.left

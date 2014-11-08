@@ -40,6 +40,7 @@ Item {
 
             Text {
                 id: textItem
+                renderType: _controller.textRenderType
                 color: enabled ? "black" : "gray"
                 anchors.fill: parent
                 text: root.text

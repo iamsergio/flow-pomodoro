@@ -44,6 +44,7 @@ ListView {
 
     Text {
         id: emptyTextLabel
+        renderType: _controller.textRenderType
         horizontalAlignment: Text.AlignHCenter
         anchors.left: parent.left
         anchors.right: parent.right

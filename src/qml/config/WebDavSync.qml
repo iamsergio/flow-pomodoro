@@ -59,7 +59,7 @@ Item {
                         text: control.currentText
                         color: "black"
                         elide: Text.ElideLeft
-                        renderType: Text.NativeRendering
+                        renderType: _controller.textRenderType
                     }
             }
         }

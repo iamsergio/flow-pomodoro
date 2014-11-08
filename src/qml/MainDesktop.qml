@@ -32,6 +32,7 @@ Main {
 
         Text {
             id: titleText
+            renderType: _controller.textRenderType
             elide: _controller.currentTask.paused ? Text.ElideLeft : Text.ElideRight
             color: _style.fontColor
             font.pixelSize: _controller.currentTask.stopped ? _style.fontSize : _style.currentTaskFontSize

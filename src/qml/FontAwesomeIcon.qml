@@ -4,6 +4,7 @@ import QtQuick 2.0
 
 Text {
     id: root
+    renderType: _controller.textRenderType
     property int size: 20
     property alias toolTip: tooltip.text
     signal clicked()

@@ -35,6 +35,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(int textRenderType READ textRenderType CONSTANT)
     Q_PROPERTY(bool firstSecondsAfterAdding READ firstSecondsAfterAdding NOTIFY firstSecondsAfterAddingChanged)
     Q_PROPERTY(int remainingMinutes READ remainingMinutes NOTIFY remainingMinutesChanged)
     Q_PROPERTY(int currentTaskDuration READ currentTaskDuration NOTIFY currentTaskDurationChanged)
@@ -123,6 +124,11 @@ public:
         QueueTypeArchive
     };
     Q_ENUMS(QueueType)
+
+    enum {
+        NativeRendering = 0,
+        QtRendering = 1
+    };
 
     explicit Controller(QQmlContext *context, Kernel *, Storage *storage,
                         Settings *settings, QObject *parent = 0);
@@ -219,6 +225,7 @@ public:
     void setSyncAtStartup(bool);
 
     Q_INVOKABLE bool systemTrayAvailable() const;
+    int textRenderType() const;
 
 public Q_SLOTS:
     void updateWebDavCredentials();
@@ -256,6 +263,7 @@ private Q_SLOTS:
     void setStartupFinished();
 
 Q_SIGNALS:
+    void textRenderTypeChanged();
     void pomodoroFunctionalityDisabledChanged();
     void remainingMinutesChanged();
     void currentTaskDurationChanged();
@@ -304,6 +312,7 @@ Q_SIGNALS:
     void syncAtStartupChanged();
 
 private:
+    void setTextRenderType(int);
     int indexOfTaskInCurrentTab(const Task::Ptr &task);
     Task::Ptr lastTaskAtCurrentTab() const;
     Task::Ptr taskAtCurrentTab(int taskIndex) const;
@@ -374,6 +383,7 @@ private:
     bool m_showPomodoroOverlay;
 
     qint64 m_pomodoroStartTimeStamp;
+    int m_textRenderType;
 };
 
 #endif

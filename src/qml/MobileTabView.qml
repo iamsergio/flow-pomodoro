@@ -77,6 +77,7 @@ Item {
                     }
                     Text {
                         anchors.fill: parent
+                        renderType: _controller.textRenderType
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: model.text

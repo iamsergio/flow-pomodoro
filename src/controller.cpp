@@ -79,6 +79,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_keepScreenOnDuringPomodoro(false)
     , m_showPomodoroOverlay(false)
     , m_pomodoroStartTimeStamp(0)
+    , m_textRenderType(NativeRendering)
 {
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
@@ -1164,4 +1165,17 @@ void Controller::webDavSync()
 #else
     qDebug() << "WebDAV sync not supported";
 #endif
+}
+
+void Controller::setTextRenderType(int textRenderType)
+{
+    if (textRenderType != m_textRenderType) {
+        m_textRenderType = textRenderType;
+        emit textRenderTypeChanged();
+    }
+}
+
+int Controller::textRenderType() const
+{
+    return m_textRenderType;
 }

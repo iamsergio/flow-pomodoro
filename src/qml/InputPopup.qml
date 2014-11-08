@@ -12,6 +12,7 @@ Popup {
 
         Text {
             id: textItem
+            renderType: _controller.textRenderType
             anchors.left: textInput.left
             anchors.right: parent.right
             anchors.leftMargin: -4 * _controller.dpiFactor

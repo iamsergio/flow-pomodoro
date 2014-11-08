@@ -55,6 +55,7 @@ Rectangle {
                 text: typeof tag != 'undefined' ? (tag.name + (last ? "" : ", ")) : ""
                 color: _style.taskTagFontColor
                 elide: Text.ElideRight
+                renderType: _controller.textRenderType
                 font.pixelSize: 12 * _controller.dpiFactor
             }
         }
@@ -84,6 +85,7 @@ Rectangle {
 
         Text {
             id: textItem
+            renderType: _controller.textRenderType
             text: root.taskSummary
             elide: Text.ElideRight
             color: _style.taskFontColor
@@ -133,6 +135,7 @@ Rectangle {
 
             Text {
                 id: iconItem
+                renderType: _controller.textRenderType
                 anchors.fill: parent
                 color: "white"
                 verticalAlignment: Text.AlignVCenter

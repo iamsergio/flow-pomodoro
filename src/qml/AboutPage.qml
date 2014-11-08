@@ -55,6 +55,7 @@ Page {
             Text  {
                 font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
+                renderType: _controller.textRenderType
                 text: "<space>"
             }
 
@@ -62,63 +63,75 @@ Page {
                 font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: qsTr("Pauses/Resumes an ongoing pomodoro")
+                renderType: _controller.textRenderType
             }
 
             Text  {
                 font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
+                renderType: _controller.textRenderType
                 text: "S"
             }
             Text  {
                 font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: qsTr("Stops an ongoing pomodoro")
+                renderType: _controller.textRenderType
             }
 
             Text  {
                 font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
+                renderType: _controller.textRenderType
                 text: "Up/Down"
             }
             Text  {
                 font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
+                renderType: _controller.textRenderType
                 text: qsTr("Select tasks")
             }
             Text  {
                 font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
+                renderType: _controller.textRenderType
                 text: "Del"
             }
             Text  {
                 font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: qsTr("Deletes a selected task or an ongoing one")
+                renderType: _controller.textRenderType
             }
             Text  {
                 font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
+                renderType: _controller.textRenderType
                 text: "Enter"
             }
             Text  {
                 font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
                 text: qsTr("Starts a selected task, or expands the window")
+                renderType: _controller.textRenderType
             }
             Text  {
                 font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
+                renderType: _controller.textRenderType
                 text: "Esc"
             }
             Text  {
                 font.pixelSize: _style.smallTextSize
                 color: _style.smallTextColor
+                renderType: _controller.textRenderType
                 text: qsTr("Collapses the window")
             }
         }
 
         Text {
             id: optionsText
+            renderType: _controller.textRenderType
             anchors.top: keyGrid.bottom
             font.pixelSize: _style.smallTextSize
             anchors.left: parent.left
@@ -133,6 +146,7 @@ Page {
 
         Text {
             id: dataPathText
+            renderType: _controller.textRenderType
             anchors.top: optionsText.bottom
             font.pixelSize: _style.smallTextSize
             anchors.left: parent.left
