@@ -22,8 +22,10 @@
 
 #include <QString>
 
-void printTimeInfo(const QString &location);
-void keepScreenOn(bool);
-bool isMobile();
-    
+namespace Utils {
+    void printTimeInfo(const QString &location);
+    void keepScreenOn(bool);
+    bool isMobile();
+}
+
 #endif

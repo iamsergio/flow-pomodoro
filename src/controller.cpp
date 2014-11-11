@@ -319,7 +319,7 @@ void Controller::setTaskStatus(TaskStatus status)
         emit currentTaskDurationChanged();
         emit currentTaskChanged();
         emit currentTitleTextChanged();
-        ::keepScreenOn(m_keepScreenOnDuringPomodoro && status == TaskStarted);
+        Utils::keepScreenOn(m_keepScreenOnDuringPomodoro && status == TaskStarted);
         setShowPomodoroOverlay(status == TaskStarted);
     }
 }
@@ -459,7 +459,7 @@ void Controller::setQueueType(QueueType type)
 
 bool Controller::isMobile() const
 {
-    return ::isMobile();
+    return Utils::isMobile();
 }
 
 bool Controller::isIOS() const
@@ -672,7 +672,7 @@ void Controller::setKeepScreenOnDuringPomodoro(bool keep)
         m_keepScreenOnDuringPomodoro = keep;
         m_settings->setValue("keepScreenOnDuringPomodoro", keep);
         emit keepScreenOnDuringPomodoroChanged();
-        ::keepScreenOn(m_keepScreenOnDuringPomodoro && currentTask()->status() == TaskStarted);
+        Utils::keepScreenOn(m_keepScreenOnDuringPomodoro && currentTask()->status() == TaskStarted);
     }
 }
 

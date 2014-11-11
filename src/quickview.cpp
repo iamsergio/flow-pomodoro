@@ -52,14 +52,14 @@ QuickView::QuickView(Kernel *kernel)
 
     QString main = m_controller->isMobile() ? "LoadingScreen.qml" : "MainDesktop.qml";
 
-    printTimeInfo("QuickView: Set Source START");
+    Utils::printTimeInfo("QuickView: Set Source START");
     if (m_useqresources) {
         // So that F5 reloads QML without having to restart the application
         setSource(QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/" + main));
     } else {
         setSource(QUrl("qrc:/qml/" + main));
     }
-    printTimeInfo("QuickView: Set Source END");
+    Utils::printTimeInfo("QuickView: Set Source END");
 
 #ifdef Q_OS_WIN
 
@@ -83,7 +83,7 @@ QuickView::QuickView(Kernel *kernel)
     }
 
     connect(m_controller, &Controller::requestActivateWindow, this, &QuickView::requestActivate);
-    printTimeInfo("QuickView: CTOR END");
+    Utils::printTimeInfo("QuickView: CTOR END");
 
     connect(kernel, &Kernel::systrayLeftClicked, this, &QuickView::toggleVisible);
 }
@@ -92,10 +92,10 @@ void QuickView::reloadQML()
 {
     qDebug() << "Reloading QML ...";
     engine()->clearComponentCache();
-    printTimeInfo("QuickView: cleared component cache");
+    Utils::printTimeInfo("QuickView: cleared component cache");
     createStyleComponent();
     setSource(source());
-    printTimeInfo("QuickView: setted Source");
+    Utils::printTimeInfo("QuickView: setted Source");
 }
 
 QUrl QuickView::styleFileName() const
@@ -116,14 +116,14 @@ QUrl QuickView::styleFileName() const
 
 void QuickView::createStyleComponent()
 {
-    printTimeInfo("QuickView: create style component START");
+    Utils::printTimeInfo("QuickView: create style component START");
     QQmlComponent *styleComponent = new QQmlComponent(engine(),
                                                       styleFileName(),
                                                       QQmlComponent::PreferSynchronous,
                                                       this);
-    printTimeInfo("QuickView: create style component END");
+    Utils::printTimeInfo("QuickView: create style component END");
     QObject *styleObject = styleComponent->create();
-    printTimeInfo("QuickView: created style item");
+    Utils::printTimeInfo("QuickView: created style item");
 
     if (styleObject) {
         QQuickItem *item = qobject_cast<QQuickItem*>(styleObject);
@@ -134,7 +134,7 @@ void QuickView::createStyleComponent()
         qWarning() << styleComponent->errorString();
         Q_ASSERT(false);
     }
-    printTimeInfo("QuickView: createStyleComponent END");
+    Utils::printTimeInfo("QuickView: createStyleComponent END");
 }
 
 void QuickView::keyReleaseEvent(QKeyEvent *event)

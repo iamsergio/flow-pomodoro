@@ -29,7 +29,7 @@
 # include <QtAndroid>
 #endif
 
-void printTimeInfo(const QString &location)
+void Utils::printTimeInfo(const QString &location)
 {
 #ifdef FLOW_DEBUG_TIMESTAMPS
     static QElapsedTimer timer;
@@ -50,7 +50,7 @@ void printTimeInfo(const QString &location)
 #endif
 }
 
-void keepScreenOn(bool keep)
+void Utils::keepScreenOn(bool keep)
 {
 #ifdef Q_OS_ANDROID
     QtAndroid::androidActivity().callMethod<void>("setKeepScreenOn", "(Z)V", jboolean(keep));
@@ -64,7 +64,7 @@ void keepScreenOn(bool keep)
 }
 
 
-bool isMobile()
+bool Utils::isMobile()
 {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_BLACKBERRY) || defined(Q_OS_IOS) || defined(Q_OS_WINRT)
     return true;

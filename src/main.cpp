@@ -126,14 +126,14 @@ static QString defaultDataFileName()
 
 int main(int argc, char *argv[])
 {
-    printTimeInfo("main");
+    Utils::printTimeInfo("main");
 
 #ifdef Q_OS_WIN
     qputenv("QT_QPA_PLATFORM","windows:fontengine=freetype");
     qInstallMessageHandler(windowsMessageHandler);
 #endif
     Application app(argc, argv);
-    printTimeInfo("main: created QApplication");
+    Utils::printTimeInfo("main: created QApplication");
     app.setOrganizationName("KDAB");
     app.setApplicationName("flow");
 
@@ -144,17 +144,17 @@ int main(int argc, char *argv[])
     QTranslator translator;
     translator.load(QString(":/translations/flow_%1").arg(QLocale::system().name())); // export LANG="pt_PT" to change
     app.installTranslator(&translator);
-    printTimeInfo("main: installed QTranslator");
+    Utils::printTimeInfo("main: installed QTranslator");
 
     RuntimeConfiguration defaultConfig;
     defaultConfig.setDataFileName(defaultDataFileName());
     Kernel kernel(defaultConfig);
 
-    printTimeInfo("main: created Kernel::instance()");
+    Utils::printTimeInfo("main: created Kernel::instance()");
     QuickView window(&kernel);
-    printTimeInfo("main: created QuickView");
+    Utils::printTimeInfo("main: created QuickView");
     initDBus(kernel.controller());
-    printTimeInfo("main: initialized dbus");
+    Utils::printTimeInfo("main: initialized dbus");
 
     if (kernel.controller()->isMobile()) {
         window.showMaximized(); // Don't use fullscreen on android
@@ -171,6 +171,6 @@ int main(int argc, char *argv[])
         window.show();
     }
 
-    printTimeInfo("main: starting app.exec()");
+    Utils::printTimeInfo("main: starting app.exec()");
     return app.exec();
 }
