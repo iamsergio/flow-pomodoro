@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
     initDBus(kernel.controller());
     Utils::printTimeInfo("main: initialized dbus");
 
-    if (kernel.controller()->isMobile()) {
+    if (Utils::isMobile()) {
         window.showMaximized(); // Don't use fullscreen on android
 
         QScreen *screen = QGuiApplication::primaryScreen();

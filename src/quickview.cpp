@@ -40,7 +40,7 @@ QuickView::QuickView(Kernel *kernel)
     : QQuickView(kernel->qmlEngine(), 0)
     , m_controller(kernel->controller())
 #ifdef DEVELOPER_MODE
-    , m_useqresources(!m_controller->isMobile())
+    , m_useqresources(!Utils::isMobile())
 #else
     , m_useqresources(false)
 #endif
@@ -50,7 +50,7 @@ QuickView::QuickView(Kernel *kernel)
 
     createStyleComponent();
 
-    QString main = m_controller->isMobile() ? "LoadingScreen.qml" : "MainDesktop.qml";
+    QString main = Utils::isMobile() ? "LoadingScreen.qml" : "MainDesktop.qml";
 
     Utils::printTimeInfo("QuickView: Set Source START");
     if (m_useqresources) {
@@ -74,7 +74,7 @@ QuickView::QuickView(Kernel *kernel)
     setDefaultAlphaBuffer(true); // Because some drivers don't request it. QTBUG-41074
 #endif
     QSize screenSize = qApp->primaryScreen()->size();
-    if (m_controller->isMobile()) {
+    if (Utils::isMobile()) {
         setResizeMode(QQuickView::SizeRootObjectToView);
     } else {
         setFlags(flags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Tool);
@@ -107,7 +107,7 @@ QUrl QuickView::styleFileName() const
         // User can override the default style by creating a Style.qml file in /home/<user>/.local/share/KDAB/flow/
         return QUrl::fromLocalFile(fileName);
     } else {
-        const QString filename = m_controller->isMobile() ? "MobileStyle.qml" : "DefaultStyle.qml";
+        const QString filename = Utils::isMobile() ? "MobileStyle.qml" : "DefaultStyle.qml";
         // Developer mode doesn't use qrc:, so we can reload with F5
         return m_useqresources ? QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/" + filename)
                                : QUrl("qrc:/qml/" + filename);

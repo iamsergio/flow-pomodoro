@@ -29,6 +29,7 @@
 #include "task.h"
 #include "tag.h"
 #include "settings.h"
+#include "utils.h"
 #include "checkbox.h"
 #include "webdavsyncer.h"
 #include "taskcontextmenumodel.h"
@@ -229,7 +230,7 @@ void Kernel::onTaskStatusChanged()
 
 void Kernel::maybeLoadPlugins()
 {
-    if (!m_controller->isMobile() && m_runtimeConfiguration.pluginsSupported())
+    if (!Utils::isMobile() && m_runtimeConfiguration.pluginsSupported())
         loadPlugins();
 }
 
