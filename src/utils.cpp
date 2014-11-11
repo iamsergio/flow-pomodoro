@@ -21,6 +21,7 @@
 
 #include <QDebug>
 #include <QElapsedTimer>
+#include <qglobal.h>
 
 #ifdef Q_OS_ANDROID
 # include <QAndroidJniObject>
@@ -59,5 +60,15 @@ void keepScreenOn(bool keep)
     }
 #else
     Q_UNUSED(keep);
+#endif
+}
+
+
+bool isMobile()
+{
+#if defined(Q_OS_ANDROID) || defined(Q_OS_BLACKBERRY) || defined(Q_OS_IOS) || defined(Q_OS_WINRT)
+    return true;
+#else
+    return false;
 #endif
 }

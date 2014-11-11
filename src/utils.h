@@ -24,6 +24,6 @@
 
 void printTimeInfo(const QString &location);
 void keepScreenOn(bool);
-
+bool isMobile();
     
 #endif
