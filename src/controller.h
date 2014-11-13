@@ -28,6 +28,7 @@
 #include <QPointer>
 
 class QTimer;
+class LoadManager;
 class Storage;
 class Kernel;
 class Settings;
@@ -35,6 +36,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(LoadManager* loadManager READ loadManager WRITE setLoadManager NOTIFY loadManagerChanged)
     Q_PROPERTY(int textRenderType READ textRenderType CONSTANT)
     Q_PROPERTY(bool firstSecondsAfterAdding READ firstSecondsAfterAdding NOTIFY firstSecondsAfterAddingChanged)
     Q_PROPERTY(int remainingMinutes READ remainingMinutes NOTIFY remainingMinutesChanged)
@@ -79,14 +81,6 @@ class Controller : public QObject {
     Q_PROPERTY(bool keepScreenOnDuringPomodoro READ keepScreenOnDuringPomodoro WRITE setKeepScreenOnDuringPomodoro NOTIFY keepScreenOnDuringPomodoroChanged)
 
     Q_PROPERTY(bool optionsContextMenuVisible READ optionsContextMenuVisible WRITE setOptionsContextMenuVisible NOTIFY optionsContextMenuVisibleChanged)
-    Q_PROPERTY(bool configurePageRequested READ configurePageRequested NOTIFY configurePageRequestedChanged)
-    Q_PROPERTY(bool aboutPageRequested READ aboutPageRequested NOTIFY aboutPageRequestedChanged)
-    Q_PROPERTY(bool inlineEditorRequested READ inlineEditorRequested NOTIFY inlineEditorRequestedChanged)
-    Q_PROPERTY(bool questionPopupRequested READ questionPopupRequested NOTIFY questionPopupRequestedChanged)
-    Q_PROPERTY(bool configurePopupRequested READ configurePopupRequested NOTIFY configurePopupRequestedChanged)
-    Q_PROPERTY(bool taskContextMenuRequested READ taskContextMenuRequested NOTIFY taskContextMenuRequestedChanged)
-    Q_PROPERTY(bool archiveRequested READ archiveRequested NOTIFY archiveRequestedChanged)
-    Q_PROPERTY(bool taskListRequested READ taskListRequested NOTIFY taskListRequestedChanged)
     Q_PROPERTY(bool startupFinished READ startupFinished NOTIFY startupFinishedChanged)
 
 public:
@@ -204,14 +198,6 @@ public:
     void setOptionsContextMenuVisible(bool);
     bool newTagDialogVisible() const;
 
-    bool configurePageRequested() const;
-    bool aboutPageRequested() const;
-    bool inlineEditorRequested() const;
-    bool questionPopupRequested() const;
-    bool taskContextMenuRequested() const;
-    bool configurePopupRequested() const;
-    bool archiveRequested() const;
-    bool taskListRequested() const;
     bool startupFinished() const;
     void setNewTagDialogVisible(bool visible);
 
@@ -226,6 +212,9 @@ public:
 
     Q_INVOKABLE bool systemTrayAvailable() const;
     int textRenderType() const;
+
+    void setLoadManager(LoadManager *);
+    LoadManager *loadManager() const;
 
 public Q_SLOTS:
     void updateWebDavCredentials();
@@ -263,6 +252,7 @@ private Q_SLOTS:
     void setStartupFinished();
 
 Q_SIGNALS:
+    void loadManagerChanged();
     void textRenderTypeChanged();
     void pomodoroFunctionalityDisabledChanged();
     void remainingMinutesChanged();
@@ -289,14 +279,6 @@ Q_SIGNALS:
     void requestActivateWindow();
     void currentTitleTextChanged();
     void optionsContextMenuVisibleChanged();
-    void configurePageRequestedChanged();
-    void aboutPageRequestedChanged();
-    void inlineEditorRequestedChanged();
-    void questionPopupRequestedChanged();
-    void configurePopupRequestedChanged();
-    void taskContextMenuRequestedChanged();
-    void archiveRequestedChanged();
-    void taskListRequestedChanged();
     void startupFinishedChanged();
     void newTagDialogVisibleChanged();
     void keepScreenOnDuringPomodoroChanged();
@@ -320,15 +302,6 @@ private:
     void setTaskStatus(TaskStatus status);
     void setTagEditStatus(TagEditStatus);
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
-    void setAboutPageRequested(bool);
-    void setConfigurePageRequested(bool);
-    void setInlineEditorRequested(bool);
-    void setQuestionPopupRequested(bool);
-    void setConfigurePopupRequested(bool);
-    void setTaskContextMenuRequested(bool);
-    void setArchiveRequested(bool);
-    void setTaskListRequested(bool);
-    bool useDelayedLoading() const;
 
     Kernel *m_kernel;
     int m_currentTaskDuration;
@@ -368,14 +341,6 @@ private:
     bool m_syncAtStartup;
 
     bool m_optionsContextMenuVisible;
-    bool m_configurePageRequested;
-    bool m_aboutPageRequested;
-    bool m_inlineEditorRequested;
-    bool m_questionPopupRequested;
-    bool m_configurePopupRequested;
-    bool m_taskContextMenuRequested;
-    bool m_archiveRequested;
-    bool m_taskListRequested;
     bool m_startupFinished;
 
     bool m_newTagDialogVisible;
@@ -384,6 +349,7 @@ private:
 
     qint64 m_pomodoroStartTimeStamp;
     int m_textRenderType;
+    LoadManager* m_loadManager;
 };
 
 #endif

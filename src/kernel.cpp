@@ -31,6 +31,7 @@
 #include "settings.h"
 #include "utils.h"
 #include "checkbox.h"
+#include "loadmanager.h"
 #include "webdavsyncer.h"
 #include "taskcontextmenumodel.h"
 
@@ -70,6 +71,10 @@ static void registerQmlTypes()
     qmlRegisterUncreatableType<Controller>("Controller",
                                            1, 0, "Controller",
                                            "Controller is not creatable");
+
+    qmlRegisterUncreatableType<LoadManager>("Controller",
+                                            1, 0, "LoadManager",
+                                            "LoadManager is not creatable");
 
     qmlRegisterUncreatableType<Task>("Controller",
                                      1, 0, "Task_",
@@ -112,6 +117,7 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     qmlContext()->setContextProperty("_controller", m_controller);
     qmlContext()->setContextProperty("_storage", m_storage);
     qmlContext()->setContextProperty("_pluginModel", m_pluginModel);
+    qmlContext()->setContextProperty("_loadManager", m_controller->loadManager());
 #ifndef NO_WEBDAV
     qmlContext()->setContextProperty("_webdavSync", m_webDavSyncer);
 #endif

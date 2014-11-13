@@ -25,6 +25,7 @@
 #include "kernel.h"
 #include "webdavsyncer.h"
 #include "utils.h"
+#include "loadmanager.h"
 
 #include <QTimer>
 #include <QScreen>
@@ -66,20 +67,13 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_isHttps(false)
     , m_syncAtStartup(false)
     , m_optionsContextMenuVisible(false)
-    , m_configurePageRequested(!useDelayedLoading())
-    , m_aboutPageRequested(!useDelayedLoading())
-    , m_inlineEditorRequested(!useDelayedLoading())
-    , m_questionPopupRequested(!useDelayedLoading())
-    , m_configurePopupRequested(!useDelayedLoading())
-    , m_taskContextMenuRequested(!useDelayedLoading())
-    , m_archiveRequested(!useDelayedLoading())
-    , m_taskListRequested(true)
     , m_startupFinished(false)
     , m_newTagDialogVisible(false)
     , m_keepScreenOnDuringPomodoro(false)
     , m_showPomodoroOverlay(false)
     , m_pomodoroStartTimeStamp(0)
     , m_textRenderType(NativeRendering)
+    , m_loadManager(new LoadManager(this))
 {
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
@@ -299,9 +293,9 @@ void Controller::setCurrentPage(Controller::Page page)
         }
 
         if (page == ConfigurePage) {
-            setConfigurePageRequested(true);
+            m_loadManager->setConfigurePageRequested(true);
         } else if (page == AboutPage) {
-            setAboutPageRequested(true);
+            m_loadManager->setAboutPageRequested(true);
         }
 
         m_page = page;
@@ -375,7 +369,7 @@ void Controller::setPopupVisible(bool visible)
     if (m_popupVisible != visible) {
         m_popupVisible = visible;
         if (visible)
-            setQuestionPopupRequested(true);
+            m_loadManager->setQuestionPopupRequested(true);
         emit popupVisibleChanged();
     }
 }
@@ -450,7 +444,7 @@ void Controller::setQueueType(QueueType type)
         m_queueType = type;
 
         if (type == QueueTypeArchive)
-            setArchiveRequested(true);
+            m_loadManager->setArchiveRequested(true);
 
         emit queueTypeChanged();
         emit currentTitleTextChanged();
@@ -621,7 +615,7 @@ void Controller::setOptionsContextMenuVisible(bool visible)
         m_optionsContextMenuVisible = visible;
 
         if (visible)
-            setConfigurePopupRequested(true);
+            m_loadManager->setConfigurePopupRequested(true);
 
         emit optionsContextMenuVisibleChanged();
     }
@@ -655,7 +649,7 @@ void Controller::setRightClickedTask(Task *task)
     //if (m_rightClickedTask != task) { // m_rightClickedTask is a QPointer and task might have been deleted
         m_rightClickedTask = task;
         if (task)
-            setTaskContextMenuRequested(true);
+            m_loadManager->setTaskContextMenuRequested(true);
 
         emit rightClickedTaskChanged();
     //}
@@ -684,72 +678,6 @@ bool Controller::keepScreenOnDuringPomodoro() const
 bool Controller::showPomodoroOverlay() const
 {
     return m_showPomodoroOverlay;
-}
-
-bool Controller::configurePageRequested() const
-{
-    return m_configurePageRequested;
-}
-
-void Controller::setConfigurePageRequested(bool requested)
-{
-    if (requested != m_configurePageRequested) {
-        m_configurePageRequested = requested;
-        emit configurePageRequestedChanged();
-    }
-}
-
-void Controller::setInlineEditorRequested(bool requested)
-{
-    if (requested != m_inlineEditorRequested) {
-        m_inlineEditorRequested = requested;
-        emit inlineEditorRequestedChanged();
-    }
-}
-
-void Controller::setQuestionPopupRequested(bool requested)
-{
-    if (requested != m_questionPopupRequested) {
-        m_questionPopupRequested = requested;
-        emit questionPopupRequestedChanged();
-    }
-}
-
-void Controller::setConfigurePopupRequested(bool requested)
-{
-    if (requested != m_configurePopupRequested) {
-        m_configurePopupRequested = requested;
-        emit configurePopupRequestedChanged();
-    }
-}
-
-void Controller::setTaskContextMenuRequested(bool requested)
-{
-    if (requested != m_taskContextMenuRequested) {
-        m_taskContextMenuRequested = requested;
-        emit taskContextMenuRequestedChanged();
-    }
-}
-
-void Controller::setArchiveRequested(bool requested)
-{
-    if (requested != m_archiveRequested) {
-        m_archiveRequested = requested;
-        emit archiveRequestedChanged();
-    }
-}
-
-void Controller::setTaskListRequested(bool requested)
-{
-    if (requested != m_taskListRequested) {
-        m_taskListRequested = requested;
-        emit taskListRequestedChanged();
-    }
-}
-
-bool Controller::useDelayedLoading() const
-{
-    return isMobile();
 }
 
 void Controller::setShowPomodoroOverlay(bool show)
@@ -797,52 +725,10 @@ void Controller::setStartupFinished()
     emit startupFinishedChanged();
 }
 
-bool Controller::aboutPageRequested() const
-{
-    return m_aboutPageRequested;
-}
-
-bool Controller::inlineEditorRequested() const
-{
-    return m_inlineEditorRequested;
-}
-
-bool Controller::questionPopupRequested() const
-{
-    return m_questionPopupRequested;
-}
-
-bool Controller::taskContextMenuRequested() const
-{
-   return m_taskContextMenuRequested;
-}
-
-bool Controller::configurePopupRequested() const
-{
-    return m_configurePopupRequested;
-}
-
-bool Controller::archiveRequested() const
-{
-    return m_archiveRequested;
-}
-
-bool Controller::taskListRequested() const
-{
-    return m_taskListRequested;
-}
 
 bool Controller::startupFinished() const
 {
     return m_startupFinished;
-}
-
-void Controller::setAboutPageRequested(bool requested)
-{
-    if (requested != m_aboutPageRequested) {
-        m_aboutPageRequested = requested;
-        emit aboutPageRequestedChanged();
-    }
 }
 
 Task *Controller::currentTask() const
@@ -1070,7 +956,7 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
     }
 
     if (editMode == EditModeInline) {
-        setInlineEditorRequested(true); // for delayed loading
+        m_loadManager->setInlineEditorRequested(true); // for delayed loading
     }
 
     if (m_editMode != editMode) {
@@ -1174,4 +1060,17 @@ void Controller::setTextRenderType(int textRenderType)
 int Controller::textRenderType() const
 {
     return m_textRenderType;
+}
+
+void Controller::setLoadManager(LoadManager* loadManager)
+{
+    if (loadManager != m_loadManager) {
+        m_loadManager = loadManager;
+        emit loadManagerChanged();
+    }
+}
+
+LoadManager* Controller::loadManager() const
+{
+    return m_loadManager;
 }

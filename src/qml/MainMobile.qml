@@ -17,8 +17,7 @@ Main {
     }
 
     Loader {
-        sourceComponent: _controller.configurePopupRequested ? Qt.createComponent("MobileOptionsContextMenu.qml")
-                                                             : null
+        sourceComponent: _loadManager.configurePopupRequested ? Qt.createComponent("MobileOptionsContextMenu.qml") : null
         anchors.fill: parent
     }
 

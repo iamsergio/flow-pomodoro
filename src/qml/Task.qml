@@ -109,7 +109,7 @@ Rectangle {
             anchors.rightMargin: _style.marginMedium
             anchors.bottom: parent.bottom
             anchors.bottomMargin: _style.marginMedium
-            sourceComponent: _controller.inlineEditorRequested ? taskTextFieldComponent : null
+            sourceComponent: _loadManager.inlineEditorRequested ? taskTextFieldComponent : null
         }
 
         Component {

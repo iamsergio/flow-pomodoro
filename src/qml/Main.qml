@@ -25,7 +25,7 @@ Rectangle {
 
     Loader {
         // Delayed loading for startup performance on mobile
-        sourceComponent: _controller.questionPopupRequested ? Qt.createComponent("QuestionPopup.qml") : null
+        sourceComponent: _loadManager.questionPopupRequested ? Qt.createComponent("QuestionPopup.qml") : null
         anchors.fill: parent
         z: main.z + 1
     }
@@ -78,7 +78,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottomMargin: _style.marginMedium
-                sourceComponent: _controller.configurePageRequested ? Qt.createComponent("ConfigurePage.qml") : null
+                sourceComponent: _loadManager.configurePageRequested ? Qt.createComponent("ConfigurePage.qml") : null
                 z: 2
             }
 
@@ -91,7 +91,7 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: _style.marginMedium
-                sourceComponent: _controller.aboutPageRequested ? Qt.createComponent("AboutPage.qml") : null
+                sourceComponent: _loadManager.aboutPageRequested ? Qt.createComponent("AboutPage.qml") : null
             }
         }
 
@@ -126,7 +126,6 @@ Rectangle {
         anchors.fill: parent
         enabled: !_controller.popupVisible
         visible: _controller.rightClickedTask !== null
-        sourceComponent: _controller.taskContextMenuRequested ? Qt.createComponent("TaskContextMenu.qml")
-                                                              : null
+        sourceComponent: _loadManager.taskContextMenuRequested ? Qt.createComponent("TaskContextMenu.qml") : null
     }
 }
