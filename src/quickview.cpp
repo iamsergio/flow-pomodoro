@@ -46,11 +46,14 @@ QuickView::QuickView(Kernel *kernel)
     , m_useqresources(false)
 #endif
     , m_kernel(kernel)
+    , m_contractedWidth(0)
+    , m_contractedHeight(0)
 {
     rootContext()->setContextProperty("_window", this);
     rootContext()->setContextProperty("_toolTipController", new ToolTipController(this));
     createStyleComponent();
     readInitialPosition();
+    readGeometryType();
 
     QString main = Utils::isMobile() ? "LoadingScreen.qml" : "MainDesktop.qml";
 
@@ -81,7 +84,7 @@ QuickView::QuickView(Kernel *kernel)
     } else {
         setFlags(flags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Tool);
         setResizeMode(QQuickView::SizeViewToRootObject);
-        positionWindow();
+        setupGeometry();
     }
 
     connect(m_controller, &Controller::requestActivateWindow, this, &QuickView::requestActivate);
@@ -124,7 +127,7 @@ void QuickView::reloadQML()
     Utils::printTimeInfo("QuickView: setted Source");
 }
 
-void QuickView::positionWindow()
+void QuickView::setupGeometry()
 {
     if (Utils::isMobile())
         return;
@@ -133,10 +136,34 @@ void QuickView::positionWindow()
 
     int x = 0;
     int y = 0;
+    int width = 0;
+    int height = 0;
 
-    const int maxX = screenSize.width() - width();
-    const int maxY = screenSize.height() - height();
-    const int centerX = screenSize.width() / 2 - width() / 2;
+    switch (m_geometryType) {
+    case GeometryStandard:
+    case GeometryCustom:
+        width = 400;
+        height = 50;
+        break;
+    case GeometryThin:
+        width = 400;
+        height = 20;
+        break;
+    case GeometrySmallSquare:
+        width = 40;
+        height = 40;
+        break;
+    case MaxGeometryTypes:
+        Q_ASSERT(false);
+        return;
+    }
+
+    setContractedWidth(width * Utils::dpiFactor());
+    setContractedHeight(height * Utils::dpiFactor());
+
+    const int maxX = screenSize.width() - m_contractedWidth;
+    const int maxY = screenSize.height() - m_contractedHeight;
+    const int centerX = screenSize.width() / 2 - m_contractedWidth / 2;
 
     switch (m_initialPosition) {
     case PositionNone:
@@ -174,7 +201,9 @@ void QuickView::positionWindow()
         return;
     }
 
-    setPosition(x, y);
+    if (this->x() != x || this->y() != y)
+        setPosition(x, y);
+    // width and height isn't set because we use SizeViewToRoot (so we can animate expand/collapse from QML)
 }
 
 void QuickView::readInitialPosition()
@@ -183,6 +212,15 @@ void QuickView::readInitialPosition()
     m_initialPosition = static_cast<Position>(m_kernel->settings()->value("windowInitialPosition", defaultPosition).toInt());
     if (m_initialPosition < PositionNone || m_initialPosition >= MaxPositions) {
         setInitialPosition(defaultPosition);
+    }
+}
+
+void QuickView::readGeometryType()
+{
+    const GeometryType defaultGeometry = GeometryStandard;
+    m_geometryType = static_cast<GeometryType>(m_kernel->settings()->value("windowGeometryType", defaultGeometry).toInt());
+    if (m_geometryType < GeometryStandard || m_geometryType >= MaxGeometryTypes) {
+        setGeometryType(defaultGeometry);
     }
 }
 
@@ -242,4 +280,46 @@ void QuickView::keyReleaseEvent(QKeyEvent *event)
 void QuickView::toggleVisible()
 {
     setVisible(!isVisible());
+}
+
+void QuickView::setGeometryType(GeometryType geometryType)
+{
+    if (geometryType != m_geometryType) {
+        m_geometryType = geometryType;
+        m_kernel->settings()->setValue("windowGeometryType", geometryType);
+        m_kernel->settings()->scheduleSync();
+        emit geometryTypeChanged();
+        setupGeometry();
+    }
+}
+
+QuickView::GeometryType QuickView::geometryType() const
+{
+    return m_geometryType;
+}
+
+void QuickView::setContractedWidth(int contractedWidth)
+{
+    if (contractedWidth != m_contractedWidth) {
+        m_contractedWidth = contractedWidth;
+        emit contractedWidthChanged();
+    }
+}
+
+int QuickView::contractedWidth() const
+{
+    return m_contractedWidth;
+}
+
+void QuickView::setContractedHeight(int contractedHeight)
+{
+    if (contractedHeight != m_contractedHeight) {
+        m_contractedHeight = contractedHeight;
+        emit contractedHeightChanged();
+    }
+}
+
+int QuickView::contractedHeight() const
+{
+    return m_contractedHeight;
 }

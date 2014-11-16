@@ -349,14 +349,7 @@ bool Controller::pomodoroFunctionalityDisabled() const
 
 qreal Controller::dpiFactor() const
 {
-    QScreen *screen = QGuiApplication::primaryScreen();
-    Q_ASSERT(screen);
-
-    if (isMobile()) {
-        return (screen->physicalDotsPerInch() / 72.0) / 2; // /2 because looks good on all devices
-    }
-
-    return 1;
+    return Utils::dpiFactor();
 }
 
 bool Controller::popupVisible() const

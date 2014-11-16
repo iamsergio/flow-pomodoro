@@ -18,6 +18,14 @@ Item {
         ListElement { text: "Top Right" }
     }
 
+    ListModel {
+        id: windowGeometryTypesModel
+        ListElement { text: "Standard" }
+        ListElement { text: "Thin" }
+        //ListElement { text: "Small Square" }
+        // ListElement { text: "Custom" }
+    }
+
     Grid {
         id: grid1
         columns: 2
@@ -126,6 +134,25 @@ Item {
             width: 150 * _controller.dpiFactor
             onCurrentIndexChanged: {
                 _window.initialPosition = currentIndex
+            }
+        }
+
+        Text {
+            visible: !_controller.isMobile
+            text: qsTr("Window geometry")
+            font.pixelSize: 12 * _controller.dpiFactor
+            height: geometryTypesCombo.height
+            verticalAlignment: Text.AlignVCenter;
+        }
+
+        ComboBox {
+            id: geometryTypesCombo
+            visible: !_controller.isMobile
+            model: windowGeometryTypesModel
+            currentIndex: _window.geometryType
+            width: 150 * _controller.dpiFactor
+            onCurrentIndexChanged: {
+                _window.geometryType = currentIndex
             }
         }
     }

@@ -15,6 +15,10 @@ Item {
     property int remainingFontSize     : 23 * _controller.dpiFactor
     property int taskHeight            : 50 * _controller.dpiFactor
 
+    property int expandedWidth         : 400 * _controller.dpiFactor
+    property int expandedHeight        : 550 * _controller.dpiFactor
+    property int smallGeometryTitleSize: 14 *  _controller.dpiFactor
+
     // tags
     property string tagBackgroundColor: "black"
     property string tagFontColor: "white"
@@ -75,9 +79,6 @@ Item {
 
     property bool deleteAnimationEnabled : true
     property int deleteAnimationDuration : 300
-
-    property int pageHeight : 500 * _controller.dpiFactor
-    property int contractedHeight: menuBarHeight
 
     property int selectedTaskBorderWidth    : Math.ceil(1 * _controller.dpiFactor)
     property string selectedTaskBorderColor : "black"

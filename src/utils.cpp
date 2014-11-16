@@ -22,6 +22,8 @@
 #include <QDebug>
 #include <QElapsedTimer>
 #include <qglobal.h>
+#include <QScreen>
+#include <QGuiApplication>
 
 #ifdef Q_OS_ANDROID
 # include <QAndroidJniObject>
@@ -71,4 +73,18 @@ bool Utils::isMobile()
 #else
     return false;
 #endif
+}
+
+
+qreal Utils::dpiFactor()
+{
+    static qreal factor = -1;
+    if (factor == -1) {
+        QScreen *screen = QGuiApplication::primaryScreen();
+        Q_ASSERT(screen);
+        factor = isMobile() ? (screen->physicalDotsPerInch() / 72.0) / 2 // /2 because looks good on all devices
+                            : 1;
+    }
+
+    return factor;
 }

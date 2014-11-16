@@ -30,6 +30,9 @@ class QKeyEvent;
 
 class QuickView : public QQuickView {
     Q_OBJECT
+    Q_PROPERTY(int contractedHeight READ contractedHeight WRITE setContractedHeight NOTIFY contractedHeightChanged)
+    Q_PROPERTY(int contractedWidth READ contractedWidth WRITE setContractedWidth NOTIFY contractedWidthChanged)
+    Q_PROPERTY(GeometryType geometryType READ geometryType WRITE setGeometryType NOTIFY geometryTypeChanged)
     Q_PROPERTY(Position initialPosition READ initialPosition WRITE setInitialPosition NOTIFY initialPositionChanged)
 public:
     enum Position {
@@ -45,12 +48,30 @@ public:
     };
     Q_ENUMS(Position)
 
+    enum GeometryType {
+        GeometryStandard, // 400x40
+        GeometryThin, // 400x20
+        GeometrySmallSquare, // 80x80
+        GeometryCustom, // uses width and height from settings
+        MaxGeometryTypes
+    };
+    Q_ENUMS(GeometryType)
+
     explicit QuickView(Kernel *kernel);
     ~QuickView();
 
     // Specifies where the window will appear at startup
     Position initialPosition() const;
     void setInitialPosition(Position);
+
+    void setGeometryType(GeometryType);
+    QuickView::GeometryType geometryType() const;
+
+    void setContractedWidth(int);
+    int contractedWidth() const;
+
+    void setContractedHeight(int);
+    int contractedHeight() const;
 
 protected:
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
@@ -59,12 +80,16 @@ private Q_SLOTS:
     void toggleVisible();
 
 Q_SIGNALS:
+    void contractedHeightChanged();
+    void contractedWidthChanged();
+    void geometryTypeChanged();
     void initialPositionChanged();
 
 private:
     void reloadQML();
-    void positionWindow();
+    void setupGeometry();
     void readInitialPosition();
+    void readGeometryType();
     QUrl styleFileName() const;
     void createStyleComponent();
 
@@ -72,6 +97,9 @@ private:
     const bool m_useqresources;
     Kernel *m_kernel;
     Position m_initialPosition;
+    GeometryType m_geometryType;
+    int m_contractedWidth;
+    int m_contractedHeight;
 };
 
 #endif

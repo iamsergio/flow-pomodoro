@@ -11,8 +11,8 @@ Rectangle {
 
     radius: _controller.isMobile ? 0 : 4
     color: "transparent"
-    width: 400 * _controller.dpiFactor
-    height: _style.contractedHeight + (_controller.expanded ? _style.pageHeight : 0)
+    width: _controller.expanded ? _style.expandedWidth : _window.contractedWidth
+    height: _controller.expanded ? _style.expandedHeight : _window.contractedHeight
 
     Connections {
         target: _controller
@@ -59,7 +59,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
-                height: _style.contractedHeight
+                height: _style.menuBarHeight
                 z: 4
             }
 

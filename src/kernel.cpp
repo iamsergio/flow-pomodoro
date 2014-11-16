@@ -33,6 +33,7 @@
 #include "checkbox.h"
 #include "loadmanager.h"
 #include "webdavsyncer.h"
+#include "quickview.h"
 #include "taskcontextmenumodel.h"
 
 #include <QStandardPaths>
@@ -71,6 +72,10 @@ static void registerQmlTypes()
     qmlRegisterUncreatableType<Controller>("Controller",
                                            1, 0, "Controller",
                                            "Controller is not creatable");
+
+    qmlRegisterUncreatableType<QuickView>("Controller",
+                                          1, 0, "QuickView",
+                                          "QuickView is not creatable");
 
     qmlRegisterUncreatableType<LoadManager>("Controller",
                                             1, 0, "LoadManager",
