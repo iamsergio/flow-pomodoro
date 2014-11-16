@@ -30,8 +30,27 @@ class QKeyEvent;
 
 class QuickView : public QQuickView {
     Q_OBJECT
+    Q_PROPERTY(Position initialPosition READ initialPosition WRITE setInitialPosition NOTIFY initialPositionChanged)
 public:
+    enum Position {
+        PositionNone = 0, // Window will appear where WM puts it
+        PositionLast, // Window will appear at the same place as last time. Saves position at exit.
+        PositionTop,
+        PositionTopLeft,
+        PositionTopRight,
+        PositionBottom, // TODO: Bottom is not supported yet
+        PositionBottomLeft,
+        PositionBottomRight,
+        MaxPositions
+    };
+    Q_ENUMS(Position)
+
     explicit QuickView(Kernel *kernel);
+    ~QuickView();
+
+    // Specifies where the window will appear at startup
+    Position initialPosition() const;
+    void setInitialPosition(Position);
 
 protected:
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
@@ -39,14 +58,20 @@ protected:
 private Q_SLOTS:
     void toggleVisible();
 
+Q_SIGNALS:
+    void initialPositionChanged();
+
 private:
     void reloadQML();
+    void positionWindow();
+    void readInitialPosition();
     QUrl styleFileName() const;
     void createStyleComponent();
 
     Controller *m_controller;
     const bool m_useqresources;
     Kernel *m_kernel;
+    Position m_initialPosition;
 };
 
 #endif

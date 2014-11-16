@@ -26,6 +26,7 @@
 #include "webdavsyncer.h"
 #include "kernel.h"
 #include "utils.h"
+#include "settings.h"
 
 #include <QStandardPaths>
 #include <QQmlContext>
@@ -46,9 +47,10 @@ QuickView::QuickView(Kernel *kernel)
 #endif
     , m_kernel(kernel)
 {
+    rootContext()->setContextProperty("_window", this);
     rootContext()->setContextProperty("_toolTipController", new ToolTipController(this));
-
     createStyleComponent();
+    readInitialPosition();
 
     QString main = Utils::isMobile() ? "LoadingScreen.qml" : "MainDesktop.qml";
 
@@ -73,19 +75,43 @@ QuickView::QuickView(Kernel *kernel)
     setColor(Qt::transparent);
     setDefaultAlphaBuffer(true); // Because some drivers don't request it. QTBUG-41074
 #endif
-    QSize screenSize = qApp->primaryScreen()->size();
+
     if (Utils::isMobile()) {
         setResizeMode(QQuickView::SizeRootObjectToView);
     } else {
         setFlags(flags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Tool);
         setResizeMode(QQuickView::SizeViewToRootObject);
-        setPosition(screenSize.width()/2 - width()/2, 0);
+        positionWindow();
     }
 
     connect(m_controller, &Controller::requestActivateWindow, this, &QuickView::requestActivate);
     Utils::printTimeInfo("QuickView: CTOR END");
 
     connect(kernel, &Kernel::systrayLeftClicked, this, &QuickView::toggleVisible);
+}
+
+QuickView::~QuickView()
+{
+    // qDebug() << "~QuickView";
+    if (m_initialPosition == PositionLast) {
+        m_kernel->settings()->setValue("windowLastPositionX", x());
+        m_kernel->settings()->setValue("windowLastPositionY", y());
+        m_kernel->settings()->scheduleSync();
+    }
+}
+
+QuickView::Position QuickView::initialPosition() const
+{
+    return m_initialPosition;
+}
+
+void QuickView::setInitialPosition(QuickView::Position position)
+{
+    if (m_initialPosition != position) {
+        m_initialPosition = position;
+        m_kernel->settings()->setValue("windowInitialPosition", position);
+        m_kernel->settings()->scheduleSync();
+    }
 }
 
 void QuickView::reloadQML()
@@ -96,6 +122,68 @@ void QuickView::reloadQML()
     createStyleComponent();
     setSource(source());
     Utils::printTimeInfo("QuickView: setted Source");
+}
+
+void QuickView::positionWindow()
+{
+    if (Utils::isMobile())
+        return;
+
+    QSize screenSize = qApp->primaryScreen()->size();
+
+    int x = 0;
+    int y = 0;
+
+    const int maxX = screenSize.width() - width();
+    const int maxY = screenSize.height() - height();
+    const int centerX = screenSize.width() / 2 - width() / 2;
+
+    switch (m_initialPosition) {
+    case PositionNone:
+        return;
+    case PositionLast:
+        x = qBound(0, m_kernel->settings()->value("windowLastPositionX").toInt(), maxX);
+        y = qBound(0, m_kernel->settings()->value("windowLastPositionY").toInt(), maxY);
+        break;
+    case PositionTop:
+        y = 0;
+        x = centerX;
+        break;
+    case PositionTopLeft:
+        x = 0;
+        y = 0;
+        break;
+    case PositionTopRight:
+        x = maxX;
+        y = 0;
+        break;
+    case PositionBottom:
+        x = centerX;
+        y = maxY;
+        break;
+    case PositionBottomLeft:
+        x = 0;
+        y = maxY;
+        break;
+    case PositionBottomRight:
+        x = maxX;
+        y = maxY;
+        break;
+    case MaxPositions:
+        Q_ASSERT(false); // Doesn't happen
+        return;
+    }
+
+    setPosition(x, y);
+}
+
+void QuickView::readInitialPosition()
+{
+    const Position defaultPosition = PositionTop;
+    m_initialPosition = static_cast<Position>(m_kernel->settings()->value("windowInitialPosition", defaultPosition).toInt());
+    if (m_initialPosition < PositionNone || m_initialPosition >= MaxPositions) {
+        setInitialPosition(defaultPosition);
+    }
 }
 
 QUrl QuickView::styleFileName() const

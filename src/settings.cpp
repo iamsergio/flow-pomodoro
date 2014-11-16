@@ -38,6 +38,11 @@ Settings::Settings(const QString &filename, QObject *parent)
 
 }
 
+Settings::~Settings()
+{
+    // qDebug() << "~Settings";
+}
+
 void Settings::setValue(const QString &key, const QVariant &value)
 {
     QSettings::setValue(key, value);

@@ -9,6 +9,15 @@ Item {
     id: root
     anchors.fill: parent
 
+    ListModel {
+        id: windowPositionModel
+        ListElement { text: "WM defined" }
+        ListElement { text: "Last Position" }
+        ListElement { text: "Top Center" }
+        ListElement { text: "Top Left" }
+        ListElement { text: "Top Right" }
+    }
+
     Grid {
         id: grid1
         columns: 2
@@ -98,6 +107,25 @@ Item {
                 target: _controller
                 property: "keepScreenOnDuringPomodoro"
                 value: keepScreenOn.checked
+            }
+        }
+
+        Text {
+            visible: !_controller.isMobile
+            text: qsTr("Initial window location")
+            font.pixelSize: 12 * _controller.dpiFactor
+            height: windowPositionsCombo.height
+            verticalAlignment: Text.AlignVCenter;
+        }
+
+        ComboBox {
+            id: windowPositionsCombo
+            visible: !_controller.isMobile
+            model: windowPositionModel
+            currentIndex: _window.initialPosition
+            width: 150 * _controller.dpiFactor
+            onCurrentIndexChanged: {
+                _window.initialPosition = currentIndex
             }
         }
     }
