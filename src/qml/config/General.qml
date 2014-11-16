@@ -24,6 +24,8 @@ Item {
         Text {
             text: qsTr("Pomodoro duration")
             font.pixelSize: 12 * _controller.dpiFactor
+            verticalAlignment: Text.AlignVCenter;
+            height: spinBox.height
         }
 
         SpinBox {
