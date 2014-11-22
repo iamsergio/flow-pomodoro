@@ -96,6 +96,7 @@ Rectangle {
             anchors.right: buttonRow.left
             anchors.rightMargin: 2
             font.pixelSize: _style.taskFontSize
+            fontSizeMode: Text.HorizontalFit
             visible: !root.inlineEditMode
         }
 
