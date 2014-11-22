@@ -18,7 +18,7 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             horizontalAlignment: Text.AlignRight
-            text: qsTr("Flow version") + ": " + _controller.version
+            text: qsTr("Version") + ": " + _controller.version + (_controller.gitDate ? " (" + _controller.gitDate + ")" : "")
         }
 
         SmallText {
