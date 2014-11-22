@@ -36,6 +36,8 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(QString gitDate READ gitDate CONSTANT)
+    Q_PROPERTY(QString gitSHA1 READ gitSHA1 CONSTANT)
     Q_PROPERTY(LoadManager* loadManager READ loadManager WRITE setLoadManager NOTIFY loadManagerChanged)
     Q_PROPERTY(int textRenderType READ textRenderType CONSTANT)
     Q_PROPERTY(bool firstSecondsAfterAdding READ firstSecondsAfterAdding NOTIFY firstSecondsAfterAddingChanged)
@@ -215,6 +217,9 @@ public:
 
     void setLoadManager(LoadManager *);
     LoadManager *loadManager() const;
+
+    QString gitSHA1() const;
+    QString gitDate() const;
 
 public Q_SLOTS:
     void updateWebDavCredentials();

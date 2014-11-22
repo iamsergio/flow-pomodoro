@@ -26,6 +26,7 @@
 #include "webdavsyncer.h"
 #include "utils.h"
 #include "loadmanager.h"
+#include "version.h"
 
 #include <QTimer>
 #include <QScreen>
@@ -1066,4 +1067,14 @@ void Controller::setLoadManager(LoadManager* loadManager)
 LoadManager* Controller::loadManager() const
 {
     return m_loadManager;
+}
+
+QString Controller::gitSHA1() const
+{
+    return Version::last_commit_sha1;
+}
+
+QString Controller::gitDate() const
+{
+    return Version::last_commit_date;
 }
