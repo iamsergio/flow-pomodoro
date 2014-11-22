@@ -1078,3 +1078,8 @@ QString Controller::gitDate() const
 {
     return Version::last_commit_date;
 }
+
+QString Controller::gitShortSHA1() const
+{
+    return gitSHA1().mid(0, 10);
+}

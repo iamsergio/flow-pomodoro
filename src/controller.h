@@ -36,6 +36,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(QString gitShortSHA1 READ gitShortSHA1 CONSTANT)
     Q_PROPERTY(QString gitDate READ gitDate CONSTANT)
     Q_PROPERTY(QString gitSHA1 READ gitSHA1 CONSTANT)
     Q_PROPERTY(LoadManager* loadManager READ loadManager WRITE setLoadManager NOTIFY loadManagerChanged)
@@ -218,6 +219,7 @@ public:
     void setLoadManager(LoadManager *);
     LoadManager *loadManager() const;
 
+    QString gitShortSHA1() const;
     QString gitSHA1() const;
     QString gitDate() const;
 
