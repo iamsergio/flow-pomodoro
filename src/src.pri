@@ -53,7 +53,7 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
 }
 
 version.target = version.h
-version.commands = generate_version.h
+version.commands = generate_version.sh
 version.depends = ../.git
 
 QMAKE_EXTRA_TARGETS += version
