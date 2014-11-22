@@ -33,10 +33,9 @@ Page {
                 anchors.topMargin: _style.marginMedium * 2
                 text: "<html>Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, <a href=\"mailto:info@kdab.com\">info@kdab.com</a><br>" +
                       qsTr("Author") + ": Sérgio Martins &lt;<a href=\"sergio.martins@kdab.com\" >sergio.martins@kdab.com</a>&gt;<br>" +
-                      "Copyright (C) 2014 Sérgio Martins &lt;<a href=\"mailto:iamsergio@gmail.com\">iamsergio@gmail.com</a>&gt;<br><br>"
+                      "Copyright (C) 2014 Sérgio Martins &lt;<a href=\"mailto:iamsergio@gmail.com\">iamsergio@gmail.com</a>&gt;<br>"
                 onLinkActivated: {
                     Qt.openUrlExternally(link)
-                    console.warn(link)
                 }
             }
 
@@ -44,7 +43,7 @@ Page {
                 id: keysText
                 text: qsTr("Keyboard bindings") + ":"
                 anchors.top: copyrightText.bottom
-                anchors.topMargin: _style.marginMedium
+                anchors.topMargin: _style.marginSmall
                 anchors.left: parent.left
                 anchors.leftMargin: _style.marginMedium
                 font.bold: true
@@ -166,6 +165,24 @@ Page {
                 color: _style.smallTextColor
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 text: qsTr("Data file") + ": " + _storage.dataFile();
+            }
+
+            SmallText {
+                id: githubText
+                anchors.top: dataPathText.bottom
+                anchors.topMargin: 10 * _controller.dpiFactor
+                text: "Source: <html><a href=\"https://github.com/iamsergio/flow-pomodoro\">https://github.com/iamsergio/flow-pomodoro</a>"
+                onLinkActivated: {
+                    Qt.openUrlExternally(link)
+                }
+            }
+            SmallText {
+                id: licenseText
+                anchors.top: githubText.bottom
+                text: "License: <html><a href=\"https://github.com/iamsergio/flow-pomodoro/blob/master/License.txt\">https://github.com/iamsergio/flow-pomodoro/blob/master/License.txt</a>"
+                onLinkActivated: {
+                    Qt.openUrlExternally(link)
+                }
             }
 
             PushButton {
