@@ -51,3 +51,10 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
     SOURCES += $$PWD/webdavsyncer.cpp
     HEADERS += $$PWD/webdavsyncer.h
 }
+
+version.target = version.h
+version.commands = generate_version.h
+version.depends = ../.git
+
+QMAKE_EXTRA_TARGETS += version
+PRE_TARGETDEPS += version.h
