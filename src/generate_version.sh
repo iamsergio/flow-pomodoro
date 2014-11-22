@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd $1
+
 cp version_template.h version.h
 LAST_SHA1=`git rev-parse HEAD`
 LAST_DATE=`git log -1 --format=%cd --date=short`
