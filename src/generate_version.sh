@@ -3,9 +3,9 @@
 cd $1
 
 cp version_template.h version.h
-LAST_SHA1=`git rev-parse HEAD`
-LAST_DATE=`git log -1 --format=%cd --date=short`
-BRANCH=`git symbolic-ref --short HEAD`
+LAST_SHA1=`git rev-parse HEAD 2> /dev/null`
+LAST_DATE=`git log -1 --format=%cd --date=short 2> /dev/null`
+BRANCH=`git symbolic-ref --short HEAD 2> /dev/null`
 
 # Check if HEAD is tagged
 if git describe --exact-match &> /dev/null ; then
