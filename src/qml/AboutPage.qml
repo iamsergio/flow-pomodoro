@@ -5,7 +5,6 @@ import Controller 1.0
 Page {
     id: root
     page: Controller.AboutPage
-    readonly property bool showKeyboardBindings: !_controller.isMobile
     MouseArea {
         anchors.fill: parent
         onClicked: {
@@ -61,6 +60,7 @@ Page {
                 anchors.leftMargin: 10
                 anchors.rightMargin: 10
                 height: childrenRect.height + 5
+                visible: !_controller.isMobile
                 RegularText {
                     id: keysText
                     text: qsTr("Keyboard bindings") + ":"
@@ -68,12 +68,10 @@ Page {
                     anchors.left: parent.left
                     anchors.leftMargin: _style.marginMedium
                     font.bold: true
-                    visible: root.showKeyboardBindings
                 }
 
                 Grid {
                     id: keyGrid
-                    visible: root.showKeyboardBindings
                     anchors.top: keysText.bottom
                     anchors.topMargin: _style.marginSmall
                     anchors.left: parent.left
