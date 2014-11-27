@@ -3,10 +3,13 @@
 #include "testtag.h"
 #include "testtagmodel.h"
 #include "testcheckabletagmodel.h"
-#include "testwebdav.h"
 #include "testtaskfiltermodel.h"
 #include "teststagedtasksmodel.h"
 #include "testarchivedtasksmodel.h"
+
+#ifndef NO_WEBDAV
+# include "testwebdav.h"
+#endif
 
 #include <QtTest/QtTest>
 #include <QGuiApplication>
@@ -65,11 +68,13 @@ int main(int argc, char *argv[])
         Q_ASSERT(success);
     }
 
+#ifndef NO_WEBDAV
     {
         TestWebDav test9;
         success &= QTest::qExec(&test9, argc, argv) == 0;
         Q_ASSERT(success);
     }
+#endif
 
     if (success)
         qDebug() << "Success!";

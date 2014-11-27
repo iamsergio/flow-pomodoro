@@ -1,13 +1,12 @@
 TEMPLATE = app
 QT += testlib
 CONFIG += testcase debug
+DEFINES += UNIT_TEST_RUN
 
 include ("../global.pri")
 include("../src/src.pri")
 
 INCLUDEPATH += $$PWD/../src/
-
-DEFINES += UNIT_TEST_RUN
 
 SOURCES += assertingproxymodel.cpp \
            main.cpp \
@@ -20,8 +19,15 @@ SOURCES += assertingproxymodel.cpp \
            testtaskfiltermodel.cpp \
            testtag.cpp \
            testtask.cpp \
-           testtagmodel.cpp \
-           testwebdav.cpp
+           testtagmodel.cpp
+
+!contains(DEFINES, NO_WEBDAV) {
+    SOURCES += testwebdav.cpp
+}
+
+!contains(DEFINES, NO_WEBDAV) {
+    HEADERS += testwebdav.h
+}
 
 HEADERS += assertingproxymodel.h \
            modelsignalspy.h \
@@ -34,5 +40,4 @@ HEADERS += assertingproxymodel.h \
            teststagedtasksmodel.h \
            testtag.h \
            testtask.h \
-           testtagmodel.h \
-           testwebdav.h
+           testtagmodel.h

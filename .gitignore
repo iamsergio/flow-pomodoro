@@ -30,4 +30,4 @@ flow.pdb
 Makefile*
 build-src*
 /cov-int
-version.h
+/src/version.h

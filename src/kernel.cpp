@@ -73,10 +73,11 @@ static void registerQmlTypes()
                                            1, 0, "Controller",
                                            "Controller is not creatable");
 
+#ifndef UNIT_TEST_RUN
     qmlRegisterUncreatableType<QuickView>("Controller",
                                           1, 0, "QuickView",
                                           "QuickView is not creatable");
-
+#endif
     qmlRegisterUncreatableType<LoadManager>("Controller",
                                             1, 0, "LoadManager",
                                             "LoadManager is not creatable");

@@ -52,12 +52,14 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
     HEADERS += $$PWD/webdavsyncer.h
 }
 
-version.target = version.h
-version.commands = $$PWD/generate_version.sh $$PWD
+!contains(DEFINES, UNIT_TEST_RUN) {
+    version.target = version.h
+    version.commands = $$PWD/generate_version.sh $$PWD
 
-exists($$PWD/../.git) { # are we in a git repo ?
-    version.depends = $$PWD/../.git
+    exists($$PWD/../.git) { # are we in a git repo ?
+        version.depends = $$PWD/../.git
+    }
+
+    QMAKE_EXTRA_TARGETS += version
+    PRE_TARGETDEPS += version.h
 }
-
-QMAKE_EXTRA_TARGETS += version
-PRE_TARGETDEPS += version.h
