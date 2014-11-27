@@ -1,15 +1,3 @@
-
-1.0 TODOs:
-----------
-- WebDav sync
-  . Add timestamp to lock file
-  . Enable it by default
-  . unit-tests
-- Konversation plugin
-- Test iPhone
-- Put on playstores
-- When editing a task, show it on top, so it's visible
-
 Future TODOs:
 -------------
 - Akonadi support
@@ -17,3 +5,8 @@ Future TODOs:
 - Import from flat-file
 - Pre-compile qml
 - Grep for TODOs
+- WebDav sync
+  . Add timestamp to lock file
+  . Enable it by default
+  . unit-tests
+- When editing a task, show it on top, so it's visible
