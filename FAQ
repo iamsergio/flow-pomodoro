@@ -3,6 +3,7 @@ FAQ:
 1. How do I override the default theme ?
     - Go to flow's data directory, check where it is in "About" dialog, it's (~/.local/share/KDAB/flow/) on Linux
     - Add a Style.qml file there, you can now override style properties.
+    - The complete list of properties is at: https://github.com/iamsergio/flow-pomodoro/blob/master/src/qml/DefaultStyle.qml
 
     Example file:
 
