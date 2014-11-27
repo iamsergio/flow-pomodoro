@@ -1,0 +1,19 @@
+FAQ:
+
+1. How do I override the default theme ?
+    - Go to flow's data directory, check where it is in "About" dialog, it's (~/.local/share/KDAB/flow/) on Linux
+    - Add a Style.qml file there, you can now override style properties.
+
+    Example file:
+
+        import QtQuick 2.0
+        import "qrc:/qml/"
+
+        DefaultStyle {
+            slackingText: "Flow" // Override "You're slacking" text
+        }
+
+    For mobile you'll want to inherit from MobileStyle instead of DefaultStyle.
+
+2. How do I change the default title ("You're slacking") to something else ?
+   Use the example file from question 1.

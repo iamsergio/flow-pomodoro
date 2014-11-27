@@ -135,4 +135,6 @@ Item {
     property color circularIndicatorSelectedBackgroundColor: "#222222"
 
     property int choiceDelegateHeight: 35 * _controller.dpiFactor
+
+    property string slackingText: qsTr("You're slacking")
 }

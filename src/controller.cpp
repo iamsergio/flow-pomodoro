@@ -584,7 +584,7 @@ QString Controller::currentTitleText() const
         if (!currentTask()->stopped())
             return currentTask()->summary();
         if (!m_expanded)
-            return tr("You're slacking");
+            return QString();
         return m_queueType == QueueTypeToday ? tr("Today's queue") : tr("Later queue");
     }
 

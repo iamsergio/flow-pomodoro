@@ -5,7 +5,7 @@ import com.kdab.flowpomodoro 1.0
 Rectangle {
     id: root
 
-    property string titleText: _controller.currentTitleText
+    property string titleText: _controller.currentTitleText ? _controller.currentTitleText : _style.slackingText
     property alias topBarItem: topBar.children
     signal requestGlobalContextMenu()
 
