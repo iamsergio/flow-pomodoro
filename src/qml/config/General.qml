@@ -102,6 +102,22 @@ Item {
         }
 
         Text {
+            text: qsTr("Hide empty tags in Later screen")
+            font.pixelSize: 12 * _controller.dpiFactor
+            height: geometryTypesCombo.height
+        }
+
+        FlowCheckBox {
+            id: hideEmptyTagsCheck
+            checked: _controller.hideEmptyTags
+            Binding {
+                target: _controller
+                property: "hideEmptyTags"
+                value: hideEmptyTagsCheck.checked
+            }
+        }
+
+        Text {
             visible: _controller.isAndroid
             text: qsTr("Keep screen on during pomodoro")
             font.pixelSize: 12 * _controller.dpiFactor

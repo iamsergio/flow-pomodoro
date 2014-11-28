@@ -27,6 +27,7 @@
 #include "taskfilterproxymodel.h"
 #include "webdavsyncer.h"
 #include "runtimeconfiguration.h"
+#include "nonemptytagfilterproxy.h"
 
 #if defined(UNIT_TEST_RUN)
 # include "assertingproxymodel.h"
@@ -65,6 +66,7 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     , m_untaggedTasksModel(new TaskFilterProxyModel(this))
     , m_stagedTasksModel(new ArchivedTasksFilterModel(this))
     , m_archivedTasksModel(new ArchivedTasksFilterModel(this))
+    , m_nonEmptyTagsModel(new NonEmptyTagFilterProxy(this))
     , m_savingInProgress(false)
     , m_loadingInProgress(false)
 {
@@ -82,6 +84,7 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     connect(tagsModel, &QAbstractListModel::modelReset, this, &Storage::scheduleSave);
     qRegisterMetaType<Tag::Ptr>("Tag::Ptr");
     m_sortedTagModel = new SortedTagsModel(m_data.tags, this);
+    m_nonEmptyTagsModel->setSourceModel(m_sortedTagModel);
 
     connect(this, &Storage::tagAboutToBeRemoved,
             this, &Storage::onTagAboutToBeRemoved);
@@ -539,3 +542,8 @@ void Storage::removeDuplicateData()
 }
 
 #endif
+
+QAbstractItemModel* Storage::nonEmptyTagsModel() const
+{
+    return m_nonEmptyTagsModel;
+}

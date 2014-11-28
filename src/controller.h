@@ -36,6 +36,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(bool hideEmptyTags READ hideEmptyTags WRITE setHideEmptyTags NOTIFY hideEmptyTagsChanged)
     Q_PROPERTY(QString gitDate READ gitDate CONSTANT)
     Q_PROPERTY(LoadManager* loadManager READ loadManager WRITE setLoadManager NOTIFY loadManagerChanged)
     Q_PROPERTY(int textRenderType READ textRenderType CONSTANT)
@@ -221,6 +222,9 @@ public:
     QString gitSHA1() const;
     QString gitDate() const;
 
+    void setHideEmptyTags(bool);
+    bool hideEmptyTags() const;
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);
@@ -257,6 +261,7 @@ private Q_SLOTS:
     void setStartupFinished();
 
 Q_SIGNALS:
+    void hideEmptyTagsChanged();
     void loadManagerChanged();
     void textRenderTypeChanged();
     void pomodoroFunctionalityDisabledChanged();
@@ -355,6 +360,7 @@ private:
     qint64 m_pomodoroStartTimeStamp;
     int m_textRenderType;
     LoadManager* m_loadManager;
+    bool m_hideEmptyTags;
 };
 
 #endif

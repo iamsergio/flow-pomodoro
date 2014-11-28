@@ -75,6 +75,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_pomodoroStartTimeStamp(0)
     , m_textRenderType(NativeRendering)
     , m_loadManager(new LoadManager(this))
+    , m_hideEmptyTags(false)
 {
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
@@ -86,6 +87,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     m_pomodoroFunctionalityDisabled = m_settings->value("pomodoroFunctionalityDisabled", /*default=*/ false).toBool();
     m_syncAtStartup = m_settings->value("syncAtStartup", /*default=*/ false).toBool();
     setKeepScreenOnDuringPomodoro(m_settings->value("keepScreenOnDuringPomodoro", /*default=*/ true).toInt());
+    m_hideEmptyTags = m_settings->value("hideEmptyTags", /*default=*/ false).toBool();
 
     m_host = m_settings->value("webdavHost").toString();
     m_user = m_settings->value("webdavUser").toString();
@@ -1086,4 +1088,18 @@ QString Controller::gitDate() const
 QString Controller::gitShortSHA1() const
 {
     return gitSHA1().mid(0, 10);
+}
+
+void Controller::setHideEmptyTags(bool hide)
+{
+    if (hide != m_hideEmptyTags) {
+        m_hideEmptyTags = hide;
+        m_settings->setValue("hideEmptyTags", QVariant(hide));
+        emit hideEmptyTagsChanged();
+    }
+}
+
+bool Controller::hideEmptyTags() const
+{
+    return m_hideEmptyTags;
 }

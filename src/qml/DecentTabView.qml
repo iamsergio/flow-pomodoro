@@ -59,7 +59,7 @@ Item {
 
             Repeater {
                 id: repeater
-                model: _storage.tagsModel
+                model: _controller.hideEmptyTags ? _storage.nonEmptyTagsModel : _storage.tagsModel
                 TagDelegate {
                     anchors.top: row.top
                     anchors.bottom: row.bottom

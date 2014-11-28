@@ -9,6 +9,7 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/kernel.cpp \
            $$PWD/loadmanager.cpp \
            $$PWD/pluginmodel.cpp \
+           $$PWD/nonemptytagfilterproxy.cpp \
            $$PWD/runtimeconfiguration.cpp \
            $$PWD/settings.cpp    \
            $$PWD/sortedtagsmodel.cpp \
@@ -33,6 +34,7 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/genericlistmodel.h \
            $$PWD/plugininterface.h \
            $$PWD/pluginmodel.h     \
+           $$PWD/nonemptytagfilterproxy.h \
            $$PWD/runtimeconfiguration.h \
            $$PWD/settings.h        \
            $$PWD/sortedtagsmodel.h \

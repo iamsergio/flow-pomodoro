@@ -32,6 +32,7 @@ class Kernel;
 class SortedTagsModel;
 class ArchivedTasksFilterModel;
 class TaskFilterProxyModel;
+class NonEmptyTagFilterProxy;
 
 typedef GenericListModel<Tag::Ptr> TagList;
 typedef GenericListModel<Task::Ptr> TaskList;
@@ -43,6 +44,7 @@ enum {
 class Storage : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QAbstractItemModel* nonEmptyTagsModel READ nonEmptyTagsModel CONSTANT)
     Q_PROPERTY(QAbstractItemModel* tagsModel READ tagsModel CONSTANT)
     Q_PROPERTY(ArchivedTasksFilterModel* stagedTasksModel READ stagedTasksModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* taskFilterModel READ taskFilterModel CONSTANT)
@@ -140,6 +142,8 @@ public:
     static int storageCount;
 #endif
 
+    QAbstractItemModel* nonEmptyTagsModel() const;
+
 public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);
     void dumpDebugInfo();
@@ -170,6 +174,7 @@ private:
     TaskFilterProxyModel *m_untaggedTasksModel;
     ArchivedTasksFilterModel *m_stagedTasksModel;
     ArchivedTasksFilterModel *m_archivedTasksModel;
+    NonEmptyTagFilterProxy* m_nonEmptyTagsModel;
     bool m_savingInProgress;
     bool m_loadingInProgress;
 };
