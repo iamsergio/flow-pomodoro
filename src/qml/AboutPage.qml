@@ -23,7 +23,7 @@ Page {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 horizontalAlignment: Text.AlignRight
-                text: qsTr("Version") + ": " + _controller.version + (_controller.gitDate ? " (" + _controller.gitDate + ")" : "")
+                text: "Flow " + _controller.version + (_controller.gitDate ? " (" + _controller.gitDate + ")" : "") + "; Qt-" + _controller.qtVersion
             }
 
             Column {

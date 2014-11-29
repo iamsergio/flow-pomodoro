@@ -36,6 +36,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(QString qtVersion READ qtVersion CONSTANT)
     Q_PROPERTY(bool hideEmptyTags READ hideEmptyTags WRITE setHideEmptyTags NOTIFY hideEmptyTagsChanged)
     Q_PROPERTY(QString gitDate READ gitDate CONSTANT)
     Q_PROPERTY(LoadManager* loadManager READ loadManager WRITE setLoadManager NOTIFY loadManagerChanged)
@@ -224,6 +225,8 @@ public:
 
     void setHideEmptyTags(bool);
     bool hideEmptyTags() const;
+
+    QString qtVersion() const;
 
 public Q_SLOTS:
     void updateWebDavCredentials();

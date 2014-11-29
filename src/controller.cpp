@@ -1103,3 +1103,8 @@ bool Controller::hideEmptyTags() const
 {
     return m_hideEmptyTags;
 }
+
+QString Controller::qtVersion() const
+{
+    return qVersion();
+}
