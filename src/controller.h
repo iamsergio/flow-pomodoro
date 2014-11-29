@@ -213,7 +213,6 @@ public:
     bool syncAtStartup() const;
     void setSyncAtStartup(bool);
 
-    Q_INVOKABLE bool systemTrayAvailable() const;
     int textRenderType() const;
 
     void setLoadManager(LoadManager *);

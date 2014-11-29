@@ -702,15 +702,6 @@ void Controller::setSyncAtStartup(bool sync)
     }
 }
 
-bool Controller::systemTrayAvailable() const
-{
-#if defined(QT_WIDGETS_LIB)
-    return QSystemTrayIcon::isSystemTrayAvailable();
-#else
-    return false;
-#endif
-}
-
 void Controller::setNewTagDialogVisible(bool visible)
 {
     if (visible != m_newTagDialogVisible) {
