@@ -57,6 +57,7 @@ ListView {
         anchors.leftMargin: _style.marginSmall
         anchors.rightMargin: _style.marginSmall
         font.pixelSize: 13 * _controller.dpiFactor
+        fontSizeMode: Text.Fit
     }
 
     contentItem.z: 2
