@@ -32,3 +32,8 @@ build-src*
 /cov-int
 /src/version.h
 /plugins/*.a
+*.lib
+release/
+*.exp
+/src/flow_plugin_import.cpp
+/src/flow_qml_plugin_import.cpp
