@@ -1,5 +1,9 @@
 TEMPLATE = subdirs
-SUBDIRS += src plugins
+SUBDIRS += plugins src
+
+static {
+    CONFIG += ordered
+}
 
 include ("global.pri")
 
