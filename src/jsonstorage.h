@@ -21,6 +21,7 @@
 #define JSONSTORAGE_H
 
 #include "storage.h"
+#include "runtimeconfiguration.h"
 
 class Kernel;
 
@@ -41,6 +42,7 @@ protected:
 
 private:
     static QVariantMap toJsonVariantMap(const Storage::Data &);
+    const RuntimeConfiguration m_runtimeConfiguration;
 };
 
 #endif

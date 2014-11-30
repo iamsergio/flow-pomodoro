@@ -27,12 +27,13 @@
 
 JsonStorage::JsonStorage(Kernel *kernel, QObject *parent)
     : Storage(kernel, parent)
+    , m_runtimeConfiguration(kernel->runtimeConfiguration())
 {
 }
 
 JsonStorage::~JsonStorage()
 {
-    if (saveScheduled() && m_kernel->runtimeConfiguration().saveEnabled())
+    if (saveScheduled() && m_runtimeConfiguration.saveEnabled())
         save_impl();
 }
 
@@ -84,7 +85,7 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
 
 void JsonStorage::load_impl()
 {
-    const QString dataFileName = m_kernel->runtimeConfiguration().dataFileName();
+    const QString dataFileName = m_runtimeConfiguration.dataFileName();
     qDebug() << "JsonStorage::load_impl Loading from" << dataFileName;
     if (!QFile::exists(dataFileName)) { // Nothing to load
         qDebug() << "JsonStorage::load_impl():" << dataFileName << "does not exist yet.";
@@ -124,7 +125,7 @@ void JsonStorage::load_impl()
 void JsonStorage::save_impl()
 {
     QByteArray serializedData = serializeToJsonData(m_data);
-    QString tmpDataFileName = m_kernel->runtimeConfiguration().dataFileName() + "~";;
+    QString tmpDataFileName = m_runtimeConfiguration.dataFileName() + "~";;
 
     QFile temporaryFile(tmpDataFileName); // not using QTemporaryFile so the backup stays next to the main one
     if (!temporaryFile.open(QIODevice::WriteOnly)) {
@@ -133,7 +134,7 @@ void JsonStorage::save_impl()
         return;
     }
 
-    const QString dataFileName = m_kernel->runtimeConfiguration().dataFileName();
+    const QString dataFileName = m_runtimeConfiguration.dataFileName();
     temporaryFile.write(serializedData, serializedData.count());
     if (QFile::exists(dataFileName) && !QFile::remove(dataFileName)) {
         qWarning() << "Could not update (remove error)" << dataFileName
