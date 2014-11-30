@@ -102,6 +102,23 @@ Item {
         }
 
         Text {
+            text: qsTr("Use systray")
+            font.pixelSize: 12 * _controller.dpiFactor
+            visible: !_controller.isMobile
+        }
+
+        FlowCheckBox {
+            id: systrayCheckBox
+            visible: !_controller.isMobile
+            checked: _controller.useSystray
+            Binding {
+                target: _controller
+                property: "useSystray"
+                value: systrayCheckBox.checked
+            }
+        }
+
+        Text {
             text: qsTr("Hide empty tags in Later screen")
             font.pixelSize: 12 * _controller.dpiFactor
             height: geometryTypesCombo.height

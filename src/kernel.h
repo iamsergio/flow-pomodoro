@@ -55,6 +55,9 @@ public:
     WebDAVSyncer *webdavSyncer() const;
 #endif
 
+    void setupSystray();
+    void destroySystray();
+
 Q_SIGNALS:
     void systrayLeftClicked();
 
@@ -68,7 +71,6 @@ private Q_SLOTS:
 private:
     void loadPlugins();
     void notifyPlugins(TaskStatus newStatus);
-    void setupSystray();
 
     RuntimeConfiguration m_runtimeConfiguration;
     Storage *m_storage;

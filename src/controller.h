@@ -36,6 +36,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(bool useSystray READ useSystray WRITE setUseSystray NOTIFY useSystrayChanged)
     Q_PROPERTY(QString qtVersion READ qtVersion CONSTANT)
     Q_PROPERTY(bool hideEmptyTags READ hideEmptyTags WRITE setHideEmptyTags NOTIFY hideEmptyTagsChanged)
     Q_PROPERTY(QString gitDate READ gitDate CONSTANT)
@@ -227,6 +228,9 @@ public:
 
     QString qtVersion() const;
 
+    void setUseSystray(bool);
+    bool useSystray() const;
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);
@@ -263,6 +267,7 @@ private Q_SLOTS:
     void setStartupFinished();
 
 Q_SIGNALS:
+    void useSystrayChanged();
     void hideEmptyTagsChanged();
     void loadManagerChanged();
     void textRenderTypeChanged();
@@ -363,6 +368,7 @@ private:
     int m_textRenderType;
     LoadManager* m_loadManager;
     bool m_hideEmptyTags;
+    bool m_useSystray;
 };
 
 #endif

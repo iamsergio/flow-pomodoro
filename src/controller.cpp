@@ -76,6 +76,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_textRenderType(NativeRendering)
     , m_loadManager(new LoadManager(this))
     , m_hideEmptyTags(false)
+    , m_useSystray(false)
 {
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
@@ -88,6 +89,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     m_syncAtStartup = m_settings->value("syncAtStartup", /*default=*/ false).toBool();
     setKeepScreenOnDuringPomodoro(m_settings->value("keepScreenOnDuringPomodoro", /*default=*/ true).toInt());
     m_hideEmptyTags = m_settings->value("hideEmptyTags", /*default=*/ false).toBool();
+    m_useSystray = m_settings->value("useSystray", /*default=*/ true).toBool();
 
     m_host = m_settings->value("webdavHost").toString();
     m_user = m_settings->value("webdavUser").toString();
@@ -1098,4 +1100,23 @@ bool Controller::hideEmptyTags() const
 QString Controller::qtVersion() const
 {
     return qVersion();
+}
+
+void Controller::setUseSystray(bool use)
+{
+    if (use != m_useSystray) {
+        m_useSystray = use;
+        m_settings->setValue("useSystray", QVariant(use));
+        emit useSystrayChanged();
+
+        if (use)
+            m_kernel->setupSystray();
+        else
+            m_kernel->destroySystray();
+    }
+}
+
+bool Controller::useSystray() const
+{
+    return m_useSystray;
 }

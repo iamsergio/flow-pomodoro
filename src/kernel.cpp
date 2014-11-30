@@ -100,10 +100,8 @@ static void registerQmlTypes()
 
 Kernel::~Kernel()
 {
+    destroySystray();
     delete m_settings;
-#if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
-    delete m_trayMenu;
-#endif
 }
 
 Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
@@ -134,7 +132,8 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     QMetaObject::invokeMethod(this, "maybeLoadPlugins", Qt::QueuedConnection);
     QMetaObject::invokeMethod(m_controller, "updateWebDavCredentials", Qt::QueuedConnection);
 
-    setupSystray();
+    if (m_controller->useSystray())
+        setupSystray();
 }
 
 Storage *Kernel::storage() const
@@ -196,6 +195,16 @@ void Kernel::setupSystray()
 # endif
     m_systrayIcon->show();
     connect(m_systrayIcon, &QSystemTrayIcon::activated, this, &Kernel::onSystrayActivated);
+#endif
+}
+
+void Kernel::destroySystray()
+{
+#if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
+    delete m_systrayIcon;
+    delete m_trayMenu;
+    m_systrayIcon = 0;
+    m_trayMenu = 0;
 #endif
 }
 
