@@ -210,6 +210,9 @@ void Kernel::destroySystray()
 
 void Kernel::loadPlugins()
 {
+    if (Utils::isMobile())
+        return;
+
     QStringList paths = QCoreApplication::libraryPaths();
 
     foreach (const QString &path, paths) {

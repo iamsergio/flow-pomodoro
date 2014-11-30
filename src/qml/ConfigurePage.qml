@@ -28,17 +28,16 @@ Page {
                     model: ListModel { // TODO: ListElement doesn't accept qsTr
                         ListElement { text: "General" ; source: "config/General.qml"}
                         ListElement { text: "Tags"    ; source: "config/Tags.qml" }
-                        ListElement { text: "Plugins" ; source: "config/Plugins.qml" }
                         ListElement { text: "WebDAV"  ; source: "config/WebDavSync.qml";}
                         ListElement { text: "Hacking" ; source: "config/Hacking.qml";}
 
                         Component.onCompleted: {
                             if (!_controller.hackingMenuSupported) {
-                                remove(4)
+                                remove(3)
                             }
 
                             if (!_storage.webDAVSyncSupported) {
-                                remove(3)
+                                remove(2)
                             }
                         }
                     }
@@ -78,7 +77,6 @@ Page {
                 }
 
                 Repeater {
-                    // Apparently the only way to hide a tab is through a repeater hack
                     model: _controller.hackingMenuSupported ? 1 : 0
                     Tab {
                         title: qsTr("Hacking")
