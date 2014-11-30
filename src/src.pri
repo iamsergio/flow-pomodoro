@@ -54,7 +54,7 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
     HEADERS += $$PWD/webdavsyncer.h
 }
 
-!contains(DEFINES, UNIT_TEST_RUN) {
+!contains(DEFINES, UNIT_TEST_RUN):linux {
     version.target = version.h
     version.commands = $$PWD/generate_version.sh $$PWD
 
