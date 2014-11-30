@@ -40,6 +40,7 @@ public:
 
     void setTaskStatus(TaskStatus status) Q_DECL_OVERRIDE;
     QString text() const Q_DECL_OVERRIDE;
+    QString helpText() const Q_DECL_OVERRIDE;
 
 private:
     void update(bool blockDistractions);
@@ -47,6 +48,7 @@ private:
     bool m_enabled;
     QMutex m_mutex;
     bool m_allowingDistractions;
+    QString m_scriptName;
 };
 
 #endif

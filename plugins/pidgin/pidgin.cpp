@@ -63,3 +63,8 @@ QString PidginPlugin::text() const
 {
     return QStringLiteral("Pidgin Notifications");
 }
+
+QString PidginPlugin::helpText() const
+{
+    return tr("Disables pidgin systray notifications. You need a patched pidgin, see FAQ.");
+}

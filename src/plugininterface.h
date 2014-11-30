@@ -40,6 +40,7 @@ public:
 	virtual void setEnabled(bool enabled) = 0;
     virtual void setTaskStatus(TaskStatus status) = 0;
     virtual QString text() const = 0;
+    virtual QString helpText() const = 0;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, "com.kdab.flow.PluginInterface")

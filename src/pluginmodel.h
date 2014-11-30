@@ -33,6 +33,7 @@ public:
 
     enum Roles {
         TextRole = Qt::UserRole + 1,
+        HelpTextRole,
         EnabledRole
     };
 

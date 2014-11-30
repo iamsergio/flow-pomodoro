@@ -42,6 +42,7 @@ QHash<int, QByteArray> PluginModel::roleNames() const
     QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
     roles.insert(TextRole, "textRole");
     roles.insert(EnabledRole, "enabledRole");
+    roles.insert(HelpTextRole, "helpTextRole");
 
     return roles;
 }
@@ -59,6 +60,8 @@ QVariant PluginModel::data(const QModelIndex &index, int role) const
         return plugin->text();
     case EnabledRole:
         return plugin->enabled();
+    case HelpTextRole:
+        return plugin->helpText();
     }
 
     return QVariant();

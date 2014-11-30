@@ -40,6 +40,7 @@ public:
 
     void setTaskStatus(TaskStatus status) Q_DECL_OVERRIDE;
     QString text() const Q_DECL_OVERRIDE;
+    QString helpText() const Q_DECL_OVERRIDE;
 
 private:
     void setSystrayIconsNotificationsEnabled(bool enabled);

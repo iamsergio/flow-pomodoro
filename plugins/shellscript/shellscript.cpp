@@ -54,7 +54,15 @@ ShellScriptPlugin::ShellScriptPlugin() : QObject(), PluginInterface()
   , m_enabled(false)
   , m_allowingDistractions(true)
 {
+    m_scriptName = "shell_script_plugin";
+#ifdef Q_OS_WIN
+    m_scriptName += ".bat";
+#else
+    m_scriptName += ".sh";
+#endif
 
+    QString directory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    m_scriptName = directory + "/" + m_scriptName;
 }
 
 void ShellScriptPlugin::setEnabled(bool enabled)
@@ -75,26 +83,16 @@ void ShellScriptPlugin::update(bool allowDistractions)
     if (allowDistractions == m_allowingDistractions)
         return;
 
-    QString scriptName = "shell_script_plugin";
-#ifdef Q_OS_WIN
-    scriptName += ".bat";
-#else
-    scriptName += ".sh";
-#endif
-
-    QString directory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    scriptName = directory + "/" + scriptName;
-
-    QFile file(scriptName);
+    QFile file(m_scriptName);
     if (!file.exists()) {
-        qDebug() << "ShellScriptPlugin: file doesn't exist" << scriptName;
+        qDebug() << "ShellScriptPlugin: file doesn't exist" << m_scriptName;
         return;
     }
 
     QStringList args;
     args << (allowDistractions ? "allow" : "disallow");
 
-    RunScriptTask *task = new RunScriptTask(scriptName, args, &m_mutex);
+    RunScriptTask *task = new RunScriptTask(m_scriptName, args, &m_mutex);
     QThreadPool::globalInstance()->start(task);
 }
 
@@ -108,4 +106,9 @@ void ShellScriptPlugin::setTaskStatus(TaskStatus status)
 QString ShellScriptPlugin::text() const
 {
     return QStringLiteral("Shell script");
+}
+
+QString ShellScriptPlugin::helpText() const
+{
+    return tr("Executes a shell script to enable/disable distractions.\nYou must create or edit <b>%1</b>. The first argument passed to the script will be <b>allow</b> or <b>disallow</b>.").arg(m_scriptName);
 }

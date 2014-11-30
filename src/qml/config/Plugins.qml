@@ -28,34 +28,94 @@ Item {
     }
 
     ListView {
+        id: listView
         anchors.top: smallText1.bottom
+        anchors.rightMargin: _style.marginMedium
         anchors.leftMargin: _style.marginMedium
-        anchors.rightMargin: 40 * _controller.dpiFactor
         anchors.topMargin: 25 * _controller.dpiFactor
+        anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         model: _pluginModel
         height: 60
-        delegate: Row {
-            id: row
-            height: 30 * _controller.dpiFactor
-            spacing: 30 * _controller.dpiFactor
+        spacing: 5 * _controller.dpiFactor
+        delegate: Item {
+            width: parent.width
+            height: ((icon.expanded && helpTextRole) ? (25 + helpTextRect.height) : 25) * _controller.dpiFactor
 
-            Text {
-                height: row.height
-                width: 150 * _controller.dpiFactor
-                text: textRole
-                renderType: _controller.textRenderType
-                font.pixelSize: _style.regularTextSize
-                color: _style.regularTextColor
+            Row {
+                id: row
+                width: parent.width
+                height: 25 * _controller.dpiFactor
+                spacing: 60 * _controller.dpiFactor
+                Item {
+                    id: containerItem
+                    width: 150 * _controller.dpiFactor
+                    height: childrenRect.height
+
+                    FontAwesomeIcon {
+                        id: icon
+                        anchors.top: titleText.top
+                        anchors.topMargin: 2 * _controller.dpiFactor
+                        property bool expanded: false
+                        size: 15
+                        text: expanded ? "\uf146" : "\uf0fe"
+                        color: _style.regularTextColor
+                        anchors.verticalCenter: undefined
+
+                        onClicked: {
+                            expanded = !expanded
+                        }
+                    }
+
+                    Text {
+                        id: titleText
+                        text: textRole
+                        anchors.left: icon.visible ? icon.right : parent.left
+                        anchors.leftMargin: 5 * _controller.dpiFactor
+                        renderType: _controller.textRenderType
+                        font.pixelSize: _style.regularTextSize
+                        color: _style.regularTextColor
+                    }
+                }
+
+                FlowCheckBox {
+                    anchors.verticalCenter: undefined
+                    anchors.top: containerItem.top
+                    anchors.topMargin: 2 * _controller.dpiFactor
+                    checked: enabledRole
+                    onCheckedChanged: {
+                        _pluginModel.setPluginEnabled(checked, index)
+                    }
+                }
             }
 
-            FlowCheckBox {
-                anchors.verticalCenterOffset: -2
-                anchors.verticalCenter: parent.verticalCenter
-                checked: enabledRole
-                onCheckedChanged: {
-                    _pluginModel.setPluginEnabled(checked, index)
+            Rectangle {
+                id: helpTextRect
+                color: Qt.lighter(_style.queueBackgroundColor, 1.3)
+                radius: 5
+                anchors.left: parent.left
+                // anchors.leftMargin: titleText.x
+
+                anchors.right: parent.right
+                anchors.top: row.bottom
+                height: helpText.height + 10 * _controller.dpiFactor
+                visible: icon.expanded
+
+                Text {
+                    id: helpText
+                    text: helpTextRole
+
+                    renderType: _controller.textRenderType
+                    font.pixelSize: 12 * _controller.dpiFactor
+                    wrapMode: Text.WordWrap
+                    color: _style.regularTextColor
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 5 * _controller.dpiFactor
+                    anchors.top: parent.top
+                    anchors.topMargin: 5 * _controller.dpiFactor
+                    textFormat: Text.RichText
                 }
             }
         }
