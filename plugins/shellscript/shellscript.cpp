@@ -19,8 +19,6 @@
 
 #include "shellscript.h"
 
-#include <QDBusConnection>
-#include <QDBusMessage>
 #include <QDebug>
 #include <QStandardPaths>
 #include <QFile>
