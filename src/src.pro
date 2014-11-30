@@ -82,4 +82,9 @@ linux:!android {
     QMAKE_POST_LINK += "; $$PWD/validate_qrc.sh $$PWD/"
 }
 
+windows {
+	# App icon
+	RC_FILE = flow.rc
+}
+
 DESTDIR = ../
