@@ -54,7 +54,6 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/Page.qml           \
                qml/PomodoroOverlay.qml \
                qml/QuestionPopup.qml  \
-               qml/RegularText.qml    \
                qml/SmallText.qml      \
                qml/TagDelegate.qml \
                qml/Task.qml           \

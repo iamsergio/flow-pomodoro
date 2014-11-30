@@ -64,13 +64,16 @@ Page {
                     anchors.right: parent.right
                     height: childrenRect.height + 5
                     visible: !_controller.isMobile
-                    RegularText {
+                    Text {
                         id: keysText
                         text: qsTr("Keyboard bindings") + ":"
 
                         anchors.left: parent.left
                         anchors.leftMargin: _style.marginMedium
                         font.bold: true
+                        renderType: _controller.textRenderType
+                        font.pixelSize: _style.regularTextSize
+                        color: _style.regularTextColor
                     }
 
                     Grid {

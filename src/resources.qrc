@@ -35,7 +35,6 @@
     <file>qml/MobileTabView.qml</file>
     <file>qml/NewTagDialog.qml</file>
     <file>qml/Page.qml</file>
-    <file>qml/RegularText.qml</file>
     <file>qml/SmallText.qml</file>
     <file>qml/TagDelegate.qml</file>
     <file>qml/Task.qml</file>
