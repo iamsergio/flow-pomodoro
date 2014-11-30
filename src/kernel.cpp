@@ -51,6 +51,10 @@
 #include <QMenu>
 #endif
 
+#ifdef FLOW_STATIC_BUILD
+Q_IMPORT_PLUGIN(ShellScriptPlugin)
+#endif
+
 static void registerQmlTypes()
 {
     qmlRegisterUncreatableType<QAbstractItemModel>("Controller",
@@ -213,6 +217,13 @@ void Kernel::loadPlugins()
     if (Utils::isMobile())
         return;
 
+    QObjectList plugins;
+
+#ifdef FLOW_STATIC_BUILD
+    foreach (QObject *pluginObject, QPluginLoader::staticInstances()) {
+        plugins << pluginObject;
+    }
+#else
     QStringList paths = QCoreApplication::libraryPaths();
 
     foreach (const QString &path, paths) {
@@ -228,19 +239,23 @@ void Kernel::loadPlugins()
         foreach (const QString &fileName, pluginsDir.entryList(QDir::Files)) {
             QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
             QObject *pluginObject = loader.instance();
-            if (pluginObject) {
-                PluginInterface *pluginInterface = qobject_cast<PluginInterface*>(pluginObject);
-                if (pluginInterface) {
-                    pluginInterface->setTaskStatus(TaskStopped);
-                    const QString pluginName = pluginObject->metaObject()->className();
-                    m_settings->beginGroup("plugins");
-                    const bool enabled = m_settings->value(pluginName + ".enabled", /**defaul=*/true).toBool();
-                    m_settings->endGroup();
-                    pluginInterface->setEnabled(enabled);
-                    m_pluginModel->addPlugin(pluginInterface);
-                }
-            }
+            if (pluginObject)
+                plugins << pluginObject;
         }
+    }
+#endif
+
+    foreach (QObject *pluginObject, plugins) {
+        PluginInterface *pluginInterface = qobject_cast<PluginInterface*>(pluginObject);
+        if (!pluginInterface)
+            continue;
+        pluginInterface->setTaskStatus(TaskStopped);
+        const QString pluginName = pluginObject->metaObject()->className();
+        m_settings->beginGroup("plugins");
+        const bool enabled = m_settings->value(pluginName + ".enabled", /**defaul=*/true).toBool();
+        m_settings->endGroup();
+        pluginInterface->setEnabled(enabled);
+        m_pluginModel->addPlugin(pluginInterface);
     }
 
     const int count = m_pluginModel->rowCount();

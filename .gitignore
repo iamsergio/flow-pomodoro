@@ -31,3 +31,4 @@ Makefile*
 build-src*
 /cov-int
 /src/version.h
+/plugins/*.a

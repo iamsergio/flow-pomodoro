@@ -14,6 +14,12 @@ contains(QT_CONFIG, dbus) {
     DEFINES += FLOW_DBUS
 }
 
+static {
+    DEFINES += FLOW_STATIC_BUILD
+    LIBS += -lshellscript
+    LIBPATH += $$PWD/../plugins/
+}
+
 include("src.pri")
 SOURCES += quickview.cpp \
            main.cpp
