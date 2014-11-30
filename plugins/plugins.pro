@@ -4,3 +4,5 @@ contains(QT_CONFIG, dbus) {
     SUBDIRS += kmail
     SUBDIRS += pidgin
 }
+
+SUBDIRS += shellscript
