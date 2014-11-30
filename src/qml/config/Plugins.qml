@@ -41,16 +41,18 @@ Item {
             height: 30 * _controller.dpiFactor
             spacing: 30 * _controller.dpiFactor
 
-            RegularText {
+            Text {
                 height: row.height
                 width: 150 * _controller.dpiFactor
                 text: textRole
+                renderType: _controller.textRenderType
+                font.pixelSize: _style.regularTextSize
+                color: _style.regularTextColor
             }
 
             FlowCheckBox {
                 anchors.verticalCenterOffset: -2
                 anchors.verticalCenter: parent.verticalCenter
-                height: row.height
                 checked: enabledRole
                 onCheckedChanged: {
                     _pluginModel.setPluginEnabled(checked, index)
