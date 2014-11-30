@@ -1,6 +1,5 @@
 include ("../../global.pri")
 
-QT       += dbus
 CONFIG   += plugin
 TARGET = shellscript
 TEMPLATE = lib
