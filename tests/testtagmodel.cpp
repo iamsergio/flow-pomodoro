@@ -120,6 +120,6 @@ void TestTagModel::testFromFile()
         }
     }
 
-    tagsModelSpy->deleteLater();
-    unsortedTagsModelSpy->deleteLater();
+    delete tagsModelSpy;
+    delete unsortedTagsModelSpy;
 }
