@@ -599,7 +599,7 @@ QString Controller::currentTitleText() const
 
 QString Controller::version() const
 {
-    if (Version::hasGit || !Version::isTag) {
+    if (Version::hasGit && !Version::isTag) {
         return QString("git-") + Version::current_branch + "-" + gitShortSHA1();
     } else {
         return STR(FLOW_VERSION);
