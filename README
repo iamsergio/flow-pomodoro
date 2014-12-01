@@ -1,7 +1,23 @@
-Qt 5.1 with QtQuick Controls and Layouts is required.
-On Windows 5.2 is recommended unless you don't want transparency.
+--------------------------------------------------------------------------------
+SUPPORTED PLATFORMS
 
-Building instructions:
-qmake && make
+    Tested: Linux, Windows 7, OSX, Android {4.4, 5.0}, BlackBerry 10, iOS
+--------------------------------------------------------------------------------
+PREBUILT PACKAGES
 
-Feel free to checkout the cmake branch and fix plugin building.
+    Windows  : https://github.com/iamsergio/flow-pomodoro/releases
+    Android  : https://play.google.com/store/apps/details?id=com.kdab.flow_pomodoro
+    Archlinux: https://aur.archlinux.org/packages/flow-pomodoro/
+--------------------------------------------------------------------------------
+DEPENDENCIES
+
+  Qt >= 5.3.0 (QtDeclarative, QtQuickControls and QtGraphicalEffects)
+--------------------------------------------------------------------------------
+BUILD
+
+    qmake && make
+--------------------------------------------------------------------------------
+INSTALL
+
+    make INSTALL_ROOT=/usr/local/ install
+--------------------------------------------------------------------------------
