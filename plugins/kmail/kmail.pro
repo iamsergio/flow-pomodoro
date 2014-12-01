@@ -1,4 +1,5 @@
 include ("../../global.pri")
+include ("../plugins.pri")
 
 QT       += qml quick dbus
 CONFIG   += plugin
