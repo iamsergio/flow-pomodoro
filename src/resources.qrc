@@ -1,6 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="/">
-    <file>translations/flow_pt_PT.qm</file>
+    <!-- <file>translations/flow_pt_PT.qm</file> -->
     <file>img/icon.png</file>
     <file>fonts/fontawesome-webfont.ttf</file>
     <file>fonts/open-sans/OpenSans-Bold.ttf</file>
