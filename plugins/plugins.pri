@@ -1,2 +1,2 @@
-target.path = /lib/qt/plugins/flow/
+target.path = /lib/kde4/plugins/flow/
 INSTALLS += target
