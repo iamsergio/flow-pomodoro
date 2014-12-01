@@ -88,3 +88,7 @@ windows {
 }
 
 DESTDIR = ../
+
+# For make INSTAL_ROOT=prefix install
+target.path = /bin/
+INSTALLS += target
