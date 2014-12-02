@@ -53,15 +53,3 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
     SOURCES += $$PWD/webdavsyncer.cpp
     HEADERS += $$PWD/webdavsyncer.h
 }
-
-!contains(DEFINES, UNIT_TEST_RUN):linux {
-    version.target = version.h
-    version.commands = $$PWD/generate_version.sh $$PWD
-
-    exists($$PWD/../.git) { # are we in a git repo ?
-        version.depends = $$PWD/../.git
-    }
-
-    QMAKE_EXTRA_TARGETS += version
-    PRE_TARGETDEPS += version.h
-}

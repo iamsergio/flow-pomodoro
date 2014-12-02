@@ -26,7 +26,6 @@
 #include "webdavsyncer.h"
 #include "utils.h"
 #include "loadmanager.h"
-#include "version.h"
 
 #include <QTimer>
 #include <QScreen>
@@ -599,15 +598,7 @@ QString Controller::currentTitleText() const
 
 QString Controller::version() const
 {
-#ifndef DEVELOPER_MODE
     return STR(FLOW_VERSION);
-#endif
-
-    if (Version::hasGit && !Version::isTag) {
-        return QString("git-") + Version::current_branch + "-" + gitShortSHA1();
-    } else {
-        return STR(FLOW_VERSION);
-    }
 }
 
 bool Controller::optionsContextMenuVisible() const
@@ -1072,19 +1063,9 @@ LoadManager* Controller::loadManager() const
     return m_loadManager;
 }
 
-QString Controller::gitSHA1() const
-{
-    return Version::last_commit_sha1;
-}
-
 QString Controller::gitDate() const
 {
-    return Version::last_commit_date;
-}
-
-QString Controller::gitShortSHA1() const
-{
-    return gitSHA1().mid(0, 10);
+    return STR(FLOW_VERSION_DATE);
 }
 
 void Controller::setHideEmptyTags(bool hide)

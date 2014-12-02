@@ -219,8 +219,6 @@ public:
     void setLoadManager(LoadManager *);
     LoadManager *loadManager() const;
 
-    QString gitShortSHA1() const;
-    QString gitSHA1() const;
     QString gitDate() const;
 
     void setHideEmptyTags(bool);
