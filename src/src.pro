@@ -77,7 +77,7 @@ RESOURCES += resources.qrc
 TRANSLATIONS += translations/flow_pt_PT.ts
 CODECFORSRC  = UTF-8
 
-linux:!android {
+linux:!android:contains(DEFINES, DEVELOPER_MODE) {
     QMAKE_POST_LINK += "$$PWD/runqmllint.sh $$PWD/qml"
     QMAKE_POST_LINK += "; $$PWD/validate_qrc.sh $$PWD/"
 }
