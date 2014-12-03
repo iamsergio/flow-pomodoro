@@ -101,7 +101,7 @@ Rectangle {
         }
 
         Loader {
-            // Startup performance improvement, since QtQuick.Controlls slows this down
+            // Startup performance improvement, since QtQuick.Controls slows this down
             id: taskTextFieldLoader
             anchors.left: textItem.left
             anchors.top: parent.top
