@@ -119,6 +119,10 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
 #ifndef NO_WEBDAV
     , m_webDavSyncer(new WebDAVSyncer(this))
 #endif
+#if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
+    , m_systrayIcon(0)
+    , m_trayMenu(0)
+#endif
 {
     m_qmlEngine->rootContext()->setObjectName("QQmlContext"); // GammaRay convenience
     registerQmlTypes();
