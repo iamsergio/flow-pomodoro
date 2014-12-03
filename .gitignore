@@ -40,3 +40,6 @@ release/
 /distros/archlinux/pkg/
 /distros/archlinux/*.zip
 /distros/archlinux/*.xz
+/src/object_script.flow.*
+*.dll
+*.zip
