@@ -33,9 +33,6 @@
 #include <QQmlExpression>
 #include <QQmlContext>
 #include <QKeyEvent>
-#ifdef QT_WIDGETS_LIB
-#include <QSystemTrayIcon>
-#endif
 #include <qglobal.h>
 
 enum {
