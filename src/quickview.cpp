@@ -58,6 +58,8 @@ QuickView::QuickView(Kernel *kernel)
     readInitialPosition();
     readGeometryType();
 
+    connect(m_controller, &Controller::stickyWindowChanged, this, &QuickView::setupWindowFlags);
+
     QString main = Utils::isMobile() ? "LoadingScreen.qml" : "MainDesktop.qml";
 
     Utils::printTimeInfo("QuickView: Set Source START");
@@ -85,7 +87,7 @@ QuickView::QuickView(Kernel *kernel)
     if (Utils::isMobile()) {
         setResizeMode(QQuickView::SizeRootObjectToView);
     } else {
-        setFlags(flags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Tool);
+        setupWindowFlags();
         setResizeMode(QQuickView::SizeViewToRootObject);
         setupGeometry();
     }
@@ -283,6 +285,15 @@ void QuickView::keyReleaseEvent(QKeyEvent *event)
 void QuickView::toggleVisible()
 {
     setVisible(!isVisible());
+}
+
+void QuickView::setupWindowFlags()
+{
+    QFlags<Qt::WindowType> f = /*flags() |*/ Qt::FramelessWindowHint;
+    if (m_controller->stickyWindow())
+        f |= Qt::WindowStaysOnTopHint | Qt::Tool;
+
+    setFlags(f);
 }
 
 void QuickView::setGeometryType(GeometryType geometryType)

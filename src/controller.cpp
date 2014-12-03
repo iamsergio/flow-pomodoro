@@ -48,7 +48,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_tickTimer(new QTimer(this))
     , m_afterAddingTimer(new QTimer(this))
     , m_elapsedMinutes(0)
-    , m_expanded(isMobile()) // Mobile is always expanded
+    , m_expanded(isMobile())
     , m_page(MainPage)
     , m_popupVisible(false)
     , m_editMode(EditModeNone)
@@ -73,6 +73,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_loadManager(new LoadManager(this))
     , m_hideEmptyTags(false)
     , m_useSystray(false)
+    , m_stickyWindow(true)
 {
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
@@ -86,6 +87,9 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     setKeepScreenOnDuringPomodoro(m_settings->value("keepScreenOnDuringPomodoro", /*default=*/ true).toInt());
     m_hideEmptyTags = m_settings->value("hideEmptyTags", /*default=*/ false).toBool();
     m_useSystray = m_settings->value("useSystray", /*default=*/ true).toBool();
+    m_stickyWindow = m_settings->value("stickyWindow", /*default=*/ true).toBool();
+
+    m_expanded = isMobile() || !m_stickyWindow;
 
     m_host = m_settings->value("webdavHost").toString();
     m_user = m_settings->value("webdavUser").toString();
@@ -259,7 +263,7 @@ bool Controller::expanded() const
 
 void Controller::setExpanded(bool expanded)
 {
-    if (isMobile())
+    if (isMobile() || !m_stickyWindow)
         return;
 
     if (expanded != m_expanded) {
@@ -1101,4 +1105,18 @@ void Controller::setUseSystray(bool use)
 bool Controller::useSystray() const
 {
     return m_useSystray;
+}
+
+void Controller::setStickyWindow(bool sticky)
+{
+    if (sticky != m_stickyWindow) {
+        m_stickyWindow = sticky;
+        m_settings->setValue("stickyWindow", QVariant(sticky));
+        emit stickyWindowChanged();
+    }
+}
+
+bool Controller::stickyWindow() const
+{
+    return m_stickyWindow;
 }

@@ -81,6 +81,7 @@ protected:
 
 private Q_SLOTS:
     void toggleVisible();
+    void setupWindowFlags();
 
 Q_SIGNALS:
     void contractedHeightChanged();

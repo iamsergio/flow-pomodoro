@@ -165,6 +165,7 @@ Item {
             model: windowPositionModel
             currentIndex: _window.initialPosition
             width: 150 * _controller.dpiFactor
+            enabled: _controller.stickyWindow
             onCurrentIndexChanged: {
                 _window.initialPosition = currentIndex
             }
@@ -181,6 +182,7 @@ Item {
         ComboBox {
             id: geometryTypesCombo
             visible: !_controller.isMobile
+            enabled: _controller.stickyWindow
             model: windowGeometryTypesModel
             currentIndex: _window.geometryType
             width: 150 * _controller.dpiFactor
@@ -188,5 +190,23 @@ Item {
                 _window.geometryType = currentIndex
             }
         }
+
+        Text {
+            visible: !_controller.isMobile
+            text: qsTr("Sticky Window (requires restart)")
+            font.pixelSize: 12 * _controller.dpiFactor
+        }
+
+        FlowCheckBox {
+            id: stickyWindow
+            visible: !_controller.isMobile
+            checked: _controller.stickyWindow
+            Binding {
+                target: _controller
+                property: "stickyWindow"
+                value: stickyWindow.checked
+            }
+        }
+
     }
 }

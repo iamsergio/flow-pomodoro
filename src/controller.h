@@ -36,6 +36,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(bool stickyWindow READ stickyWindow WRITE setStickyWindow NOTIFY stickyWindowChanged)
     Q_PROPERTY(bool useSystray READ useSystray WRITE setUseSystray NOTIFY useSystrayChanged)
     Q_PROPERTY(QString qtVersion READ qtVersion CONSTANT)
     Q_PROPERTY(bool hideEmptyTags READ hideEmptyTags WRITE setHideEmptyTags NOTIFY hideEmptyTagsChanged)
@@ -229,6 +230,9 @@ public:
     void setUseSystray(bool);
     bool useSystray() const;
 
+    void setStickyWindow(bool);
+    bool stickyWindow() const;
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);
@@ -265,6 +269,7 @@ private Q_SLOTS:
     void setStartupFinished();
 
 Q_SIGNALS:
+    void stickyWindowChanged();
     void useSystrayChanged();
     void hideEmptyTagsChanged();
     void loadManagerChanged();
@@ -367,6 +372,7 @@ private:
     LoadManager* m_loadManager;
     bool m_hideEmptyTags;
     bool m_useSystray;
+    bool m_stickyWindow;
 };
 
 #endif
