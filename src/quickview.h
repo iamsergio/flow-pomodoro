@@ -73,6 +73,9 @@ public:
     void setContractedHeight(int);
     int contractedHeight() const;
 
+public Q_SLOTS:
+    void showWidgetContextMenu(const QPoint &pos);
+
 protected:
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 

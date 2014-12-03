@@ -6,10 +6,6 @@ Main {
     id: root
     property bool smallMode: !(_controller.expanded || _window.geometryType === QuickView.GeometryStandard)
 
-    onRequestGlobalContextMenu: {
-        globalContextMenu.popup()
-    }
-
     topBarItem:
         Item {
         id: header
@@ -129,9 +125,5 @@ Main {
                 }
             }
         }
-    }
-
-    GlobalContextMenu {
-        id: globalContextMenu
     }
 }

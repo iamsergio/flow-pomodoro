@@ -36,6 +36,9 @@
 #include <QQmlEngine>
 #include <QQuickItem>
 #include <QGuiApplication>
+#ifdef QT_WIDGETS_LIB
+# include <QMenu>
+#endif
 
 QuickView::QuickView(Kernel *kernel)
     : QQuickView(kernel->qmlEngine(), 0)
@@ -322,4 +325,55 @@ void QuickView::setContractedHeight(int contractedHeight)
 int QuickView::contractedHeight() const
 {
     return m_contractedHeight;
+}
+
+void QuickView::showWidgetContextMenu(const QPoint &pos)
+{
+#ifdef QT_WIDGETS_LIB
+
+    // Widget context menu because the QML one has OpenGL artifacts on many cards I've tested
+
+    static QMenu *contextMenu = 0;
+    if (contextMenu) {
+        // Protect against re-entrancy
+        contextMenu->deleteLater();
+        contextMenu = 0;
+        return;
+    }
+
+    contextMenu = new QMenu();
+    QAction *pauseAction = m_controller->currentTask()->running() ? new QAction(tr("Pause"), contextMenu)
+                                                                  : new QAction(tr("Resume"), contextMenu);
+    QAction *stopAction = new QAction(tr("Stop"), contextMenu);
+    QAction *aboutAction = new QAction(tr("About"), contextMenu);
+    QAction *quitAction = new QAction(tr("Quit"), contextMenu);
+
+    if (!m_controller->rightClickedTask() && !m_controller->currentTask()->stopped()) {
+        contextMenu->addAction(pauseAction);
+        contextMenu->addAction(stopAction);
+    }
+
+    if (m_controller->currentPage() != Controller::AboutPage)
+        contextMenu->addAction(aboutAction);
+
+    contextMenu->addAction(quitAction);
+
+    QAction *action = contextMenu->exec(mapToGlobal(pos));
+    contextMenu->deleteLater();
+    contextMenu = 0;
+
+    if (action == aboutAction) {
+        m_controller->setExpanded(true);
+        m_controller->setCurrentPage(Controller::AboutPage);
+    } else if (action == quitAction) {
+        qApp->quit();
+    } else if (action == pauseAction) {
+        m_controller->pausePomodoro();
+    } else if (action == stopAction) {
+        m_controller->stopPomodoro();
+    }
+
+#else
+    Q_UNUSED(pos);
+#endif
 }

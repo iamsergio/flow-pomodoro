@@ -818,7 +818,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
         } else {
             setExpanded(false);
         }
-        return true;
+        return false;
     }
 
     if (m_page != MainPage)

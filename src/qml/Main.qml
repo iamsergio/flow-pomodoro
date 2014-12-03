@@ -7,7 +7,6 @@ Rectangle {
 
     property string titleText: _controller.currentTitleText ? _controller.currentTitleText : _style.slackingText
     property alias topBarItem: topBar.children
-    signal requestGlobalContextMenu()
 
     radius: _controller.isMobile ? 0 : 4
     color: "transparent"
@@ -49,7 +48,7 @@ Rectangle {
                 } else if (mouse.button === Qt.RightButton) {
                     if (_controller.editMode === Controller.EditModeNone) {
                         _controller.requestContextMenu(null) // reset task
-                        root.requestGlobalContextMenu()
+                        _window.showWidgetContextMenu(Qt.point(mouse.x, mouse.y))
                     }
                 }
             }
