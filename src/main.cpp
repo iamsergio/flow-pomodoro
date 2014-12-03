@@ -53,12 +53,12 @@ void initDBus(Controller *controller)
         qWarning() << "Cannot connect to the D-Bus session bus.\n"
                       "To start it, run:\n"
                       "\teval `dbus-launch --auto-syntax`\n";
-        exit(-1);
+        return;
     }
 
     if (!QDBusConnection::sessionBus().registerService("com.kdab.flow-pomodoro.FlowInterface")) {
         qWarning() << QDBusConnection::sessionBus().lastError();
-        exit(-2);
+        return;
     }
 
     Flow *flowDBusInterface = new Flow(controller, qApp);
