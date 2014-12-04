@@ -87,6 +87,8 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             font.pixelSize: 20 * _controller.dpiFactor
+                            fontSizeMode: Text.Fit
+                            minimumPixelSize: 16 * _controller.dpiFactor
                         }
 
                         Rectangle {
