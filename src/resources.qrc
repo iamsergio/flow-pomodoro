@@ -16,6 +16,7 @@
     <file>qml/FontAwesomeIcon.qml</file>
     <file>qml/FlowCircularProgressIndicator.qml</file>
     <file>qml/FlowCheckBox.qml</file>
+    <file>qml/FlowScrollBar.qml</file>
     <file>qml/FlowSwitch.qml</file>
     <file>qml/GlobalContextMenu.qml</file>
     <file>qml/InputPopup.qml</file>

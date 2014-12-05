@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Controls 1.0
 import Controller 1.0
 import ".."
 
@@ -8,7 +9,7 @@ Item {
 
     Text {
         id: smallText1
-        anchors.topMargin: _style.marginBig
+        anchors.topMargin: _style.marginMedium
         anchors.leftMargin: _style.marginMedium
         anchors.top: parent.top
         anchors.left: parent.left
@@ -32,10 +33,12 @@ Item {
         anchors.top: smallText1.bottom
         anchors.rightMargin: _style.marginMedium
         anchors.leftMargin: _style.marginMedium
-        anchors.topMargin: 25 * _controller.dpiFactor
+        anchors.topMargin: 15 * _controller.dpiFactor
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
+        boundsBehavior: Flickable.StopAtBounds
+
         model: _pluginModel
         height: 60
         spacing: 5 * _controller.dpiFactor
@@ -98,7 +101,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: row.bottom
-                height: helpText.height + (helpText.anchors.topMargin * 3 * _controller.dpiFactor) + (errorText.visible ? errorText.height : 0) + configItemContainer.height
+                height: helpText.height + (helpText.anchors.topMargin * 4 * _controller.dpiFactor) + (errorText.visible ? errorText.height : 0) + configItemContainer.height
                 visible: icon.expanded
 
                 Text {
@@ -116,13 +119,27 @@ Item {
                     textFormat: Text.RichText
                 }
 
+                Item {
+                    id: configItemContainer
+                    height: childrenRect.height
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: helpText.bottom
+                    anchors.topMargin: 5 * _controller.dpiFactor
+                    Component.onCompleted: {
+                        if (configItem) {
+                            configItem.parent = configItemContainer
+                        }
+                    }
+                }
+
                 Text {
                     id: errorText
                     color: "red"
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.leftMargin: 5 * _controller.dpiFactor
-                    anchors.top: helpText.bottom
+                    anchors.top: configItemContainer.bottom
                     anchors.topMargin: 5 * _controller.dpiFactor
                     font.pixelSize: 12 * _controller.dpiFactor
                     wrapMode: Text.WordWrap
@@ -130,20 +147,14 @@ Item {
                     visible: objectRole.lastError
                     text: objectRole.lastError ? "<b>" + qsTr("Error") + ": </b>" + objectRole.lastError : ""
                 }
-
-                Item {
-                    id: configItemContainer
-                    height: childrenRect.height
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.top: errorText.bottom
-                    Component.onCompleted: {
-                        if (configItem) {
-                            configItem.parent = configItemContainer
-                        }
-                    }
-                }
             }
         }
+    }
+
+    FlowScrollBar {
+        anchors.left: listView.right
+        anchors.top: listView.top
+        anchors.bottom: listView.bottom
+        flickable: listView
     }
 }

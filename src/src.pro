@@ -41,6 +41,7 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/FontAwesomeIcon.qml \
                qml/FlowCircularProgressIndicator.qml \
                qml/FlowCheckBox.qml \
+               qml/FlowScrollBar.qml \
                qml/FlowSwitch.qml \
                qml/InputPopup.qml \
                qml/GlobalContextMenu.qml \
