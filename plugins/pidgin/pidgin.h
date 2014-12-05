@@ -28,6 +28,7 @@
 class PidginPlugin : public QObject, public PluginInterface
 {
     Q_OBJECT
+    Q_PROPERTY(QString lastError READ lastError NOTIFY lastErrorChanged)
     Q_PLUGIN_METADATA(IID "com.kdab.flow.PluginInterface")
     Q_INTERFACES(PluginInterface)
 
@@ -41,9 +42,16 @@ public:
     QString text() const Q_DECL_OVERRIDE;
     QString helpText() const Q_DECL_OVERRIDE;
 
+    QString lastError() const;
+
+Q_SIGNALS:
+    void lastErrorChanged();
+
 private:
+	void setLastError(const QString &);
     void update(bool enable);
     bool m_enabled;
+    QString m_lastError;
 };
 
 #endif

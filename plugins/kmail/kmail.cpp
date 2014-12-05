@@ -49,7 +49,7 @@ void KMailPlugin::setSystrayIconsNotificationsEnabled(bool enable)
 
     const bool queued = QDBusConnection::sessionBus().send(message);
     if (!queued) {
-        qWarning() << "Could not queue D-Bus message";
+        setLastError(tr("Could not queue D-Bus message"));
     }
 }
 
@@ -60,7 +60,7 @@ void KMailPlugin::setNewMailAgentEnabled(bool enable)
 
     const bool queued = QDBusConnection::sessionBus().send(message);
     if (!queued) {
-        qWarning() << "Could not queue D-Bus message for new mail agent";
+        setLastError(tr("Could not queue D-Bus message for new mail agent"));
     }
 }
 
@@ -85,4 +85,18 @@ QString KMailPlugin::text() const
 QString KMailPlugin::helpText() const
 {
     return tr("Disables KMail systray notifications and notifier agent popups.");
+}
+
+void KMailPlugin::setLastError(const QString &lastError)
+{
+	qWarning() << Q_FUNC_INFO << lastError;
+    if (lastError != m_lastError) {
+        m_lastError = lastError;
+        emit lastErrorChanged();
+    }
+}
+
+QString KMailPlugin::lastError() const
+{
+    return m_lastError;
 }

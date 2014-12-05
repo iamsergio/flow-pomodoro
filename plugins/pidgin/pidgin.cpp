@@ -48,7 +48,7 @@ void PidginPlugin::update(bool enable)
     message << "/pidgin/docklet/change_icon_on_unread" << (enable ? 1 : 0);
     const bool queued = QDBusConnection::sessionBus().send(message);
     if (!queued) {
-        qWarning() << "Could not queue D-Bus message for pidgin";
+        setLastError(tr("Could not queue D-Bus message for pidgin"));
     }
 }
 
@@ -67,4 +67,18 @@ QString PidginPlugin::text() const
 QString PidginPlugin::helpText() const
 {
     return tr("Disables pidgin systray notifications. You need a patched pidgin, see FAQ.");
+}
+
+void PidginPlugin::setLastError(const QString &lastError)
+{
+	qWarning() << Q_FUNC_INFO << lastError;
+    if (lastError != m_lastError) {
+        m_lastError = lastError;
+        emit lastErrorChanged();
+    }
+}
+
+QString PidginPlugin::lastError() const
+{
+    return m_lastError;
 }

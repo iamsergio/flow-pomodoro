@@ -85,7 +85,7 @@ void ShellScriptPlugin::update(bool allowDistractions)
 
     QFile file(m_scriptName);
     if (!file.exists()) {
-        qDebug() << "ShellScriptPlugin: file doesn't exist" << m_scriptName;
+        setLastError(tr("File doesn't exist: %1").arg(m_scriptName));
         return;
     }
 
@@ -111,4 +111,18 @@ QString ShellScriptPlugin::text() const
 QString ShellScriptPlugin::helpText() const
 {
     return tr("Executes a shell script to enable/disable distractions.\nYou must create or edit <b>%1</b>. The first argument passed to the script will be <b>allow</b> or <b>disallow</b>.").arg(m_scriptName);
+}
+
+void ShellScriptPlugin::setLastError(const QString &lastError)
+{
+	qWarning() << Q_FUNC_INFO << lastError;
+    if (lastError != m_lastError) {
+        m_lastError = lastError;
+        emit lastErrorChanged();
+    }
+}
+
+QString ShellScriptPlugin::lastError() const
+{
+    return m_lastError;
 }

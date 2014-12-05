@@ -29,6 +29,7 @@
 class ShellScriptPlugin : public QObject, public PluginInterface
 {
     Q_OBJECT
+    Q_PROPERTY(QString lastError READ lastError NOTIFY lastErrorChanged)
     Q_PLUGIN_METADATA(IID "com.kdab.flow.PluginInterface")
     Q_INTERFACES(PluginInterface)
 
@@ -42,13 +43,20 @@ public:
     QString text() const Q_DECL_OVERRIDE;
     QString helpText() const Q_DECL_OVERRIDE;
 
+    QString lastError() const;
+
+Q_SIGNALS:
+    void lastErrorChanged();
+
 private:
+	void setLastError(const QString &);
     void update(bool blockDistractions);
     void startProcess(const QString &filename, const QStringList &arguments);
     bool m_enabled;
     QMutex m_mutex;
     bool m_allowingDistractions;
     QString m_scriptName;
+    QString m_lastError;
 };
 
 #endif
