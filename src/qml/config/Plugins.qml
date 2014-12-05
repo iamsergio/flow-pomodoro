@@ -39,6 +39,7 @@ Item {
         model: _pluginModel
         height: 60
         spacing: 5 * _controller.dpiFactor
+        clip: true
         delegate: Item {
             width: parent.width
             height: ((icon.expanded && helpTextRole) ? (25 + helpTextRect.height) : 25) * _controller.dpiFactor
@@ -97,7 +98,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: row.bottom
-                height: helpText.height + (helpText.anchors.topMargin * 3 * _controller.dpiFactor) + (errorText.visible ? errorText.height : 0)
+                height: helpText.height + (helpText.anchors.topMargin * 3 * _controller.dpiFactor) + (errorText.visible ? errorText.height : 0) + configItemContainer.height
                 visible: icon.expanded
 
                 Text {
@@ -130,6 +131,18 @@ Item {
                     text: objectRole.lastError ? "<b>" + qsTr("Error") + ": </b>" + objectRole.lastError : ""
                 }
 
+                Item {
+                    id: configItemContainer
+                    height: childrenRect.height
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: errorText.bottom
+                    Component.onCompleted: {
+                        if (configItem) {
+                            configItem.parent = configItemContainer
+                        }
+                    }
+                }
             }
         }
     }

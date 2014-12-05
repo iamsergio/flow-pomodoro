@@ -29,6 +29,8 @@
 
 class Controller;
 class QObject;
+class QQmlEngine;
+class QQuickItem;
 
 class PluginInterface
 {
@@ -43,6 +45,8 @@ public:
     virtual QString text() const = 0;
     virtual QString helpText() const = 0;
     virtual QObject *controller() = 0;
+    virtual void setQmlEngine(QQmlEngine *) = 0;
+    virtual QQuickItem* configureItem() const = 0;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, "com.kdab.flow.PluginInterface")

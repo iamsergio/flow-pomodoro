@@ -117,6 +117,16 @@ QObject *ShellScriptPlugin::controller()
     return this;
 }
 
+void ShellScriptPlugin::setQmlEngine(QQmlEngine *)
+{
+
+}
+
+QQuickItem *ShellScriptPlugin::configureItem() const
+{
+    return 0;
+}
+
 void ShellScriptPlugin::setLastError(const QString &lastError)
 {
     if (!lastError.isEmpty())

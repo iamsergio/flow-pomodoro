@@ -259,6 +259,7 @@ void Kernel::loadPlugins()
         const bool enabled = m_settings->value(pluginName + ".enabled", /**defaul=*/true).toBool();
         m_settings->endGroup();
         pluginInterface->setEnabled(enabled);
+        pluginInterface->setQmlEngine(m_qmlEngine);
         m_pluginModel->addPlugin(pluginInterface);
     }
 

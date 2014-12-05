@@ -75,6 +75,16 @@ QObject *PidginPlugin::controller()
     return this;
 }
 
+void PidginPlugin::setQmlEngine(QQmlEngine *)
+{
+
+}
+
+QQuickItem *PidginPlugin::configureItem() const
+{
+    return 0;
+}
+
 void PidginPlugin::setLastError(const QString &lastError)
 {
     if (!lastError.isEmpty())

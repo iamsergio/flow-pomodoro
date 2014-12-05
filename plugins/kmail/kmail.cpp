@@ -93,6 +93,16 @@ QObject *KMailPlugin::controller()
     return this;
 }
 
+void KMailPlugin::setQmlEngine(QQmlEngine *)
+{
+
+}
+
+QQuickItem *KMailPlugin::configureItem() const
+{
+    return 0;
+}
+
 void KMailPlugin::setLastError(const QString &lastError)
 {
     if (!lastError.isEmpty())

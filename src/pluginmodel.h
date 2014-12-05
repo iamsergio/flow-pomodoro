@@ -35,7 +35,8 @@ public:
         TextRole = Qt::UserRole + 1,
         HelpTextRole,
         EnabledRole,
-        ObjectRole
+        ObjectRole,
+        ConfigItemRole
     };
 
     explicit PluginModel(Kernel *kernel, QObject *parent = 0);

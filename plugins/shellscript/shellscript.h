@@ -43,6 +43,8 @@ public:
     QString text() const Q_DECL_OVERRIDE;
     QString helpText() const Q_DECL_OVERRIDE;
     QObject *controller() Q_DECL_OVERRIDE;
+    void setQmlEngine(QQmlEngine *) Q_DECL_OVERRIDE;
+    QQuickItem *configureItem() const Q_DECL_OVERRIDE;
 
     QString lastError() const;
 

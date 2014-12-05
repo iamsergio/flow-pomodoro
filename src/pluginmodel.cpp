@@ -22,6 +22,8 @@
 #include "settings.h"
 #include "kernel.h"
 
+#include <QQuickItem>
+
 PluginModel::PluginModel(Kernel *kernel, QObject *parent)
     : QAbstractListModel(parent)
     , m_kernel(kernel)
@@ -44,6 +46,7 @@ QHash<int, QByteArray> PluginModel::roleNames() const
     roles.insert(EnabledRole, "enabledRole");
     roles.insert(HelpTextRole, "helpTextRole");
     roles.insert(ObjectRole, "objectRole");
+    roles.insert(ConfigItemRole, "configItem");
 
     return roles;
 }
@@ -65,6 +68,8 @@ QVariant PluginModel::data(const QModelIndex &index, int role) const
         return plugin->helpText();
     case ObjectRole:
         return QVariant::fromValue<QObject*>(plugin->controller());
+    case ConfigItemRole:
+        return QVariant::fromValue<QObject*>(plugin->configureItem());
     }
 
     return QVariant();
