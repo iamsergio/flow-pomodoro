@@ -50,6 +50,7 @@ Q_SIGNALS:
     void lastErrorChanged();
 
 private:
+    bool checkSanity();
     void setLastError(const QString &);
     void update(bool blockDistractions);
     void startProcess(const QString &filename, const QStringList &arguments);

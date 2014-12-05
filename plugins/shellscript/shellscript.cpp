@@ -63,6 +63,7 @@ ShellScriptPlugin::ShellScriptPlugin() : QObject(), PluginInterface()
 
     QString directory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
     m_scriptName = directory + "/" + m_scriptName;
+    checkSanity();
 }
 
 void ShellScriptPlugin::setEnabled(bool enabled)
@@ -84,11 +85,8 @@ void ShellScriptPlugin::update(bool allowDistractions)
         return;
 
     setLastError("");
-    QFile file(m_scriptName);
-    if (!file.exists()) {
-        setLastError(tr("File doesn't exist: %1").arg(m_scriptName));
+    if (!checkSanity())
         return;
-    }
 
     QStringList args;
     args << (allowDistractions ? "allow" : "disallow");
@@ -132,4 +130,15 @@ void ShellScriptPlugin::setLastError(const QString &lastError)
 QString ShellScriptPlugin::lastError() const
 {
     return m_lastError;
+}
+
+bool ShellScriptPlugin::checkSanity()
+{
+    QFile file(m_scriptName);
+    if (!file.exists()) {
+        setLastError(tr("File doesn't exist: %1").arg(m_scriptName));
+        return false;
+    }
+
+    return true;
 }
