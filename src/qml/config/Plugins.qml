@@ -95,17 +95,14 @@ Item {
                 color: Qt.lighter(_style.queueBackgroundColor, 1.3)
                 radius: 5
                 anchors.left: parent.left
-                // anchors.leftMargin: titleText.x
-
                 anchors.right: parent.right
                 anchors.top: row.bottom
-                height: helpText.height + 10 * _controller.dpiFactor
+                height: helpText.height + (helpText.anchors.topMargin * 3 * _controller.dpiFactor) + (errorText.visible ? errorText.height : 0)
                 visible: icon.expanded
 
                 Text {
                     id: helpText
                     text: helpTextRole
-
                     renderType: _controller.textRenderType
                     font.pixelSize: 12 * _controller.dpiFactor
                     wrapMode: Text.WordWrap
@@ -117,6 +114,22 @@ Item {
                     anchors.topMargin: 5 * _controller.dpiFactor
                     textFormat: Text.RichText
                 }
+
+                Text {
+                    id: errorText
+                    color: "red"
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 5 * _controller.dpiFactor
+                    anchors.top: helpText.bottom
+                    anchors.topMargin: 5 * _controller.dpiFactor
+                    font.pixelSize: 12 * _controller.dpiFactor
+                    wrapMode: Text.WordWrap
+                    textFormat: Text.RichText
+                    visible: objectRole.lastError
+                    text: objectRole.lastError ? "<b>" + qsTr("Error") + ": </b>" + objectRole.lastError : ""
+                }
+
             }
         }
     }

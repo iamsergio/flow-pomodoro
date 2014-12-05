@@ -43,6 +43,7 @@ QHash<int, QByteArray> PluginModel::roleNames() const
     roles.insert(TextRole, "textRole");
     roles.insert(EnabledRole, "enabledRole");
     roles.insert(HelpTextRole, "helpTextRole");
+    roles.insert(ObjectRole, "objectRole");
 
     return roles;
 }
@@ -62,6 +63,8 @@ QVariant PluginModel::data(const QModelIndex &index, int role) const
         return plugin->enabled();
     case HelpTextRole:
         return plugin->helpText();
+    case ObjectRole:
+        return QVariant::fromValue<QObject*>(plugin->controller());
     }
 
     return QVariant();

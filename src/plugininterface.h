@@ -28,6 +28,7 @@
 #include <QtPlugin>
 
 class Controller;
+class QObject;
 
 class PluginInterface
 {
@@ -41,6 +42,7 @@ public:
     virtual void setTaskStatus(TaskStatus status) = 0;
     virtual QString text() const = 0;
     virtual QString helpText() const = 0;
+    virtual QObject *controller() = 0;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, "com.kdab.flow.PluginInterface")

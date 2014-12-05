@@ -87,9 +87,14 @@ QString KMailPlugin::helpText() const
     return tr("Disables KMail systray notifications and notifier agent popups.");
 }
 
+QObject *KMailPlugin::controller()
+{
+    return this;
+}
+
 void KMailPlugin::setLastError(const QString &lastError)
 {
-	qWarning() << Q_FUNC_INFO << lastError;
+    qWarning() << Q_FUNC_INFO << lastError;
     if (lastError != m_lastError) {
         m_lastError = lastError;
         emit lastErrorChanged();

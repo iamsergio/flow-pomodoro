@@ -34,7 +34,8 @@ public:
     enum Roles {
         TextRole = Qt::UserRole + 1,
         HelpTextRole,
-        EnabledRole
+        EnabledRole,
+        ObjectRole
     };
 
     explicit PluginModel(Kernel *kernel, QObject *parent = 0);

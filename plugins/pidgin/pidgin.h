@@ -41,6 +41,7 @@ public:
     void setTaskStatus(TaskStatus status) Q_DECL_OVERRIDE;
     QString text() const Q_DECL_OVERRIDE;
     QString helpText() const Q_DECL_OVERRIDE;
+    QObject *controller() Q_DECL_OVERRIDE;
 
     QString lastError() const;
 
@@ -48,7 +49,7 @@ Q_SIGNALS:
     void lastErrorChanged();
 
 private:
-	void setLastError(const QString &);
+    void setLastError(const QString &);
     void update(bool enable);
     bool m_enabled;
     QString m_lastError;

@@ -69,9 +69,14 @@ QString PidginPlugin::helpText() const
     return tr("Disables pidgin systray notifications. You need a patched pidgin, see FAQ.");
 }
 
+QObject *PidginPlugin::controller()
+{
+    return this;
+}
+
 void PidginPlugin::setLastError(const QString &lastError)
 {
-	qWarning() << Q_FUNC_INFO << lastError;
+    qWarning() << Q_FUNC_INFO << lastError;
     if (lastError != m_lastError) {
         m_lastError = lastError;
         emit lastErrorChanged();
