@@ -83,6 +83,7 @@ void ShellScriptPlugin::update(bool allowDistractions)
     if (allowDistractions == m_allowingDistractions)
         return;
 
+    setLastError("");
     QFile file(m_scriptName);
     if (!file.exists()) {
         setLastError(tr("File doesn't exist: %1").arg(m_scriptName));

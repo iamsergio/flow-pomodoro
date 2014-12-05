@@ -66,6 +66,7 @@ void KMailPlugin::setNewMailAgentEnabled(bool enable)
 
 void KMailPlugin::update(bool enable)
 {
+    setLastError("");
     setSystrayIconsNotificationsEnabled(enable);
     setNewMailAgentEnabled(enable);
 }
