@@ -95,7 +95,8 @@ QObject *KMailPlugin::controller()
 
 void KMailPlugin::setLastError(const QString &lastError)
 {
-    qWarning() << Q_FUNC_INFO << lastError;
+    if (!lastError.isEmpty())
+        qWarning() << Q_FUNC_INFO << lastError;
     if (lastError != m_lastError) {
         m_lastError = lastError;
         emit lastErrorChanged();
