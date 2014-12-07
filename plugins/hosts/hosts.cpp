@@ -157,6 +157,11 @@ QString HostsPlugin::lastError() const
 bool HostsPlugin::checkSanity()
 {
     QFileInfo info(hostsFileName());
+    if (!info.exists()) {
+        setLastError(tr("Hosts file doesn't exist."));
+        return false;
+    }
+
     if (!info.isWritable()) {
         setLastError(tr("Hosts file isn't writable."));
         return false;
