@@ -6,5 +6,5 @@ TEMPLATE = subdirs
         SUBDIRS += pidgin
     }
 
-    SUBDIRS += shellscript
+    SUBDIRS += shellscript hosts
 }
