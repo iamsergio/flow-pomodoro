@@ -177,7 +177,7 @@ void HostsPlugin::updateHosts(bool allow)
 
     QFile file(hostsFileName());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        setLastError(tr("Failed to open %1 because %2").arg(hostsFileName()).arg(file.errorString()));
+        setLastError(tr("Failed to open %1 because %2 (%3)").arg(hostsFileName(), file.errorString()).arg(file.error()));
         return;
     }
 
@@ -231,7 +231,7 @@ void HostsPlugin::updateHosts(bool allow)
 
     QSaveFile fileWriter(hostsFileName());
     if (!fileWriter.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        setLastError(tr("Failed to open %1 because: %2").arg(hostsFileName(), file.errorString()));
+        setLastError(tr("Failed to open %1 for saving because: %2 (%3)").arg(hostsFileName(), file.errorString()).arg(fileWriter.error()));
         return;
     }
     fileWriter.write(data);
