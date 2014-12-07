@@ -127,6 +127,11 @@ QQuickItem *ShellScriptPlugin::configureItem() const
     return 0;
 }
 
+void ShellScriptPlugin::setSettings(QSettings *)
+{
+
+}
+
 void ShellScriptPlugin::setLastError(const QString &lastError)
 {
     if (!lastError.isEmpty())

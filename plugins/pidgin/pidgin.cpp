@@ -85,6 +85,11 @@ QQuickItem *PidginPlugin::configureItem() const
     return 0;
 }
 
+void PidginPlugin::setSettings(QSettings *)
+{
+
+}
+
 void PidginPlugin::setLastError(const QString &lastError)
 {
     if (!lastError.isEmpty())
