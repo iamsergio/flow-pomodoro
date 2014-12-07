@@ -130,7 +130,7 @@ QQuickItem *ShellScriptPlugin::configureItem() const
 void ShellScriptPlugin::setLastError(const QString &lastError)
 {
     if (!lastError.isEmpty())
-        qWarning() << Q_FUNC_INFO << lastError;
+        qWarning() << "ShellScriptPlugin:" << lastError;
     if (lastError != m_lastError) {
         m_lastError = lastError;
         emit lastErrorChanged();

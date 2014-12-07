@@ -106,7 +106,7 @@ QQuickItem *KMailPlugin::configureItem() const
 void KMailPlugin::setLastError(const QString &lastError)
 {
     if (!lastError.isEmpty())
-        qWarning() << Q_FUNC_INFO << lastError;
+        qWarning() << "KMailPlugin:" << lastError;
     if (lastError != m_lastError) {
         m_lastError = lastError;
         emit lastErrorChanged();

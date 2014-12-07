@@ -88,7 +88,7 @@ QQuickItem *PidginPlugin::configureItem() const
 void PidginPlugin::setLastError(const QString &lastError)
 {
     if (!lastError.isEmpty())
-        qWarning() << Q_FUNC_INFO << lastError;
+        qWarning() << "PidginPlugin:" << lastError;
     if (lastError != m_lastError) {
         m_lastError = lastError;
         emit lastErrorChanged();
