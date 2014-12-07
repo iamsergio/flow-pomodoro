@@ -40,7 +40,7 @@ static QString hostsFileName()
 #if defined(Q_OS_WINDOWS)
     return "C:\\Windows\\System32\\drivers\\etc\\hosts";
 #else
-    return "/data/etc/hosts";
+    return "/etc/hosts";
 #endif
 }
 
