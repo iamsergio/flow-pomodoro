@@ -53,6 +53,7 @@
 
 #ifdef FLOW_STATIC_BUILD
 Q_IMPORT_PLUGIN(ShellScriptPlugin)
+Q_IMPORT_PLUGIN(HostsPlugin)
 #endif
 
 static void registerQmlTypes()
