@@ -37,7 +37,7 @@ const char *const s_endTag = "# End Flow-pomodoro specific hosts, do not remove 
 
 static QString hostsFileName()
 {
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WIN)
     return "C:\\Windows\\System32\\drivers\\etc\\hosts";
 #else
     return "/etc/hosts";
