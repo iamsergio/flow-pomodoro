@@ -130,7 +130,7 @@ void HostsPlugin::setSettings(QSettings *settings)
     bool firstRun = m_settings->value("firstRun", /*default=*/ true).toBool();
     if (firstRun) {
         m_settings->setValue("firstRun", false);
-        QString examples = "www.facebook.com\nwww.9gag.com\nwww.gmail.com\n";
+        QString examples = "www.facebook.com\nwww.9gag.com\n";
         m_settings->setValue("hosts", examples);
         m_settings->sync();
     }
