@@ -10,3 +10,5 @@ SOURCES += shellscript.cpp
 
 INCLUDEPATH += ../../src/
 DESTDIR = ../
+
+RESOURCES += resources.qrc

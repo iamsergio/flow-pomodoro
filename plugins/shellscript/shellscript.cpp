@@ -55,14 +55,27 @@ ShellScriptPlugin::ShellScriptPlugin() : QObject(), PluginInterface()
   , m_allowingDistractions(true)
 {
     m_scriptName = "shell_script_plugin";
+    const QString suffix =
 #ifdef Q_OS_WIN
-    m_scriptName += ".bat";
+    ".bat";
 #else
-    m_scriptName += ".sh";
+    ".sh";
 #endif
 
-    QString directory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    m_scriptName = directory + "/" + m_scriptName;
+    QString dataDirectory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    m_scriptName = dataDirectory + "/" + m_scriptName + suffix;
+
+    // Create one from template if it doesn't exist
+    if (!QFile::exists(m_scriptName)) {
+        if (QFile::copy(":/plugins/shellscript/script_template" + suffix, m_scriptName)) {
+            QFlags<QFile::Permission> permissions = QFile::permissions(m_scriptName) | QFileDevice::WriteOwner | QFileDevice::ExeOwner;
+            if (!QFile::setPermissions(m_scriptName, permissions))
+                setLastError(tr("Failed to set permissions on %1").arg(m_scriptName));
+        } else {
+            setLastError(tr("Failed to create script %1").arg(m_scriptName));
+        }
+    }
+
     checkSanity();
 }
 

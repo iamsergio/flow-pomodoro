@@ -1,0 +1,6 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/plugins/shellscript/">
+    <file>script_template.sh</file>
+    <file>script_template.bat</file>
+</qresource>
+</RCC>
