@@ -97,6 +97,8 @@ void ShellScriptPlugin::update(bool allowDistractions)
     if (allowDistractions == m_allowingDistractions)
         return;
 
+    m_allowingDistractions = allowDistractions;
+
     setLastError("");
     if (!checkSanity())
         return;
