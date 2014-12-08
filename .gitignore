@@ -43,3 +43,4 @@ release/
 /src/object_script.flow.*
 *.dll
 *.zip
+/build
