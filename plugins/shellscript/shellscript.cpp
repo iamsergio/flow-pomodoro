@@ -68,6 +68,9 @@ ShellScriptPlugin::ShellScriptPlugin() : QObject(), PluginInterface()
     ".sh";
 #endif
 
+    // Fixes crash in static mode, because qqmlimport calls QPluginLoader::staticPlugins() before us.
+    moveToThread(qApp->thread());
+
     QString dataDirectory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
     m_scriptName = dataDirectory + "/" + m_scriptName + suffix;
 
