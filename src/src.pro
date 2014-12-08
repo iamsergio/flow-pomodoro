@@ -16,7 +16,7 @@ contains(QT_CONFIG, dbus) {
 
 static {
     DEFINES += FLOW_STATIC_BUILD
-    LIBS += -lshellscript
+    LIBS += -lshellscript -lhosts
     LIBPATH += $$PWD/../plugins/
 }
 
