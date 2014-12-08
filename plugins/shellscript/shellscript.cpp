@@ -24,6 +24,10 @@
 #include <QFile>
 #include <QRunnable>
 #include <QThreadPool>
+#include <QQmlComponent>
+#include <QQuickItem>
+#include <QQmlContext>
+#include <QQmlEngine>
 
 class RunScriptTask : public QRunnable
 {
@@ -53,6 +57,8 @@ private:
 ShellScriptPlugin::ShellScriptPlugin() : QObject(), PluginInterface()
   , m_enabled(false)
   , m_allowingDistractions(true)
+  , m_qmlEngine(0)
+  , m_configItem(0)
 {
     m_scriptName = "shell_script_plugin";
     const QString suffix =
@@ -132,14 +138,38 @@ QObject *ShellScriptPlugin::controller()
     return this;
 }
 
-void ShellScriptPlugin::setQmlEngine(QQmlEngine *)
+void ShellScriptPlugin::setQmlEngine(QQmlEngine *engine)
 {
+    Q_ASSERT(!m_qmlEngine && engine);
 
+#if defined(Q_OS_LINUX)
+    // We don't have a linux way to open a generic gui editor, xdg-open is trying to execute it instead
+    return;
+#endif
+
+    m_qmlEngine = engine;
+
+    QQmlComponent *component = new QQmlComponent(engine, QUrl("qrc:/plugins/shellscript/Config.qml"),
+                                                 QQmlComponent::PreferSynchronous, this);
+
+    if (component->isError()) {
+        setLastError("Error creating component: " + component->errorString());
+        return;
+    }
+
+    QQmlContext *subContext = new QQmlContext(engine->rootContext());
+    m_configItem = qobject_cast<QQuickItem*>(component->create(subContext));
+    subContext->setContextProperty("_plugin", this);
+
+    if (!m_configItem) {
+        setLastError("Error creating item");
+        return;
+    }
 }
 
 QQuickItem *ShellScriptPlugin::configureItem() const
 {
-    return 0;
+    return m_configItem;
 }
 
 void ShellScriptPlugin::setSettings(QSettings *)
@@ -160,6 +190,25 @@ void ShellScriptPlugin::setLastError(const QString &lastError)
 QString ShellScriptPlugin::lastError() const
 {
     return m_lastError;
+}
+
+void ShellScriptPlugin::editScript()
+{
+    QString command;
+#if defined(Q_OS_WINDOWS)
+    command = "notepad";
+#elif defined(Q_OS_OSX)
+    command = "open -a TextEdit";
+#elif defined(Q_OS_LINUX)
+    // Do nothing for now, xdg-open is trying to execute the file instead of opening an editor
+#endif
+
+    if (!command.isEmpty()) {
+        command += " " + m_scriptName;
+        if (QProcess::execute(command) != 0) {
+            setLastError(tr("Error running command"));
+        }
+    }
 }
 
 bool ShellScriptPlugin::checkSanity()

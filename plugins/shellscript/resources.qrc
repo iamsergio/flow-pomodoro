@@ -2,5 +2,6 @@
 <qresource prefix="/plugins/shellscript/">
     <file>script_template.sh</file>
     <file>script_template.bat</file>
+    <file>Config.qml</file>
 </qresource>
 </RCC>

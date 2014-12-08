@@ -49,6 +49,9 @@ public:
 
     QString lastError() const;
 
+public Q_SLOTS:
+    void editScript();
+
 Q_SIGNALS:
     void lastErrorChanged();
 
@@ -62,6 +65,8 @@ private:
     bool m_allowingDistractions;
     QString m_scriptName;
     QString m_lastError;
+    QQmlEngine *m_qmlEngine;
+    QQuickItem *m_configItem;
 };
 
 #endif

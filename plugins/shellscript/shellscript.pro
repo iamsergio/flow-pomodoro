@@ -12,3 +12,7 @@ INCLUDEPATH += ../../src/
 DESTDIR = ../
 
 RESOURCES += resources.qrc
+
+QT += quick
+
+OTHER_FILES += Config.qml
