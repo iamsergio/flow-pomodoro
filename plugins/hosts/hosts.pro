@@ -9,7 +9,7 @@ QT += qml quick
 HEADERS += hosts.h
 SOURCES += hosts.cpp
 
-RESOURCES += resources.qrc
+RESOURCES += hostsplugin.qrc
 
 INCLUDEPATH += ../../src/
 DESTDIR = ../

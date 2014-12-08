@@ -132,6 +132,11 @@ int main(int argc, char *argv[])
     qputenv("QT_QPA_PLATFORM","windows:fontengine=freetype");
     qInstallMessageHandler(windowsMessageHandler);
 #endif
+
+#ifdef FLOW_STATIC_BUILD
+    Q_INIT_RESOURCE(shellscriptplugin);
+    Q_INIT_RESOURCE(hostsplugin);
+#endif
     Application app(argc, argv);
     Utils::printTimeInfo("main: created QApplication");
     app.setOrganizationName("KDAB");
