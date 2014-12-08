@@ -99,7 +99,7 @@ void HostsPlugin::setQmlEngine(QQmlEngine *engine)
     Q_ASSERT(!m_qmlEngine && engine);
     m_qmlEngine = engine;
 
-    QQmlComponent *component = new QQmlComponent(engine, QUrl("qrc:/plugins/hosts/HostsConfig.qml"),
+    QQmlComponent *component = new QQmlComponent(engine, QUrl("qrc:/plugins/hosts/Config.qml"),
                                                  QQmlComponent::PreferSynchronous, this);
 
     if (component->isError()) {
