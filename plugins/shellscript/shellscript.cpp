@@ -38,7 +38,7 @@ static QString linuxTextEditor()
     static QString editor;
     if (editor.isNull()) {
         QStringList candidates;
-        candidates << "kwrite" << "kate" << "gedit" << "mousepad" << "emacs";
+        candidates << "kwrite" << "kate" << "gedit" << "mousepad" << "leafpad" << "emacs";
         foreach (const QString &candidate, candidates) {
             if (!QStandardPaths::findExecutable(candidate).isEmpty()) {
                 editor = candidate;
