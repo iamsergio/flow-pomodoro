@@ -225,7 +225,7 @@ QString ShellScriptPlugin::lastError() const
 void ShellScriptPlugin::editScript()
 {
     QString command;
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WIN)
     command = "notepad";
 #elif defined(Q_OS_OSX)
     command = "open -a TextEdit";
