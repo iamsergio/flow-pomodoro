@@ -230,7 +230,7 @@ void ShellScriptPlugin::editScript()
 
     if (!command.isEmpty()) {
         command += " \"" + m_scriptName + "\"";
-        if (QProcess::execute(command) != 0) {
+        if (!QProcess::startDetached(command)) {
             setLastError(tr("Error running command %1").arg(command));
         }
     }
