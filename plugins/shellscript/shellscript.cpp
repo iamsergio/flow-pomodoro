@@ -202,6 +202,11 @@ void ShellScriptPlugin::setSettings(QSettings *)
 
 }
 
+bool ShellScriptPlugin::enabledByDefault() const
+{
+    return true;
+}
+
 void ShellScriptPlugin::setLastError(const QString &lastError)
 {
     if (!lastError.isEmpty())

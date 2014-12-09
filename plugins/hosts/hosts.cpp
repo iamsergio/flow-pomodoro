@@ -141,6 +141,11 @@ void HostsPlugin::setSettings(QSettings *settings)
     m_settings->endGroup();
 }
 
+bool HostsPlugin::enabledByDefault() const
+{
+    return false;
+}
+
 void HostsPlugin::setLastError(const QString &lastError)
 {
     if (!lastError.isEmpty())

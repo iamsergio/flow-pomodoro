@@ -90,6 +90,11 @@ void PidginPlugin::setSettings(QSettings *)
 
 }
 
+bool PidginPlugin::enabledByDefault() const
+{
+    return true;
+}
+
 void PidginPlugin::setLastError(const QString &lastError)
 {
     if (!lastError.isEmpty())

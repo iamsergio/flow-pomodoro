@@ -49,6 +49,7 @@ public:
     virtual void setQmlEngine(QQmlEngine *) = 0;
     virtual QQuickItem* configureItem() const = 0;
     virtual void setSettings(QSettings *) = 0;
+    virtual bool enabledByDefault() const = 0;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, "com.kdab.flow.PluginInterface")

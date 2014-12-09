@@ -255,9 +255,10 @@ void Kernel::loadPlugins()
         if (!pluginInterface)
             continue;
         pluginInterface->setTaskStatus(TaskStopped);
+        bool enabledByDefault = pluginInterface->enabledByDefault();
         const QString pluginName = pluginObject->metaObject()->className();
         m_settings->beginGroup("plugins");
-        const bool enabled = m_settings->value(pluginName + ".enabled", /**defaul=*/true).toBool();
+        const bool enabled = m_settings->value(pluginName + ".enabled", /**defaul=*/ enabledByDefault).toBool();
         m_settings->endGroup();
         pluginInterface->setEnabled(enabled);
         pluginInterface->setSettings(m_settings);

@@ -108,6 +108,11 @@ void KMailPlugin::setSettings(QSettings *)
 
 }
 
+bool KMailPlugin::enabledByDefault() const
+{
+    return true;
+}
+
 void KMailPlugin::setLastError(const QString &lastError)
 {
     if (!lastError.isEmpty())

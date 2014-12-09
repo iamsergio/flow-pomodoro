@@ -45,6 +45,7 @@ public:
     void setQmlEngine(QQmlEngine *) Q_DECL_OVERRIDE;
     QQuickItem *configureItem() const Q_DECL_OVERRIDE;
     void setSettings(QSettings *) Q_DECL_OVERRIDE;
+    bool enabledByDefault() const Q_DECL_OVERRIDE;
 
     QString lastError() const;
 
