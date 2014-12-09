@@ -233,7 +233,7 @@ void HostsPlugin::updateHosts(bool allow)
 
     QSaveFile fileWriter(hostsFileName());
     if (!fileWriter.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        setLastError(tr("Failed to open %1 for saving because: %2 (%3)").arg(hostsFileName(), file.errorString()).arg(fileWriter.error()));
+        setLastError(tr("Failed to open %1 for saving because: %2 (%3)").arg(hostsFileName(), fileWriter.errorString()).arg(fileWriter.error()));
         return;
     }
     fileWriter.write(data);
