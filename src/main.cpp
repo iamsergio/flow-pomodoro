@@ -68,6 +68,7 @@ void initDBus(Controller *controller)
 #endif
 }
 
+#ifdef Q_OS_WIN
 static QString logFile()
 {
     static QString filename;
@@ -78,12 +79,22 @@ static QString logFile()
 
     return filename;
 }
+#endif
 
-void windowsMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+static bool acceptsWarning(const QString &warning)
 {
-    QFile file(logFile());
-    file.open(QIODevice::Append | QIODevice::WriteOnly);
-    QTextStream out(&file);
+    // False positive binding loop or a bug in QtQuick.Controls, ignore it.
+    if (warning.contains("Binding loop detected for property") && warning.contains("FlowCheckBox.qml"))
+        return false;
+
+    return true;
+}
+
+void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    Q_UNUSED(context);
+    if (type == QtWarningMsg && !acceptsWarning(msg))
+        return;
 
     QString level;
     switch (type) {
@@ -101,7 +112,14 @@ void windowsMessageHandler(QtMsgType type, const QMessageLogContext &context, co
         abort();
     }
 
-    out << level << msg << "(" << context.file << ":" << context.line << " " << context.function << ")\r\n";
+#if defined(Q_OS_WIN)
+    QFile file(logFile());
+    file.open(QIODevice::Append | QIODevice::WriteOnly);
+    QTextStream out(&file);
+#else
+    QTextStream out(stderr);
+#endif
+    out << level << msg << "\r\n";
 }
 
 static QString defaultDataFileName()
@@ -130,8 +148,8 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_WIN
     qputenv("QT_QPA_PLATFORM","windows:fontengine=freetype");
-    qInstallMessageHandler(windowsMessageHandler);
 #endif
+    qInstallMessageHandler(flowMessageHandler);
 
 #ifdef FLOW_STATIC_BUILD
     Q_INIT_RESOURCE(shellscriptplugin);
