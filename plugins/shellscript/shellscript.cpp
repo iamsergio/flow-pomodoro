@@ -28,6 +28,28 @@
 #include <QQuickItem>
 #include <QQmlContext>
 #include <QQmlEngine>
+#include <QStandardPaths>
+
+#ifdef Q_OS_LINUX
+static QString linuxTextEditor()
+{
+    // We can't use xdg-open because it will execute the .sh file.
+    // A better approach might be
+    static QString editor;
+    if (editor.isNull()) {
+        QStringList candidates;
+        candidates << "kwrite" << "kate" << "gedit" << "mousepad" << "emacs";
+        foreach (const QString &candidate, candidates) {
+            if (!QStandardPaths::findExecutable(candidate).isEmpty()) {
+                editor = candidate;
+                break;
+            }
+        }
+    }
+
+    return editor;
+}
+#endif
 
 class RunScriptTask : public QRunnable
 {
@@ -146,8 +168,8 @@ void ShellScriptPlugin::setQmlEngine(QQmlEngine *engine)
     Q_ASSERT(!m_qmlEngine && engine);
 
 #if defined(Q_OS_LINUX)
-    // We don't have a linux way to open a generic gui editor, xdg-open is trying to execute it instead
-    return;
+    if (linuxTextEditor().isEmpty())
+        return;
 #endif
 
     m_qmlEngine = engine;
@@ -203,7 +225,7 @@ void ShellScriptPlugin::editScript()
 #elif defined(Q_OS_OSX)
     command = "open -a TextEdit";
 #elif defined(Q_OS_LINUX)
-    // Do nothing for now, xdg-open is trying to execute the file instead of opening an editor
+    command = linuxTextEditor();
 #endif
 
     if (!command.isEmpty()) {
