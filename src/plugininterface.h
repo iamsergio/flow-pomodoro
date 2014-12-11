@@ -52,6 +52,6 @@ public:
     virtual bool enabledByDefault() const = 0;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface, "com.kdab.flow.PluginInterface")
+Q_DECLARE_INTERFACE(PluginInterface, "com.kdab.flow.PluginInterface/v0.9.3")
 
 #endif

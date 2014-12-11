@@ -30,7 +30,7 @@ class KMailPlugin : public QObject, public PluginInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString lastError READ lastError NOTIFY lastErrorChanged)
-    Q_PLUGIN_METADATA(IID "com.kdab.flow.PluginInterface")
+    Q_PLUGIN_METADATA(IID "com.kdab.flow.PluginInterface/v0.9.3")
     Q_INTERFACES(PluginInterface)
 
 public:
