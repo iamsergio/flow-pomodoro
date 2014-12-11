@@ -42,7 +42,7 @@ Page {
                     id: copyrectRect
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    height: copyrightText.height + 5
+                    height: copyrightText.height + 5 * _controller.dpiFactor
 
                     SmallText {
                         id: copyrightText
@@ -54,7 +54,7 @@ Page {
                         }
                     }
 
-                    radius: 5
+                    radius: 5 * _controller.dpiFactor
                     color: Qt.lighter(_style.queueBackgroundColor, 1.3)
                 }
 
