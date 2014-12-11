@@ -146,6 +146,7 @@ int main(int argc, char *argv[])
 {
     Utils::printTimeInfo("main");
 
+    qputenv("QML_DISABLE_DISTANCEFIELD", "1"); // Use native for QQuickControls too.
 #ifdef Q_OS_WIN
     qputenv("QT_QPA_PLATFORM","windows:fontengine=freetype");
 #endif
