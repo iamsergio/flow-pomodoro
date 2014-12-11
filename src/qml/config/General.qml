@@ -73,7 +73,10 @@ Item {
 
         Component {
             id: desktopSpinBoxStyleComponent
-            SpinBoxStyle {}
+            SpinBoxStyle {
+                // Weird text clipping on windows with native rendering
+                renderType: Text.QtRendering
+            }
         }
 
         Component {
