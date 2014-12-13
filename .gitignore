@@ -50,3 +50,4 @@ flow.app
 *.Debug
 *.Release
 lib*.a
+.DS_Store
