@@ -23,7 +23,8 @@ Main {
             visible: _controller.expanded
             color: "white"
             onClicked: {
-                _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
+                if (_controller.rightClickedTask === null) // Ignore if we have the context menu open
+                    _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
             }
         }
 
