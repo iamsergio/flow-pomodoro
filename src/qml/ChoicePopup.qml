@@ -83,6 +83,8 @@ Item {
                             renderType: _controller.textRenderType
                             text: root.title
                             anchors.fill: parent
+                            anchors.leftMargin: 8 * _controller.dpiFactor
+                            anchors.rightMargin: 8 * _controller.dpiFactor
                             elide: Text.ElideRight
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
