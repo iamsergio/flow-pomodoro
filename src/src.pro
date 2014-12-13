@@ -88,6 +88,10 @@ windows {
 	RC_FILE = flow.rc
 }
 
+osx {
+    ICON = img/icon.icns
+}
+
 DESTDIR = ../
 
 # For make INSTAL_ROOT=prefix install
