@@ -87,7 +87,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     setKeepScreenOnDuringPomodoro(m_settings->value("keepScreenOnDuringPomodoro", /*default=*/ true).toInt());
     m_hideEmptyTags = m_settings->value("hideEmptyTags", /*default=*/ false).toBool();
     m_useSystray = m_settings->value("useSystray", /*default=*/ true).toBool();
-    m_stickyWindow = m_settings->value("stickyWindow", /*default=*/ true).toBool();
+    m_stickyWindow = m_settings->value("stickyWindow", /*default=*/ true).toBool() || Utils::isOSX(); // On OSX Qt::Tool flag isn't working
 
     m_expanded = isMobile() || !m_stickyWindow;
 
@@ -1119,4 +1119,9 @@ void Controller::setStickyWindow(bool sticky)
 bool Controller::stickyWindow() const
 {
     return m_stickyWindow;
+}
+
+bool Controller::isOSX() const
+{
+    return Utils::isOSX();
 }

@@ -75,6 +75,13 @@ bool Utils::isMobile()
 #endif
 }
 
+bool Utils::isOSX()
+{
+#ifdef Q_OS_OSX
+    return true;
+#endif
+    return false;
+}
 
 qreal Utils::dpiFactor()
 {

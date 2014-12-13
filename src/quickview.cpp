@@ -58,6 +58,8 @@ QuickView::QuickView(Kernel *kernel)
     readInitialPosition();
     readGeometryType();
 
+    setIcon(QIcon(":/img/icon.png"));
+
     connect(m_controller, &Controller::stickyWindowChanged, this, &QuickView::setupWindowFlags);
 
     QString main = Utils::isMobile() ? "LoadingScreen.qml" : "MainDesktop.qml";

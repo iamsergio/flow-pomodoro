@@ -36,6 +36,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(bool isOSX READ isOSX CONSTANT)
     Q_PROPERTY(bool stickyWindow READ stickyWindow WRITE setStickyWindow NOTIFY stickyWindowChanged)
     Q_PROPERTY(bool useSystray READ useSystray WRITE setUseSystray NOTIFY useSystrayChanged)
     Q_PROPERTY(QString qtVersion READ qtVersion CONSTANT)
@@ -179,6 +180,7 @@ public:
     bool isMobile() const;
     bool isIOS() const;
     bool isAndroid() const;
+    bool isOSX() const;
     bool openSSLSupported() const;
     bool hackingMenuSupported() const;
 
