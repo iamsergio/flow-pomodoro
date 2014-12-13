@@ -54,7 +54,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool pomodoroFunctionalityDisabled READ pomodoroFunctionalityDisabled WRITE setPomodoroFunctionalityDisabled NOTIFY pomodoroFunctionalityDisabledChanged)
     Q_PROPERTY(bool syncAtStartup READ syncAtStartup WRITE setSyncAtStartup NOTIFY syncAtStartupChanged)
     Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged) // Task being played
-    Q_PROPERTY(Task* rightClickedTask READ rightClickedTask WRITE setRightClickedTask NOTIFY rightClickedTaskChanged)
+    Q_PROPERTY(Task* rightClickedTask READ rightClickedTask NOTIFY rightClickedTaskChanged)
     Q_PROPERTY(Task *selectedTask READ selectedTask NOTIFY selectedTaskChanged)
     Q_PROPERTY(Tag* currentTabTag READ currentTabTag WRITE setCurrentTabTag NOTIFY currentTabTagChanged)
     Q_PROPERTY(QueueType queueType READ queueType WRITE setQueueType NOTIFY queueTypeChanged)
