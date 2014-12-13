@@ -44,3 +44,6 @@ release/
 *.dll
 *.zip
 /build
+*.dylib
+*.qmake.stash
+flow.app
