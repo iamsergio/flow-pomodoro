@@ -260,10 +260,10 @@ public Q_SLOTS:
     void beginAddingNewTag();
     void endAddingNewTag(const QString &tagName);
 
-    void requestContextMenu(Task *);
+    void requestContextMenu(Task *, bool showStaticOptions = true);
 
     void webDavSync();
-    void setRightClickedTask(Task *);
+    void setRightClickedTask(Task *, bool showStaticOptions = true);
     void toggleConfigurePage();
 
 private Q_SLOTS:
@@ -375,6 +375,7 @@ private:
     bool m_hideEmptyTags;
     bool m_useSystray;
     bool m_stickyWindow;
+    bool m_addingTask;
 };
 
 #endif

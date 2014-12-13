@@ -24,6 +24,7 @@
 TaskContextMenuModel::TaskContextMenuModel(Task *task, QObject *parent)
     : QAbstractListModel(parent)
     , m_task(task)
+    , m_showStaticOptions(true)
 {
     setObjectName("TaskContextMenuModel");
 
@@ -69,7 +70,7 @@ TaskContextMenuModel::TaskContextMenuModel(Task *task, QObject *parent)
 
 int TaskContextMenuModel::rowCount(const QModelIndex &/*parent*/) const
 {
-    return OptionTypeCount + m_task->checkableTagModel()->rowCount(QModelIndex());
+    return rowOffset() + m_task->checkableTagModel()->rowCount(QModelIndex());
 }
 
 QVariant TaskContextMenuModel::staticData(OptionType optionType, int role) const
@@ -102,10 +103,10 @@ QVariant TaskContextMenuModel::data(const QModelIndex &index, int role) const
     if (index.row() < 0 || index.row() >= rowCount(QModelIndex()))
         return QVariant();
 
-    if (index.row() < OptionTypeCount)
+    if (m_showStaticOptions && index.row() < OptionTypeCount)
         return staticData(static_cast<OptionType>(index.row()), role);
 
-    int tagRow = index.row() - OptionTypeCount;
+    const int tagRow = index.row() - rowOffset();
     QAbstractItemModel *tagModel = m_task->checkableTagModel();
     if (tagRow < 0 || tagRow >= tagModel->rowCount()) {
         qWarning() << "TaskContextMenuModel: invalid index" << tagRow;
@@ -147,6 +148,21 @@ int TaskContextMenuModel::count() const
     return rowCount(QModelIndex());
 }
 
+bool TaskContextMenuModel::showStaticOptions() const
+{
+    return m_showStaticOptions;
+}
+
+void TaskContextMenuModel::setShowStaticOptions(bool show)
+{
+    if (m_showStaticOptions != show) {
+        beginResetModel();
+        m_showStaticOptions = show;
+        endResetModel();
+        emit showStaticOptionsChanged();
+    }
+}
+
 void TaskContextMenuModel::onModelAboutToBeReset()
 {
     beginResetModel();
@@ -169,12 +185,12 @@ void TaskContextMenuModel::onLayoutChanged()
 
 void TaskContextMenuModel::onDataChanged(const QModelIndex &left, const QModelIndex &right)
 {
-    emit dataChanged(index(left.row() + OptionTypeCount, 0), index(right.row() + OptionTypeCount, 0));
+    emit dataChanged(index(left.row() + rowOffset(), 0), index(right.row() + rowOffset(), 0));
 }
 
 void TaskContextMenuModel::onRowsAboutToBeInserted(const QModelIndex &, int start, int end)
 {
-    beginInsertRows(QModelIndex(), start + OptionTypeCount, end + OptionTypeCount);
+    beginInsertRows(QModelIndex(), start + rowOffset(), end + rowOffset());
 }
 
 void TaskContextMenuModel::onRowsInserted()
@@ -184,10 +200,15 @@ void TaskContextMenuModel::onRowsInserted()
 
 void TaskContextMenuModel::onRowsAboutToBeRemoved(const QModelIndex &, int start, int end)
 {
-    beginRemoveRows(QModelIndex(), start + OptionTypeCount, end + OptionTypeCount);
+    beginRemoveRows(QModelIndex(), start + rowOffset(), end + rowOffset());
 }
 
 void TaskContextMenuModel::onRowsRemoved()
 {
     endRemoveRows();
+}
+
+int TaskContextMenuModel::rowOffset() const
+{
+    return m_showStaticOptions ? OptionTypeCount : 0;
 }

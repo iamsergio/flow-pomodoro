@@ -29,6 +29,7 @@ class TaskContextMenuModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(bool showStaticOptions READ showStaticOptions NOTIFY showStaticOptionsChanged)
 public:
 
     enum Role {
@@ -59,8 +60,12 @@ public:
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
     int count() const;
 
+    bool showStaticOptions() const;
+    void setShowStaticOptions(bool);
+
 Q_SIGNALS:
     void countChanged();
+    void showStaticOptionsChanged();
 
 private Q_SLOTS:
     void onModelAboutToBeReset();
@@ -74,11 +79,13 @@ private Q_SLOTS:
     void onRowsRemoved();
 
 private:
+    int rowOffset() const;
     QVariant staticData(OptionType row, int role) const;
     Task *m_task;
     QHash<OptionType, Option> m_staticOptions;
     Option m_moveToTodayOption;
     Option m_archiveOption;
+    bool m_showStaticOptions;
 };
 
 #endif

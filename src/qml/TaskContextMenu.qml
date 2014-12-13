@@ -8,7 +8,7 @@ Item {
     ChoicePopup {
         anchors.fill: parent
         model: _controller.rightClickedTask === null ? null : _controller.rightClickedTask.contextMenuModel
-        title: _controller.rightClickedTask !== null ? _controller.rightClickedTask.summary : ""
+        title: _controller.rightClickedTask !== null ? (_controller.rightClickedTask.contextMenuModel.showStaticOptions ? _controller.rightClickedTask.summary : qsTr("Select tags")) : ""
         onChoiceClicked: {
             if (index === TaskContextMenuModel.OptionTypeEdit) {
                 _controller.editTask(_controller.rightClickedTask, Controller.EditModeInline)

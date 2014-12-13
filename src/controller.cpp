@@ -20,6 +20,7 @@
 
 #include "controller.h"
 #include "settings.h"
+#include "taskcontextmenumodel.h"
 #include "taskfilterproxymodel.h"
 #include "storage.h"
 #include "kernel.h"
@@ -642,12 +643,14 @@ void Controller::setCurrentTabTag(Tag *tag)
     }
 }
 
-void Controller::setRightClickedTask(Task *task)
+void Controller::setRightClickedTask(Task *task, bool showStaticOptions)
 {
     //if (m_rightClickedTask != task) { // m_rightClickedTask is a QPointer and task might have been deleted
         m_rightClickedTask = task;
-        if (task)
+        if (task) {
+            task->contextMenuModel()->setShowStaticOptions(showStaticOptions);
             m_loadManager->setTaskContextMenuRequested(true);
+        }
 
         emit rightClickedTaskChanged();
     //}
@@ -968,6 +971,13 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
         m_storage->setDisableSaving(!task.isNull());
 
         if (task.isNull()) {
+            if (m_addingTask && m_taskBeingEdited) {
+                m_addingTask = false;
+                // It's a new task, lets popup the context menu to choose tags
+                if (m_queueType == QueueTypeToday && !m_storage->tasks().isEmpty()) {
+                    requestContextMenu(m_taskBeingEdited, /*showStaticOption=*/ false);
+                }
+            }
             m_taskBeingEdited.clear();
             m_storage->save(); // Editor closed. Write to disk immediately.
         } else {
@@ -996,10 +1006,10 @@ void Controller::endAddingNewTag(const QString &tagName)
         setTagEditStatus(TagEditStatusNone);
 }
 
-void Controller::requestContextMenu(Task *task)
+void Controller::requestContextMenu(Task *task, bool showStaticOptions)
 {
     editTask(0, EditModeNone);
-    setRightClickedTask(task);
+    setRightClickedTask(task, showStaticOptions);
 }
 
 void Controller::addTask(const QString &text, bool startEditMode)
@@ -1019,6 +1029,7 @@ void Controller::addTask(const QString &text, bool startEditMode)
         editTask(m_storage->taskAt(lastIndex).data(), EditModeInline);
         emit forceFocus(lastIndex);
         emit addingNewTask();
+        m_addingTask = true;
     }
 }
 
