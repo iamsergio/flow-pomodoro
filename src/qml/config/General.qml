@@ -195,19 +195,19 @@ Item {
         }
 
         Text {
-            visible: !_controller.isMobile
+            visible: stickyWindowBox.visible
             text: qsTr("Sticky Window (requires restart)")
             font.pixelSize: 12 * _controller.dpiFactor
         }
 
         FlowCheckBox {
-            id: stickyWindow
-            visible: !_controller.isMobile
+            id: stickyWindowBox
+            visible: !_controller.isMobile && !_controller.isOSX
             checked: _controller.stickyWindow
             Binding {
                 target: _controller
                 property: "stickyWindow"
-                value: stickyWindow.checked
+                value: stickyWindowBox.checked
             }
         }
 
