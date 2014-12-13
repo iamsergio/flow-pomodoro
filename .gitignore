@@ -47,3 +47,6 @@ release/
 *.dylib
 *.qmake.stash
 flow.app
+*.Debug
+*.Release
+lib*.a
