@@ -26,6 +26,7 @@ namespace Utils {
     void printTimeInfo(const QString &location);
     void keepScreenOn(bool);
     bool isMobile();
+    bool isOSX();
     qreal dpiFactor();
 }
 

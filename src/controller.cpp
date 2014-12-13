@@ -1120,3 +1120,8 @@ bool Controller::stickyWindow() const
 {
     return m_stickyWindow;
 }
+
+bool Controller::isOSX() const
+{
+    return Utils::isOSX();
+}
