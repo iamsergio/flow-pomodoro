@@ -24,7 +24,7 @@
 TaskContextMenuModel::TaskContextMenuModel(Task *task, QObject *parent)
     : QAbstractListModel(parent)
     , m_task(task)
-    , m_showStaticOptions(true)
+    , m_tagOnlyMenu(false)
 {
     setObjectName("TaskContextMenuModel");
 
@@ -103,7 +103,7 @@ QVariant TaskContextMenuModel::data(const QModelIndex &index, int role) const
     if (index.row() < 0 || index.row() >= rowCount(QModelIndex()))
         return QVariant();
 
-    if (m_showStaticOptions && index.row() < OptionTypeCount)
+    if (index.row() < rowOffset())
         return staticData(static_cast<OptionType>(index.row()), role);
 
     const int tagRow = index.row() - rowOffset();
@@ -148,18 +148,18 @@ int TaskContextMenuModel::count() const
     return rowCount(QModelIndex());
 }
 
-bool TaskContextMenuModel::showStaticOptions() const
+bool TaskContextMenuModel::tagOnlyMenu() const
 {
-    return m_showStaticOptions;
+    return m_tagOnlyMenu;
 }
 
-void TaskContextMenuModel::setShowStaticOptions(bool show)
+void TaskContextMenuModel::setTagOnlyMenu(bool onlyTags)
 {
-    if (m_showStaticOptions != show) {
+    if (m_tagOnlyMenu != onlyTags) {
         beginResetModel();
-        m_showStaticOptions = show;
+        m_tagOnlyMenu = onlyTags;
         endResetModel();
-        emit showStaticOptionsChanged();
+        emit tagOnlyMenuChanged();
     }
 }
 
@@ -210,5 +210,5 @@ void TaskContextMenuModel::onRowsRemoved()
 
 int TaskContextMenuModel::rowOffset() const
 {
-    return m_showStaticOptions ? OptionTypeCount : 0;
+    return m_tagOnlyMenu ? 1 : OptionTypeCount;
 }

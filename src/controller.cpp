@@ -643,12 +643,12 @@ void Controller::setCurrentTabTag(Tag *tag)
     }
 }
 
-void Controller::setRightClickedTask(Task *task, bool showStaticOptions)
+void Controller::setRightClickedTask(Task *task, bool tagOnlyMenu)
 {
     //if (m_rightClickedTask != task) { // m_rightClickedTask is a QPointer and task might have been deleted
         m_rightClickedTask = task;
         if (task) {
-            task->contextMenuModel()->setShowStaticOptions(showStaticOptions);
+            task->contextMenuModel()->setTagOnlyMenu(tagOnlyMenu);
             m_loadManager->setTaskContextMenuRequested(true);
         }
 
@@ -975,7 +975,7 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
                 m_addingTask = false;
                 // It's a new task, lets popup the context menu to choose tags
                 if (m_queueType == QueueTypeToday && !m_storage->tasks().isEmpty()) {
-                    requestContextMenu(m_taskBeingEdited, /*showStaticOption=*/ false);
+                    requestContextMenu(m_taskBeingEdited, /*tagOnlyMenu=*/ true);
                 }
             }
             m_taskBeingEdited.clear();
@@ -1006,10 +1006,10 @@ void Controller::endAddingNewTag(const QString &tagName)
         setTagEditStatus(TagEditStatusNone);
 }
 
-void Controller::requestContextMenu(Task *task, bool showStaticOptions)
+void Controller::requestContextMenu(Task *task, bool tagOnlyMenu)
 {
     editTask(0, EditModeNone);
-    setRightClickedTask(task, showStaticOptions);
+    setRightClickedTask(task, tagOnlyMenu);
 }
 
 void Controller::addTask(const QString &text, bool startEditMode)

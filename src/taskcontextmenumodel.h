@@ -29,7 +29,7 @@ class TaskContextMenuModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
-    Q_PROPERTY(bool showStaticOptions READ showStaticOptions NOTIFY showStaticOptionsChanged)
+    Q_PROPERTY(bool tagOnlyMenu READ tagOnlyMenu NOTIFY tagOnlyMenuChanged)
 public:
 
     enum Role {
@@ -40,10 +40,10 @@ public:
     };
 
     enum OptionType {
-        OptionTypeEdit = 0,
+        OptionTypeNewTag = 0,
+        OptionTypeEdit,
         OptionTypeDelete,
         OptionTypeQueue,
-        OptionTypeNewTag,
         OptionTypeCount
     };
     Q_ENUMS(OptionType)
@@ -60,12 +60,12 @@ public:
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
     int count() const;
 
-    bool showStaticOptions() const;
-    void setShowStaticOptions(bool);
+    bool tagOnlyMenu() const;
+    void setTagOnlyMenu(bool onlyTags);
 
 Q_SIGNALS:
     void countChanged();
-    void showStaticOptionsChanged();
+    void tagOnlyMenuChanged();
 
 private Q_SLOTS:
     void onModelAboutToBeReset();
@@ -85,7 +85,7 @@ private:
     QHash<OptionType, Option> m_staticOptions;
     Option m_moveToTodayOption;
     Option m_archiveOption;
-    bool m_showStaticOptions;
+    bool m_tagOnlyMenu;
 };
 
 #endif
