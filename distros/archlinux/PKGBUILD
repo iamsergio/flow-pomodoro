@@ -12,7 +12,7 @@ depends=('qt5-base>=5.3.0', 'qt5-declarative>=5.3.0', 'qt5-graphicaleffects>=5.3
 makedepends=('qt5-base>=5.3.0', 'qt5-declarative>=5.3.0', 'qt5-graphicaleffects>=5.3.0', 'qt5-quickcontrols>=5.3.0')
 
 source=(https://github.com/iamsergio/flow-pomodoro/archive/v${pkgver}.zip)
-sha1sums=('64a06bc476543f19e0eb5e021ac25da26284a741')
+sha1sums=('e0902ff17030446a205ccd55d0fbd964f33a172e')
 
 build() {
   mkdir -p ${pkgname}-${pkgver}/build
