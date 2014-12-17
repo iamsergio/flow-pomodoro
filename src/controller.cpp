@@ -849,7 +849,9 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         if (editing) {
             editTask(Q_NULLPTR, EditModeNone);
         } else {
-            if (m_selectedTask == Q_NULLPTR) {
+            if (m_rightClickedTask) {
+                setRightClickedTask(Q_NULLPTR);
+            } else if (!m_selectedTask) {
                 setExpanded(true);
             } else {
                 startPomodoro(m_selectedTask);
