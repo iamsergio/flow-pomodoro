@@ -794,9 +794,12 @@ void Controller::setTagEditStatus(TagEditStatus status)
     }
 }
 
-bool Controller::eventFilter(QObject *, QEvent *event)
+bool Controller::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() != QEvent::KeyRelease)
+        return false;
+
+    if (!object->inherits("QWindow")) // Filters out duplicated events
         return false;
 
     QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
@@ -825,7 +828,7 @@ bool Controller::eventFilter(QObject *, QEvent *event)
         } else {
             setExpanded(false);
         }
-        return false;
+        return true;
     }
 
     if (m_page != MainPage)
