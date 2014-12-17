@@ -111,7 +111,18 @@ Page {
                             text: qsTr("Stops an ongoing pomodoro")
                             renderType: _controller.textRenderType
                         }
-
+                        Text  {
+                            font.pixelSize: _style.smallTextSize
+                            color: _style.smallTextColor
+                            renderType: _controller.textRenderType
+                            text: "T"
+                        }
+                        Text  {
+                            font.pixelSize: _style.smallTextSize
+                            color: _style.smallTextColor
+                            text: qsTr("Toggles today/later lists")
+                            renderType: _controller.textRenderType
+                        }
                         Text  {
                             font.pixelSize: _style.smallTextSize
                             color: _style.smallTextColor

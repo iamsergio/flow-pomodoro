@@ -717,6 +717,10 @@ void Controller::setStartupFinished()
     emit startupFinishedChanged();
 }
 
+void Controller::toggleQueueType()
+{
+    setQueueType(m_queueType == QueueTypeToday ? QueueTypeArchive : QueueTypeToday);
+}
 
 bool Controller::startupFinished() const
 {
@@ -868,6 +872,14 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
     case Qt::Key_S:
         stopPomodoro();
         return true;
+        break;
+    case Qt::Key_T:
+        if (m_page == MainPage) {
+            toggleQueueType();
+            return true;
+        }
+
+        return false;
         break;
     case Qt::Key_N:
         setExpanded(true);

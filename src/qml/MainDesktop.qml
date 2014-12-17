@@ -86,6 +86,7 @@ Main {
                 id: switchItem
                 visible: _controller.expanded && _controller.currentPage === Controller.MainPage
                 anchors.verticalCenter: parent.verticalCenter
+                checked: _controller.queueType == Controller.QueueTypeArchive
                 Binding {
                     target: _controller
                     property: "queueType"

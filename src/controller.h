@@ -316,6 +316,7 @@ Q_SIGNALS:
     void syncAtStartupChanged();
 
 private:
+    void toggleQueueType();
     void setTextRenderType(int);
     int indexOfTaskInCurrentTab(const Task::Ptr &task);
     Task::Ptr lastTaskAtCurrentTab() const;
