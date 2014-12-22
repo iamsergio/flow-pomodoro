@@ -881,6 +881,10 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
 
         return false;
         break;
+    case Qt::Key_C:
+        setCurrentPage(m_page == ConfigurePage ? MainPage : ConfigurePage);
+        return true;
+        break;
     case Qt::Key_N:
         setExpanded(true);
         addTask("New Task", /**open editor=*/true); // Detect on which tab we're on and tag it properly
