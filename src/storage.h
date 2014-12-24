@@ -44,6 +44,7 @@ enum {
 class Storage : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged)
     Q_PROPERTY(QAbstractItemModel* nonEmptyTagsModel READ nonEmptyTagsModel CONSTANT)
     Q_PROPERTY(QAbstractItemModel* tagsModel READ tagsModel CONSTANT)
     Q_PROPERTY(ArchivedTasksFilterModel* stagedTasksModel READ stagedTasksModel CONSTANT)
@@ -143,6 +144,7 @@ public:
 #endif
 
     QAbstractItemModel* nonEmptyTagsModel() const;
+    int taskCount() const;
 
 public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);
@@ -151,6 +153,7 @@ public Q_SLOTS:
     void save();
 
 Q_SIGNALS:
+    void taskCountChanged();
     void tagAboutToBeRemoved(const QString &name);
 
 private Q_SLOTS:

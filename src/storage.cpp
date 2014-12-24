@@ -177,6 +177,8 @@ void Storage::setData(Storage::Data &data)
     m_data = data;
     if (m_data.instanceId.isEmpty())
         m_data.instanceId = oldInstanceId;
+
+    emit taskCountChanged();
 }
 
 void Storage::load()
@@ -197,6 +199,7 @@ void Storage::load()
         createTag(tr("movies"), "{387be44a-1eb7-4895-954a-cf5bc82d8f03}");
     }
     m_loadingInProgress = false;
+    emit taskCountChanged();
 }
 
 void Storage::save()
@@ -414,9 +417,12 @@ int Storage::indexOfTask(const Task::Ptr &task) const
 
 void Storage::clearTasks()
 {
-    // Don't use clear() here
-    foreach (const Task::Ptr &task, m_data.tasks) {
-        removeTask(task);
+    if (!m_data.tasks.isEmpty()) {
+        // Don't use clear() here
+        foreach (const Task::Ptr &task, m_data.tasks) {
+            removeTask(task);
+        }
+        emit taskCountChanged();
     }
 }
 
@@ -467,6 +473,7 @@ Task::Ptr Storage::prependTask(const QString &taskText)
     Task::Ptr task = Task::createTask(m_kernel, taskText);
     connectTask(task);
     m_data.tasks.prepend(task);
+    emit taskCountChanged();
     return task;
 }
 
@@ -474,6 +481,7 @@ Task::Ptr Storage::addTask(const Task::Ptr &task)
 {
     connectTask(task);
     m_data.tasks << task;
+    emit taskCountChanged();
     return task;
 }
 
@@ -497,6 +505,7 @@ void Storage::removeTask(const Task::Ptr &task)
     task->setTagList(TagRef::List()); // So Tag::taskCount() decreases in case Task::Ptr is left hanging somewhere
     if (webDAVSyncSupported())
         m_data.deletedItemUids << task->uuid(); // TODO: Make this persistent
+    emit taskCountChanged();
 }
 
 #ifdef DEVELOPER_MODE
@@ -546,4 +555,9 @@ void Storage::removeDuplicateData()
 QAbstractItemModel* Storage::nonEmptyTagsModel() const
 {
     return m_nonEmptyTagsModel;
+}
+
+int Storage::taskCount() const
+{
+    return m_data.tasks.count();
 }
