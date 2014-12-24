@@ -231,6 +231,7 @@ void Kernel::loadPlugins()
 #else
     QStringList paths = QCoreApplication::libraryPaths();
 
+    QStringList acceptedFileNames;
     foreach (const QString &path, paths) {
         const QString candidatePath = path == qApp->applicationDirPath() ? path + "/plugins/"
                                                                          : path + "/flow/";
@@ -238,10 +239,14 @@ void Kernel::loadPlugins()
         // qDebug() << "Looking for plugins in " << candidatePath;
         QDir pluginsDir = QDir(candidatePath);
         foreach (const QString &fileName, pluginsDir.entryList(QDir::Files)) {
+            if (acceptedFileNames.contains(fileName)) // Don't load plugins more than once.
+                continue;
             QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
             QObject *pluginObject = loader.instance();
-            if (pluginObject)
+            if (pluginObject) {
                 plugins << pluginObject;
+                acceptedFileNames << fileName;
+            }
         }
     }
 #endif
