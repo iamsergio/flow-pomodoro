@@ -239,6 +239,15 @@ void Task::removeTag(const QString &tagName)
     }
 }
 
+void Task::toggleTag(const QString &tagName)
+{
+    if (containsTag(tagName)) {
+        removeTag(tagName);
+    } else {
+        addTag(tagName);
+    }
+}
+
 TaskStatus Task::status() const
 {
     return m_status;

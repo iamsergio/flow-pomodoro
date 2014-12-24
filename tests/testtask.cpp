@@ -134,3 +134,13 @@ void TestTask::testJson()
     QCOMPARE(task->tags().count(), task2->tags().count());
     QCOMPARE(task->tags().at(0).tagName(), task2->tags().at(0).tagName());
 }
+
+void TestTask::testToggleTag()
+{
+    Task::Ptr task = Task::createTask(m_kernel, "testToggleTag");
+    QCOMPARE(task->tags().count(), 0);
+    task->addTag("tagA");
+    QVERIFY(task->containsTag("tagA"));
+    task->toggleTag("tagA");
+    QVERIFY(!task->containsTag("tagA"));
+}
