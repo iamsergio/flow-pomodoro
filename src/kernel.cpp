@@ -232,12 +232,8 @@ void Kernel::loadPlugins()
     QStringList paths = QCoreApplication::libraryPaths();
 
     foreach (const QString &path, paths) {
-        QString candidatePath = path;
-        if (path == qApp->applicationDirPath()) {
-            candidatePath += QStringLiteral("/plugins/");
-        } else {
-            candidatePath += QStringLiteral("/flow/");
-        }
+        const QString candidatePath = path == qApp->applicationDirPath() ? path + "/plugins/"
+                                                                         : path + "/flow/";
 
         // qDebug() << "Looking for plugins in " << candidatePath;
         QDir pluginsDir = QDir(candidatePath);
