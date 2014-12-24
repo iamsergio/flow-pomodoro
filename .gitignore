@@ -51,3 +51,4 @@ flow.app
 *.Release
 lib*.a
 .DS_Store
+/tests/unit-test-settings.ini
