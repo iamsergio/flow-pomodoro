@@ -163,6 +163,17 @@ void TaskContextMenuModel::setTagOnlyMenu(bool onlyTags)
     }
 }
 
+void TaskContextMenuModel::toggleTag(int idx)
+{
+    const int tagRow = idx - rowOffset();
+    if (tagRow < 0) // User clicked on static data
+        return;
+
+    QString tagName = data(index(idx, 0), TextRole).toString();
+    if (!tagName.isEmpty())
+        m_task->toggleTag(tagName);
+}
+
 void TaskContextMenuModel::onModelAboutToBeReset()
 {
     beginResetModel();

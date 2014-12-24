@@ -62,6 +62,7 @@ public:
 
     bool tagOnlyMenu() const;
     void setTagOnlyMenu(bool onlyTags);
+    void toggleTag(int index);
 
 Q_SIGNALS:
     void countChanged();
