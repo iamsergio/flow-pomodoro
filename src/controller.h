@@ -246,8 +246,8 @@ public Q_SLOTS:
     void pausePomodoro();
 
     void toggleSelectedTask(Task *task);
-    void cycleSelectionUp();
-    void cycleSelectionDown();
+    void cycleTaskSelectionUp();
+    void cycleTaskSelectionDown();
 
     void showQuestionPopup(QObject *obj, const QString &text, const QString &callback);
     void onPopupButtonClicked(bool okClicked);

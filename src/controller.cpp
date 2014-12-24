@@ -188,7 +188,7 @@ void Controller::toggleSelectedTask(Task *task)
     setSelectedTask(m_selectedTask == task ? Task::Ptr() : task->toStrongRef());
 }
 
-void Controller::cycleSelectionUp()
+void Controller::cycleTaskSelectionUp()
 {
     Task::Ptr firstTask = taskAtCurrentTab(0);
     if (!firstTask)
@@ -205,7 +205,7 @@ void Controller::cycleSelectionUp()
     }
 }
 
-void Controller::cycleSelectionDown()
+void Controller::cycleTaskSelectionDown()
 {
     Task::Ptr firstTask = taskAtCurrentTab(0);
     Task::Ptr lastTask = lastTaskAtCurrentTab();
@@ -899,11 +899,11 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         return true;
         break;
     case Qt::Key_Up:
-        cycleSelectionUp();
+        cycleTaskSelectionUp();
         return true;
         break;
     case Qt::Key_Down:
-        cycleSelectionDown();
+        cycleTaskSelectionDown();
         return true;
         break;
     case Qt::Key_F2:
