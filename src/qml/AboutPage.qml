@@ -244,6 +244,11 @@ Page {
                     color: Qt.lighter(_style.queueBackgroundColor, 1.3)
                     radius: 5
                 }
+                SmallText {
+                    id: countText
+                    anchors.left: parent.left
+                    text: qsTr("TaskCount: %1").arg(_storage.taskCount)
+                }
             }
 
             PushButton {
