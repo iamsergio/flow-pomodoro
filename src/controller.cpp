@@ -973,10 +973,12 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
     case Qt::Key_Tab:
         if (taskMenuVisible() && !newTagDialogVisible())
             cycleMenuSelectionDown();
+        return true;
         break;
     case Qt::Key_Backtab:
         if (taskMenuVisible() && !newTagDialogVisible())
             cycleMenuSelectionUp();
+        return true;
         break;
     default:
         break;
