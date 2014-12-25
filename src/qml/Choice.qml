@@ -4,11 +4,22 @@ Rectangle {
     id: root
     property bool topLineVisible: true
     property bool checked: false
+    property bool current: false
     property string fontAwesomeIconCode: ""
 
     color: (itemMouseArea.pressed && !checkableRole) ? "#E3E3E3" : "white"
     signal clicked(bool dismiss)
     signal toggled(bool checkState, string itemText)
+
+    Rectangle {
+        color: "lightblue"
+        width: 6 * _controller.dpiFactor
+        height: parent.height
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 1 * _controller.dpiFactor
+        visible: root.current
+    }
 
     Text {
         id: icon

@@ -17,6 +17,28 @@ Item {
         return 0
     }
 
+    function ensureVisible(index)
+    {
+        if (index === 0)
+            index = -1; // If we request for index 0 to be visible, lets also show the header
+
+        if (!isVisible(index)) {
+            // +1 because of header, and another +1 because numbering starts at 0
+            var newContentY = (index + 2) * delegateHeight - flickable.height
+            if (newContentY >= 0) {
+                flickable.contentY = newContentY
+            } else {
+                flickable.contentY = (index + 1 + (index === 0 ? 0 : 0)) * delegateHeight
+            }
+        }
+    }
+
+    function isVisible(index)
+    {
+        return ((index + 2) * delegateHeight <= flickable.height + flickable.contentY) &&
+                ((index + 1) * delegateHeight >= flickable.contentY)
+    }
+
     Rectangle {
         id: background
         anchors.fill: parent
@@ -119,6 +141,7 @@ Item {
                             height: root.delegateHeight
                             fontAwesomeIconCode: iconRole
                             checked: checkedRole
+                            current: index === _controller.currentMenuIndex
                             onClicked: {
                                 if (checkableRole) {
                                     root.choiceToggled(index)
@@ -128,6 +151,10 @@ Item {
                             }
                             onToggled: {
                                 root.choiceToggled(checkState, itemText)
+                            }
+                            onCurrentChanged: {
+                                if (current)
+                                    root.ensureVisible(index);
                             }
                         }
                     }

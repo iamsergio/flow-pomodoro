@@ -90,7 +90,7 @@ public:
 
     Q_INVOKABLE void addTag(const QString &tagName);
     Q_INVOKABLE void removeTag(const QString &tagName);
-    void toggleTag(const QString &tagName);
+    Q_INVOKABLE void toggleTag(const QString &tagName);
 
     TaskStatus status() const;
     void setStatus(TaskStatus status);

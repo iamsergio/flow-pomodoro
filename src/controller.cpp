@@ -75,6 +75,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_hideEmptyTags(false)
     , m_useSystray(false)
     , m_stickyWindow(true)
+    , m_currentMenuIndex(-1)
 {
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
@@ -221,6 +222,21 @@ void Controller::cycleTaskSelectionDown()
         int currentIndex = indexOfTaskInCurrentTab(m_selectedTask->toStrongRef());
         setSelectedTask(taskAtCurrentTab(currentIndex + 1));
     }
+}
+
+void Controller::cycleMenuSelectionUp()
+{
+    if (m_currentMenuIndex > 0)
+        setCurrentMenuIndex(m_currentMenuIndex - 1);
+}
+
+void Controller::cycleMenuSelectionDown()
+{
+    if (!m_rightClickedTask)
+        return;
+
+    if (m_currentMenuIndex < m_rightClickedTask->contextMenuModel()->count() - 1)
+        setCurrentMenuIndex(m_currentMenuIndex + 1);
 }
 
 void Controller::showQuestionPopup(QObject *obj, const QString &text, const QString &callback)
@@ -646,6 +662,7 @@ void Controller::setCurrentTabTag(Tag *tag)
 void Controller::setRightClickedTask(Task *task, bool tagOnlyMenu)
 {
     //if (m_rightClickedTask != task) { // m_rightClickedTask is a QPointer and task might have been deleted
+        setCurrentMenuIndex(-1);
         m_rightClickedTask = task;
         if (task) {
             task->contextMenuModel()->setTagOnlyMenu(tagOnlyMenu);
@@ -715,6 +732,11 @@ void Controller::setStartupFinished()
 {
     m_startupFinished = true;
     emit startupFinishedChanged();
+}
+
+bool Controller::taskMenuVisible() const
+{
+    return m_rightClickedTask != 0;
 }
 
 void Controller::toggleQueueType()
@@ -841,10 +863,16 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
     if (m_editMode == EditModeEditor)
         return false;
 
-    if (editing && (keyEvent->key() != Qt::Key_Escape &&
-                    keyEvent->key() != Qt::Key_Enter &&
-                    keyEvent->key() != Qt::Key_Return)) {
+    const bool enterKeyPressed = keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return;
+    const bool escKeyPressed = keyEvent->key() != Qt::Key_Escape;
+
+    if (editing && !escKeyPressed && !enterKeyPressed)
         return false;
+
+    if (taskMenuVisible() && enterKeyPressed && m_currentMenuIndex != -1) {
+        // Too many situations where we can loose focus, so lets not use QML keyboard handling
+        emit enterPressed();
+        return true;
     }
 
     switch (keyEvent->key()) {
@@ -866,7 +894,11 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         return true;
         break;
     case Qt::Key_Space:
-        pausePomodoro();
+        if (taskMenuVisible() && m_currentMenuIndex != -1) {
+            m_rightClickedTask->contextMenuModel()->toggleTag(m_currentMenuIndex);
+        } else {
+            pausePomodoro();
+        }
         return true;
         break;
     case Qt::Key_S:
@@ -899,11 +931,17 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         return true;
         break;
     case Qt::Key_Up:
-        cycleTaskSelectionUp();
+        if (taskMenuVisible())
+            cycleMenuSelectionUp();
+        else
+            cycleTaskSelectionUp();
         return true;
         break;
     case Qt::Key_Down:
-        cycleTaskSelectionDown();
+        if (taskMenuVisible())
+            cycleMenuSelectionDown();
+        else
+            cycleTaskSelectionDown();
         return true;
         break;
     case Qt::Key_F2:
@@ -913,6 +951,14 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
             return true;
         }
         return false;
+        break;
+    case Qt::Key_Tab:
+        if (taskMenuVisible())
+            cycleMenuSelectionDown();
+        break;
+    case Qt::Key_Backtab:
+        if (taskMenuVisible())
+            cycleMenuSelectionUp();
         break;
     default:
         break;
@@ -1156,4 +1202,17 @@ bool Controller::stickyWindow() const
 bool Controller::isOSX() const
 {
     return Utils::isOSX();
+}
+
+void Controller::setCurrentMenuIndex(int currentMenuIndex)
+{
+    if (currentMenuIndex != m_currentMenuIndex) {
+        m_currentMenuIndex = currentMenuIndex;
+        emit currentMenuIndexChanged();
+    }
+}
+
+int Controller::currentMenuIndex() const
+{
+    return m_currentMenuIndex;
 }

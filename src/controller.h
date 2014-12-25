@@ -36,6 +36,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(int currentMenuIndex READ currentMenuIndex WRITE setCurrentMenuIndex NOTIFY currentMenuIndexChanged)
     Q_PROPERTY(bool isOSX READ isOSX CONSTANT)
     Q_PROPERTY(bool stickyWindow READ stickyWindow WRITE setStickyWindow NOTIFY stickyWindowChanged)
     Q_PROPERTY(bool useSystray READ useSystray WRITE setUseSystray NOTIFY useSystrayChanged)
@@ -235,6 +236,8 @@ public:
     void setStickyWindow(bool);
     bool stickyWindow() const;
 
+    int currentMenuIndex() const;
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);
@@ -248,6 +251,9 @@ public Q_SLOTS:
     void toggleSelectedTask(Task *task);
     void cycleTaskSelectionUp();
     void cycleTaskSelectionDown();
+
+    void cycleMenuSelectionUp();
+    void cycleMenuSelectionDown();
 
     void showQuestionPopup(QObject *obj, const QString &text, const QString &callback);
     void onPopupButtonClicked(bool okClicked);
@@ -271,6 +277,8 @@ private Q_SLOTS:
     void setStartupFinished();
 
 Q_SIGNALS:
+    void enterPressed();
+    void currentMenuIndexChanged();
     void stickyWindowChanged();
     void useSystrayChanged();
     void hideEmptyTagsChanged();
@@ -316,6 +324,8 @@ Q_SIGNALS:
     void syncAtStartupChanged();
 
 private:
+    bool taskMenuVisible() const;
+    void setCurrentMenuIndex(int);
     void toggleQueueType();
     void setTextRenderType(int);
     int indexOfTaskInCurrentTab(const Task::Ptr &task);
@@ -377,6 +387,7 @@ private:
     bool m_useSystray;
     bool m_stickyWindow;
     bool m_addingTask;
+    int m_currentMenuIndex;
 };
 
 #endif
