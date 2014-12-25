@@ -800,7 +800,7 @@ void Controller::setTagEditStatus(TagEditStatus status)
 
 bool Controller::eventFilter(QObject *object, QEvent *event)
 {
-    if (event->type() != QEvent::KeyRelease)
+    if (event->type() != QEvent::KeyPress)
         return false;
 
     if (!object->inherits("QWindow")) // Filters out duplicated events
