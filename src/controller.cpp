@@ -734,6 +734,11 @@ void Controller::setStartupFinished()
     emit startupFinishedChanged();
 }
 
+bool Controller::anyOverlayVisible() const
+{
+    return taskMenuVisible() || newTagDialogVisible();
+}
+
 bool Controller::taskMenuVisible() const
 {
     return m_rightClickedTask != 0;
@@ -875,6 +880,48 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         return true;
     }
 
+    if (!editing && !anyOverlayVisible()) {
+       switch (keyEvent->key()) {
+       case Qt::Key_S:
+           stopPomodoro();
+           return true;
+           break;
+       case Qt::Key_T:
+           if (m_page == MainPage) {
+               toggleQueueType();
+               return true;
+           }
+
+           return false;
+           break;
+       case Qt::Key_C:
+           setCurrentPage(m_page == ConfigurePage ? MainPage : ConfigurePage);
+           return true;
+           break;
+       case Qt::Key_N:
+           setExpanded(true);
+           addTask("New Task", /**open editor=*/true); // Detect on which tab we're on and tag it properly
+           return true;
+           break;
+       case Qt::Key_Delete:
+           if (m_selectedTask == Q_NULLPTR) {
+               stopPomodoro();
+           } else {
+               removeTask(m_selectedTask);
+           }
+           return true;
+           break;
+       case Qt::Key_F2:
+       case Qt::Key_E:
+           if (m_selectedTask) {
+               editTask(m_selectedTask, EditModeInline);
+               return true;
+           }
+           return false;
+           break;
+       }
+    }
+
     switch (keyEvent->key()) {
     case Qt::Key_Return:
     case Qt::Key_Enter:
@@ -896,39 +943,13 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
     case Qt::Key_Space:
         if (taskMenuVisible() && m_currentMenuIndex != -1) {
             m_rightClickedTask->contextMenuModel()->toggleTag(m_currentMenuIndex);
-        } else {
-            pausePomodoro();
-        }
-        return true;
-        break;
-    case Qt::Key_S:
-        stopPomodoro();
-        return true;
-        break;
-    case Qt::Key_T:
-        if (m_page == MainPage) {
-            toggleQueueType();
             return true;
-        }
-
-        return false;
-        break;
-    case Qt::Key_C:
-        setCurrentPage(m_page == ConfigurePage ? MainPage : ConfigurePage);
-        return true;
-        break;
-    case Qt::Key_N:
-        setExpanded(true);
-        addTask("New Task", /**open editor=*/true); // Detect on which tab we're on and tag it properly
-        return true;
-        break;
-    case Qt::Key_Delete:
-        if (m_selectedTask == Q_NULLPTR) {
-            stopPomodoro();
+        } else if (!anyOverlayVisible() && !editing) {
+            pausePomodoro();
+            return true;
         } else {
-            removeTask(m_selectedTask);
+            return false;
         }
-        return true;
         break;
     case Qt::Key_Up:
         if (taskMenuVisible())
@@ -943,14 +964,6 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         else
             cycleTaskSelectionDown();
         return true;
-        break;
-    case Qt::Key_F2:
-    case Qt::Key_E:
-        if (m_selectedTask) {
-            editTask(m_selectedTask, EditModeInline);
-            return true;
-        }
-        return false;
         break;
     case Qt::Key_Tab:
         if (taskMenuVisible())

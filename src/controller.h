@@ -324,6 +324,7 @@ Q_SIGNALS:
     void syncAtStartupChanged();
 
 private:
+    bool anyOverlayVisible() const;
     bool taskMenuVisible() const;
     void setCurrentMenuIndex(int);
     void toggleQueueType();
