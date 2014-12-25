@@ -17,18 +17,21 @@ Item {
 
         function processChoice(index)
         {
-            if (index === TaskContextMenuModel.OptionTypeEdit) {
-                _controller.editTask(_controller.rightClickedTask, Controller.EditModeInline)
-            } else if (index ===  TaskContextMenuModel.OptionTypeDelete) {
-                _controller.removeTask(_controller.rightClickedTask)
-            } else if (index ===  TaskContextMenuModel.OptionTypeNewTag) {
-                _controller.newTagDialogVisible = true
-            } else if (index ===  TaskContextMenuModel.OptionTypeQueue) {
-                _controller.rightClickedTask.staged = !_controller.rightClickedTask.staged
+            if (!_controller.rightClickedTask.contextMenuModel.tagOnlyMenu) {
+                if (index === TaskContextMenuModel.OptionTypeEdit) {
+                    _controller.editTask(_controller.rightClickedTask, Controller.EditModeInline)
+                } else if (index ===  TaskContextMenuModel.OptionTypeDelete) {
+                    _controller.removeTask(_controller.rightClickedTask)
+                } else if (index ===  TaskContextMenuModel.OptionTypeQueue) {
+                    _controller.rightClickedTask.staged = !_controller.rightClickedTask.staged
+                }
             }
 
-            if (index !== TaskContextMenuModel.OptionTypeNewTag)
+            if (index === TaskContextMenuModel.OptionTypeNewTag) {
+                _controller.newTagDialogVisible = true
+            } else {
                 _controller.setRightClickedTask(null)
+            }
         }
 
         onChoiceToggled: {
