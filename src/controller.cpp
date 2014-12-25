@@ -846,10 +846,13 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
     }
 
     const bool editing = !m_taskBeingEdited.isNull();
+    const bool escKeyPressed = keyEvent->key() == Qt::Key_Escape;
 
-    if (keyEvent->key() == Qt::Key_Escape) {
+    if (escKeyPressed) {
         if (editing) {
             editTask(Q_NULLPTR, EditModeNone);
+        } else if (newTagDialogVisible()) {
+            setNewTagDialogVisible(false);
         } else if (m_rightClickedTask) {
             setRightClickedTask(0);
         } else if (m_tagBeingEdited) {
@@ -869,9 +872,8 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         return false;
 
     const bool enterKeyPressed = keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return;
-    const bool escKeyPressed = keyEvent->key() != Qt::Key_Escape;
 
-    if (editing && !escKeyPressed && !enterKeyPressed)
+    if (editing && !enterKeyPressed)
         return false;
 
     if (taskMenuVisible() && enterKeyPressed && m_currentMenuIndex != -1) {
@@ -928,6 +930,9 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         if (editing) {
             editTask(Q_NULLPTR, EditModeNone);
         } else {
+            if (newTagDialogVisible())
+                return false;
+
             if (m_rightClickedTask) {
                 setRightClickedTask(Q_NULLPTR);
             } else if (!m_selectedTask) {
@@ -966,11 +971,11 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         return true;
         break;
     case Qt::Key_Tab:
-        if (taskMenuVisible())
+        if (taskMenuVisible() && !newTagDialogVisible())
             cycleMenuSelectionDown();
         break;
     case Qt::Key_Backtab:
-        if (taskMenuVisible())
+        if (taskMenuVisible() && !newTagDialogVisible())
             cycleMenuSelectionUp();
         break;
     default:
