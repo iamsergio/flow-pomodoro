@@ -41,7 +41,6 @@ Item {
     property color tagBackground: "black"
     property int tagRowBottomMargin: 1 * _controller.dpiFactor
     property int tagRowRightMargin: 6 * _controller.dpiFactor
-    property int tagScrollIndicatorFadeWidth: 25 * _controller.dpiFactor
 
 
     // ModalDialog

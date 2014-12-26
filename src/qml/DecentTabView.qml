@@ -5,29 +5,31 @@ Item {
     id: root
     height: _style.tagTabHeight
 
-    LinearGradient {
-        id: rightScrollIndicator
-        anchors.fill: root
-        visible: !flickable.atXEnd && flickable.visible
-        start: Qt.point(flickable.width - _style.tagScrollIndicatorFadeWidth, 0)
-        end: Qt.point(flickable.width, 0)
+    Rectangle {
         z: flickable.z + 1
+        rotation: -90
+        height: parent.height
+        width: height
+        y: 0
+        x: root.width - height
+        visible: !flickable.atXEnd && flickable.visible
         gradient: Gradient {
             GradientStop { position: 0.0; color: "transparent" }
             GradientStop { position: 1.0; color: _style.queueBackgroundColor }
         }
     }
 
-    LinearGradient {
-        id: leftScrollIndicator
-        visible: !flickable.atXBeginning && flickable.visible
-        anchors.fill: root
-        start: Qt.point(0, 0)
-        end: Qt.point(_style.tagScrollIndicatorFadeWidth, 0)
+    Rectangle {
         z: flickable.z + 1
+        rotation: 90
+        height: parent.height
+        width: height
+        y: 0
+        x: 0
+        visible: !flickable.atXBeginning && flickable.visible
         gradient: Gradient {
-            GradientStop { position: 0.0; color: _style.queueBackgroundColor }
-            GradientStop { position: 1.0; color: "transparent" }
+            GradientStop { position: 0.0; color: "transparent" }
+            GradientStop { position: 1.0; color: _style.queueBackgroundColor }
         }
     }
 
