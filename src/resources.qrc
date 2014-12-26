@@ -51,5 +51,6 @@
     <file>qml/config/Tags.qml</file>
     <file>qml/config/WebDavSync.qml</file>
     <file>img/shadow.png</file>
+    <file>img/shadow2.png</file>
 </qresource>
 </RCC>
