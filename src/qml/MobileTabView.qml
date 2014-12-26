@@ -1,5 +1,4 @@
 import QtQuick 2.0
-import QtGraphicalEffects 1.0
 
 Item {
     id: root
@@ -32,18 +31,10 @@ Item {
         height: _style.configTabBarHeight
         width: _style.configTabBarWidth
 
-        LinearGradient {
-            id: rightScrollIndicator
-            anchors.fill: parent
-            visible: _style.configTabBarEnableGradient
-            anchors.margins: tabBar.border.width
-            start: Qt.point(0, 0)
-            end: Qt.point(0, height)
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: _style.configTabBarDarkerGradientColor }
-                GradientStop { position: 0.5; color: _style.configTabBarLightGradientColor }
-                GradientStop { position: 1.0; color: _style.configTabBarDarkerGradientColor }
-            }
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: _style.configTabBarDarkerGradientColor }
+            GradientStop { position: 0.5; color: _style.configTabBarLightGradientColor }
+            GradientStop { position: 1.0; color: _style.configTabBarDarkerGradientColor }
         }
 
         Rectangle {
