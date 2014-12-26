@@ -21,7 +21,6 @@ rsync -av $QT/plugins/platforms/ platforms/
 rsync -av $QT/qml/QtQml/ QtQml/
 rsync -av $QT/qml/QtQuick/ QtQuick/
 rsync -av $QT/qml/QtQuick.2/ QtQuick.2/
-rsync -av $QT/qml/QtGraphicalEffects/ QtGraphicalEffects/
 
 cp ../flow.exe .
 mkdir plugins
