@@ -210,9 +210,9 @@ void Storage::save()
         return;
 
     m_savingInProgress = true;
-    m_savingDisabled += 1;
+    m_savingDisabled++;
     save_impl();
-    m_savingDisabled += -1;
+    m_savingDisabled--;
     m_savingInProgress = false;
 }
 
