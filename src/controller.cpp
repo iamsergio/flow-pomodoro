@@ -1099,7 +1099,7 @@ void Controller::endAddingNewTag(const QString &tagName)
 
 void Controller::requestContextMenu(Task *task, bool tagOnlyMenu)
 {
-    editTask(0, EditModeNone);
+    editTask(Q_NULLPTR, EditModeNone);
     setRightClickedTask(task, tagOnlyMenu);
 }
 
