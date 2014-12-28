@@ -141,6 +141,7 @@ public:
 
 #if defined(UNIT_TEST_RUN)
     static int storageCount;
+    static int saveCallCount;
 #endif
 
     QAbstractItemModel* nonEmptyTagsModel() const;

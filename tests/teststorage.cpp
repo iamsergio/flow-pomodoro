@@ -210,3 +210,12 @@ void TestStorage::testPreserveInstanceId()
     m_storage->setData(data2);
     QCOMPARE(data.instanceId, QByteArray("1")); // instanceId is never overwritten
 }
+
+void TestStorage::testSaveCount()
+{
+    Task::Ptr task = m_storage->addTask("t1");
+    const int saveCountStart = m_storage->saveCallCount;
+    task->setSummary("t2");
+    qApp->processEvents();
+    QCOMPARE(m_storage->saveCallCount - saveCountStart, 1);
+}

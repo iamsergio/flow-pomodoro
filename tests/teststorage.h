@@ -42,6 +42,7 @@ private Q_SLOTS:
     void testPrependTask(); // indexOfItem, taskAt
 
     void testPreserveInstanceId();
+    void testSaveCount();
 
 private:
     SignalSpy m_storageSpy;

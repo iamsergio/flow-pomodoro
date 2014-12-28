@@ -32,6 +32,7 @@
 #if defined(UNIT_TEST_RUN)
 # include "assertingproxymodel.h"
   int Storage::storageCount = 0;
+  int Storage::saveCallCount = 0;
 #endif
 
 static QVariant tagsDataFunction(const TagList &list, int index, int role)
@@ -91,10 +92,7 @@ Storage::Storage(Kernel *kernel, QObject *parent)
 
     m_taskFilterModel->setSourceModel(m_data.tasks);
     m_untaggedTasksModel->setSourceModel(m_archivedTasksModel);
-    m_scheduleTimer.setSingleShot(true);
-    m_scheduleTimer.setInterval(0);
 
-    connect(&m_scheduleTimer, &QTimer::timeout, this, &Storage::save);
     QAbstractItemModel *tasksModel = m_data.tasks; // android doesn't build if you use m_data.tasks directly in the connect statement
     connect(tasksModel, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
     connect(tasksModel, &QAbstractListModel::rowsInserted, this, &Storage::scheduleSave);
@@ -204,6 +202,10 @@ void Storage::load()
 
 void Storage::save()
 {
+#if defined(UNIT_TEST_RUN)
+    Storage::saveCallCount++;
+#endif
+
     if (!m_kernel->runtimeConfiguration().saveEnabled()) // Unit-tests don't save
         return;
 
