@@ -1064,14 +1064,17 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
             m_taskBeingEdited->setSummary(tr("New Task"));
         }
 
+        Task *previousTask = m_taskBeingEdited.data();
+        m_taskBeingEdited.clear(); // clear before calling requestContextMenu, due to re-entrancy of editTask(nullptr) being called by requestContextMenu()
+
         if (m_addingTask) {
             m_addingTask = false;
             // It's a new task, lets popup the context menu to choose tags
             if (m_queueType == QueueTypeToday && !m_storage->tasks().isEmpty()) {
-                requestContextMenu(m_taskBeingEdited, /*tagOnlyMenu=*/ true);
+                requestContextMenu(previousTask, /*tagOnlyMenu=*/ true);
             }
         }
-        m_taskBeingEdited.clear();
+
         m_storage->save(); // Editor closed. Write to disk immediately.
     } else {
         m_taskBeingEdited = task.data();

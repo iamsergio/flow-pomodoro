@@ -229,8 +229,6 @@ bool Storage::saveScheduled() const
 void Storage::scheduleSave()
 {
     if (m_savingDisabled == 0) {
-        //if (!m_scheduleTimer.isActive())
-            //qDebug() << Q_FUNC_INFO;
         m_scheduleTimer.start();
     }
 }
@@ -431,6 +429,10 @@ void Storage::clearTasks()
 void Storage::setDisableSaving(bool disable)
 {
     m_savingDisabled += (disable ? 1 : -1);
+    if (m_savingDisabled < 0) {
+        qWarning() << "invalid value for m_savingDisabled" << m_savingDisabled;
+        Q_ASSERT(false);
+    }
 }
 
 bool Storage::savingInProgress() const
