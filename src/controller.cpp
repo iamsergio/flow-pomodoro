@@ -1048,32 +1048,36 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
         return;
     }
 
-    if (m_taskBeingEdited != task.data()) {
+    setSelectedTask(Task::Ptr());
+
+    if (m_taskBeingEdited == task.data()) {
+        // Nothing do to
+        return;
+    }
+
+    // Disabling saving when editor is opened, only save when it's closed.
+    m_storage->setDisableSaving(!task.isNull());
+
+    if (task.isNull()) {
         if (m_taskBeingEdited && m_taskBeingEdited->summary().isEmpty()) {
             // Empty summaries are not allowed !
             m_taskBeingEdited->setSummary(tr("New Task"));
         }
 
-        // Disabling saving when editor is opened, only save when it's closed.
-        m_storage->setDisableSaving(!task.isNull());
-
-        if (task.isNull()) {
-            if (m_addingTask && m_taskBeingEdited) {
-                m_addingTask = false;
-                // It's a new task, lets popup the context menu to choose tags
-                if (m_queueType == QueueTypeToday && !m_storage->tasks().isEmpty()) {
-                    requestContextMenu(m_taskBeingEdited, /*tagOnlyMenu=*/ true);
-                }
+        if (m_addingTask) {
+            m_addingTask = false;
+            // It's a new task, lets popup the context menu to choose tags
+            if (m_queueType == QueueTypeToday && !m_storage->tasks().isEmpty()) {
+                requestContextMenu(m_taskBeingEdited, /*tagOnlyMenu=*/ true);
             }
-            m_taskBeingEdited.clear();
-            m_storage->save(); // Editor closed. Write to disk immediately.
-        } else {
-            m_taskBeingEdited = task.data();
         }
-        emit taskBeingEditedChanged();
+        m_taskBeingEdited.clear();
+        m_storage->save(); // Editor closed. Write to disk immediately.
+    } else {
+        m_taskBeingEdited = task.data();
     }
 
-    setSelectedTask(Task::Ptr());
+    emit taskBeingEditedChanged();
 }
 
 void Controller::beginAddingNewTag()
