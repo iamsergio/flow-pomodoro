@@ -1243,3 +1243,28 @@ int Controller::currentMenuIndex() const
 {
     return m_currentMenuIndex;
 }
+
+QString Controller::buildOptionsText() const
+{
+    QStringList options;
+    options << (isMobile() ? "mobile" : "desktop");
+
+    if (m_storage->webDAVSyncSupported()) {
+        options << "webdav";
+        options << (openSSLSupported() ? "openssl" : "no-openssl");
+    } else {
+        options << "no-webdav";
+    }
+
+    if (hackingMenuSupported())
+        options << "hacking";
+
+    QString text = tr("Build options") + ": ";
+    for (int i = 0; i < options.count(); ++i) {
+        if (i > 0)
+            text += ", ";
+        text += options.at(i);
+    }
+
+    return text;
+}

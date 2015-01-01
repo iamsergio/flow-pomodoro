@@ -207,10 +207,7 @@ Page {
                             anchors.left: parent.left
                             anchors.leftMargin: _style.marginMedium
                             color: _style.smallTextColor
-                            text: qsTr("Build options") + ": " + (_controller.isMobile ? "mobile, " : "desktop, ")
-                                  + (_storage.webDAVSyncSupported ? "webdav, " : "no-webdav, ")
-                                  + (_controller.openSSLSupported ? "openssl" : "no-openssl")
-                                  + (_controller.hackingMenuSupported ? ", hacking" : "")
+                            text: _controller.buildOptionsText
                         }
 
                         Text {

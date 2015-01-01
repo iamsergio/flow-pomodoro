@@ -36,6 +36,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(QString buildOptionsText READ buildOptionsText CONSTANT)
     Q_PROPERTY(int currentMenuIndex READ currentMenuIndex WRITE setCurrentMenuIndex NOTIFY currentMenuIndexChanged)
     Q_PROPERTY(bool isOSX READ isOSX CONSTANT)
     Q_PROPERTY(bool stickyWindow READ stickyWindow WRITE setStickyWindow NOTIFY stickyWindowChanged)
@@ -237,6 +238,8 @@ public:
     bool stickyWindow() const;
 
     int currentMenuIndex() const;
+
+    QString buildOptionsText() const;
 
 public Q_SLOTS:
     void updateWebDavCredentials();
