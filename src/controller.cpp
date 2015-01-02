@@ -22,6 +22,7 @@
 #include "settings.h"
 #include "taskcontextmenumodel.h"
 #include "taskfilterproxymodel.h"
+#include "sortedtaskcontextmenumodel.h"
 #include "storage.h"
 #include "kernel.h"
 #include "webdavsyncer.h"
@@ -235,7 +236,7 @@ void Controller::cycleMenuSelectionDown()
     if (!m_rightClickedTask)
         return;
 
-    if (m_currentMenuIndex < m_rightClickedTask->contextMenuModel()->count() - 1)
+    if (m_currentMenuIndex < m_rightClickedTask->sortedContextMenuModel()->count() - 1)
         setCurrentMenuIndex(m_currentMenuIndex + 1);
 }
 
@@ -947,7 +948,7 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         break;
     case Qt::Key_Space:
         if (taskMenuVisible() && m_currentMenuIndex != -1) {
-            m_rightClickedTask->contextMenuModel()->toggleTag(m_currentMenuIndex);
+            m_rightClickedTask->sortedContextMenuModel()->toggleTag(m_currentMenuIndex);
             return true;
         } else if (!anyOverlayVisible() && !editing) {
             pausePomodoro();

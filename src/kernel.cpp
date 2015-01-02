@@ -35,6 +35,7 @@
 #include "webdavsyncer.h"
 #include "quickview.h"
 #include "taskcontextmenumodel.h"
+#include "sortedtaskcontextmenumodel.h"
 
 #include <QStandardPaths>
 #include <QAbstractListModel>
@@ -98,6 +99,10 @@ static void registerQmlTypes()
     qmlRegisterUncreatableType<TaskContextMenuModel>("Controller",
                                                      1, 0, "TaskContextMenuModel",
                                                      "TaskContextMenuModel is not creatable");
+
+    qmlRegisterUncreatableType<SortedTaskContextMenuModel>("Controller",
+                                                           1, 0, "SortedTaskContextMenuModel",
+                                                           "SortedTaskContextMenuModel is not creatable");
 
     qmlRegisterType<CircularProgressIndicator>("com.kdab.flowpomodoro", 1, 0, "CircularProgressIndicator");
     qmlRegisterType<CheckBoxImpl>("com.kdab.flowpomodoro", 1, 0, "CheckBoxPrivate");

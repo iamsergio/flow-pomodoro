@@ -9,7 +9,7 @@ Item {
         id: choicePopup
         focus: true
         anchors.fill: parent
-        model: _controller.rightClickedTask === null ? null : _controller.rightClickedTask.contextMenuModel
+        model: _controller.rightClickedTask === null ? null : _controller.rightClickedTask.sortedContextMenuModel
         title: _controller.rightClickedTask !== null ? (_controller.rightClickedTask.contextMenuModel.tagOnlyMenu ? qsTr("Select tags") : _controller.rightClickedTask.summary) : ""
         onChoiceClicked: {
             processChoice(index)

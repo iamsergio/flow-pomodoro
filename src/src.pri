@@ -13,6 +13,7 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/runtimeconfiguration.cpp \
            $$PWD/settings.cpp    \
            $$PWD/sortedtagsmodel.cpp \
+           $$PWD/sortedtaskcontextmenumodel.cpp \
            $$PWD/storage.cpp \
            $$PWD/syncable.cpp \
            $$PWD/tag.cpp \
@@ -38,6 +39,7 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/runtimeconfiguration.h \
            $$PWD/settings.h        \
            $$PWD/sortedtagsmodel.h \
+           $$PWD/sortedtaskcontextmenumodel.h \
            $$PWD/storage.h \
            $$PWD/syncable.h \
            $$PWD/tag.h \

@@ -62,7 +62,6 @@ public:
 
     bool tagOnlyMenu() const;
     void setTagOnlyMenu(bool onlyTags);
-    void toggleTag(int index);
 
 Q_SIGNALS:
     void countChanged();
@@ -80,6 +79,7 @@ private Q_SLOTS:
     void onRowsRemoved();
 
 private:
+    void toggleTag(int index);
     int rowOffset() const;
     QVariant staticData(OptionType row, int role) const;
     Task *m_task;
@@ -87,6 +87,8 @@ private:
     Option m_moveToTodayOption;
     Option m_archiveOption;
     bool m_tagOnlyMenu;
+
+    friend class SortedTaskContextMenuModel;
 };
 
 #endif

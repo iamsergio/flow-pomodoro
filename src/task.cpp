@@ -22,6 +22,7 @@
 #include "settings.h"
 #include "checkabletagmodel.h"
 #include "taskcontextmenumodel.h"
+#include "sortedtaskcontextmenumodel.h"
 #if defined(UNIT_TEST_RUN)
 # include "assertingproxymodel.h"
 #endif
@@ -62,6 +63,7 @@ Task::Task(Kernel *kernel, const QString &summary)
     , m_creationDate(QDateTime::currentDateTimeUtc())
     , m_modificationDate(m_creationDate)
     , m_contextMenuModel(0)
+    , m_sortedContextMenuModel(0)
     , m_kernel(kernel)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
@@ -104,10 +106,14 @@ void Task::modelSetup()
     Q_ASSERT(allTagsModel);
     m_checkableTagModel->setSourceModel(allTagsModel);
     m_contextMenuModel = new TaskContextMenuModel(this, this);
+    m_sortedContextMenuModel = new SortedTaskContextMenuModel(this);
+    m_sortedContextMenuModel->setSourceModel(m_contextMenuModel);
 
 #if defined(UNIT_TEST_RUN)
     AssertingProxyModel *assert = new AssertingProxyModel(this);
     assert->setSourceModel(m_contextMenuModel);
+    assert = new AssertingProxyModel(this);
+    assert->setSourceModel(m_sortedContextMenuModel);
     assert = new AssertingProxyModel(this);
     assert->setSourceModel(m_checkableTagModel);
     assert = new AssertingProxyModel(this);
@@ -359,6 +365,11 @@ void Task::fromJson(const QVariantMap &map)
 
     setTagList(tags);
     blockSignals(false);
+}
+
+SortedTaskContextMenuModel *Task::sortedContextMenuModel() const
+{
+    return m_sortedContextMenuModel;
 }
 
 TaskContextMenuModel *Task::contextMenuModel() const

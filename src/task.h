@@ -48,6 +48,7 @@ class QAbstractListModel;
 class Storage;
 class Kernel;
 class TaskContextMenuModel;
+class SortedTaskContextMenuModel;
 
 class Task : public QObject, public Syncable {
     Q_OBJECT
@@ -62,6 +63,7 @@ class Task : public QObject, public Syncable {
     Q_PROPERTY(bool running READ running NOTIFY statusChanged STORED false)
 
     Q_PROPERTY(TaskContextMenuModel* contextMenuModel READ contextMenuModel CONSTANT)
+    Q_PROPERTY(SortedTaskContextMenuModel* sortedContextMenuModel READ sortedContextMenuModel CONSTANT)
 public:
     typedef QSharedPointer<Task> Ptr;
     typedef GenericListModel<Ptr> List;
@@ -109,6 +111,7 @@ public:
     void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
 
     TaskContextMenuModel *contextMenuModel() const;
+    SortedTaskContextMenuModel *sortedContextMenuModel() const;
 
     bool operator==(const Task &other) const;
     Kernel *kernel() const;
@@ -149,6 +152,7 @@ private:
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
     TaskContextMenuModel *m_contextMenuModel;
+    SortedTaskContextMenuModel *m_sortedContextMenuModel;
     Kernel *m_kernel;
 };
 
