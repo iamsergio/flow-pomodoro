@@ -876,10 +876,10 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
     if (m_editMode == EditModeEditor)
         return false;
 
-    const bool enterKeyPressed = keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return;
-
-    if (editing && !enterKeyPressed)
+    if (editing)
         return false;
+
+    const bool enterKeyPressed = keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return;
 
     if (taskMenuVisible() && enterKeyPressed && m_currentMenuIndex != -1) {
         // Too many situations where we can loose focus, so lets not use QML keyboard handling
@@ -887,8 +887,19 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         return true;
     }
 
-    if (!editing && !anyOverlayVisible()) {
+    if (!anyOverlayVisible()) {
        switch (keyEvent->key()) {
+       case Qt::Key_Return:
+       case Qt::Key_Enter:
+           if (m_selectedTask) {
+               startPomodoro(m_selectedTask);
+               setExpanded(false);
+           } else {
+               setExpanded(true);
+           }
+
+           return true;
+           break;
        case Qt::Key_S:
            stopPomodoro();
            return true;
@@ -930,31 +941,11 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
     }
 
     switch (keyEvent->key()) {
-    case Qt::Key_Return:
-    case Qt::Key_Enter:
-        if (editing) {
-            editTask(Q_NULLPTR, EditModeNone);
-        } else {
-            if (newTagDialogVisible())
-                return false;
-
-            if (m_rightClickedTask) {
-                setRightClickedTask(Q_NULLPTR);
-            } else if (!m_selectedTask) {
-                setExpanded(true);
-            } else {
-                startPomodoro(m_selectedTask);
-                setExpanded(false);
-            }
-        }
-
-        return true;
-        break;
     case Qt::Key_Space:
         if (taskMenuVisible() && m_currentMenuIndex != -1) {
             m_rightClickedTask->sortedContextMenuModel()->toggleTag(m_currentMenuIndex);
             return true;
-        } else if (!anyOverlayVisible() && !editing) {
+        } else if (!anyOverlayVisible()) {
             pausePomodoro();
             return true;
         } else {
