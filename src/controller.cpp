@@ -837,7 +837,11 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
     QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
     if (keyEvent->key() == Qt::Key_Back) {
         if (m_page == MainPage) {
-            setQueueType(QueueTypeToday);
+            if (m_queueType != QueueTypeToday) {
+                setQueueType(QueueTypeToday);
+            } else if (isAndroid()) {
+                qApp->quit();
+            }
         } else {
             setCurrentPage(MainPage);
         }
