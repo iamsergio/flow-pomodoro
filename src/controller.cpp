@@ -77,6 +77,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_useSystray(false)
     , m_stickyWindow(true)
     , m_currentMenuIndex(-1)
+    , m_expertMode(false)
 {
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
@@ -100,6 +101,8 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     m_password = m_settings->value("webdavPassword").toString();
     m_isHttps = m_settings->value("webdavIsHttps", false).toBool();
     m_port = m_settings->value("webdavPort", 80).toInt();
+
+    m_expertMode = qApp->arguments().contains("--expert");
 
     connect(this, &Controller::invalidateTaskModel,
             m_storage->taskFilterModel(), &TaskFilterProxyModel::invalidateFilter,
@@ -1263,4 +1266,9 @@ QString Controller::buildOptionsText() const
     }
 
     return text;
+}
+
+bool Controller::expertMode() const
+{
+    return m_expertMode;
 }

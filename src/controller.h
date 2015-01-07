@@ -36,6 +36,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(bool expertMode READ expertMode CONSTANT)
     Q_PROPERTY(QString buildOptionsText READ buildOptionsText CONSTANT)
     Q_PROPERTY(int currentMenuIndex READ currentMenuIndex WRITE setCurrentMenuIndex NOTIFY currentMenuIndexChanged)
     Q_PROPERTY(bool isOSX READ isOSX CONSTANT)
@@ -241,6 +242,8 @@ public:
 
     QString buildOptionsText() const;
 
+    bool expertMode() const;
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);
@@ -392,6 +395,7 @@ private:
     bool m_stickyWindow;
     bool m_addingTask;
     int m_currentMenuIndex;
+    bool m_expertMode;
 };
 
 #endif
