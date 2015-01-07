@@ -2,7 +2,7 @@ import QtQuick 2.0
 import Controller 1.0
 
 Rectangle {
-
+    id: root
     signal deleteClicked()
 
     property QtObject taskObj: null
@@ -14,7 +14,6 @@ Rectangle {
     property int modelIndex: -1
     property bool selected: _controller.selectedTask === taskObj && !inlineEditMode && taskObj !== null
 
-    id: root
     color: _style.taskBackgroundColor
     anchors.left: parent.left
     anchors.right: parent.right
@@ -196,5 +195,15 @@ Rectangle {
                 }
             }
         }
+    }
+    Text {
+        color: _style.taskTagFontColor
+        text: root.taskObj ? root.taskObj.age : ""
+        visible: root.taskObj !== null && _controller.expertMode && _controller.showTaskAge
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: _controller.dpiFactor * 3
+        anchors.bottomMargin: _controller.dpiFactor * 2
+        font.pixelSize: _controller.dpiFactor * 11
     }
 }

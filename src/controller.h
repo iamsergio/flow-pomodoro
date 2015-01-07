@@ -36,6 +36,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(bool showTaskAge READ showTaskAge WRITE setShowTaskAge NOTIFY showTaskAgeChanged)
     Q_PROPERTY(bool expertMode READ expertMode CONSTANT)
     Q_PROPERTY(QString buildOptionsText READ buildOptionsText CONSTANT)
     Q_PROPERTY(int currentMenuIndex READ currentMenuIndex WRITE setCurrentMenuIndex NOTIFY currentMenuIndexChanged)
@@ -244,6 +245,9 @@ public:
 
     bool expertMode() const;
 
+    void setShowTaskAge(bool);
+    bool showTaskAge() const;
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);
@@ -283,6 +287,7 @@ private Q_SLOTS:
     void setStartupFinished();
 
 Q_SIGNALS:
+    void showTaskAgeChanged();
     void enterPressed();
     void currentMenuIndexChanged();
     void stickyWindowChanged();
@@ -396,6 +401,7 @@ private:
     bool m_addingTask;
     int m_currentMenuIndex;
     bool m_expertMode;
+    bool m_showTaskAge;
 };
 
 #endif

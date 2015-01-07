@@ -78,6 +78,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_stickyWindow(true)
     , m_currentMenuIndex(-1)
     , m_expertMode(false)
+    , m_showTaskAge(false)
 {
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
@@ -92,6 +93,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     m_hideEmptyTags = m_settings->value("hideEmptyTags", /*default=*/ false).toBool();
     m_useSystray = m_settings->value("useSystray", /*default=*/ true).toBool();
     m_stickyWindow = m_settings->value("stickyWindow", /*default=*/ true).toBool() && !Utils::isOSX(); // On OSX Qt::Tool flag isn't working
+    m_showTaskAge = m_settings->value("showTaskAge", /*default=*/ false).toBool();
 
     m_expanded = isMobile() || !m_stickyWindow;
 
@@ -1271,4 +1273,18 @@ QString Controller::buildOptionsText() const
 bool Controller::expertMode() const
 {
     return m_expertMode;
+}
+
+void Controller::setShowTaskAge(bool showTaskAge)
+{
+    if (showTaskAge != m_showTaskAge) {
+        m_showTaskAge = showTaskAge;
+        m_settings->setValue("showTaskAge", QVariant(showTaskAge));
+        emit showTaskAgeChanged();
+    }
+}
+
+bool Controller::showTaskAge() const
+{
+    return m_showTaskAge;
 }

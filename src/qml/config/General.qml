@@ -210,6 +210,21 @@ Item {
                 value: stickyWindowBox.checked
             }
         }
+        Text {
+            visible: showTaskAgeBox.visible
+            text: qsTr("Show age (in days) on each task")
+            font.pixelSize: 12 * _controller.dpiFactor
+        }
 
+        FlowCheckBox {
+            id: showTaskAgeBox
+            visible: _controller.expertMode
+            checked: _controller.showTaskAge
+            Binding {
+                target: _controller
+                property: "showTaskAge"
+                value: showTaskAgeBox.checked
+            }
+        }
     }
 }
