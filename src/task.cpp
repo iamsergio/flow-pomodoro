@@ -430,3 +430,11 @@ void Task::onEdited()
     m_revision++;
     emit changed();
 }
+
+int Task::age() const
+{
+    if (!m_creationDate.isValid())
+        return -1;
+
+    return m_creationDate.toLocalTime().date().daysTo(QDate::currentDate());
+}
