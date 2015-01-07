@@ -44,6 +44,7 @@ enum {
 class Storage : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int ageAverage READ ageAverage NOTIFY taskCountChanged)
     Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged)
     Q_PROPERTY(QAbstractItemModel* nonEmptyTagsModel READ nonEmptyTagsModel CONSTANT)
     Q_PROPERTY(QAbstractItemModel* tagsModel READ tagsModel CONSTANT)
@@ -146,6 +147,7 @@ public:
 
     QAbstractItemModel* nonEmptyTagsModel() const;
     int taskCount() const;
+    int ageAverage() const;
 
 public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);

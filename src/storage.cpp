@@ -565,3 +565,16 @@ int Storage::taskCount() const
 {
     return m_data.tasks.count();
 }
+
+int Storage::ageAverage() const
+{
+    if (m_data.tasks.isEmpty())
+        return 0;
+
+    int totalAge = 0;
+    foreach (const Task::Ptr &task, m_data.tasks) {
+        totalAge += task->age();
+    }
+
+    return totalAge / m_data.tasks.count();
+}
