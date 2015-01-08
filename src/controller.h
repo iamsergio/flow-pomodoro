@@ -36,6 +36,8 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(ArchiveViewType archiveViewType READ archiveViewType WRITE setArchiveViewType NOTIFY archiveViewTypeChanged)
+    Q_PROPERTY(bool showAllTasksView READ showAllTasksView WRITE setShowAllTasksView NOTIFY showAllTasksViewChanged)
     Q_PROPERTY(bool showTaskAge READ showTaskAge WRITE setShowTaskAge NOTIFY showTaskAgeChanged)
     Q_PROPERTY(bool expertMode READ expertMode CONSTANT)
     Q_PROPERTY(QString buildOptionsText READ buildOptionsText CONSTANT)
@@ -133,6 +135,13 @@ public:
         NativeRendering = 0,
         QtRendering = 1
     };
+
+    enum ArchiveViewType {
+        ArchiveViewAll, // Shows all archived tasks
+        ArchiveViewUntagged, // Shows all untagged archived tasks
+        ArchiveViewSpecificTag // Shows all archived tasks from a specific tag
+    };
+    Q_ENUMS(ArchiveViewType)
 
     explicit Controller(QQmlContext *context, Kernel *, Storage *storage,
                         Settings *settings, QObject *parent = 0);
@@ -248,6 +257,12 @@ public:
     void setShowTaskAge(bool);
     bool showTaskAge() const;
 
+    void setArchiveViewType(ArchiveViewType);
+    ArchiveViewType archiveViewType() const;
+
+    void setShowAllTasksView(bool);
+    bool showAllTasksView() const;
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTabTag(Tag *);
@@ -287,6 +302,8 @@ private Q_SLOTS:
     void setStartupFinished();
 
 Q_SIGNALS:
+    void showAllTasksViewChanged();
+    void archiveViewTypeChanged();
     void showTaskAgeChanged();
     void enterPressed();
     void currentMenuIndexChanged();
@@ -402,6 +419,8 @@ private:
     int m_currentMenuIndex;
     bool m_expertMode;
     bool m_showTaskAge;
+    ArchiveViewType m_archiveViewType;
+    bool m_showAllTasksView;
 };
 
 #endif

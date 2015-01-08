@@ -46,9 +46,35 @@ Page {
             id: archiveViewComponent
             TaskListView {
                 id: archiveView
-                model: _controller.currentTabTag == null ? _storage.untaggedTasksModel : _controller.currentTabTag.taskModel
-                emptyText: _controller.currentTabTag == null ? qsTr("No archived untagged tasks found.")
-                                                             : qsTr("No archived tasks found with tag %1").arg(_controller.currentTabTag.name)
+
+                function modelForViewType()
+                {
+                    if (_controller.archiveViewType === Controller.ArchiveViewAll) {
+                        return _storage.archivedTasksModel
+                    } else if (_controller.archiveViewType === Controller.ArchiveViewUntagged) {
+                        return _storage.untaggedTasksModel
+                    } else if (_controller.currentTabTag) {
+                        return _controller.currentTabTag.taskModel
+                    }
+
+                    return null
+                }
+
+                function emptyTextForViewType()
+                {
+                    if (_controller.archiveViewType === Controller.ArchiveViewAll) {
+                        return qsTr("No archived tasks found.")
+                    } else if (_controller.archiveViewType === Controller.ArchiveViewUntagged) {
+                        return qsTr("No archived untagged tasks found.")
+                    } else if (_controller.currentTabTag) {
+                        qsTr("No archived tasks found with tag %1").arg(_controller.currentTabTag.name)
+                    }
+
+                    return ""
+                }
+
+                model: modelForViewType()
+                emptyText: emptyTextForViewType()
             }
         }
 

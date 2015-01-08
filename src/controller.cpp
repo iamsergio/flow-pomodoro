@@ -79,6 +79,8 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_currentMenuIndex(-1)
     , m_expertMode(false)
     , m_showTaskAge(false)
+    , m_archiveViewType(ArchiveViewUntagged)
+    , m_showAllTasksView(false)
 {
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
@@ -94,6 +96,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     m_useSystray = m_settings->value("useSystray", /*default=*/ true).toBool();
     m_stickyWindow = m_settings->value("stickyWindow", /*default=*/ true).toBool() && !Utils::isOSX(); // On OSX Qt::Tool flag isn't working
     m_showTaskAge = m_settings->value("showTaskAge", /*default=*/ false).toBool();
+    m_showAllTasksView = m_settings->value("showAllTasksView", /*default=*/ false).toBool();
 
     m_expanded = isMobile() || !m_stickyWindow;
 
@@ -651,6 +654,7 @@ void Controller::setCurrentTabTag(Tag *tag)
 {
     if (m_currentTabTag != tag) {
         if (tag) {
+            setArchiveViewType(ArchiveViewSpecificTag);
             connect(tag, &Tag::destroyed,
                     this, &Controller::currentTabTagChanged, Qt::UniqueConnection);
         }
@@ -1287,4 +1291,31 @@ void Controller::setShowTaskAge(bool showTaskAge)
 bool Controller::showTaskAge() const
 {
     return m_showTaskAge;
+}
+
+void Controller::setArchiveViewType(ArchiveViewType archiveViewType)
+{
+    if (archiveViewType != m_archiveViewType) {
+        m_archiveViewType = archiveViewType;
+        emit archiveViewTypeChanged();
+    }
+}
+
+Controller::ArchiveViewType Controller::archiveViewType() const
+{
+    return m_archiveViewType;
+}
+
+void Controller::setShowAllTasksView(bool showAllTasksView)
+{
+    if (showAllTasksView != m_showAllTasksView) {
+        m_showAllTasksView = showAllTasksView;
+        m_settings->setValue("showAllTasksView", QVariant(showAllTasksView));
+        emit showAllTasksViewChanged();
+    }
+}
+
+bool Controller::showAllTasksView() const
+{
+    return m_showAllTasksView;
 }

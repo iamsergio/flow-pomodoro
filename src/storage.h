@@ -49,6 +49,7 @@ class Storage : public QObject
     Q_PROPERTY(QAbstractItemModel* nonEmptyTagsModel READ nonEmptyTagsModel CONSTANT)
     Q_PROPERTY(QAbstractItemModel* tagsModel READ tagsModel CONSTANT)
     Q_PROPERTY(ArchivedTasksFilterModel* stagedTasksModel READ stagedTasksModel CONSTANT)
+    Q_PROPERTY(ArchivedTasksFilterModel* archivedTasksModel READ archivedTasksModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* taskFilterModel READ taskFilterModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* untaggedTasksModel READ untaggedTasksModel CONSTANT)
     Q_PROPERTY(bool webDAVSyncSupported READ webDAVSyncSupported CONSTANT)
@@ -115,7 +116,7 @@ public:
         return -1;
     }
 //------------------------------------------------------------------------------
-//Stuff fot tasks
+// Stuff for tasks
     TaskFilterProxyModel* taskFilterModel() const;
     TaskFilterProxyModel* untaggedTasksModel() const;
     ArchivedTasksFilterModel* stagedTasksModel() const;

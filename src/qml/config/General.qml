@@ -226,5 +226,22 @@ Item {
                 value: showTaskAgeBox.checked
             }
         }
+
+        Text {
+            visible: showAllTasksView.visible
+            text: qsTr("Show \"all tasks\" view")
+            font.pixelSize: 12 * _controller.dpiFactor
+        }
+
+        FlowCheckBox {
+            id: showAllTasksView
+            visible: _controller.expertMode
+            checked: _controller.showAllTasksView
+            Binding {
+                target: _controller
+                property: "showAllTasksView"
+                value: showAllTasksView.checked
+            }
+        }
     }
 }

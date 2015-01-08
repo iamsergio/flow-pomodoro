@@ -10,6 +10,7 @@ Rectangle {
     property bool isSelected: false
     property int taskCount: 0
     property QtObject tagObj: null
+    property int archiveViewType: -1
 
     height: _style.tagTabHeight
     color: "black"
@@ -62,8 +63,10 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            if (!root.isSelected)
+            if (!root.isSelected) {
                 _controller.setCurrentTabTag(root.tagObj)
+                _controller.archiveViewType = root.archiveViewType
+            }
         }
     }
 }
