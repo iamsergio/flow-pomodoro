@@ -199,7 +199,7 @@ Rectangle {
     Text {
         color: _style.taskTagFontColor
         text: root.taskObj ? root.taskObj.age : ""
-        visible: root.taskObj !== null && _controller.expertMode && _controller.showTaskAge
+        visible: root.taskObj !== null && _controller.showTaskAge
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: _controller.dpiFactor * 3
