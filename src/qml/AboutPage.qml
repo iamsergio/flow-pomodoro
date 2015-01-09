@@ -244,7 +244,7 @@ Page {
                 SmallText {
                     id: countText
                     anchors.left: parent.left
-                    text: qsTr("Task count: %1").arg(_storage.taskCount) + "; " + qsTr("Average task age: %1 days").arg(_storage.ageAverage)
+                    text: qsTr("Task count: %1").arg(_storage.taskCount)
                 }
             }
 
