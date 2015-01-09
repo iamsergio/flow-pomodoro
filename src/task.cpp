@@ -274,7 +274,10 @@ void Task::setCreationDate(const QDateTime &date)
 
 void Task::setLastPomodoroDate(const QDateTime &date)
 {
-    m_lastPomodoroDate = date;
+    if (date != m_lastPomodoroDate) {
+        m_lastPomodoroDate = date;
+        emit daysSinceLastPomodoroChanged();
+    }
 }
 
 QDateTime Task::creationDate() const
@@ -454,4 +457,12 @@ int Task::daysSinceCreation() const
         return -1;
 
     return m_creationDate.toLocalTime().date().daysTo(QDate::currentDate());
+}
+
+int Task::daysSinceLastPomodoro() const
+{
+    if (!m_lastPomodoroDate.isValid())
+        return -1;
+
+    return m_lastPomodoroDate.toLocalTime().date().daysTo(QDate::currentDate());
 }

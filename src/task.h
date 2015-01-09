@@ -52,6 +52,7 @@ class SortedTaskContextMenuModel;
 
 class Task : public QObject, public Syncable {
     Q_OBJECT
+    Q_PROPERTY(int daysSinceLastPomodoro READ daysSinceLastPomodoro NOTIFY daysSinceLastPomodoroChanged)
     Q_PROPERTY(int daysSinceCreation READ daysSinceCreation NOTIFY daysSinceCreationChanged)
     Q_PROPERTY(bool staged READ staged WRITE setStaged NOTIFY stagedChanged)
     Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
@@ -128,8 +129,10 @@ public:
 #endif
 
     int daysSinceCreation() const; // days since creation date
+    int daysSinceLastPomodoro() const;
 
 Q_SIGNALS:
+    void daysSinceLastPomodoroChanged();
     void daysSinceCreationChanged();
     void summaryChanged();
     void descriptionChanged();
