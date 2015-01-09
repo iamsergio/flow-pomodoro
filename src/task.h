@@ -100,6 +100,8 @@ public:
 
     QDateTime creationDate() const;
     QDateTime modificationDate() const;
+    QDateTime lastPomodoroDate() const;
+    void setLastPomodoroDate(const QDateTime &);
 
     bool running() const;
     bool stopped() const;
@@ -155,6 +157,7 @@ private:
     QWeakPointer<Task> m_this;
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
+    QDateTime m_lastPomodoroDate;
     TaskContextMenuModel *m_contextMenuModel;
     SortedTaskContextMenuModel *m_sortedContextMenuModel;
     Kernel *m_kernel;

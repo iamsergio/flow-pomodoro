@@ -145,7 +145,7 @@ void Controller::startPomodoro(Task *t)
 
     Task::Ptr task = t->toStrongRef();
     setSelectedTask(Task::Ptr());
-
+    t->setLastPomodoroDate(QDateTime::currentDateTimeUtc());
     stopPomodoro(); // Stop previous one, if any
 
     m_currentTask = task;
@@ -162,6 +162,7 @@ void Controller::startPomodoro(Task *t)
 
     setTaskStatus(TaskStarted);
     emit invalidateTaskModel();
+    m_storage->scheduleSave();
 }
 
 void Controller::stopPomodoro()

@@ -272,6 +272,11 @@ void Task::setCreationDate(const QDateTime &date)
     m_creationDate = date;
 }
 
+void Task::setLastPomodoroDate(const QDateTime &date)
+{
+    m_lastPomodoroDate = date;
+}
+
 QDateTime Task::creationDate() const
 {
     return m_creationDate;
@@ -285,6 +290,11 @@ void Task::setModificationDate(const QDateTime &date)
 QDateTime Task::modificationDate() const
 {
     return m_modificationDate;
+}
+
+QDateTime Task::lastPomodoroDate() const
+{
+    return m_lastPomodoroDate;
 }
 
 bool Task::running() const
@@ -328,6 +338,9 @@ QVariantMap Task::toJson() const
     if (m_modificationDate.isValid())
         map.insert("modificationTimestamp", m_modificationDate.toMSecsSinceEpoch());
 
+    if (m_lastPomodoroDate.isValid())
+        map.insert("lastPomodoroDate", m_lastPomodoroDate.toMSecsSinceEpoch());
+
     return map;
 }
 
@@ -355,6 +368,10 @@ void Task::fromJson(const QVariantMap &map)
     QDateTime modificationDate = QDateTime::fromMSecsSinceEpoch(map.value("modificationTimestamp", QDateTime()).toLongLong());
     if (modificationDate.isValid())
         setModificationDate(modificationDate);
+
+    QDateTime lastPomodoroDate = QDateTime::fromMSecsSinceEpoch(map.value("lastPomodoroDate", QDateTime()).toLongLong());
+    if (lastPomodoroDate.isValid())
+        setLastPomodoroDate(lastPomodoroDate);
 
     QVariantList tagsVariant = map.value("tags").toList();
     TagRef::List tags;
