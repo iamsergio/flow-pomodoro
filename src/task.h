@@ -102,6 +102,8 @@ public:
     QDateTime creationDate() const;
     QDateTime modificationDate() const;
     QDateTime lastPomodoroDate() const;
+    QDate dueDate() const;
+    void setDueDate(const QDate &);
     void setLastPomodoroDate(const QDateTime &);
 
     bool running() const;
@@ -161,6 +163,7 @@ private:
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
     QDateTime m_lastPomodoroDate;
+    QDate m_dueDate;
     TaskContextMenuModel *m_contextMenuModel;
     SortedTaskContextMenuModel *m_sortedContextMenuModel;
     Kernel *m_kernel;

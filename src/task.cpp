@@ -300,6 +300,16 @@ QDateTime Task::lastPomodoroDate() const
     return m_lastPomodoroDate;
 }
 
+QDate Task::dueDate() const
+{
+    return m_dueDate;
+}
+
+void Task::setDueDate(const QDate &date)
+{
+    m_dueDate = date;
+}
+
 bool Task::running() const
 {
     return m_status == TaskStarted;
@@ -344,6 +354,9 @@ QVariantMap Task::toJson() const
     if (m_lastPomodoroDate.isValid())
         map.insert("lastPomodoroDate", m_lastPomodoroDate.toMSecsSinceEpoch());
 
+    if (m_dueDate.isValid())
+        map.insert("dueDate", m_dueDate.toJulianDay());
+
     return map;
 }
 
@@ -375,6 +388,10 @@ void Task::fromJson(const QVariantMap &map)
     QDateTime lastPomodoroDate = QDateTime::fromMSecsSinceEpoch(map.value("lastPomodoroDate", QDateTime()).toLongLong());
     if (lastPomodoroDate.isValid())
         setLastPomodoroDate(lastPomodoroDate);
+
+    QDate dueDate = QDate::fromJulianDay(map.value("dueDate", QDate()).toLongLong());
+    if (dueDate.isValid())
+        setDueDate(dueDate);
 
     QVariantList tagsVariant = map.value("tags").toList();
     TagRef::List tags;
