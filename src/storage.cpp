@@ -573,7 +573,7 @@ int Storage::ageAverage() const
 
     int totalAge = 0;
     foreach (const Task::Ptr &task, m_data.tasks) {
-        totalAge += task->age();
+        totalAge += task->daysSinceCreation();
     }
 
     return totalAge / m_data.tasks.count();

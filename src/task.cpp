@@ -448,7 +448,7 @@ void Task::onEdited()
     emit changed();
 }
 
-int Task::age() const
+int Task::daysSinceCreation() const
 {
     if (!m_creationDate.isValid())
         return -1;

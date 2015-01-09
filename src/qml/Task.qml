@@ -198,7 +198,7 @@ Rectangle {
     }
     Text {
         color: _style.taskTagFontColor
-        text: root.taskObj ? root.taskObj.age : ""
+        text: root.taskObj ? root.taskObj.daysSinceCreation : ""
         visible: root.taskObj !== null && _controller.showTaskAge
         anchors.bottom: parent.bottom
         anchors.right: parent.right
