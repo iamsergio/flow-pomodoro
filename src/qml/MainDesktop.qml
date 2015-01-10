@@ -20,7 +20,7 @@ Main {
             anchors.leftMargin: _style.marginMedium
 
             toolTip: qsTr("Add new task")
-            visible: _controller.expanded
+            visible: _controller.expanded && _controller.currentPage == Controller.MainPage
             color: "white"
             onClicked: {
                 if (_controller.rightClickedTask === null) // Ignore if we have the context menu open

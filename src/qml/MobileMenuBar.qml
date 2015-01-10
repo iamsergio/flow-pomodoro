@@ -23,6 +23,7 @@ Rectangle {
         anchors.left: parent.left
         toolTip: qsTr("Add new task")
         color: _style.fontColor
+        visible: _controller.currentPage == Controller.MainPage
         onClicked: {
             _controller.addTask("New Task", /**open editor=*/true) // TODO: Pass edit mode instead
         }
