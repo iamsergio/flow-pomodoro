@@ -51,12 +51,13 @@ Item {
                 text: root.tagName
                 style: TextFieldStyle {
                      textColor: "black"
+                     font.pixelSize: 12 * _controller.dpiFactor
                      background: Rectangle {
-                         radius: 6
+                         radius: 2 * _controller.dpiFactor
                          implicitWidth: 100 * _controller.dpiFactor
                          implicitHeight: 24 * _controller.dpiFactor
                          border.color: "#333"
-                         border.width: 1
+                         border.width: 1 * _controller.dpiFactor
                      }
                 }
                 onAccepted: {
