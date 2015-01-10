@@ -42,9 +42,7 @@ MouseArea {
             color: enabled ? "black" : "gray"
             enabled: _controller.tagEditStatus !== Controller.TagEditStatusNew
             onClicked: {
-                newTag.textField.text = ""
-                _controller.beginAddingNewTag()
-                newTag.textField.forceActiveFocus()
+                _controller.newTagDialogVisible = true
             }
         }
 
