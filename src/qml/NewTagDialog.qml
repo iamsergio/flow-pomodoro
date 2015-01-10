@@ -6,6 +6,7 @@ InputPopup {
     visible: _controller.newTagDialogVisible
 
     onClicked: {
+        Qt.inputMethod.commit()
         if (okClicked) {
             _storage.createTag(enteredText)
             if (_controller.rightClickedTask !== null)
