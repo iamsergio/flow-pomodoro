@@ -50,6 +50,8 @@ Item {
             enabled: !_controller.pomodoroFunctionalityDisabled
             minimumValue: 0
             maximumValue: 59
+            height: _style.checkBoxIconSize
+            width: 50 * _controller.dpiFactor
             value: _controller.defaultPomodoroDuration
             onValueChanged: {
                 // The binding gets broken when user edits, not sure how to fix it.. so hack it:
@@ -66,9 +68,14 @@ Item {
                     Qt.inputMethod.hide(); // hide keyboard
             }
 
-            style: _controller.isMobile ? mobileSpinBoxStyleComponent
+            style: _controller.isMobile ? (_controller.isAndroid ? dummySpinBox.style
+                                                                : mobileSpinBoxStyleComponent)
                                         : desktopSpinBoxStyleComponent
+        }
 
+        SpinBox {
+            id: dummySpinBox
+            visible: false
         }
 
         Component {
@@ -92,6 +99,8 @@ Item {
         Text {
             text: qsTr("Disable pomodoro functionality")
             font.pixelSize: 12 * _controller.dpiFactor
+            verticalAlignment: Text.AlignVCenter
+            height: Math.max(disablePomodoroCheckBox.height, contentHeight)
         }
 
         FlowCheckBox {
@@ -108,6 +117,8 @@ Item {
             text: qsTr("Use systray")
             font.pixelSize: 12 * _controller.dpiFactor
             visible: !_controller.isMobile
+            verticalAlignment: Text.AlignVCenter
+            height: Math.max(systrayCheckBox.height, contentHeight)
         }
 
         FlowCheckBox {
@@ -124,7 +135,8 @@ Item {
         Text {
             text: qsTr("Hide empty tags in Later screen")
             font.pixelSize: 12 * _controller.dpiFactor
-            height: geometryTypesCombo.height
+            verticalAlignment: Text.AlignVCenter
+            height: Math.max(hideEmptyTagsCheck.height, contentHeight)
         }
 
         FlowCheckBox {
@@ -141,6 +153,8 @@ Item {
             visible: _controller.isAndroid
             text: qsTr("Keep screen on during pomodoro")
             font.pixelSize: 12 * _controller.dpiFactor
+            verticalAlignment: Text.AlignVCenter
+            height: Math.max(keepScreenOn.height, contentHeight)
         }
 
         FlowCheckBox {
@@ -158,8 +172,8 @@ Item {
             visible: !_controller.isMobile
             text: qsTr("Initial window location")
             font.pixelSize: 12 * _controller.dpiFactor
-            height: windowPositionsCombo.height
-            verticalAlignment: Text.AlignVCenter;
+            verticalAlignment: Text.AlignVCenter
+            height: Math.max(windowPositionsCombo.height, contentHeight)
         }
 
         ComboBox {
@@ -178,8 +192,8 @@ Item {
             visible: !_controller.isMobile
             text: qsTr("Window geometry")
             font.pixelSize: 12 * _controller.dpiFactor
-            height: geometryTypesCombo.height
-            verticalAlignment: Text.AlignVCenter;
+            verticalAlignment: Text.AlignVCenter
+            height: Math.max(geometryTypesCombo.height, contentHeight)
         }
 
         ComboBox {
@@ -198,6 +212,8 @@ Item {
             visible: stickyWindowBox.visible
             text: qsTr("Sticky Window (requires restart)")
             font.pixelSize: 12 * _controller.dpiFactor
+            verticalAlignment: Text.AlignVCenter
+            height: Math.max(stickyWindowBox.height, contentHeight)
         }
 
         FlowCheckBox {
@@ -210,10 +226,13 @@ Item {
                 value: stickyWindowBox.checked
             }
         }
+
         Text {
             visible: showTaskAgeBox.visible
             text: qsTr("Show age (in days) on each task")
             font.pixelSize: 12 * _controller.dpiFactor
+            verticalAlignment: Text.AlignVCenter
+            height: Math.max(showTaskAgeBox.height, contentHeight)
         }
 
         FlowCheckBox {
@@ -231,6 +250,8 @@ Item {
             visible: showAllTasksView.visible
             text: qsTr("Show \"all tasks\" view")
             font.pixelSize: 12 * _controller.dpiFactor
+            verticalAlignment: Text.AlignVCenter
+            height: Math.max(showAllTasksView.height, contentHeight)
         }
 
         FlowCheckBox {

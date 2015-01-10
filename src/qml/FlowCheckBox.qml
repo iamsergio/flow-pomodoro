@@ -4,7 +4,7 @@ import com.kdab.flowpomodoro 1.0
 Item {
     id: root
     property alias checked: checkboxPrivate.checked
-    width: 22 * _controller.dpiFactor
+    width: _style.checkBoxIconSize
     height: width
     signal toggled()
 
@@ -16,7 +16,7 @@ Item {
         id: icon
         renderType: _controller.textRenderType
         anchors.fill: parent
-        font.pixelSize: 20 * _controller.dpiFactor
+        font.pixelSize: _style.checkBoxIconSize
         font.family: "FontAwesome"
         anchors.verticalCenter: parent.verticalCenter
         text: root.checked ? "\uf046" : "\uf096"

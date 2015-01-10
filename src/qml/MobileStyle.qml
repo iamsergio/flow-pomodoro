@@ -14,4 +14,5 @@ DefaultStyle {
     addTagIconSize: 50
     deleteTagIconSize: 30
     addTagItemHeight: 48 * _controller.dpiFactor
+    checkBoxIconSize: 48 * _controller.dpiFactor
 }
