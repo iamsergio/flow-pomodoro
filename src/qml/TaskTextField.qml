@@ -17,14 +17,6 @@ TextField {
         }
     }
 
-    Binding {
-        // two way binding
-        target: _controller.taskBeingEdited
-        when: textField.visible && _controller.editMode !== Controller.EditModeNone
-        property: "summary"
-        value: textField.text
-    }
-
     Connections {
         target: _controller
         onForceFocus: {
@@ -41,6 +33,7 @@ TextField {
     }
 
     onAccepted: {
+        _controller.taskBeingEdited.summary = textField.text
         _controller.editTask(null, Controller.EditModeNone)
     }
 }

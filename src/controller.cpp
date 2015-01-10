@@ -1061,9 +1061,6 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
         return;
     }
 
-    // Disabling saving when editor is opened, only save when it's closed.
-    m_storage->setDisableSaving(!task.isNull());
-
     if (task.isNull()) {
         if (m_taskBeingEdited && m_taskBeingEdited->summary().isEmpty()) {
             // Empty summaries are not allowed !
@@ -1080,8 +1077,6 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
                 requestContextMenu(previousTask, /*tagOnlyMenu=*/ true);
             }
         }
-
-        m_storage->save(); // Editor closed. Write to disk immediately.
     } else {
         m_taskBeingEdited = task.data();
     }
