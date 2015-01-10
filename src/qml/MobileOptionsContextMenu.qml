@@ -17,7 +17,7 @@ Item {
         onChoiceClicked: {
             _controller.optionsContextMenuVisible = false
             if (index === 0) {
-                _controller.toggleConfigurePage()
+                _controller.currentPage = Controller.ConfigurePage
             } else if (index === 1) {
                 _controller.currentPage = Controller.AboutPage
             } else if (index === 2) {
