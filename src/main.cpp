@@ -150,8 +150,9 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_WIN
     qputenv("QT_QPA_PLATFORM","windows:fontengine=freetype");
 #endif
+#ifndef Q_OS_ANDROID
     qInstallMessageHandler(flowMessageHandler);
-
+#endif
 #ifdef FLOW_STATIC_BUILD
     Q_INIT_RESOURCE(shellscriptplugin);
     Q_INIT_RESOURCE(hostsplugin);
