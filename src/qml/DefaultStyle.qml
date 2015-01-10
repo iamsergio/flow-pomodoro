@@ -115,15 +115,15 @@ Item {
     property int menuBarMargin: borderWidth
 
     // Config tab bar
-    property color configTabBarFontColor: "white"
-    property color configTabBarSelectedFontColor: "black"
+    property color configTabBarFontColor: "#999999"
+    property color configTabBarSelectedFontColor: "white"
     property int configTabBarFontSize: 13 * _controller.dpiFactor
+    property int configTabBarSelectedFontSize: 16 * _controller.dpiFactor
     property int configTabBarSeparatorWidth: 2 * _controller.dpiFactor
     property int configTabBarBorderWidth: 2 * _controller.dpiFactor
     property int configTabBarBorderRadius: 8 * _controller.dpiFactor
-    property int configTabBarHeight: 30 * _controller.dpiFactor
+    property int configTabBarHeight: 48 * _controller.dpiFactor
     property color configTabBarBorderColor:  "black"
-    property color configTabBarSelectedColor: "#CECCCB"
 
     property bool configTabBarEnableGradient: true
     property color configTabBarLightGradientColor: "#454C54"

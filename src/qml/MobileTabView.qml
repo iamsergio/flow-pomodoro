@@ -52,10 +52,9 @@ Item {
             spacing: 0
             Repeater {
                 model: root.model
-                Rectangle {
+                Item {
                     anchors.top: row.top
                     anchors.bottom: row.bottom
-                    color: root.selectedIndex === index ? _style.configTabBarSelectedColor : "transparent"
                     width: row.width / root.count
                     Rectangle {
                         id: verticalSeparator
@@ -72,7 +71,9 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: model.text
-                        font.pixelSize: _style.configTabBarFontSize
+                        font.pixelSize: root.selectedIndex === index ? _style.configTabBarSelectedFontSize
+                                                                     : _style.configTabBarFontSize
+                        font.bold: root.selectedIndex === index
                         color: root.selectedIndex === index ? _style.configTabBarSelectedFontColor
                                                             :  _style.configTabBarFontColor
                     }
