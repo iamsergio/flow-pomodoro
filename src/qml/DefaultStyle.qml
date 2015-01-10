@@ -97,6 +97,9 @@ Item {
     property int marginSmall: Math.ceil(5 * _controller.dpiFactor)
     property int marginMedium: Math.ceil(10 * _controller.dpiFactor)
     property int marginBig: Math.ceil(20 * _controller.dpiFactor)
+    property int addTagIconSize: 23
+    property int deleteTagIconSize: 14
+    property int addTagItemHeight: 23 * _controller.dpiFactor
 
     // Mobile Menu Bar
     property color menuBarFontColor: fontColor

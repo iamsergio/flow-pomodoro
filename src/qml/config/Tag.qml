@@ -6,8 +6,8 @@ import ".."
 
 Item {
     id: root
-    height: 23 * _controller.dpiFactor
-    width: label.contentWidth + taskCountLabel.contentWidth + _style.tagExtraWidth + deleteImage.width
+    height: _style.addTagItemHeight
+    width: Math.max(label.contentWidth + taskCountLabel.contentWidth + _style.tagExtraWidth + deleteImage.width, 50 * _controller.dpiFactor)
     property QtObject tagObj: null
     property bool beingEdited: false
     property string tagName: ""
@@ -47,7 +47,7 @@ Item {
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 visible: root.beingEdited
-                width: parent.width + 2
+                width: parent.width + 2 * _controller.dpiFactor
                 text: root.tagName
                 style: TextFieldStyle {
                      textColor: "black"
@@ -107,7 +107,7 @@ Item {
                 anchors.rightMargin: 5 * _controller.dpiFactor
                 visible: !root.beingEdited
                 text: "\uf1f8"
-                size: 14
+                size: _style.deleteTagIconSize
 
                 function reallyRemove()
                 {

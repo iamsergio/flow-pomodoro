@@ -38,8 +38,9 @@ MouseArea {
             id: addImage
             toolTip: qsTr("Add new tag")
             text: "\uf067"
-            anchors.verticalCenter: undefined
             color: enabled ? "black" : "gray"
+            size: _style.addTagIconSize
+            anchors.verticalCenter: undefined
             enabled: _controller.tagEditStatus !== Controller.TagEditStatusNew
             onClicked: {
                 _controller.newTagDialogVisible = true
