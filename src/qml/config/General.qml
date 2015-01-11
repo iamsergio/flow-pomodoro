@@ -64,8 +64,10 @@ Item {
             }
 
             onEditingFinished: {
-                if (_controller.isMobile)
+                if (_controller.isMobile) {
+                    focus = false
                     Qt.inputMethod.hide(); // hide keyboard
+                }
             }
 
             style: _controller.isMobile ? (_controller.isAndroid ? dummySpinBox.style
