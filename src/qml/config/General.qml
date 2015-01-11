@@ -51,7 +51,7 @@ Item {
             minimumValue: 0
             maximumValue: 59
             height: _style.checkBoxIconSize
-            width: 50 * _controller.dpiFactor
+            width: 55 * _controller.dpiFactor
             value: _controller.defaultPomodoroDuration
             onValueChanged: {
                 // The binding gets broken when user edits, not sure how to fix it.. so hack it:
