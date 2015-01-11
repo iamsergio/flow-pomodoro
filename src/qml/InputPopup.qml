@@ -2,6 +2,7 @@ import QtQuick 2.0
 
 Popup {
     id: root
+    signal accepted()
     centerPopup: false
     property alias text: textItem.text
     property alias enteredText: textInput.text
@@ -29,6 +30,9 @@ Popup {
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: 10 * _controller.dpiFactor
             width: 0.70 * parent.width
+            onAccepted: {
+                root.accepted()
+            }
         }
 
         Rectangle {

@@ -5,7 +5,8 @@ InputPopup {
     icon: "\uf02b"
     visible: _controller.newTagDialogVisible
 
-    onClicked: {
+    function buttonClicked(okClicked)
+    {
         Qt.inputMethod.commit()
         if (okClicked) {
             _storage.createTag(enteredText)
@@ -16,5 +17,19 @@ InputPopup {
         _controller.newTagDialogVisible = false
         enteredText = ""
         Qt.inputMethod.hide()
+    }
+
+    onClicked: {
+        buttonClicked(okClicked)
+    }
+
+    onAccepted: {
+        buttonClicked(true)
+    }
+
+    onVisibleChanged: {
+        if (visible) {
+            enteredText = ""
+        }
     }
 }
