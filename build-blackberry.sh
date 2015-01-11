@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Replace with your own script
-source /data/qt5-blackberry-5.3.source
+source /data/qt5-blackberry.source 5.4
 
 mkdir build_dir-blackberry &> /dev/null
 cd build_dir-blackberry
