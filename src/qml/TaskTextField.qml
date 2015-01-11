@@ -27,10 +27,8 @@ TextField {
         }
     }
 
-    style: TextFieldStyle {
-        // Set text color explicitely, for some reason it defaults to gray on blackberry
-        textColor: "black"
-    }
+    font.pixelSize: 13 * _controller.dpiFactor
+    textColor: _controller.isAndroid ? "white" : "black"
 
     onAccepted: {
         _controller.taskBeingEdited.summary = textField.text
