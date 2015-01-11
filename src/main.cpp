@@ -18,6 +18,11 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifdef FLOW_DBUS
+# include <QDBusConnection> // Keep before quickview.h because some mingw header #defines interface struct
+# include <QDBusError>
+#endif
+
 #include "quickview.h"
 #include "controller.h"
 #include "kernel.h"
@@ -35,11 +40,6 @@ typedef QGuiApplication Application;
 
 #include <QDebug>
 #include <QFontDatabase>
-
-#ifdef FLOW_DBUS
-# include <QDBusConnection>
-# include <QDBusError>
-#endif
 
 #include <QStandardPaths>
 #include <QTranslator>
