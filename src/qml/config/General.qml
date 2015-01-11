@@ -107,6 +107,7 @@ Item {
 
         FlowCheckBox {
             id: disablePomodoroCheckBox
+            width: _style.checkBoxIconSize
             checked: _controller.pomodoroFunctionalityDisabled
             Binding {
                 target: _controller
@@ -125,6 +126,7 @@ Item {
 
         FlowCheckBox {
             id: systrayCheckBox
+            width: _style.checkBoxIconSize
             visible: !_controller.isMobile
             checked: _controller.useSystray
             Binding {
@@ -143,6 +145,7 @@ Item {
 
         FlowCheckBox {
             id: hideEmptyTagsCheck
+            width: _style.checkBoxIconSize
             checked: _controller.hideEmptyTags
             Binding {
                 target: _controller
@@ -161,6 +164,7 @@ Item {
 
         FlowCheckBox {
             id: keepScreenOn
+            width: _style.checkBoxIconSize
             visible: _controller.isAndroid
             checked: _controller.pomodoroFunctionalityDisabled
             Binding {
@@ -222,6 +226,7 @@ Item {
             id: stickyWindowBox
             visible: !_controller.isMobile && !_controller.isOSX
             checked: _controller.stickyWindow
+            width: _style.checkBoxIconSize
             Binding {
                 target: _controller
                 property: "stickyWindow"
@@ -241,6 +246,7 @@ Item {
             id: showTaskAgeBox
             visible: _controller.expertMode
             checked: _controller.showTaskAge
+            width: _style.checkBoxIconSize
             Binding {
                 target: _controller
                 property: "showTaskAge"
@@ -260,6 +266,7 @@ Item {
             id: showAllTasksView
             visible: _controller.expertMode
             checked: _controller.showAllTasksView
+            width: _style.checkBoxIconSize
             Binding {
                 target: _controller
                 property: "showAllTasksView"
