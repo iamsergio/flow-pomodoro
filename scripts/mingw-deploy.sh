@@ -10,6 +10,7 @@ cp $QT/bin/Qt5Qml.dll .
 cp $QT/bin/Qt5Quick.dll .
 cp $QT/bin/Qt5Widgets.dll .
 cp $QT/bin/Qt5Network.dll .
+cp $QT/bin/Qt5DBus.dll .
 
 cp /usr/i686-w64-mingw32/bin/libgcc_s_sjlj-1.dll .
 cp /usr/i686-w64-mingw32/bin/libstdc++-6.dll .
