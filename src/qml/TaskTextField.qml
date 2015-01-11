@@ -25,6 +25,13 @@ TextField {
                 textField.selectAll()
             }
         }
+
+        onAboutToAddTask: {
+            // Save the current text when user presses the add icon again:
+            if (textField.visible && _controller.taskBeingEdited) {
+                _controller.taskBeingEdited.summary = textField.text
+            }
+        }
     }
 
     font.pixelSize: 13 * _controller.dpiFactor

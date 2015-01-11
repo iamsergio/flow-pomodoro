@@ -1104,6 +1104,8 @@ void Controller::requestContextMenu(Task *task, bool tagOnlyMenu)
 
 void Controller::addTask(const QString &text, bool startEditMode)
 {
+    m_addingTask = false;
+    emit aboutToAddTask();
     Task::Ptr task = m_storage->prependTask(text);
 
     if (m_currentTabTag && queueType() == QueueTypeArchive)

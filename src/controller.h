@@ -301,6 +301,7 @@ private Q_SLOTS:
     void setStartupFinished();
 
 Q_SIGNALS:
+    void aboutToAddTask();
     void showAllTasksViewChanged();
     void archiveViewTypeChanged();
     void showTaskAgeChanged();
