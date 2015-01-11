@@ -35,6 +35,26 @@
 const char *const s_startTag = "# Start Flow-pomodoro specific hosts, do not remove this tag";
 const char *const s_endTag = "# End Flow-pomodoro specific hosts, do not remove this tag";
 
+#if defined(Q_OS_WIN)
+extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+#endif
+
+struct ScoppedSetter {
+    ScoppedSetter()
+    {
+#if defined(Q_OS_WIN)
+        qt_ntfs_permission_lookup++;
+#endif
+    }
+
+    ~ScoppedSetter()
+    {
+#if defined(Q_OS_WIN)
+    qt_ntfs_permission_lookup--;
+#endif
+    }
+};
+
 static QString hostsFileName()
 {
 #if defined(Q_OS_WIN)
@@ -162,6 +182,8 @@ QString HostsPlugin::lastError() const
 
 bool HostsPlugin::checkSanity()
 {
+    ScoppedSetter setter;
+
     QFileInfo info(hostsFileName());
     if (!info.exists()) {
         setLastError(tr("Hosts file doesn't exist."));
