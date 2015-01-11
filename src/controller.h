@@ -288,7 +288,6 @@ public Q_SLOTS:
 
     void editTask(Task *, EditMode);
 
-    void beginAddingNewTag();
     void endAddingNewTag(const QString &tagName);
 
     void requestContextMenu(Task *, bool tagOnlyMenu = false);
