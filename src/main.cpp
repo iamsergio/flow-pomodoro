@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 
     // qputenv("QML_DISABLE_DISTANCEFIELD", "1");
 #ifdef Q_OS_WIN
-    qputenv("QT_QPA_PLATFORM","windows:fontengine=freetype");
+    // qputenv("QT_QPA_PLATFORM","windows:fontengine=freetype");
 #endif
 #ifndef Q_OS_ANDROID
     qInstallMessageHandler(flowMessageHandler);
