@@ -3,7 +3,8 @@ FLOW_BUILD_DIR=/data/extra/sources/flow-pomodoro/build/
 FLOW_BUILD_LOG=$FLOW_SRC_DIR/build.log
 MAKECOMMAND="make -j10"
 
-echo "This is a private script, don't use it\n"
+echo "This is a private script, don't use it"
+echo
 
 set -e # abort if any command fails
 #-------------------------------------------------------------------------------
@@ -37,14 +38,29 @@ cd $FLOW_SRC_DIR
 git clean -fdx &> $FLOW_BUILD_LOG
 sh build-android.sh &> $FLOW_BUILD_LOG
 #-------------------------------------------------------------------------------
-# 6. MinGW in source
 echo "6. Building MinGW in source"
 cd $FLOW_SRC_DIR
 git clean -fdx &> $FLOW_BUILD_LOG
 sh scripts/build-mingw.sh &> $FLOW_BUILD_LOG
 #-------------------------------------------------------------------------------
+echo "7. CMake in source"
+cd $FLOW_SRC_DIR
+git clean -fdx &> $FLOW_BUILD_LOG &> $FLOW_BUILD_LOG
+cmake . -DCMAKE_INSTALL_PREFIX=./install_dir/ &> $FLOW_BUILD_LOG
+$MAKECOMMAND &> $FLOW_BUILD_LOG
+make install &> $FLOW_BUILD_LOG
+#-------------------------------------------------------------------------------
+echo "8. CMake shadow"
+cd $FLOW_SRC_DIR
+git clean -fdx &> $FLOW_BUILD_LOG
+mkdir $FLOW_BUILD_DIR &> $FLOW_BUILD_LOG
+cd $FLOW_BUILD_DIR &> $FLOW_BUILD_LOG &> $FLOW_BUILD_LOG
+cmake $FLOW_SRC_DIR -DCMAKE_INSTALL_PREFIX=./install_dir/ &> $FLOW_BUILD_LOG
+$MAKECOMMAND &> $FLOW_BUILD_LOG
+make install &> $FLOW_BUILD_LOG
+#-------------------------------------------------------------------------------
 
 rm $FLOW_BUILD_LOG
 cd $FLOW_SRC_DIR
-git clean -fdx
+git clean -fdx  &> $FLOW_BUILD_LOG
 echo "Success!"
