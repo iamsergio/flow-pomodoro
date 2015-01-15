@@ -34,6 +34,6 @@ add_executable(flow ${flow_SRC} ${RESOURCES})
 add_definitions(-DNO_WEBDAV)
 target_compile_features(flow PUBLIC cxx_auto_type)
 
-qt5_use_modules(flow Gui Quick)
+qt5_use_modules(flow Gui Quick DBus Widgets)
 
 install (TARGETS flow DESTINATION bin)
