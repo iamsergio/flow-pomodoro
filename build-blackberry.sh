@@ -12,5 +12,9 @@ echo "Making package..."
 cp ../bar-descriptor-blackberry.xml .
 blackberry-nativepackager -devMode -package flow-pomodoro.bar bar-descriptor-blackberry.xml
 
-echo "installing..."
-blackberry-deploy -installApp -device z10 -password 12345 flow-pomodoro.bar
+if [ $# = 1 ] ; then
+    if [ $1 = "install" ] ; then
+        echo "installing..."
+        blackberry-deploy -installApp -device z10 -password 12345 flow-pomodoro.bar
+    fi
+fi
