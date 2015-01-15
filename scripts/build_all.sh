@@ -59,7 +59,13 @@ cmake $FLOW_SRC_DIR -DCMAKE_INSTALL_PREFIX=./install_dir/ &> $FLOW_BUILD_LOG
 $MAKECOMMAND &> $FLOW_BUILD_LOG
 make install &> $FLOW_BUILD_LOG
 #-------------------------------------------------------------------------------
-
+echo "9. Unit-tests"
+cd $FLOW_SRC_DIR/tests/
+git clean -fdx &> $FLOW_BUILD_LOG
+qmake &> $FLOW_BUILD_LOG
+$MAKECOMMAND &> $FLOW_BUILD_LOG
+./tests &> $FLOW_BUILD_LOG
+#-------------------------------------------------------------------------------
 rm $FLOW_BUILD_LOG
 cd $FLOW_SRC_DIR
 git clean -fdx  &> $FLOW_BUILD_LOG
