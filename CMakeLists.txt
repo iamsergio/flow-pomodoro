@@ -17,3 +17,20 @@ set(CMAKE_CXX_FLAGS "${Qt5Gui_EXECUTABLE_COMPILE_FLAGS}")
 
 add_subdirectory(src)
 add_subdirectory(plugins)
+
+set(CPACK_PACKAGE_VERSION "0.9.5")
+set(CPACK_PACKAGE_VERSION_MAJOR "0")
+set(CPACK_PACKAGE_VERSION_MINOR "9")
+set(CPACK_PACKAGE_VERSION_PATCH "5")
+set(CPACK_PACKAGE_CONTACT "Sergio Martins <iamsergio@gmail.com>") # deb
+set(CPACK_GENERATOR "DEB;")
+
+# Deb
+set(CPACK_PACKAGE_NAME "flow-pomodoro")
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "A sticky task manager and pomodoro that blocks distractions.")
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
+
+# NSIS
+set(CPACK_PACKAGE_EXECUTABLES "flow.exe" "${CMAKE_CURRENT_SOURCE_DIR}/src/img/icon.ico") # nsis
+
+include(CPack)
