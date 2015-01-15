@@ -28,6 +28,7 @@
 #include "webdavsyncer.h"
 #include "utils.h"
 #include "loadmanager.h"
+#include "flow_version.h"
 
 #include <QTimer>
 #include <QScreen>

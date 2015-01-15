@@ -52,3 +52,5 @@ flow.app
 lib*.a
 .DS_Store
 /tests/unit-test-settings.ini
+*.qrc.depends
+install_manifest.txt
