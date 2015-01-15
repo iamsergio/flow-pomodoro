@@ -19,10 +19,13 @@ FAQ:
 2. How do I change the default title ("You're slacking") to something else ?
    Use the example file from question 1.
 
-3. Why doesn't pidgin plugin work ?
+3. Where does flow look for plugins ?
+   It looks in $QT_PLUGIN_PATH/flow/, <dir_containing_executable>/plugins/ and `qmake -query QT_INSTALL_PLUGINS`/flow/
+
+4. Why doesn't pidgin plugin work ?
    You need to apply this patch: https://developer.pidgin.im/attachment/ticket/15824/patch.diff
 
-4. How to use hardware acceleration on Windows ?
+5. How to use hardware acceleration on Windows ?
    Flow-pomodoro ships OpenGL32.dll from mesa project, which uses software rendering.
    If you think you have decent OpenGL graphic drivers simply delete the shipped OpenGL32.dll
    and flow will pick the system one. If you have nvidia or ATI chances are it will work.
