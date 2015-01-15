@@ -100,7 +100,7 @@ void Task::modelSetup()
     connect(tagsModel, &QAbstractListModel::layoutChanged, this, &Task::tagsChanged);
     connect(tagsModel, &QAbstractListModel::dataChanged, this, &Task::tagsChanged);
 
-    auto roleNames = storage->tagsModel()->roleNames();
+    QHash<int, QByteArray> roleNames = storage->tagsModel()->roleNames();
     roleNames.insert(Qt::CheckStateRole, QByteArray("checkState"));
     QAbstractItemModel *allTagsModel = storage->tagsModel();
     Q_ASSERT(allTagsModel);

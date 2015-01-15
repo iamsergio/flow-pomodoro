@@ -4,7 +4,6 @@ macro(add_flow_plugin _name)
     add_definitions(-DQT_PLUGIN)
     add_definitions(-DQT_SHARED)
     add_library(${_name} SHARED ${_name}.cpp)
-    target_compile_features(${_name} PUBLIC cxx_auto_type)
     qt5_use_modules(${_name} Gui Quick DBus)
     install(TARGETS ${_name} DESTINATION lib/kde4/plugins/flow/) # TODO: fix plugin path
 endmacro()

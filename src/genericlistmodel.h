@@ -144,7 +144,8 @@ public:
         if (!index.isValid())
             return QVariant();
 
-        for (auto it = m_roles.cbegin(); it != m_roles.cend(); ++it) {
+        QHash<int, QByteArray>::const_iterator it;
+        for (it = m_roles.cbegin(); it != m_roles.cend(); ++it) {
             if (it.key() == role) {
                 GetterFunc func = m_getters.value(it.key());
                 return func ? func(index.row())

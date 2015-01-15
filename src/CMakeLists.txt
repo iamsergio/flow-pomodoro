@@ -32,7 +32,6 @@ qt5_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/resources.qrc)
 
 add_executable(flow ${flow_SRC} ${RESOURCES})
 add_definitions(-DNO_WEBDAV)
-target_compile_features(flow PUBLIC cxx_auto_type)
 
 qt5_use_modules(flow Gui Quick DBus Widgets)
 
