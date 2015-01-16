@@ -1,1 +1,1 @@
-add_flow_plugin(kmail)
+add_flow_plugin(kmail FALSE)

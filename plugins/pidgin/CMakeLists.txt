@@ -1,1 +1,1 @@
-add_flow_plugin(pidgin)
+add_flow_plugin(pidgin FALSE)

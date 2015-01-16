@@ -1,1 +1,1 @@
-add_flow_plugin(shellscript)
+add_flow_plugin(shellscript TRUE)

@@ -1,1 +1,1 @@
-add_flow_plugin(hosts)
+add_flow_plugin(hosts TRUE)
