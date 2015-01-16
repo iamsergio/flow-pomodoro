@@ -235,13 +235,23 @@ void Kernel::loadPlugins()
     }
 #else
     QStringList paths = QCoreApplication::libraryPaths();
+    QString defaultMakeInstallPluginPath = qApp->applicationDirPath() + "/../lib/flow-pomodoro/plugins/";
+    paths << defaultMakeInstallPluginPath;
 
     QStringList acceptedFileNames;
     foreach (const QString &path, paths) {
-        const QString candidatePath = path == qApp->applicationDirPath() ? path + "/plugins/"
-                                                                         : path + "/flow/";
+        QString candidatePath;
+        if (path == qApp->applicationDirPath()) {
+            // For shipping plugins along side with your executable
+            candidatePath = path + "/plugins/";
+        } else if (path != defaultMakeInstallPluginPath) {
+            // Plugins in kde4 or Qt plugin directory
+            candidatePath = path + "/flow-pomodoro/";
+        } else {
+            candidatePath = path;
+        }
 
-        // qDebug() << "Looking for plugins in " << candidatePath;
+        qDebug() << "Looking for plugins in " << candidatePath;
         QDir pluginsDir = QDir(candidatePath);
         foreach (const QString &fileName, pluginsDir.entryList(QDir::Files)) {
             if (acceptedFileNames.contains(fileName)) // Don't load plugins more than once.

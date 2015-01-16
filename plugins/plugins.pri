@@ -1,2 +1,2 @@
-target.path = /lib/kde4/plugins/flow/
+target.path = /lib/flow-pomodoro/plugins/
 INSTALLS += target
