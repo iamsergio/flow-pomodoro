@@ -251,7 +251,7 @@ void Kernel::loadPlugins()
             candidatePath = path;
         }
 
-        qDebug() << "Looking for plugins in " << candidatePath;
+        // qDebug() << "Looking for plugins in " << candidatePath;
         QDir pluginsDir = QDir(candidatePath);
         foreach (const QString &fileName, pluginsDir.entryList(QDir::Files)) {
             if (acceptedFileNames.contains(fileName)) // Don't load plugins more than once.
