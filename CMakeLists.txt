@@ -9,6 +9,10 @@ find_package(Qt5Quick)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+execute_process(COMMAND "qmake" "-query" "QT_INSTALL_PLUGINS" OUTPUT_VARIABLE QT_INSTALL_PLUGINS)
+string(STRIP ${QT_INSTALL_PLUGINS} QT_INSTALL_PLUGINS)
+set(QT_INSTALL_PLUGINS ${QT_INSTALL_PLUGINS}/flow/)
+
 include_directories(${Qt5Core_INCLUDES})
 include_directories(${Qt5Gui_INCLUDES})
 
