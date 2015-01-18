@@ -166,7 +166,7 @@ Item {
             id: keepScreenOn
             width: _style.checkBoxIconSize
             visible: _controller.isAndroid
-            checked: _controller.pomodoroFunctionalityDisabled
+            checked: _controller.keepScreenOnDuringPomodoro
             Binding {
                 target: _controller
                 property: "keepScreenOnDuringPomodoro"
