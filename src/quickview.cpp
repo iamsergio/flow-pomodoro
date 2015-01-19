@@ -291,9 +291,17 @@ void QuickView::toggleVisible()
 
 void QuickView::setupWindowFlags()
 {
-    QFlags<Qt::WindowType> f = /*flags() |*/ Qt::FramelessWindowHint;
-    if (m_controller->stickyWindow())
-        f |= Qt::WindowStaysOnTopHint | Qt::Tool;
+    QFlags<Qt::WindowType> f = Qt::FramelessWindowHint;
+    if (m_controller->stickyWindow()) {
+        f |= Qt::WindowStaysOnTopHint;
+#ifdef Q_OS_OSX
+	f |= Qt::Window;
+#else
+      f |= Qt::Tool;
+#endif
+    } else {
+	f |= Qt::Window;
+    }
 
     setFlags(f);
 }

@@ -92,10 +92,10 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     m_defaultPomodoroDuration = m_settings->value("defaultPomodoroDuration", /*default=*/ QVariant(25)).toInt();
     m_pomodoroFunctionalityDisabled = m_settings->value("pomodoroFunctionalityDisabled", /*default=*/ false).toBool();
     m_syncAtStartup = m_settings->value("syncAtStartup", /*default=*/ false).toBool();
-    setKeepScreenOnDuringPomodoro(m_settings->value("keepScreenOnDuringPomodoro", /*default=*/ true).toInt());
+    setKeepScreenOnDuringPomodoro(m_settings->value("keepScreenOnDuringPomodoro", /*default=*/ true).toBool());
     m_hideEmptyTags = m_settings->value("hideEmptyTags", /*default=*/ false).toBool();
     m_useSystray = m_settings->value("useSystray", /*default=*/ true).toBool();
-    m_stickyWindow = m_settings->value("stickyWindow", /*default=*/ true).toBool() && !Utils::isOSX(); // On OSX Qt::Tool flag isn't working
+    m_stickyWindow = m_settings->value("stickyWindow", /*default=*/ true).toBool();
     m_showTaskAge = m_settings->value("showTaskAge", /*default=*/ false).toBool();
     m_showAllTasksView = m_settings->value("showAllTasksView", /*default=*/ false).toBool();
 
