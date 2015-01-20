@@ -1,5 +1,5 @@
 include ("../../global.pri")
-include ("../plugins.pri")
+include ("../distractions.pri")
 
 CONFIG   += plugin
 TARGET = hosts
@@ -10,6 +10,3 @@ HEADERS += hosts.h
 SOURCES += hosts.cpp
 
 RESOURCES += hostsplugin.qrc
-
-INCLUDEPATH += ../../src/
-DESTDIR = ../

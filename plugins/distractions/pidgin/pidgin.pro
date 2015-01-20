@@ -1,5 +1,5 @@
 include ("../../global.pri")
-include ("../plugins.pri")
+include ("../distractions.pri")
 
 QT       += dbus
 CONFIG   += plugin
@@ -8,6 +8,3 @@ TEMPLATE = lib
 
 HEADERS += pidgin.h
 SOURCES += pidgin.cpp
-
-INCLUDEPATH += ../../src/
-DESTDIR = ../

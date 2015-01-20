@@ -1,0 +1,20 @@
+include_directories("${PROJECT_SOURCE_DIR}/src/")
+
+macro(add_flow_plugin _name _has_resources)
+    add_definitions(-DQT_PLUGIN)
+    add_definitions(-DQT_SHARED)
+
+    if (${_has_resources})
+        qt5_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/${_name}plugin.qrc)
+        add_library(${_name} SHARED ${_name}.cpp ${RESOURCES})
+    else()
+        add_library(${_name} SHARED ${_name}.cpp)
+    endif()
+    qt5_use_modules(${_name} Gui Quick DBus)
+    install(TARGETS ${_name} DESTINATION lib/flow-pomodoro/plugins/distractions/)
+endmacro()
+
+add_subdirectory(kmail)
+add_subdirectory(pidgin)
+add_subdirectory(hosts)
+add_subdirectory(shellscript)

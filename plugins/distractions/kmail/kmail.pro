@@ -1,5 +1,5 @@
 include ("../../global.pri")
-include ("../plugins.pri")
+include ("../distractions.pri")
 
 QT       += qml quick dbus
 CONFIG   += plugin
@@ -8,6 +8,3 @@ TEMPLATE = lib
 
 HEADERS += kmail.h
 SOURCES += kmail.cpp
-
-INCLUDEPATH += ../../src
-DESTDIR = ../

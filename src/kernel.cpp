@@ -227,6 +227,7 @@ void Kernel::loadPlugins()
     if (Utils::isMobile())
         return;
 
+    static const QStringList pluginTypes = QStringList() << "distractions";
     QObjectList plugins;
 
 #ifdef FLOW_STATIC_BUILD
@@ -251,16 +252,18 @@ void Kernel::loadPlugins()
             candidatePath = path;
         }
 
-        // qDebug() << "Looking for plugins in " << candidatePath;
-        QDir pluginsDir = QDir(candidatePath);
-        foreach (const QString &fileName, pluginsDir.entryList(QDir::Files)) {
-            if (acceptedFileNames.contains(fileName)) // Don't load plugins more than once.
-                continue;
-            QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
-            QObject *pluginObject = loader.instance();
-            if (pluginObject) {
-                plugins << pluginObject;
-                acceptedFileNames << fileName;
+        foreach (const QString &pluginType, pluginTypes) {
+            //qDebug() << "Looking for plugins in " << candidatePath;
+            QDir pluginsDir = QDir(candidatePath + "/" + pluginType);
+            foreach (const QString &fileName, pluginsDir.entryList(QDir::Files)) {
+                if (acceptedFileNames.contains(fileName)) // Don't load plugins more than once.
+                    continue;
+                QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+                QObject *pluginObject = loader.instance();
+                if (pluginObject) {
+                    plugins << pluginObject;
+                    acceptedFileNames << fileName;
+                }
             }
         }
     }
