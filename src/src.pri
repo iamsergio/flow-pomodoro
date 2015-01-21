@@ -5,6 +5,7 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/circularprogressindicator.cpp \
            $$PWD/checkbox.cpp \
            $$PWD/controller.cpp  \
+           $$PWD/extendedtagsmodel.cpp \
            $$PWD/jsonstorage.cpp \
            $$PWD/kernel.cpp \
            $$PWD/loadmanager.cpp \
@@ -29,6 +30,7 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/checkbox.h \
            $$PWD/circularprogressindicator.h \
            $$PWD/controller.h      \
+           $$PWD/extendedtagsmodel.h \
            $$PWD/jsonstorage.h      \
            $$PWD/kernel.h \
            $$PWD/loadmanager.h \

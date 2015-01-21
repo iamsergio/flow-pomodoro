@@ -35,6 +35,7 @@
 #include "webdavsyncer.h"
 #include "quickview.h"
 #include "taskcontextmenumodel.h"
+#include "extendedtagsmodel.h"
 #include "sortedtaskcontextmenumodel.h"
 
 #include <QStandardPaths>
@@ -74,6 +75,10 @@ static void registerQmlTypes()
     qmlRegisterUncreatableType<ArchivedTasksFilterModel>("Controller",
                                                          1, 0, "ArchivedTasksFilterModel",
                                                          "ArchivedTasksFilterModel is not creatable");
+
+    qmlRegisterUncreatableType<ExtendedTagsModel>("Controller",
+                                                  1, 0, "ExtendedTagsModel",
+                                                  "ExtendedTagsModel is not creatable");
 
     qmlRegisterUncreatableType<Controller>("Controller",
                                            1, 0, "Controller",

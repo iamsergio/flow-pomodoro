@@ -2,15 +2,12 @@ import QtQuick 2.0
 
 Rectangle {
     id: root
-    property string text: ""
     property alias textItem: tagText
     property alias textItem2: countText
     property alias textRow: textRow
     property bool isLastIndex:  true
     property bool isSelected: false
-    property int taskCount: 0
     property QtObject tagObj: null
-    property int archiveViewType: -1
 
     height: _style.tagTabHeight
     color: "black"
@@ -22,7 +19,7 @@ Rectangle {
         Text {
             id: tagText
             renderType: _controller.textRenderType
-            text: root.text
+            text: root.tagObj.name
             color: _style.tagTabTextColor
             font.bold: true
             font.pixelSize: _style.tagTabFontSize
@@ -30,7 +27,7 @@ Rectangle {
         Text {
             id: countText
             renderType: _controller.textRenderType
-            text: root.taskCount > 0 ? " (" + root.taskCount + ")" : ""
+            text: root.tagObj.taskModel.count > 0 ? " (" + root.tagObj.taskModel.count + ")" : ""
             color: _style.tagTabTextColor
             anchors.verticalCenter: tagText.verticalCenter
             anchors.verticalCenterOffset: -1
@@ -64,8 +61,7 @@ Rectangle {
         anchors.fill: parent
         onClicked: {
             if (!root.isSelected) {
-                _controller.setCurrentTabTag(root.tagObj)
-                _controller.archiveViewType = root.archiveViewType
+                _controller.setCurrentTag(root.tagObj)
             }
         }
     }

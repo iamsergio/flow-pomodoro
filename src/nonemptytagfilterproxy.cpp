@@ -58,8 +58,7 @@ bool NonEmptyTagFilterProxy::filterAcceptsRow(int source_row, const QModelIndex 
 
     Tag::Ptr tag = index.data(Storage::TagPtrRole).value<Tag::Ptr>();
     Q_ASSERT(tag);
-
-    if (!tag)
+    if (!tag) // null tag means it's "All" or "Untagged" special tags
         return false;
 
     connect(static_cast<TaskFilterProxyModel*>(tag.data()->taskModel()), &TaskFilterProxyModel::countChanged,

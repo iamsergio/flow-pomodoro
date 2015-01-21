@@ -22,6 +22,8 @@
 #include "settings.h"
 #include "taskcontextmenumodel.h"
 #include "taskfilterproxymodel.h"
+#include "archivedtasksfiltermodel.h"
+#include "extendedtagsmodel.h"
 #include "sortedtaskcontextmenumodel.h"
 #include "storage.h"
 #include "kernel.h"
@@ -80,8 +82,9 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_currentMenuIndex(-1)
     , m_expertMode(false)
     , m_showTaskAge(false)
-    , m_archiveViewType(ArchiveViewUntagged)
     , m_showAllTasksView(false)
+    , m_allTasksTag(0)
+    , m_untaggedTasksTag(0)
 {
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
@@ -116,6 +119,11 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
 
     qApp->installEventFilter(this);
     QMetaObject::invokeMethod(this, "setStartupFinished", Qt::QueuedConnection);
+
+    m_untaggedTasksTag = Tag::Ptr(new Tag(tr("Untagged"), m_storage->untaggedTasksModel()));
+    m_allTasksTag = Tag::Ptr(new Tag(tr("All"), m_storage->archivedTasksModel()));
+    m_currentTag = m_untaggedTasksTag.data();
+    updateExtendedTagModel();
 }
 
 Controller::~Controller()
@@ -206,7 +214,7 @@ void Controller::cycleTaskSelectionUp()
     if (!firstTask)
         return;
 
-    if (m_currentTabTag && m_selectedTask && !m_selectedTask->containsTag(m_currentTabTag->name()))
+    if (m_currentTag && m_selectedTask && !m_selectedTask->containsTag(m_currentTag->name()))
         m_selectedTask.clear();
 
     if (!m_selectedTask) {
@@ -224,7 +232,7 @@ void Controller::cycleTaskSelectionDown()
     if (!lastTask || m_selectedTask == lastTask.data())
         return;
 
-    if (m_currentTabTag && m_selectedTask && !m_selectedTask->containsTag(m_currentTabTag->name()))
+    if (m_currentTag && m_selectedTask && !m_selectedTask->containsTag(m_currentTag->name()))
         m_selectedTask.clear();
 
     if (!m_selectedTask) {
@@ -248,6 +256,16 @@ void Controller::cycleMenuSelectionDown()
 
     if (m_currentMenuIndex < m_rightClickedTask->sortedContextMenuModel()->count() - 1)
         setCurrentMenuIndex(m_currentMenuIndex + 1);
+}
+
+void Controller::cycleTagSelectionLeft()
+{
+
+}
+
+void Controller::cycleTagSelectionRight()
+{
+
 }
 
 void Controller::showQuestionPopup(QObject *obj, const QString &text, const QString &callback)
@@ -454,9 +472,9 @@ void Controller::setSelectedTask(const Task::Ptr &task)
     }
 }
 
-Tag *Controller::currentTabTag() const
+Tag *Controller::currentTag() const
 {
-    return m_currentTabTag;
+    return m_currentTag;
 }
 
 Controller::QueueType Controller::queueType() const
@@ -652,22 +670,22 @@ bool Controller::newTagDialogVisible() const
     return m_newTagDialogVisible;
 }
 
-void Controller::setCurrentTabTag(Tag *tag)
+void Controller::setCurrentTag(Tag *tag)
 {
-    if (m_currentTabTag != tag) {
+    Q_ASSERT(tag);
+    if (tag && m_currentTag != tag) {
         if (tag) {
-            setArchiveViewType(ArchiveViewSpecificTag);
             connect(tag, &Tag::destroyed,
-                    this, &Controller::currentTabTagChanged, Qt::UniqueConnection);
+                    this, &Controller::onCurrentTagDestroyed, Qt::UniqueConnection);
         }
 
-        if (m_currentTabTag) {
-            disconnect(m_currentTabTag.data(), &Tag::destroyed,
-                       this, &Controller::currentTabTagChanged);
+        if (m_currentTag) {
+            disconnect(m_currentTag.data(), &Tag::destroyed,
+                       this, &Controller::onCurrentTagDestroyed);
         }
 
-        m_currentTabTag = tag;
-        emit currentTabTagChanged();
+        m_currentTag = tag;
+        emit currentTagChanged();
     }
 }
 
@@ -746,6 +764,17 @@ void Controller::setStartupFinished()
     emit startupFinishedChanged();
 }
 
+void Controller::updateExtendedTagModel()
+{
+    Tag::List extraTags;
+    if (m_showAllTasksView) {
+        extraTags << m_allTasksTag;
+    }
+
+    extraTags << m_untaggedTasksTag;
+    m_storage->extendedTagsModel()->setExtraRows(extraTags);
+}
+
 bool Controller::anyOverlayVisible() const
 {
     return taskMenuVisible() || newTagDialogVisible();
@@ -781,6 +810,11 @@ void Controller::onTimerTick()
         stopPomodoro();
         emit taskFinished();
     }
+}
+
+void Controller::onCurrentTagDestroyed()
+{
+    setCurrentTag(m_untaggedTasksTag.data());
 }
 
 void Controller::updateWebDavCredentials()
@@ -821,7 +855,7 @@ Task::Ptr Controller::taskAtCurrentTab(int taskIndex) const
 
 QAbstractItemModel *Controller::currentTabTaskModel() const
 {
-    return m_currentTabTag ? m_currentTabTag->taskModel() : m_storage->taskFilterModel();
+    return m_currentTag ? m_currentTag->taskModel() : m_storage->taskFilterModel();
 }
 
 void Controller::setTagEditStatus(TagEditStatus status)
@@ -1109,8 +1143,8 @@ void Controller::addTask(const QString &text, bool startEditMode)
     emit aboutToAddTask();
     Task::Ptr task = m_storage->prependTask(text);
 
-    if (m_currentTabTag && queueType() == QueueTypeArchive)
-        task->addTag(m_currentTabTag->name());
+    if (m_currentTag && queueType() == QueueTypeArchive)
+        task->addTag(m_currentTag->name());
 
     task->setStaged(m_queueType == QueueTypeToday);
     editTask(Q_NULLPTR, EditModeNone);
@@ -1179,6 +1213,10 @@ void Controller::setHideEmptyTags(bool hide)
         m_hideEmptyTags = hide;
         m_settings->setValue("hideEmptyTags", QVariant(hide));
         emit hideEmptyTagsChanged();
+
+        if (hide && m_currentTag->taskCount() == 0 && m_currentTag->kernel()) {
+            setCurrentTag(m_untaggedTasksTag.data());
+        }
     }
 }
 
@@ -1287,29 +1325,33 @@ bool Controller::showTaskAge() const
     return m_showTaskAge;
 }
 
-void Controller::setArchiveViewType(ArchiveViewType archiveViewType)
-{
-    if (archiveViewType != m_archiveViewType) {
-        m_archiveViewType = archiveViewType;
-        emit archiveViewTypeChanged();
-    }
-}
-
-Controller::ArchiveViewType Controller::archiveViewType() const
-{
-    return m_archiveViewType;
-}
-
 void Controller::setShowAllTasksView(bool showAllTasksView)
 {
     if (showAllTasksView != m_showAllTasksView) {
         m_showAllTasksView = showAllTasksView;
         m_settings->setValue("showAllTasksView", QVariant(showAllTasksView));
         emit showAllTasksViewChanged();
+        updateExtendedTagModel();
     }
 }
 
 bool Controller::showAllTasksView() const
 {
     return m_showAllTasksView;
+}
+
+Tag* Controller::allTasksTag() const
+{
+    return m_allTasksTag.data();
+}
+
+Tag* Controller::untaggedTasksTag() const
+{
+    return m_untaggedTasksTag.data();
+}
+
+QAbstractItemModel* Controller::tagsModel() const
+{
+    return hideEmptyTags() ? m_storage->nonEmptyTagsModel()
+                           : m_storage->extendedTagsModel();
 }

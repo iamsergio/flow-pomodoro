@@ -33,14 +33,15 @@
     int Tag::tagCount = 0;
 #endif
 
-Tag::Tag(Kernel *kernel, const QString &_name)
+Tag::Tag(Kernel *kernel, const QString &name)
     : QObject()
     , Syncable()
-    , m_name(_name.trimmed())
+    , m_name(name.trimmed())
     , m_taskCount(0)
     , m_beingEdited(false)
     , m_taskModel(Q_NULLPTR)
     , m_kernel(kernel)
+    , m_isFake(false)
     , m_dontUpdateRevision(false)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
@@ -50,10 +51,24 @@ Tag::Tag(Kernel *kernel, const QString &_name)
 #endif
 }
 
+Tag::Tag(const QString &name, QAbstractItemModel *taskModel)
+    : QObject()
+    , Syncable()
+    , m_name(name)
+    , m_taskCount(0)
+    , m_beingEdited(false)
+    , m_taskModel(taskModel)
+    , m_kernel(Q_NULLPTR)
+    , m_isFake(true)
+    , m_dontUpdateRevision(true)
+{
+}
+
 Tag::~Tag()
 {
 #if defined(QT_TESTLIB_LIB)
-    tagCount--;
+    if (m_kernel)
+        tagCount--;
     // qDebug() << "[TAG] DTOR " << ((void*)this) << m_name;
 #endif
 }
@@ -65,6 +80,7 @@ int Tag::taskCount() const
 
 void Tag::incrementTaskCount(int increment)
 {
+    Q_ASSERT(!m_isFake);
     if (m_taskCount + increment >= 0) {
         m_taskCount += increment;
         emit taskCountChanged(m_taskCount - increment, m_taskCount);
@@ -80,6 +96,7 @@ QString Tag::name() const
 
 void Tag::setName(const QString &name)
 {
+    Q_ASSERT(!m_isFake);
     if (name.trimmed().toLower() != m_name.toLower() && !name.isEmpty()) {
         m_name = name.trimmed(); // We preserve original case
         if (!m_dontUpdateRevision)
@@ -95,6 +112,7 @@ bool Tag::beingEdited() const
 
 void Tag::setBeingEdited(bool yes)
 {
+    Q_ASSERT(!m_isFake);
     if (m_beingEdited != yes) {
         m_beingEdited = yes;
         emit beingEditedChanged();
@@ -103,15 +121,15 @@ void Tag::setBeingEdited(bool yes)
 
 QAbstractItemModel *Tag::taskModel()
 {
-    // TODO: this should be ok now
-    if (!m_taskModel && m_kernel) {
-        m_taskModel = new TaskFilterProxyModel(this);
-        m_taskModel->setTagName(m_name);
-        m_taskModel->setSourceModel(m_kernel->storage()->archivedTasksModel());
-        m_taskModel->setObjectName(QString("Tasks with tag %1 model").arg(m_name));
+    if (!m_taskModel && !m_isFake) {
+        TaskFilterProxyModel *model = new TaskFilterProxyModel(this);
+        model->setTagName(m_name);
+        model->setSourceModel(m_kernel->storage()->archivedTasksModel());
+        model->setObjectName(QString("Tasks with tag %1 model").arg(m_name));
+        m_taskModel = model;
 
         connect(this, &Tag::taskCountChanged,
-                m_taskModel, &TaskFilterProxyModel::invalidateFilter,
+                model, &TaskFilterProxyModel::invalidateFilter,
                 Qt::QueuedConnection);
 #if defined(UNIT_TEST_RUN)
         AssertingProxyModel *assert = new AssertingProxyModel(this);
@@ -124,6 +142,7 @@ QAbstractItemModel *Tag::taskModel()
 
 QVariantMap Tag::toJson() const
 {
+    Q_ASSERT(!m_isFake);
     QVariantMap map = Syncable::toJson();
     map.insert("name", m_name);
     return map;
@@ -131,6 +150,7 @@ QVariantMap Tag::toJson() const
 
 void Tag::fromJson(const QVariantMap &map)
 {
+    Q_ASSERT(!m_isFake);
     Syncable::fromJson(map);
     QString name = map.value("name").toString();
     if (name.isEmpty()) {
@@ -155,6 +175,7 @@ Kernel *Tag::kernel() const
 void Tag::setKernel(Kernel *kernel)
 {
     Q_ASSERT(kernel && !m_kernel);
+    Q_ASSERT(!m_isFake);
     m_kernel = kernel;
 }
 

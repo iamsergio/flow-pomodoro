@@ -33,6 +33,7 @@ class SortedTagsModel;
 class ArchivedTasksFilterModel;
 class TaskFilterProxyModel;
 class NonEmptyTagFilterProxy;
+class ExtendedTagsModel;
 
 typedef GenericListModel<Tag::Ptr> TagList;
 typedef GenericListModel<Task::Ptr> TaskList;
@@ -44,6 +45,7 @@ enum {
 class Storage : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(ExtendedTagsModel* extendedTagsModel READ extendedTagsModel CONSTANT)
     Q_PROPERTY(int ageAverage READ ageAverage NOTIFY taskCountChanged)
     Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged)
     Q_PROPERTY(QAbstractItemModel* nonEmptyTagsModel READ nonEmptyTagsModel CONSTANT)
@@ -133,6 +135,7 @@ public:
     Q_INVOKABLE Tag::Ptr createTag(const QString &tagName, const QString &uid = QString());
     Tag::Ptr tag(const QString &name, bool create = true);
     QAbstractItemModel *tagsModel() const;
+    ExtendedTagsModel *extendedTagsModel() const;
     QString deletedTagName() const;
     bool containsTag(const QString &name) const;
     void clearTags();
@@ -182,6 +185,7 @@ private:
     ArchivedTasksFilterModel *m_stagedTasksModel;
     ArchivedTasksFilterModel *m_archivedTasksModel;
     NonEmptyTagFilterProxy* m_nonEmptyTagsModel;
+    ExtendedTagsModel *m_extendedTagsModel;
     bool m_savingInProgress;
     bool m_loadingInProgress;
 };

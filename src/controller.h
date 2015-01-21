@@ -36,7 +36,9 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
-    Q_PROPERTY(ArchiveViewType archiveViewType READ archiveViewType WRITE setArchiveViewType NOTIFY archiveViewTypeChanged)
+    Q_PROPERTY(QAbstractItemModel* tagsModel READ tagsModel NOTIFY hideEmptyTagsChanged)
+    Q_PROPERTY(Tag* untaggedTasksTag READ untaggedTasksTag CONSTANT)
+    Q_PROPERTY(Tag* allTasksTag READ allTasksTag CONSTANT)
     Q_PROPERTY(bool showAllTasksView READ showAllTasksView WRITE setShowAllTasksView NOTIFY showAllTasksViewChanged)
     Q_PROPERTY(bool showTaskAge READ showTaskAge WRITE setShowTaskAge NOTIFY showTaskAgeChanged)
     Q_PROPERTY(bool expertMode READ expertMode CONSTANT)
@@ -62,7 +64,7 @@ class Controller : public QObject {
     Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged) // Task being played
     Q_PROPERTY(Task* rightClickedTask READ rightClickedTask NOTIFY rightClickedTaskChanged)
     Q_PROPERTY(Task *selectedTask READ selectedTask NOTIFY selectedTaskChanged)
-    Q_PROPERTY(Tag* currentTabTag READ currentTabTag WRITE setCurrentTabTag NOTIFY currentTabTagChanged)
+    Q_PROPERTY(Tag* currentTag READ currentTag WRITE setCurrentTag NOTIFY currentTagChanged)
     Q_PROPERTY(QueueType queueType READ queueType WRITE setQueueType NOTIFY queueTypeChanged)
     // Editing task properties
     Q_PROPERTY(QObject* taskBeingEdited READ taskBeingEdited NOTIFY taskBeingEditedChanged)
@@ -136,13 +138,6 @@ public:
         QtRendering = 1
     };
 
-    enum ArchiveViewType {
-        ArchiveViewAll, // Shows all archived tasks
-        ArchiveViewUntagged, // Shows all untagged archived tasks
-        ArchiveViewSpecificTag // Shows all archived tasks from a specific tag
-    };
-    Q_ENUMS(ArchiveViewType)
-
     explicit Controller(QQmlContext *context, Kernel *, Storage *storage,
                         Settings *settings, QObject *parent = 0);
     ~Controller();
@@ -185,7 +180,7 @@ public:
     Task *selectedTask() const;
     void setSelectedTask(const Task::Ptr &task);
 
-    Tag *currentTabTag() const;
+    Tag *currentTag() const;
 
     Controller::QueueType queueType() const;
     void setQueueType(QueueType);
@@ -257,15 +252,17 @@ public:
     void setShowTaskAge(bool);
     bool showTaskAge() const;
 
-    void setArchiveViewType(ArchiveViewType);
-    ArchiveViewType archiveViewType() const;
-
     void setShowAllTasksView(bool);
     bool showAllTasksView() const;
 
+    Tag* allTasksTag() const;
+    Tag* untaggedTasksTag() const;
+
+    QAbstractItemModel* tagsModel() const;
+
 public Q_SLOTS:
     void updateWebDavCredentials();
-    void setCurrentTabTag(Tag *);
+    void setCurrentTag(Tag *);
     void addTask(const QString &text, bool startEditMode);
     void removeTask(Task *);
 
@@ -279,6 +276,9 @@ public Q_SLOTS:
 
     void cycleMenuSelectionUp();
     void cycleMenuSelectionDown();
+
+    void cycleTagSelectionLeft();
+    void cycleTagSelectionRight();
 
     void showQuestionPopup(QObject *obj, const QString &text, const QString &callback);
     void onPopupButtonClicked(bool okClicked);
@@ -298,12 +298,12 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void onTimerTick();
+    void onCurrentTagDestroyed();
     void setStartupFinished();
 
 Q_SIGNALS:
     void aboutToAddTask();
     void showAllTasksViewChanged();
-    void archiveViewTypeChanged();
     void showTaskAgeChanged();
     void enterPressed();
     void currentMenuIndexChanged();
@@ -330,7 +330,7 @@ Q_SIGNALS:
     void rightClickedTaskChanged();
     void configureTabIndexChanged();
     void selectedTaskChanged();
-    void currentTabTagChanged();
+    void currentTagChanged();
     void invalidateTaskModel();
     void queueTypeChanged();
     void addingNewTask();
@@ -352,6 +352,7 @@ Q_SIGNALS:
     void syncAtStartupChanged();
 
 private:
+    void updateExtendedTagModel();
     bool anyOverlayVisible() const;
     bool taskMenuVisible() const;
     void setCurrentMenuIndex(int);
@@ -386,7 +387,7 @@ private:
     Task::Ptr m_invalidTask;
     int m_configureTabIndex;
     QPointer<Task> m_selectedTask;
-    QPointer<Tag> m_currentTabTag;
+    QPointer<Tag> m_currentTag;
     QueueType m_queueType;
     Storage *m_storage;
     bool m_pomodoroFunctionalityDisabled;
@@ -419,8 +420,9 @@ private:
     int m_currentMenuIndex;
     bool m_expertMode;
     bool m_showTaskAge;
-    ArchiveViewType m_archiveViewType;
     bool m_showAllTasksView;
+    Tag::Ptr m_allTasksTag;
+    Tag::Ptr m_untaggedTasksTag;
 };
 
 #endif

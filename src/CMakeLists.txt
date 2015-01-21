@@ -5,6 +5,7 @@ set(flow_SRC
     circularprogressindicator.cpp
     checkbox.cpp
     controller.cpp
+    extendedtagsmodel.cpp
     genericlistmodel.h
     jsonstorage.cpp
     kernel.cpp

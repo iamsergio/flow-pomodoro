@@ -41,6 +41,7 @@ public:
     typedef GenericListModel<Tag::Ptr> List;
 
     explicit Tag(Kernel *kernel, const QString &name);
+    explicit Tag(const QString &name, QAbstractItemModel *taskModel); // For fake tags ("All" and "Untagged")
     ~Tag();
 
     int taskCount() const;
@@ -78,8 +79,9 @@ private:
     QString m_name;
     int m_taskCount;
     bool m_beingEdited;
-    TaskFilterProxyModel *m_taskModel; // All unstaged tasks with this tag
+    QAbstractItemModel *m_taskModel; // All unstaged tasks with this tag
     Kernel *m_kernel;
+    bool m_isFake;
     bool m_dontUpdateRevision;
 };
 

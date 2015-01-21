@@ -21,6 +21,7 @@
 #include "tag.h"
 #include "task.h"
 #include "kernel.h"
+#include "extendedtagsmodel.h"
 #include "jsonstorage.h"
 #include "sortedtagsmodel.h"
 #include "archivedtasksfiltermodel.h"
@@ -68,6 +69,7 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     , m_stagedTasksModel(new ArchivedTasksFilterModel(this))
     , m_archivedTasksModel(new ArchivedTasksFilterModel(this))
     , m_nonEmptyTagsModel(new NonEmptyTagFilterProxy(this))
+    , m_extendedTagsModel(new ExtendedTagsModel(this))
     , m_savingInProgress(false)
     , m_loadingInProgress(false)
 {
@@ -85,7 +87,8 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     connect(tagsModel, &QAbstractListModel::modelReset, this, &Storage::scheduleSave);
     qRegisterMetaType<Tag::Ptr>("Tag::Ptr");
     m_sortedTagModel = new SortedTagsModel(m_data.tags, this);
-    m_nonEmptyTagsModel->setSourceModel(m_sortedTagModel);
+    m_extendedTagsModel->setSourceModel(m_sortedTagModel);
+    m_nonEmptyTagsModel->setSourceModel(m_extendedTagsModel);
 
     connect(this, &Storage::tagAboutToBeRemoved,
             this, &Storage::onTagAboutToBeRemoved);
@@ -577,4 +580,9 @@ int Storage::ageAverage() const
     }
 
     return totalAge / m_data.tasks.count();
+}
+
+ExtendedTagsModel* Storage::extendedTagsModel() const
+{
+    return m_extendedTagsModel;
 }
