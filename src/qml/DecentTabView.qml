@@ -33,30 +33,26 @@ Item {
         }
     }
 
-    Flickable {
+    ListView {
         id: flickable
-        anchors.fill: parent
-        contentWidth: row.width
         clip: true
-
-        Row {
-            id: row
-            height: parent.height
-            width: childrenRect.width
-
-            Repeater {
-                id: repeater
-                model: _controller.tagsModel
-                TagDelegate {
-                    anchors.top: row.top
-                    anchors.bottom: row.bottom
-                    isLastIndex: index === repeater.model.count - 1
-                    tagObj: tag
-                    isSelected: tag === _controller.currentTag
-                    width: Math.max(Math.max(_style.tagTabWidth, root.width / repeater.model.count),
-                                    textItem.contentWidth + textItem2.contentWidth + textRow.spacing + 12 * _controller.dpiFactor)
+        anchors.fill: parent
+        orientation: ListView.Horizontal
+        highlightFollowsCurrentItem: true
+        model: _controller.tagsModel
+        delegate:
+            TagDelegate {
+                height: parent.height
+                isLastIndex: index === flickable.model.count - 1
+                tagObj: tag
+                isSelected: tag === _controller.currentTag
+                onIsSelectedChanged: {
+                    if (isSelected)
+                        flickable.currentIndex = index
                 }
+
+                width: Math.max(Math.max(_style.tagTabWidth, root.width / flickable.model.count),
+                                textItem.contentWidth + textItem2.contentWidth + textRow.spacing + 12 * _controller.dpiFactor)
             }
-        }
     }
 }
