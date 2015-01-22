@@ -38,6 +38,7 @@ Item {
         clip: true
         anchors.fill: parent
         orientation: ListView.Horizontal
+        highlightMoveDuration: 50
         highlightFollowsCurrentItem: true
         model: _controller.tagsModel
         delegate:

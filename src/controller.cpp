@@ -285,6 +285,16 @@ void Controller::cycleTagSelectionRight()
         setCurrentTag(m->data(m->index(currentIndex + 1, 0), Storage::TagRole).value<Tag*>());
 }
 
+void Controller::selectTagByFirstLetter(const QChar &c)
+{
+    int count = tagsModel()->rowCount();
+    for (int i = 0; i < count; ++i) {
+        Tag *t = tagsModel()->data(tagsModel()->index(i, 0), Storage::TagRole).value<Tag*>();
+        if (t->name().toLower().startsWith(c.toLower()))
+            setCurrentTag(t);
+    }
+}
+
 void Controller::showQuestionPopup(QObject *obj, const QString &text, const QString &callback)
 {
     if (!obj || callback.isEmpty() || text.isEmpty()) {
@@ -949,6 +959,8 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         return true;
     }
 
+    const bool archiveVisible = m_queueType == QueueTypeArchive && m_page == MainPage;
+
     if (!anyOverlayVisible()) {
        switch (keyEvent->key()) {
        case Qt::Key_Return:
@@ -1007,11 +1019,18 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
                return false;
            }
        case Qt::Key_Right:
-           if (m_queueType == QueueTypeArchive && m_page == MainPage) {
+           if (archiveVisible) {
                cycleTagSelectionRight();
                return true;
            } else {
                return false;
+           }
+       }
+
+       if (archiveVisible) {
+           QString text = keyEvent->text();
+           if (!text.isEmpty()) {
+               selectTagByFirstLetter(text.at(0));
            }
        }
     }
