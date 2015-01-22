@@ -258,14 +258,31 @@ void Controller::cycleMenuSelectionDown()
         setCurrentMenuIndex(m_currentMenuIndex + 1);
 }
 
+static int indexOfTag(QAbstractItemModel *model, Tag *tag)
+{
+    int count = model->rowCount();
+    for (int i = 0; i < count; ++i) {
+        Tag *t = model->data(model->index(i, 0), Storage::TagRole).value<Tag*>();
+        if (t == tag)
+            return i;
+    }
+    return -1;
+}
+
 void Controller::cycleTagSelectionLeft()
 {
-
+    QAbstractItemModel *m = tagsModel();
+    int currentIndex = indexOfTag(m, m_currentTag);
+    if (currentIndex > 0)
+        setCurrentTag(m->data(m->index(currentIndex - 1, 0), Storage::TagRole).value<Tag*>());
 }
 
 void Controller::cycleTagSelectionRight()
 {
-
+    QAbstractItemModel *m = tagsModel();
+    int currentIndex = indexOfTag(m, m_currentTag);
+    if (currentIndex < m->rowCount() - 1)
+        setCurrentTag(m->data(m->index(currentIndex + 1, 0), Storage::TagRole).value<Tag*>());
 }
 
 void Controller::showQuestionPopup(QObject *obj, const QString &text, const QString &callback)
@@ -982,6 +999,20 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
            }
            return false;
            break;
+       case Qt::Key_Left:
+           if (m_queueType == QueueTypeArchive && m_page == MainPage) {
+               cycleTagSelectionLeft();
+               return true;
+           } else {
+               return false;
+           }
+       case Qt::Key_Right:
+           if (m_queueType == QueueTypeArchive && m_page == MainPage) {
+               cycleTagSelectionRight();
+               return true;
+           } else {
+               return false;
+           }
        }
     }
 
