@@ -1,5 +1,5 @@
 TEMPLATE = app
-QT += testlib
+QT += testlib widgets
 CONFIG += testcase debug
 DEFINES += UNIT_TEST_RUN
 

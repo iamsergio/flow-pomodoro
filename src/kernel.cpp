@@ -46,6 +46,7 @@
 #include <QPluginLoader>
 #include <QDir>
 #include <QWindow>
+#include <QFontDatabase>
 
 #ifdef QT_WIDGETS_LIB
 #include <QSystemTrayIcon>
@@ -84,11 +85,10 @@ static void registerQmlTypes()
                                            1, 0, "Controller",
                                            "Controller is not creatable");
 
-#ifndef UNIT_TEST_RUN
     qmlRegisterUncreatableType<QuickView>("Controller",
                                           1, 0, "QuickView",
                                           "QuickView is not creatable");
-#endif
+
     qmlRegisterUncreatableType<LoadManager>("Controller",
                                             1, 0, "LoadManager",
                                             "LoadManager is not creatable");
@@ -135,6 +135,10 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     , m_trayMenu(0)
 #endif
 {
+    QFontDatabase::addApplicationFont(":/fonts/fontawesome-webfont.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/open-sans/OpenSans-Regular.ttf");
+    qApp->setFont(QFont("Open Sans"));
+
     m_qmlEngine->rootContext()->setObjectName("QQmlContext"); // GammaRay convenience
     registerQmlTypes();
     qmlContext()->setContextProperty("_controller", m_controller);

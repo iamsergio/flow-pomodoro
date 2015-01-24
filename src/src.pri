@@ -9,8 +9,9 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/jsonstorage.cpp \
            $$PWD/kernel.cpp \
            $$PWD/loadmanager.cpp \
-           $$PWD/pluginmodel.cpp \
            $$PWD/nonemptytagfilterproxy.cpp \
+           $$PWD/pluginmodel.cpp \
+           $$PWD/quickview.cpp \
            $$PWD/runtimeconfiguration.cpp \
            $$PWD/settings.cpp    \
            $$PWD/sortedtagsmodel.cpp \
@@ -36,7 +37,8 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/loadmanager.h \
            $$PWD/genericlistmodel.h \
            $$PWD/plugininterface.h \
-           $$PWD/pluginmodel.h     \
+           $$PWD/pluginmodel.h \
+           $$PWD/quickview.h \
            $$PWD/nonemptytagfilterproxy.h \
            $$PWD/runtimeconfiguration.h \
            $$PWD/settings.h        \
@@ -51,6 +53,8 @@ HEADERS += $$PWD/archivedtasksfiltermodel.h \
            $$PWD/taskfilterproxymodel.h \
            $$PWD/tooltipcontroller.h \
            $$PWD/utils.h
+
+RESOURCES += $$PWD/resources.qrc
 
 !contains(DEFINES, NO_WEBDAV) {
     include("$$PWD/../3rdparty/qwebdav/qwebdav.pri")

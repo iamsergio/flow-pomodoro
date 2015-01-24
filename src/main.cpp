@@ -39,7 +39,6 @@ typedef QGuiApplication Application;
 #endif
 
 #include <QDebug>
-#include <QFontDatabase>
 
 #include <QStandardPaths>
 #include <QTranslator>
@@ -161,10 +160,6 @@ int main(int argc, char *argv[])
     Utils::printTimeInfo("main: created QApplication");
     app.setOrganizationName("KDAB");
     app.setApplicationName("flow");
-
-    QFontDatabase::addApplicationFont(":/fonts/fontawesome-webfont.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/open-sans/OpenSans-Regular.ttf");
-    app.setFont(QFont("Open Sans"));
 
     QTranslator translator;
     translator.load(QString(":/translations/flow_%1").arg(QLocale::system().name())); // export LANG="pt_PT" to change

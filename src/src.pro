@@ -21,10 +21,7 @@ static {
 }
 
 include("src.pri")
-SOURCES += quickview.cpp \
-           main.cpp
-
-HEADERS += quickview.h
+SOURCES += main.cpp
 
 OTHER_FILES += qml/AboutPage.qml      \
                qml/Choice.qml \
@@ -74,7 +71,6 @@ lupdate_only {
     SOURCES += $$OTHER_FILES
 }
 
-RESOURCES += resources.qrc
 TRANSLATIONS += translations/flow_pt_PT.ts
 CODECFORSRC  = UTF-8
 
