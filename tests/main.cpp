@@ -6,17 +6,18 @@
 #include "testtaskfiltermodel.h"
 #include "teststagedtasksmodel.h"
 #include "testarchivedtasksmodel.h"
+#include "quick/testui.h"
 
 #ifndef NO_WEBDAV
 # include "testwebdav.h"
 #endif
 
 #include <QtTest/QtTest>
-#include <QGuiApplication>
+#include <QApplication>
 
 int main(int argc, char *argv[])
 { 
-    QCoreApplication app(argc, argv);
+    QApplication app(argc, argv);
     app.setAttribute(Qt::AA_Use96Dpi, true);
     bool success = true;
 
@@ -76,6 +77,11 @@ int main(int argc, char *argv[])
     }
 #endif
 
+    {
+        TestUI uiTest;
+        success &= QTest::qExec(&uiTest, argc, argv) == 0;
+        Q_ASSERT(success);
+    }
     if (success)
         qDebug() << "Success!";
     else

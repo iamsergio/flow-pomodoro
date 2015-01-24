@@ -11,6 +11,7 @@ INCLUDEPATH += $$PWD/../src/
 SOURCES += assertingproxymodel.cpp \
            main.cpp \
            modelsignalspy.cpp \
+           quick/testui.cpp \
            signalspy.cpp \
            testarchivedtasksmodel.cpp \
            testcheckabletagmodel.cpp \
@@ -31,6 +32,7 @@ SOURCES += assertingproxymodel.cpp \
 
 HEADERS += assertingproxymodel.h \
            modelsignalspy.h \
+           quick/testui.h \
            signalspy.h \
            testarchivedtasksmodel.h \
            testcheckabletagmodel.h \

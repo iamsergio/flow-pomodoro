@@ -31,13 +31,14 @@
 #include "controller.h"
 #include "tagref.h"
 #include "settings.h"
+#include "quickview.h"
 #include <QtTest/QtTest>
 
 class TestBase : public QObject
 {
 public:
 
-    TestBase()
+    TestBase() : m_view(nullptr)
     {
         RuntimeConfiguration config;
         config.setDataFileName("data.dat");
@@ -58,6 +59,7 @@ public:
     ~TestBase()
     {
         QFile::remove("unit-test-settings.ini");
+        delete m_view;
     }
 
     bool checkStorageConsistency(int expectedTagCount = -1)
@@ -108,6 +110,8 @@ public:
     void createNewKernel(const QString &dataFilename, bool load = true)
     {
         delete m_kernel;
+        delete m_view;
+        m_view = 0;
         RuntimeConfiguration config;
         config.setDataFileName("data_files/" + dataFilename);
         config.setPluginsSupported(false);
@@ -122,6 +126,13 @@ public:
             m_kernel->storage()->load();
     }
 
+    void createInstanceWithUI()
+    {
+        createNewKernel("quick_tests.dat");
+        m_view = new QuickView(m_kernel);
+        m_view->show();
+    }
+
     void waitForIt()
     {
         QTestEventLoop::instance().enterLoop(10);
@@ -133,8 +144,21 @@ public:
         QTestEventLoop::instance().exitLoop();
     }
 
+    void mouseClick(QQuickItem *item)
+    {
+        m_view->mouseClick(item);
+        QTest::qWait(400);
+    }
+
+    void mouseClick(const QString &objectName)
+    {
+        m_view->mouseClick(objectName);
+        QTest::qWait(400);
+    }
+
 protected:
     Kernel *m_kernel;
+    QuickView *m_view;
     Storage *m_storage;
     Controller *m_controller;
 };

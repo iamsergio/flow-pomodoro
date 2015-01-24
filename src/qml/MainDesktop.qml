@@ -9,6 +9,7 @@ Main {
     topBarItem:
         Item {
         id: header
+        objectName: "header"
         anchors.fill: parent
 
         FontAwesomeIcon {
@@ -84,6 +85,7 @@ Main {
 
             FlowSwitch {
                 id: switchItem
+                objectName: "switchItem"
                 visible: _controller.expanded && _controller.currentPage === Controller.MainPage
                 anchors.verticalCenter: parent.verticalCenter
                 checked: _controller.queueType == Controller.QueueTypeArchive
@@ -116,6 +118,7 @@ Main {
 
             FontAwesomeIcon {
                 id: configureIcon
+                objectName: "configureIcon"
                 anchors.verticalCenter: buttonRow.verticalCenter
                 toolTip: qsTr("Configure")
                 visible: _controller.expanded

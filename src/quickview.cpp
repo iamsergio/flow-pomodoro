@@ -398,3 +398,41 @@ void QuickView::showWidgetContextMenu(const QPoint &pos)
     Q_UNUSED(pos);
 #endif
 }
+
+
+#ifdef UNIT_TEST_RUN
+QQuickItem * QuickView::itemByName(const QString &name)
+{
+    return rootObject() ? rootObject()->findChild<QQuickItem*>(name)
+                        : nullptr;
+}
+
+QList<QQuickItem*> QuickView::itemsByName(const QString &name)
+{
+    return rootObject() ? rootObject()->findChildren<QQuickItem*>(name)
+                        : QList<QQuickItem*>();
+}
+
+void QuickView::mouseClick(QQuickItem *item)
+{
+    if (!item) {
+        qWarning() << "Invalid item";
+        Q_ASSERT(false);
+        return;
+    }
+    QPointF scenePos = item->parentItem()->mapToScene(item->position() + QPointF(item->width() / 2, item->height() / 2));
+    QPointF globalPos = mapToGlobal(scenePos.toPoint());
+    QCursor::setPos(globalPos.toPoint());
+
+    QMouseEvent pressEvent(QEvent::MouseButtonPress, scenePos, scenePos, globalPos, Qt::LeftButton, Qt::LeftButton, 0);
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, scenePos, scenePos, globalPos, Qt::LeftButton, 0, 0);
+    mousePressEvent(&pressEvent);
+    mouseReleaseEvent(&releaseEvent);
+}
+
+void QuickView::mouseClick(const QString &objectName)
+{
+    mouseClick(itemByName(objectName));
+}
+
+#endif

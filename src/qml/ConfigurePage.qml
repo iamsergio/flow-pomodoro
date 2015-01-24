@@ -104,6 +104,7 @@ Page {
 
         PushButton {
             id: okButton
+            objectName: "configurePageOKButton"
             text: qsTr("OK")
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom

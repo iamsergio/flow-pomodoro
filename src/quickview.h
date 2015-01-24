@@ -73,6 +73,13 @@ public:
     void setContractedHeight(int);
     int contractedHeight() const;
 
+#ifdef UNIT_TEST_RUN
+    QQuickItem *itemByName(const QString &name);
+    QList<QQuickItem*> itemsByName(const QString &name);
+    void mouseClick(QQuickItem *item);
+    void mouseClick(const QString &objectName);
+#endif
+
 public Q_SLOTS:
     void showWidgetContextMenu(const QPoint &pos);
 
