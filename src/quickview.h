@@ -80,7 +80,7 @@ public:
     void mouseClick(QQuickItem *item);
     void mouseClick(const QString &objectName);
     void sendText(const QString &text);
-    void sendKey(int, const QString &);
+    void sendKey(int, const QString &, Qt::KeyboardModifiers modifiers = 0);
 #endif
 
 public Q_SLOTS:

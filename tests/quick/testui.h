@@ -38,6 +38,7 @@ private Q_SLOTS:
     void testNewTask();
     void testArchiveTask();
     void testPlayTask();
+    void testKeyBindings();
 };
 
 #endif

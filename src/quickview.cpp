@@ -448,12 +448,12 @@ void QuickView::mouseClick(const QString &objectName)
     mouseClick(itemByName(objectName));
 }
 
-void QuickView::sendKey(int key, const QString &text)
+void QuickView::sendKey(int key, const QString &text, Qt::KeyboardModifiers modifiers)
 {
     // Go through qApp instead of calling key event handlers directly, so event filters are processed
-    QKeyEvent pressEvent(QKeyEvent::KeyPress, key, 0, text);
+    QKeyEvent pressEvent(QKeyEvent::KeyPress, key, modifiers, text);
     qApp->sendEvent(this, &pressEvent);
-    QKeyEvent releaseEvent(QKeyEvent::KeyRelease, key, 0, text);
+    QKeyEvent releaseEvent(QKeyEvent::KeyRelease, key, modifiers, text);
     qApp->sendEvent(this, &releaseEvent);
 }
 

@@ -188,3 +188,12 @@ void TestUI::testPlayTask()
     QCOMPARE(todayView->property("count").toInt(), 1);
     QVERIFY(!progressIndicator->isVisible());
 }
+
+void TestUI::testKeyBindings()
+{
+    QCOMPARE(m_controller->queueType(), Controller::QueueTypeToday);
+    sendKey(Qt::Key_Tab, "", Qt::ControlModifier);
+    QCOMPARE(m_controller->queueType(), Controller::QueueTypeArchive);
+    sendKey(Qt::Key_Tab, "", Qt::ControlModifier);
+    QCOMPARE(m_controller->queueType(), Controller::QueueTypeToday);
+}

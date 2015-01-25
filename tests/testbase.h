@@ -171,9 +171,9 @@ public:
         QTest::qWait(400);
     }
 
-    void sendKey(int key, const QString &text = "")
+    void sendKey(int key, const QString &text = "", Qt::KeyboardModifiers modifiers = 0)
     {
-        m_view->sendKey(key, text);
+        m_view->sendKey(key, text, modifiers);
         QTest::qWait(200);
     }
 protected:
