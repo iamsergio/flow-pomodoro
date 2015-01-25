@@ -196,4 +196,6 @@ void TestUI::testKeyBindings()
     QCOMPARE(m_controller->queueType(), Controller::QueueTypeArchive);
     sendKey(Qt::Key_Tab, "", Qt::ControlModifier);
     QCOMPARE(m_controller->queueType(), Controller::QueueTypeToday);
+
+    // TODO: Test more bindings
 }
