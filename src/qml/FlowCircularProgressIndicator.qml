@@ -4,6 +4,7 @@ import Controller 1.0
 
 CircularProgressIndicator {
     id: root
+    objectName: "circularProgressIndicator"
     property alias containsMouse: mouseArea.containsMouse
     property alias mousePressed: mouseArea.pressed
     signal clicked()

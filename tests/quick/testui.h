@@ -35,6 +35,9 @@ private Q_SLOTS:
     void testQueueSwitchButton();
     void testGoToConfigurePage();
     void testGoToAboutPage();
+    void testNewTask();
+    void testArchiveTask();
+    void testPlayTask();
 };
 
 #endif

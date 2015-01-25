@@ -84,6 +84,7 @@ Rectangle {
 
         Text {
             id: textItem
+            objectName: "taskTextItem"
             renderType: _controller.textRenderType
             text: root.taskSummary
             elide: Text.ElideRight
@@ -176,6 +177,7 @@ Rectangle {
 
             FontAwesomeIcon {
                 id: archiveIcon
+                objectName: "archiveIcon"
                 toolTip: (taskObj !== null && taskObj.staged) ? qsTr("Archive task") : qsTr("Queue for today")
                 size: 30
                 text: (taskObj !== null && taskObj.staged) ? "\uf187" : "\uf06a"
@@ -187,6 +189,7 @@ Rectangle {
 
             FontAwesomeIcon {
                 id: playIcon
+                objectName: "playIcon"
                 size: 30
                 text: "\uf01d"
                 visible: root.buttonsVisible && (taskObj !== null && taskObj.staged) && !_controller.pomodoroFunctionalityDisabled

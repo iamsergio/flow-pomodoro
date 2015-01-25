@@ -401,16 +401,29 @@ void QuickView::showWidgetContextMenu(const QPoint &pos)
 
 
 #ifdef UNIT_TEST_RUN
-QQuickItem * QuickView::itemByName(const QString &name)
+
+// Since QObject::findChildren() doesn't know about parentItem()/childItems()
+static void findItems(QQuickItem *root, const QString &name, QList<QQuickItem*> &list)
 {
-    return rootObject() ? rootObject()->findChild<QQuickItem*>(name)
-                        : nullptr;
+    if (root->objectName() == name)
+        list << root;
+
+    foreach (QQuickItem *child, root->childItems()) {
+        findItems(child, name, list);
+    }
 }
 
-QList<QQuickItem*> QuickView::itemsByName(const QString &name)
+QQuickItem * QuickView::itemByName(const QString &name, QQuickItem *root)
 {
-    return rootObject() ? rootObject()->findChildren<QQuickItem*>(name)
-                        : QList<QQuickItem*>();
+    auto items = itemsByName(name, root);
+    return items.isEmpty() ? nullptr : items.first();
+}
+
+QList<QQuickItem*> QuickView::itemsByName(const QString &name, QQuickItem *root)
+{
+    QList<QQuickItem*> items;
+    findItems(root ? root : rootObject(), name, items);
+    return items;
 }
 
 void QuickView::mouseClick(QQuickItem *item)
@@ -422,7 +435,7 @@ void QuickView::mouseClick(QQuickItem *item)
     }
     QPointF scenePos = item->parentItem()->mapToScene(item->position() + QPointF(item->width() / 2, item->height() / 2));
     QPointF globalPos = mapToGlobal(scenePos.toPoint());
-    QCursor::setPos(globalPos.toPoint());
+    moveMouseTo(item);
 
     QMouseEvent pressEvent(QEvent::MouseButtonPress, scenePos, scenePos, globalPos, Qt::LeftButton, Qt::LeftButton, 0);
     QMouseEvent releaseEvent(QEvent::MouseButtonRelease, scenePos, scenePos, globalPos, Qt::LeftButton, 0, 0);
@@ -433,6 +446,34 @@ void QuickView::mouseClick(QQuickItem *item)
 void QuickView::mouseClick(const QString &objectName)
 {
     mouseClick(itemByName(objectName));
+}
+
+void QuickView::sendKey(int key, const QString &text)
+{
+    // Go through qApp instead of calling key event handlers directly, so event filters are processed
+    QKeyEvent pressEvent(QKeyEvent::KeyPress, key, 0, text);
+    qApp->sendEvent(this, &pressEvent);
+    QKeyEvent releaseEvent(QKeyEvent::KeyRelease, key, 0, text);
+    qApp->sendEvent(this, &releaseEvent);
+}
+
+void QuickView::sendText(const QString &text)
+{
+    for (int i = 0; i < text.count(); ++i) {
+        int key = Qt::Key_A + (text.at(i).unicode() - QChar('a').unicode());
+        sendKey(key, text.at(i));
+    }
+}
+
+void QuickView::moveMouseTo(QQuickItem *item)
+{
+    QPointF scenePos = item->parentItem()->mapToScene(item->position() + QPointF(item->width() / 2, item->height() / 2));
+    QPointF globalPos = mapToGlobal(scenePos.toPoint());
+    QCursor::setPos(globalPos.toPoint());
+
+    // Also send a move event so that MouseArea's detect mouse entering
+    QMouseEvent moveEvent(QEvent::MouseMove, scenePos, scenePos, globalPos, Qt::LeftButton, Qt::LeftButton, 0);
+    mouseMoveEvent(&moveEvent);
 }
 
 #endif

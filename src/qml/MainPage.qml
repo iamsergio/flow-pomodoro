@@ -14,6 +14,7 @@ Page {
             id: taskListComponent
             TaskListView {
                 id: stagedView
+                objectName: "stagedView"
                 model: _storage.stagedTasksModel
                 emptyText: qsTr("No queued tasks for today.") + "\n"+ qsTr("Please create new ones or pick some from your archive.")
             }
@@ -46,6 +47,7 @@ Page {
             id: archiveViewComponent
             TaskListView {
                 id: archiveView
+                objectName: "archiveView"
 
                 function emptyTextForViewType()
                 {

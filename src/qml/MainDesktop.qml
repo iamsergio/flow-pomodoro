@@ -14,6 +14,7 @@ Main {
 
         FontAwesomeIcon {
             id: addIcon
+            objectName: "addIconItem"
             text: "\uf055" // "\uf0fe"
             size: 30
             anchors.verticalCenter: parent.verticalCenter

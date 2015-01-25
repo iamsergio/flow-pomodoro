@@ -77,3 +77,114 @@ void TestUI::testGoToAboutPage()
 {
 
 }
+
+static void printObjectTree(QObject *root)
+{
+    static int level = 0;
+    qDebug() << QString().fill(' ', level) << root << ";" << root;
+    level++;
+    foreach (QObject *child, root->children()) {
+        printObjectTree(child);
+    }
+    level--;
+}
+
+static void printItemTree(QQuickItem *root)
+{
+    static int level = 0;
+    qDebug() << QString().fill(' ', level) << root << "; parentObject=" << root->parent() << "; parentItem=" << root->parentItem();
+    level++;
+    foreach (QQuickItem *child, root->childItems()) {
+        printItemTree(child);
+    }
+    level--;
+}
+
+void TestUI::testNewTask()
+{
+    mouseClick("addIconItem");
+    sendText("test task1");
+    sendKey(Qt::Key_Enter);
+    QCOMPARE(m_storage->taskCount(), 1);
+    Task::Ptr task1 = m_storage->tasks().at(0);
+    QCOMPARE(task1->summary(), QString("test task1"));
+    QQuickItem *contextMenu = m_view->itemByName("taskContextMenu");
+    QVERIFY(contextMenu->isVisible());
+    sendKey(Qt::Key_Escape);
+    QVERIFY(!contextMenu->isVisible());
+    QVERIFY(m_controller->expanded());
+
+    QQuickItem *listView = m_view->itemByName("stagedView");
+    QVERIFY(listView);
+
+    QList<QQuickItem*> items = m_view->itemsByName("taskItem");
+    QCOMPARE(items.count(), 1);
+
+    QQuickItem *taskTextItem = m_view->itemByName("taskTextItem");
+    QVERIFY(taskTextItem);
+    QCOMPARE(taskTextItem->property("text").toString(), QString("test task1"));
+
+}
+
+void TestUI::testArchiveTask()
+{
+    QQuickItem *archiveIcon = m_view->itemByName("archiveIcon");
+    QQuickItem *playIcon = m_view->itemByName("playIcon");
+    QVERIFY(archiveIcon);
+    QVERIFY(!archiveIcon->isVisible());
+    QQuickItem* taskItem = m_view->itemByName("taskItem");
+    moveMouseTo(taskItem);
+    QVERIFY(archiveIcon->isVisible());
+    QVERIFY(playIcon->isVisible());
+    mouseClick(archiveIcon);
+    QQuickItem *todayView = m_view->itemByName("stagedView");
+    QCOMPARE(todayView->property("count").toInt(), 0);
+    QQuickItem *archiveView = m_view->itemByName("archiveView");
+    QCOMPARE(archiveView->property("count").toInt(), 1);
+
+    QQuickItem *switchItem = m_view->itemByName("switchItem");
+    QVERIFY(switchItem);
+    mouseClick(switchItem); // Go to archive view
+    QList<QQuickItem*> items = m_view->itemsByName("taskItem", archiveView);
+    QCOMPARE(items.count(), 1);
+    taskItem = items.first();
+    moveMouseTo(taskItem);
+    archiveIcon = m_view->itemByName("archiveIcon");
+    playIcon = m_view->itemByName("playIcon");
+    QVERIFY(playIcon);
+    QVERIFY(!playIcon->isVisible());
+    mouseClick(archiveIcon); // Stage
+
+    QCOMPARE(todayView->property("count").toInt(), 1);
+    QCOMPARE(archiveView->property("count").toInt(), 0);
+    mouseClick(switchItem); // Go to today view
+    QCOMPARE(m_controller->queueType(), Controller::QueueTypeToday);
+    QVERIFY(todayView->isVisible());
+    items = m_view->itemsByName("taskItem", todayView);
+    QCOMPARE(items.count(), 1);
+}
+
+void TestUI::testPlayTask()
+{
+    QQuickItem *playIcon = m_view->itemByName("playIcon");
+    QQuickItem* taskItem = m_view->itemByName("taskItem");
+    moveMouseTo(taskItem);
+    mouseClick(playIcon);
+    QVERIFY(!m_controller->expanded());
+
+    QQuickItem *globalMouseArea = m_view->itemByName("header");
+    mouseClick(globalMouseArea);
+    QVERIFY(m_controller->expanded());
+
+    QQuickItem *todayView = m_view->itemByName("stagedView");
+    QCOMPARE(todayView->property("count").toInt(), 0);
+    Task::Ptr task1 = m_storage->tasks().at(0);
+    QCOMPARE(task1->status(), TaskStarted);
+
+    QQuickItem *progressIndicator = m_view->itemByName("circularProgressIndicator");
+    QVERIFY(progressIndicator);
+    QVERIFY(progressIndicator->isVisible());
+    mouseClick(progressIndicator); // Stop
+    QCOMPARE(todayView->property("count").toInt(), 1);
+    QVERIFY(!progressIndicator->isVisible());
+}

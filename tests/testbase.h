@@ -33,6 +33,7 @@
 #include "settings.h"
 #include "quickview.h"
 #include <QtTest/QtTest>
+#include <QQuickItem>
 
 class TestBase : public QObject
 {
@@ -146,7 +147,15 @@ public:
 
     void mouseClick(QQuickItem *item)
     {
+        QVERIFY(item->isVisible());
         m_view->mouseClick(item);
+        QTest::qWait(400);
+    }
+
+    void moveMouseTo(QQuickItem *item)
+    {
+        QVERIFY(item->isVisible());
+        m_view->moveMouseTo(item);
         QTest::qWait(400);
     }
 
@@ -156,6 +165,17 @@ public:
         QTest::qWait(400);
     }
 
+    void sendText(const QString &text)
+    {
+        m_view->sendText(text);
+        QTest::qWait(400);
+    }
+
+    void sendKey(int key, const QString &text = "")
+    {
+        m_view->sendKey(key, text);
+        QTest::qWait(200);
+    }
 protected:
     Kernel *m_kernel;
     QuickView *m_view;

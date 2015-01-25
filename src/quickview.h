@@ -74,10 +74,13 @@ public:
     int contractedHeight() const;
 
 #ifdef UNIT_TEST_RUN
-    QQuickItem *itemByName(const QString &name);
-    QList<QQuickItem*> itemsByName(const QString &name);
+    QQuickItem *itemByName(const QString &name, QQuickItem *root = 0);
+    QList<QQuickItem*> itemsByName(const QString &name, QQuickItem *root = 0);
+    void moveMouseTo(QQuickItem *item);
     void mouseClick(QQuickItem *item);
     void mouseClick(const QString &objectName);
+    void sendText(const QString &text);
+    void sendKey(int, const QString &);
 #endif
 
 public Q_SLOTS:

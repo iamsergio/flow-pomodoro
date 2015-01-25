@@ -4,6 +4,7 @@ import Controller 1.0
 Item {
     id: root
     anchors.fill: parent
+    objectName: "taskContextMenu"
 
     ChoicePopup {
         id: choicePopup
