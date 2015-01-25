@@ -978,8 +978,8 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
            stopPomodoro();
            return true;
            break;
-       case Qt::Key_T:
-           if (m_page == MainPage) {
+       case Qt::Key_Tab:
+           if (m_page == MainPage && keyEvent->modifiers() & Qt::ControlModifier) {
                toggleQueueType();
                return true;
            }

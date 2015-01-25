@@ -115,7 +115,7 @@ Page {
                             font.pixelSize: _style.smallTextSize
                             color: _style.smallTextColor
                             renderType: _controller.textRenderType
-                            text: "T"
+                            text: "Ctrl+Tab"
                         }
                         Text  {
                             font.pixelSize: _style.smallTextSize
