@@ -89,6 +89,10 @@ static void registerQmlTypes()
                                           1, 0, "QuickView",
                                           "QuickView is not creatable");
 
+    qmlRegisterUncreatableType<Settings>("Controller",
+                                          1, 0, "Settings",
+                                          "Settings is not creatable");
+
     qmlRegisterUncreatableType<LoadManager>("Controller",
                                             1, 0, "LoadManager",
                                             "LoadManager is not creatable");

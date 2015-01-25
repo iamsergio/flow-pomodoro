@@ -34,7 +34,30 @@ class Settings : public QSettings {
     Q_PROPERTY(bool useSystray READ useSystray WRITE setUseSystray NOTIFY useSystrayChanged)
     Q_PROPERTY(bool hideEmptyTags READ hideEmptyTags WRITE setHideEmptyTags NOTIFY hideEmptyTagsChanged)
     Q_PROPERTY(bool keepScreenOnDuringPomodoro READ keepScreenOnDuringPomodoro WRITE setKeepScreenOnDuringPomodoro NOTIFY keepScreenOnDuringPomodoroChanged)
+    Q_PROPERTY(GeometryType geometryType READ geometryType WRITE setGeometryType NOTIFY geometryTypeChanged)
+    Q_PROPERTY(Position initialPosition READ initialPosition WRITE setInitialPosition NOTIFY initialPositionChanged)
 public:
+    enum Position {
+        PositionNone = 0, // Window will appear where WM puts it
+        PositionLast, // Window will appear at the same place as last time. Saves position at exit.
+        PositionTop,
+        PositionTopLeft,
+        PositionTopRight,
+        PositionBottom, // TODO: Bottom is not supported yet
+        PositionBottomLeft,
+        PositionBottomRight,
+        MaxPositions
+    };
+    Q_ENUMS(Position)
+
+    enum GeometryType {
+        GeometryStandard, // 400x40
+        GeometryThin, // 400x20
+        GeometrySmallSquare, // 80x80
+        GeometryCustom, // uses width and height from settings
+        MaxGeometryTypes
+    };
+    Q_ENUMS(GeometryType)
 
     explicit Settings(QObject *parent = 0);
     explicit Settings(const QString &filename, QObject *parent = 0); // Overload for unit-tests
@@ -61,6 +84,10 @@ public:
     bool useSystray() const;
     void setStickyWindow(bool);
     bool stickyWindow() const;
+    Position initialPosition() const; // Specifies where the window will appear at startup
+    void setInitialPosition(Position);
+    void setGeometryType(GeometryType);
+    Settings::GeometryType geometryType() const;
 
 private Q_SLOTS:
     void doSync();
@@ -75,6 +102,8 @@ Q_SIGNALS:
     void useSystrayChanged();
     void hideEmptyTagsChanged();
     void keepScreenOnDuringPomodoroChanged();
+    void geometryTypeChanged();
+    void initialPositionChanged();
 
 private:
     void init();
@@ -91,6 +120,8 @@ private:
     bool m_useSystray;
     bool m_showTaskAge;
     bool m_stickyWindow;
+    Position m_initialPosition;
+    GeometryType m_geometryType;
 };
 
 #endif

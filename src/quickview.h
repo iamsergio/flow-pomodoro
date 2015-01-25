@@ -32,40 +32,9 @@ class QuickView : public QQuickView {
     Q_OBJECT
     Q_PROPERTY(int contractedHeight READ contractedHeight WRITE setContractedHeight NOTIFY contractedHeightChanged)
     Q_PROPERTY(int contractedWidth READ contractedWidth WRITE setContractedWidth NOTIFY contractedWidthChanged)
-    Q_PROPERTY(GeometryType geometryType READ geometryType WRITE setGeometryType NOTIFY geometryTypeChanged)
-    Q_PROPERTY(Position initialPosition READ initialPosition WRITE setInitialPosition NOTIFY initialPositionChanged)
 public:
-    enum Position {
-        PositionNone = 0, // Window will appear where WM puts it
-        PositionLast, // Window will appear at the same place as last time. Saves position at exit.
-        PositionTop,
-        PositionTopLeft,
-        PositionTopRight,
-        PositionBottom, // TODO: Bottom is not supported yet
-        PositionBottomLeft,
-        PositionBottomRight,
-        MaxPositions
-    };
-    Q_ENUMS(Position)
-
-    enum GeometryType {
-        GeometryStandard, // 400x40
-        GeometryThin, // 400x20
-        GeometrySmallSquare, // 80x80
-        GeometryCustom, // uses width and height from settings
-        MaxGeometryTypes
-    };
-    Q_ENUMS(GeometryType)
-
     explicit QuickView(Kernel *kernel);
     ~QuickView();
-
-    // Specifies where the window will appear at startup
-    Position initialPosition() const;
-    void setInitialPosition(Position);
-
-    void setGeometryType(GeometryType);
-    QuickView::GeometryType geometryType() const;
 
     void setContractedWidth(int);
     int contractedWidth() const;
@@ -92,26 +61,21 @@ protected:
 private Q_SLOTS:
     void toggleVisible();
     void setupWindowFlags();
+    void onWindowGeometryTypeChanged();
 
 Q_SIGNALS:
     void contractedHeightChanged();
     void contractedWidthChanged();
-    void geometryTypeChanged();
-    void initialPositionChanged();
 
 private:
     void reloadQML();
     void setupGeometry();
-    void readInitialPosition();
-    void readGeometryType();
     QUrl styleFileName() const;
     void createStyleComponent();
 
     Controller *m_controller;
     const bool m_useqresources;
     Kernel *m_kernel;
-    Position m_initialPosition;
-    GeometryType m_geometryType;
     int m_contractedWidth;
     int m_contractedHeight;
 };

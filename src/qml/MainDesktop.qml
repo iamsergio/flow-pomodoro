@@ -4,7 +4,7 @@ import com.kdab.flowpomodoro 1.0
 
 Main {
     id: root
-    property bool smallMode: !(_controller.expanded || _window.geometryType === QuickView.GeometryStandard)
+    property bool smallMode: !(_controller.expanded || _settings.geometryType === Settings.GeometryStandard)
 
     topBarItem:
         Item {
@@ -65,7 +65,7 @@ Main {
             font.bold: false
             font.pixelSize: _style.clickHereFontSize
             color: _style.clickHereFontColor
-            visible: _controller.currentTask.stopped && !_controller.expanded && _window.geometryType === QuickView.GeometryStandard
+            visible: _controller.currentTask.stopped && !_controller.expanded && _settings.geometryType === Settings.GeometryStandard
             anchors.left: titleText.left
             anchors.leftMargin: _style.marginSmall
             anchors.bottom: parent.bottom

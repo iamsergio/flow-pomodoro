@@ -63,6 +63,18 @@ void Settings::init()
     m_stickyWindow = value("stickyWindow", /*default=*/ true).toBool();
     m_showTaskAge = value("showTaskAge", /*default=*/ false).toBool();
     m_showAllTasksView = value("showAllTasksView", /*default=*/ false).toBool();
+
+    const Position defaultPosition = PositionTop;
+    m_initialPosition = static_cast<Settings::Position>(value("windowInitialPosition", defaultPosition).toInt());
+    if (m_initialPosition < PositionNone || m_initialPosition >= MaxPositions) {
+        setInitialPosition(defaultPosition);
+    }
+
+    const GeometryType defaultGeometry = GeometryStandard;
+    m_geometryType = static_cast<GeometryType>(value("windowGeometryType", defaultGeometry).toInt());
+    if (m_geometryType < GeometryStandard || m_geometryType >= MaxGeometryTypes) {
+        setGeometryType(defaultGeometry);
+    }
 }
 
 Settings::~Settings()
@@ -222,5 +234,32 @@ void Settings::setSyncAtStartup(bool sync)
         m_syncAtStartup = sync;
         setValue("syncAtStartup", sync);
         emit syncAtStartupChanged();
+    }
+}
+
+void Settings::setGeometryType(GeometryType geometryType)
+{
+    if (geometryType != m_geometryType) {
+        m_geometryType = geometryType;
+        setValue("windowGeometryType", geometryType);
+        emit geometryTypeChanged();
+    }
+}
+
+Settings::GeometryType Settings::geometryType() const
+{
+    return m_geometryType;
+}
+
+Settings::Position Settings::initialPosition() const
+{
+    return m_initialPosition;
+}
+
+void Settings::setInitialPosition(Position position)
+{
+    if (m_initialPosition != position) {
+        m_initialPosition = position;
+        setValue("windowInitialPosition", position);
     }
 }

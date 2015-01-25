@@ -55,11 +55,10 @@ QuickView::QuickView(Kernel *kernel)
     rootContext()->setContextProperty("_window", this);
     rootContext()->setContextProperty("_toolTipController", new ToolTipController(this));
     createStyleComponent();
-    readInitialPosition();
-    readGeometryType();
 
     setIcon(QIcon(":/img/icon.png"));
 
+    connect(m_kernel->settings(), &Settings::geometryTypeChanged, this, &QuickView::onWindowGeometryTypeChanged);
     connect(m_kernel->settings(), &Settings::stickyWindowChanged, this, &QuickView::setupWindowFlags);
 
     QString main = Utils::isMobile() ? "LoadingScreen.qml" : "MainDesktop.qml";
@@ -103,24 +102,11 @@ QuickView::QuickView(Kernel *kernel)
 QuickView::~QuickView()
 {
     // qDebug() << "~QuickView";
-    if (m_initialPosition == PositionLast) {
-        m_kernel->settings()->setValue("windowLastPositionX", x());
-        m_kernel->settings()->setValue("windowLastPositionY", y());
-        m_kernel->settings()->scheduleSync();
-    }
-}
-
-QuickView::Position QuickView::initialPosition() const
-{
-    return m_initialPosition;
-}
-
-void QuickView::setInitialPosition(QuickView::Position position)
-{
-    if (m_initialPosition != position) {
-        m_initialPosition = position;
-        m_kernel->settings()->setValue("windowInitialPosition", position);
-        m_kernel->settings()->scheduleSync();
+    Settings *settings = m_kernel->settings();
+    if (settings->initialPosition() == Settings::PositionLast) {
+        settings->setValue("windowLastPositionX", x());
+        settings->setValue("windowLastPositionY", y());
+        settings->scheduleSync();
     }
 }
 
@@ -146,21 +132,21 @@ void QuickView::setupGeometry()
     int width = 0;
     int height = 0;
 
-    switch (m_geometryType) {
-    case GeometryStandard:
-    case GeometryCustom:
+    switch (m_kernel->settings()->geometryType()) {
+    case Settings::GeometryStandard:
+    case Settings::GeometryCustom:
         width = 400;
         height = 50;
         break;
-    case GeometryThin:
+    case Settings::GeometryThin:
         width = 400;
         height = 20;
         break;
-    case GeometrySmallSquare:
+    case Settings::GeometrySmallSquare:
         width = 40;
         height = 40;
         break;
-    case MaxGeometryTypes:
+    case Settings::MaxGeometryTypes:
         Q_ASSERT(false);
         return;
     }
@@ -172,38 +158,38 @@ void QuickView::setupGeometry()
     const int maxY = screenSize.height() - m_contractedHeight;
     const int centerX = screenSize.width() / 2 - m_contractedWidth / 2;
 
-    switch (m_initialPosition) {
-    case PositionNone:
+    switch (m_kernel->settings()->initialPosition()) {
+    case Settings::PositionNone:
         return;
-    case PositionLast:
+    case Settings::PositionLast:
         x = qBound(0, m_kernel->settings()->value("windowLastPositionX").toInt(), maxX);
         y = qBound(0, m_kernel->settings()->value("windowLastPositionY").toInt(), maxY);
         break;
-    case PositionTop:
+    case Settings::PositionTop:
         y = 0;
         x = centerX;
         break;
-    case PositionTopLeft:
+    case Settings::PositionTopLeft:
         x = 0;
         y = 0;
         break;
-    case PositionTopRight:
+    case Settings::PositionTopRight:
         x = maxX;
         y = 0;
         break;
-    case PositionBottom:
+    case Settings::PositionBottom:
         x = centerX;
         y = maxY;
         break;
-    case PositionBottomLeft:
+    case Settings::PositionBottomLeft:
         x = 0;
         y = maxY;
         break;
-    case PositionBottomRight:
+    case Settings::PositionBottomRight:
         x = maxX;
         y = maxY;
         break;
-    case MaxPositions:
+    case Settings::MaxPositions:
         Q_ASSERT(false); // Doesn't happen
         return;
     }
@@ -211,24 +197,6 @@ void QuickView::setupGeometry()
     if (this->x() != x || this->y() != y)
         setPosition(x, y);
     // width and height isn't set because we use SizeViewToRoot (so we can animate expand/collapse from QML)
-}
-
-void QuickView::readInitialPosition()
-{
-    const Position defaultPosition = PositionTop;
-    m_initialPosition = static_cast<Position>(m_kernel->settings()->value("windowInitialPosition", defaultPosition).toInt());
-    if (m_initialPosition < PositionNone || m_initialPosition >= MaxPositions) {
-        setInitialPosition(defaultPosition);
-    }
-}
-
-void QuickView::readGeometryType()
-{
-    const GeometryType defaultGeometry = GeometryStandard;
-    m_geometryType = static_cast<GeometryType>(m_kernel->settings()->value("windowGeometryType", defaultGeometry).toInt());
-    if (m_geometryType < GeometryStandard || m_geometryType >= MaxGeometryTypes) {
-        setGeometryType(defaultGeometry);
-    }
 }
 
 QUrl QuickView::styleFileName() const
@@ -306,20 +274,9 @@ void QuickView::setupWindowFlags()
     setFlags(f);
 }
 
-void QuickView::setGeometryType(GeometryType geometryType)
+void QuickView::onWindowGeometryTypeChanged()
 {
-    if (geometryType != m_geometryType) {
-        m_geometryType = geometryType;
-        m_kernel->settings()->setValue("windowGeometryType", geometryType);
-        m_kernel->settings()->scheduleSync();
-        emit geometryTypeChanged();
-        setupGeometry();
-    }
-}
-
-QuickView::GeometryType QuickView::geometryType() const
-{
-    return m_geometryType;
+    setupGeometry();
 }
 
 void QuickView::setContractedWidth(int contractedWidth)

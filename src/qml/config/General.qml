@@ -186,11 +186,11 @@ Item {
             id: windowPositionsCombo
             visible: !_controller.isMobile
             model: windowPositionModel
-            currentIndex: _window.initialPosition
+            currentIndex: _settings.initialPosition
             width: 150 * _controller.dpiFactor
             enabled: _settings.stickyWindow
             onCurrentIndexChanged: {
-                _window.initialPosition = currentIndex
+                _settings.initialPosition = currentIndex
             }
         }
 
@@ -207,10 +207,10 @@ Item {
             visible: !_controller.isMobile
             enabled: _settings.stickyWindow
             model: windowGeometryTypesModel
-            currentIndex: _window.geometryType
+            currentIndex: _settings.geometryType
             width: 150 * _controller.dpiFactor
             onCurrentIndexChanged: {
-                _window.geometryType = currentIndex
+                _settings.geometryType = currentIndex
             }
         }
 
