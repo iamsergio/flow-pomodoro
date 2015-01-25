@@ -60,7 +60,7 @@ QuickView::QuickView(Kernel *kernel)
 
     setIcon(QIcon(":/img/icon.png"));
 
-    connect(m_controller, &Controller::stickyWindowChanged, this, &QuickView::setupWindowFlags);
+    connect(m_kernel->settings(), &Settings::stickyWindowChanged, this, &QuickView::setupWindowFlags);
 
     QString main = Utils::isMobile() ? "LoadingScreen.qml" : "MainDesktop.qml";
 
@@ -292,7 +292,7 @@ void QuickView::toggleVisible()
 void QuickView::setupWindowFlags()
 {
     QFlags<Qt::WindowType> f = Qt::FramelessWindowHint;
-    if (m_controller->stickyWindow()) {
+    if (m_kernel->settings()->stickyWindow()) {
         f |= Qt::WindowStaysOnTopHint;
 #ifdef Q_OS_OSX
 	f |= Qt::Window;

@@ -145,6 +145,7 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     qmlContext()->setContextProperty("_storage", m_storage);
     qmlContext()->setContextProperty("_pluginModel", m_pluginModel);
     qmlContext()->setContextProperty("_loadManager", m_controller->loadManager());
+    qmlContext()->setContextProperty("_settings", m_settings);
 #ifndef NO_WEBDAV
     qmlContext()->setContextProperty("_webdavSync", m_webDavSyncer);
 #endif
@@ -155,7 +156,7 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     QMetaObject::invokeMethod(this, "maybeLoadPlugins", Qt::QueuedConnection);
     QMetaObject::invokeMethod(m_controller, "updateWebDavCredentials", Qt::QueuedConnection);
 
-    if (m_controller->useSystray())
+    if (m_settings->useSystray())
         setupSystray();
 }
 

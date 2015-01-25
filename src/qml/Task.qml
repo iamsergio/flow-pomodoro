@@ -192,7 +192,7 @@ Rectangle {
                 objectName: "playIcon"
                 size: 30
                 text: "\uf01d"
-                visible: root.buttonsVisible && (taskObj !== null && taskObj.staged) && !_controller.pomodoroFunctionalityDisabled
+                visible: root.buttonsVisible && (taskObj !== null && taskObj.staged) && !_settings.pomodoroFunctionalityDisabled
                 onClicked: {
                     _controller.startPomodoro(root.taskObj, _style.defaultPomodoroDuration)
                 }
@@ -202,7 +202,7 @@ Rectangle {
     Text {
         color: _style.taskTagFontColor
         text: root.taskObj ? root.taskObj.daysSinceCreation : ""
-        visible: root.taskObj !== null && _controller.showTaskAge
+        visible: root.taskObj !== null && _settings.showTaskAge
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: _controller.dpiFactor * 3

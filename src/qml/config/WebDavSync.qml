@@ -177,9 +177,9 @@ Item {
 
         FlowCheckBox {
             id: syncAtStartupCheckBox
-            checked: _controller.syncAtStartup
+            checked: _settings.syncAtStartup
             Binding {
-                target: _controller
+                target: _settings
                 property: "syncAtStartup"
                 value: syncAtStartupCheckBox.checked
             }

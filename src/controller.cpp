@@ -62,27 +62,19 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_configureTabIndex(0)
     , m_queueType(QueueTypeToday)
     , m_storage(storage)
-    , m_pomodoroFunctionalityDisabled(false)
     , m_qmlContext(context)
     , m_settings(settings)
     , m_port(80)
     , m_isHttps(false)
-    , m_syncAtStartup(false)
     , m_optionsContextMenuVisible(false)
     , m_startupFinished(false)
     , m_newTagDialogVisible(false)
-    , m_keepScreenOnDuringPomodoro(false)
     , m_showPomodoroOverlay(false)
     , m_pomodoroStartTimeStamp(0)
     , m_textRenderType(NativeRendering)
     , m_loadManager(new LoadManager(this))
-    , m_hideEmptyTags(false)
-    , m_useSystray(false)
-    , m_stickyWindow(true)
     , m_currentMenuIndex(-1)
     , m_expertMode(false)
-    , m_showTaskAge(false)
-    , m_showAllTasksView(false)
     , m_allTasksTag(0)
     , m_untaggedTasksTag(0)
 {
@@ -92,17 +84,13 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     m_afterAddingTimer->setSingleShot(true);
     m_afterAddingTimer->setInterval(AfterAddingTimeout);
 
-    m_defaultPomodoroDuration = m_settings->value("defaultPomodoroDuration", /*default=*/ QVariant(25)).toInt();
-    m_pomodoroFunctionalityDisabled = m_settings->value("pomodoroFunctionalityDisabled", /*default=*/ false).toBool();
-    m_syncAtStartup = m_settings->value("syncAtStartup", /*default=*/ false).toBool();
-    setKeepScreenOnDuringPomodoro(m_settings->value("keepScreenOnDuringPomodoro", /*default=*/ true).toBool());
-    m_hideEmptyTags = m_settings->value("hideEmptyTags", /*default=*/ false).toBool();
-    m_useSystray = m_settings->value("useSystray", /*default=*/ true).toBool();
-    m_stickyWindow = m_settings->value("stickyWindow", /*default=*/ true).toBool();
-    m_showTaskAge = m_settings->value("showTaskAge", /*default=*/ false).toBool();
-    m_showAllTasksView = m_settings->value("showAllTasksView", /*default=*/ false).toBool();
+    m_expanded = isMobile() || !m_settings->stickyWindow();
 
-    m_expanded = isMobile() || !m_stickyWindow;
+    connect(m_settings, &Settings::keepScreenOnDuringPomodoroChanged, this, &Controller::onKeepScreenOnDuringPomodoroChanged);
+    connect(m_settings, &Settings::pomodoroFunctionalityDisabledChanged, this, &Controller::onPomodoroFunctionalityDisabledChanged);
+    connect(m_settings, &Settings::showAllTasksViewChanged, this, &Controller::onShowAllTasksViewChanged);
+    connect(m_settings, &Settings::useSystrayChanged, this, &Controller::onUseSystrayChanged);
+    connect(m_settings, &Settings::hideEmptyTagsChanged, this, &Controller::onHideEmptyTagsChanged);
 
     m_host = m_settings->value("webdavHost").toString();
     m_user = m_settings->value("webdavUser").toString();
@@ -161,7 +149,7 @@ void Controller::startPomodoro(Task *t)
 
     m_elapsedMinutes = 0;
     m_pomodoroStartTimeStamp = QDateTime::currentMSecsSinceEpoch();
-    m_currentTaskDuration = m_defaultPomodoroDuration;
+    m_currentTaskDuration = m_settings->defaultPomodoroDuration();
 
     setExpanded(false);
 
@@ -336,7 +324,7 @@ bool Controller::expanded() const
 
 void Controller::setExpanded(bool expanded)
 {
-    if (isMobile() || !m_stickyWindow)
+    if (isMobile() || !m_settings->stickyWindow())
         return;
 
     if (expanded != m_expanded) {
@@ -391,38 +379,9 @@ void Controller::setTaskStatus(TaskStatus status)
         emit currentTaskDurationChanged();
         emit currentTaskChanged();
         emit currentTitleTextChanged();
-        Utils::keepScreenOn(m_keepScreenOnDuringPomodoro && status == TaskStarted);
+        Utils::keepScreenOn(m_settings->keepScreenOnDuringPomodoro() && status == TaskStarted);
         setShowPomodoroOverlay(status == TaskStarted);
     }
-}
-
-void Controller::setDefaultPomodoroDuration(int duration)
-{
-    if (m_defaultPomodoroDuration != duration && duration > 0 && duration < 59) {
-        m_defaultPomodoroDuration = duration;
-        m_settings->setValue("defaultPomodoroDuration", QVariant(duration));
-        emit defaultPomodoroDurationChanged();
-    }
-}
-
-int Controller::defaultPomodoroDuration() const
-{
-    return m_defaultPomodoroDuration;
-}
-
-void Controller::setPomodoroFunctionalityDisabled(bool disable)
-{
-    if (disable != m_pomodoroFunctionalityDisabled) {
-        m_pomodoroFunctionalityDisabled = disable;
-        m_settings->setValue("pomodoroFunctionalityDisabled", QVariant(disable));
-        stopPomodoro();
-        emit pomodoroFunctionalityDisabledChanged();
-    }
-}
-
-bool Controller::pomodoroFunctionalityDisabled() const
-{
-    return m_pomodoroFunctionalityDisabled;
 }
 
 qreal Controller::dpiFactor() const
@@ -735,21 +694,6 @@ void Controller::toggleConfigurePage()
     setCurrentPage(m_page == ConfigurePage ? MainPage : ConfigurePage);
 }
 
-void Controller::setKeepScreenOnDuringPomodoro(bool keep)
-{
-    if (keep != m_keepScreenOnDuringPomodoro) {
-        m_keepScreenOnDuringPomodoro = keep;
-        m_settings->setValue("keepScreenOnDuringPomodoro", keep);
-        emit keepScreenOnDuringPomodoroChanged();
-        Utils::keepScreenOn(m_keepScreenOnDuringPomodoro && currentTask()->status() == TaskStarted);
-    }
-}
-
-bool Controller::keepScreenOnDuringPomodoro() const
-{
-    return m_keepScreenOnDuringPomodoro;
-}
-
 bool Controller::showPomodoroOverlay() const
 {
     return m_showPomodoroOverlay;
@@ -760,20 +704,6 @@ void Controller::setShowPomodoroOverlay(bool show)
     if (show != m_showPomodoroOverlay) {
         m_showPomodoroOverlay = show;
         emit showPomodoroOverlayChanged();
-    }
-}
-
-bool Controller::syncAtStartup() const
-{
-    return m_syncAtStartup;
-}
-
-void Controller::setSyncAtStartup(bool sync)
-{
-    if (m_syncAtStartup != sync) {
-        m_syncAtStartup = sync;
-        m_settings->setValue("syncAtStartup", sync);
-        emit syncAtStartupChanged();
     }
 }
 
@@ -794,7 +724,7 @@ void Controller::setStartupFinished()
 void Controller::updateExtendedTagModel()
 {
     Tag::List extraTags;
-    if (m_showAllTasksView) {
+    if (m_settings->showAllTasksView()) {
         extraTags << m_allTasksTag;
     }
 
@@ -842,6 +772,37 @@ void Controller::onTimerTick()
 void Controller::onCurrentTagDestroyed()
 {
     setCurrentTag(m_untaggedTasksTag.data());
+}
+
+void Controller::onKeepScreenOnDuringPomodoroChanged()
+{
+    Utils::keepScreenOn(m_settings->keepScreenOnDuringPomodoro() && currentTask()->status() == TaskStarted);
+}
+
+void Controller::onPomodoroFunctionalityDisabledChanged()
+{
+    stopPomodoro();
+}
+
+void Controller::onShowAllTasksViewChanged()
+{
+    updateExtendedTagModel();
+}
+
+void Controller::onUseSystrayChanged()
+{
+    if (m_settings->useSystray())
+        m_kernel->setupSystray();
+    else
+        m_kernel->destroySystray();
+}
+
+void Controller::onHideEmptyTagsChanged()
+{
+    if (m_settings->hideEmptyTags() && m_currentTag->taskCount() == 0 && m_currentTag->kernel()) {
+        setCurrentTag(m_untaggedTasksTag.data());
+    }
+    emit tagsModelChanged();
 }
 
 void Controller::updateWebDavCredentials()
@@ -1239,14 +1200,6 @@ int Controller::textRenderType() const
     return m_textRenderType;
 }
 
-void Controller::setLoadManager(LoadManager* loadManager)
-{
-    if (loadManager != m_loadManager) {
-        m_loadManager = loadManager;
-        emit loadManagerChanged();
-    }
-}
-
 LoadManager* Controller::loadManager() const
 {
     return m_loadManager;
@@ -1257,60 +1210,9 @@ QString Controller::gitDate() const
     return STR(FLOW_VERSION_DATE);
 }
 
-void Controller::setHideEmptyTags(bool hide)
-{
-    if (hide != m_hideEmptyTags) {
-        m_hideEmptyTags = hide;
-        m_settings->setValue("hideEmptyTags", QVariant(hide));
-        emit hideEmptyTagsChanged();
-
-        if (hide && m_currentTag->taskCount() == 0 && m_currentTag->kernel()) {
-            setCurrentTag(m_untaggedTasksTag.data());
-        }
-    }
-}
-
-bool Controller::hideEmptyTags() const
-{
-    return m_hideEmptyTags;
-}
-
 QString Controller::qtVersion() const
 {
     return qVersion();
-}
-
-void Controller::setUseSystray(bool use)
-{
-    if (use != m_useSystray) {
-        m_useSystray = use;
-        m_settings->setValue("useSystray", QVariant(use));
-        emit useSystrayChanged();
-
-        if (use)
-            m_kernel->setupSystray();
-        else
-            m_kernel->destroySystray();
-    }
-}
-
-bool Controller::useSystray() const
-{
-    return m_useSystray;
-}
-
-void Controller::setStickyWindow(bool sticky)
-{
-    if (sticky != m_stickyWindow) {
-        m_stickyWindow = sticky;
-        m_settings->setValue("stickyWindow", QVariant(sticky));
-        emit stickyWindowChanged();
-    }
-}
-
-bool Controller::stickyWindow() const
-{
-    return m_stickyWindow;
 }
 
 bool Controller::isOSX() const
@@ -1361,35 +1263,6 @@ bool Controller::expertMode() const
     return m_expertMode;
 }
 
-void Controller::setShowTaskAge(bool showTaskAge)
-{
-    if (showTaskAge != m_showTaskAge) {
-        m_showTaskAge = showTaskAge;
-        m_settings->setValue("showTaskAge", QVariant(showTaskAge));
-        emit showTaskAgeChanged();
-    }
-}
-
-bool Controller::showTaskAge() const
-{
-    return m_showTaskAge;
-}
-
-void Controller::setShowAllTasksView(bool showAllTasksView)
-{
-    if (showAllTasksView != m_showAllTasksView) {
-        m_showAllTasksView = showAllTasksView;
-        m_settings->setValue("showAllTasksView", QVariant(showAllTasksView));
-        emit showAllTasksViewChanged();
-        updateExtendedTagModel();
-    }
-}
-
-bool Controller::showAllTasksView() const
-{
-    return m_showAllTasksView;
-}
-
 Tag* Controller::allTasksTag() const
 {
     return m_allTasksTag.data();
@@ -1402,6 +1275,6 @@ Tag* Controller::untaggedTasksTag() const
 
 QAbstractItemModel* Controller::tagsModel() const
 {
-    return hideEmptyTags() ? m_storage->nonEmptyTagsModel()
-                           : m_storage->extendedTagsModel();
+    return m_settings->hideEmptyTags() ? m_storage->nonEmptyTagsModel()
+                                       : m_storage->extendedTagsModel();
 }

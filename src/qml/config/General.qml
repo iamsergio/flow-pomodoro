@@ -47,15 +47,15 @@ Item {
 
         SpinBox {
             id: spinBox
-            enabled: !_controller.pomodoroFunctionalityDisabled
+            enabled: !_settings.pomodoroFunctionalityDisabled
             minimumValue: 0
             maximumValue: 59
             height: _style.checkBoxIconSize
             width: 55 * _controller.dpiFactor
-            value: _controller.defaultPomodoroDuration
+            value: _settings.defaultPomodoroDuration
             onValueChanged: {
                 // The binding gets broken when user edits, not sure how to fix it.. so hack it:
-                _controller.defaultPomodoroDuration = value
+                _settings.defaultPomodoroDuration = value
             }
             onVisibleChanged: {
                 if (!visible && _controller.isMobile) {
@@ -108,9 +108,9 @@ Item {
         FlowCheckBox {
             id: disablePomodoroCheckBox
             width: _style.checkBoxIconSize
-            checked: _controller.pomodoroFunctionalityDisabled
+            checked: _settings.pomodoroFunctionalityDisabled
             Binding {
-                target: _controller
+                target: _settings
                 property: "pomodoroFunctionalityDisabled"
                 value: disablePomodoroCheckBox.checked
             }
@@ -128,9 +128,9 @@ Item {
             id: systrayCheckBox
             width: _style.checkBoxIconSize
             visible: !_controller.isMobile
-            checked: _controller.useSystray
+            checked: _settings.useSystray
             Binding {
-                target: _controller
+                target: _settings
                 property: "useSystray"
                 value: systrayCheckBox.checked
             }
@@ -146,9 +146,9 @@ Item {
         FlowCheckBox {
             id: hideEmptyTagsCheck
             width: _style.checkBoxIconSize
-            checked: _controller.hideEmptyTags
+            checked: _settings.hideEmptyTags
             Binding {
-                target: _controller
+                target: _settings
                 property: "hideEmptyTags"
                 value: hideEmptyTagsCheck.checked
             }
@@ -166,9 +166,9 @@ Item {
             id: keepScreenOn
             width: _style.checkBoxIconSize
             visible: _controller.isAndroid
-            checked: _controller.keepScreenOnDuringPomodoro
+            checked: _settings.keepScreenOnDuringPomodoro
             Binding {
-                target: _controller
+                target: _settings
                 property: "keepScreenOnDuringPomodoro"
                 value: keepScreenOn.checked
             }
@@ -188,7 +188,7 @@ Item {
             model: windowPositionModel
             currentIndex: _window.initialPosition
             width: 150 * _controller.dpiFactor
-            enabled: _controller.stickyWindow
+            enabled: _settings.stickyWindow
             onCurrentIndexChanged: {
                 _window.initialPosition = currentIndex
             }
@@ -205,7 +205,7 @@ Item {
         ComboBox {
             id: geometryTypesCombo
             visible: !_controller.isMobile
-            enabled: _controller.stickyWindow
+            enabled: _settings.stickyWindow
             model: windowGeometryTypesModel
             currentIndex: _window.geometryType
             width: 150 * _controller.dpiFactor
@@ -225,7 +225,7 @@ Item {
         FlowCheckBox {
             id: stickyWindowBox
             visible: !_controller.isMobile && !_controller.isOSX
-            checked: _controller.stickyWindow
+            checked: _settings.stickyWindow
             width: _style.checkBoxIconSize
             Binding {
                 target: _controller
@@ -245,10 +245,10 @@ Item {
         FlowCheckBox {
             id: showTaskAgeBox
             visible: _controller.expertMode
-            checked: _controller.showTaskAge
+            checked: _settings.showTaskAge
             width: _style.checkBoxIconSize
             Binding {
-                target: _controller
+                target: _settings
                 property: "showTaskAge"
                 value: showTaskAgeBox.checked
             }
@@ -265,10 +265,10 @@ Item {
         FlowCheckBox {
             id: showAllTasksView
             visible: _controller.expertMode
-            checked: _controller.showAllTasksView
+            checked: _settings.showAllTasksView
             width: _style.checkBoxIconSize
             Binding {
-                target: _controller
+                target: _settings
                 property: "showAllTasksView"
                 value: showAllTasksView.checked
             }

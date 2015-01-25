@@ -36,21 +36,16 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
-    Q_PROPERTY(QAbstractItemModel* tagsModel READ tagsModel NOTIFY hideEmptyTagsChanged)
+    Q_PROPERTY(QAbstractItemModel* tagsModel READ tagsModel NOTIFY tagsModelChanged)
     Q_PROPERTY(Tag* untaggedTasksTag READ untaggedTasksTag CONSTANT)
     Q_PROPERTY(Tag* allTasksTag READ allTasksTag CONSTANT)
-    Q_PROPERTY(bool showAllTasksView READ showAllTasksView WRITE setShowAllTasksView NOTIFY showAllTasksViewChanged)
-    Q_PROPERTY(bool showTaskAge READ showTaskAge WRITE setShowTaskAge NOTIFY showTaskAgeChanged)
     Q_PROPERTY(bool expertMode READ expertMode CONSTANT)
     Q_PROPERTY(QString buildOptionsText READ buildOptionsText CONSTANT)
     Q_PROPERTY(int currentMenuIndex READ currentMenuIndex WRITE setCurrentMenuIndex NOTIFY currentMenuIndexChanged)
     Q_PROPERTY(bool isOSX READ isOSX CONSTANT)
-    Q_PROPERTY(bool stickyWindow READ stickyWindow WRITE setStickyWindow NOTIFY stickyWindowChanged)
-    Q_PROPERTY(bool useSystray READ useSystray WRITE setUseSystray NOTIFY useSystrayChanged)
     Q_PROPERTY(QString qtVersion READ qtVersion CONSTANT)
-    Q_PROPERTY(bool hideEmptyTags READ hideEmptyTags WRITE setHideEmptyTags NOTIFY hideEmptyTagsChanged)
     Q_PROPERTY(QString gitDate READ gitDate CONSTANT)
-    Q_PROPERTY(LoadManager* loadManager READ loadManager WRITE setLoadManager NOTIFY loadManagerChanged)
+    Q_PROPERTY(LoadManager* loadManager READ loadManager)
     Q_PROPERTY(int textRenderType READ textRenderType CONSTANT)
     Q_PROPERTY(bool firstSecondsAfterAdding READ firstSecondsAfterAdding NOTIFY firstSecondsAfterAddingChanged)
     Q_PROPERTY(int remainingMinutes READ remainingMinutes NOTIFY remainingMinutesChanged)
@@ -58,9 +53,6 @@ class Controller : public QObject {
     Q_PROPERTY(bool expanded READ expanded WRITE setExpanded NOTIFY expandedChanged)
     Q_PROPERTY(Page currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged)
     Q_PROPERTY(int configureTabIndex READ configureTabIndex WRITE setConfigureTabIndex NOTIFY configureTabIndexChanged)
-    Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
-    Q_PROPERTY(bool pomodoroFunctionalityDisabled READ pomodoroFunctionalityDisabled WRITE setPomodoroFunctionalityDisabled NOTIFY pomodoroFunctionalityDisabledChanged)
-    Q_PROPERTY(bool syncAtStartup READ syncAtStartup WRITE setSyncAtStartup NOTIFY syncAtStartupChanged)
     Q_PROPERTY(Task* currentTask READ currentTask NOTIFY currentTaskChanged) // Task being played
     Q_PROPERTY(Task* rightClickedTask READ rightClickedTask NOTIFY rightClickedTaskChanged)
     Q_PROPERTY(Task *selectedTask READ selectedTask NOTIFY selectedTaskChanged)
@@ -92,8 +84,6 @@ class Controller : public QObject {
     Q_PROPERTY(QString currentTitleText READ currentTitleText NOTIFY currentTitleTextChanged)
     Q_PROPERTY(QString version READ version CONSTANT)
     Q_PROPERTY(bool newTagDialogVisible READ newTagDialogVisible WRITE setNewTagDialogVisible NOTIFY newTagDialogVisibleChanged)
-    Q_PROPERTY(bool keepScreenOnDuringPomodoro READ keepScreenOnDuringPomodoro WRITE setKeepScreenOnDuringPomodoro NOTIFY keepScreenOnDuringPomodoroChanged)
-
     Q_PROPERTY(bool optionsContextMenuVisible READ optionsContextMenuVisible WRITE setOptionsContextMenuVisible NOTIFY optionsContextMenuVisibleChanged)
     Q_PROPERTY(bool startupFinished READ startupFinished NOTIFY startupFinishedChanged)
 
@@ -150,16 +140,13 @@ public:
     bool expanded() const;
     void setExpanded(bool expanded);
 
+    bool showPomodoroOverlay() const;
+    void setShowPomodoroOverlay(bool);
+
     bool firstSecondsAfterAdding() const;
 
     Controller::Page currentPage() const;
     void setCurrentPage(Page page);
-
-    void setDefaultPomodoroDuration(int duration);
-    int defaultPomodoroDuration() const;
-
-    void setPomodoroFunctionalityDisabled(bool);
-    bool pomodoroFunctionalityDisabled() const;
 
     qreal dpiFactor() const;
 
@@ -216,44 +203,18 @@ public:
     bool startupFinished() const;
     void setNewTagDialogVisible(bool visible);
 
-    void setKeepScreenOnDuringPomodoro(bool);
-    bool keepScreenOnDuringPomodoro() const;
-
-    bool showPomodoroOverlay() const;
-    void setShowPomodoroOverlay(bool);
-
-    bool syncAtStartup() const;
-    void setSyncAtStartup(bool);
-
     int textRenderType() const;
 
-    void setLoadManager(LoadManager *);
     LoadManager *loadManager() const;
 
     QString gitDate() const;
-
-    void setHideEmptyTags(bool);
-    bool hideEmptyTags() const;
-
     QString qtVersion() const;
-
-    void setUseSystray(bool);
-    bool useSystray() const;
-
-    void setStickyWindow(bool);
-    bool stickyWindow() const;
 
     int currentMenuIndex() const;
 
     QString buildOptionsText() const;
 
     bool expertMode() const;
-
-    void setShowTaskAge(bool);
-    bool showTaskAge() const;
-
-    void setShowAllTasksView(bool);
-    bool showAllTasksView() const;
 
     Tag* allTasksTag() const;
     Tag* untaggedTasksTag() const;
@@ -300,27 +261,26 @@ public Q_SLOTS:
 private Q_SLOTS:
     void onTimerTick();
     void onCurrentTagDestroyed();
+    void onKeepScreenOnDuringPomodoroChanged();
+    void onPomodoroFunctionalityDisabledChanged();
+    void onShowAllTasksViewChanged();
+    void onUseSystrayChanged();
+    void onHideEmptyTagsChanged();
     void setStartupFinished();
 
 Q_SIGNALS:
+    void tagsModelChanged();
     void aboutToAddTask();
-    void showAllTasksViewChanged();
-    void showTaskAgeChanged();
     void enterPressed();
     void currentMenuIndexChanged();
-    void stickyWindowChanged();
-    void useSystrayChanged();
-    void hideEmptyTagsChanged();
     void loadManagerChanged();
     void textRenderTypeChanged();
-    void pomodoroFunctionalityDisabledChanged();
     void remainingMinutesChanged();
     void currentTaskDurationChanged();
     void taskFinished();
     void expandedChanged();
     void firstSecondsAfterAddingChanged();
     void currentPageChanged();
-    void defaultPomodoroDurationChanged();
     void forceFocus(int index);
     void currentTaskChanged();
     void popupVisibleChanged();
@@ -340,7 +300,6 @@ Q_SIGNALS:
     void optionsContextMenuVisibleChanged();
     void startupFinishedChanged();
     void newTagDialogVisibleChanged();
-    void keepScreenOnDuringPomodoroChanged();
     void showPomodoroOverlayChanged();
 
     // webdav stuff
@@ -350,7 +309,6 @@ Q_SIGNALS:
     void isHttpsChanged();
     void portChanged();
     void pathChanged();
-    void syncAtStartupChanged();
 
 private:
     void updateExtendedTagModel();
@@ -375,7 +333,6 @@ private:
     bool m_expanded;
     Task::Ptr m_currentTask;
     Page m_page;
-    int m_defaultPomodoroDuration;
     bool m_popupVisible;
     QString m_popupText;
     QString m_popupOkCallback;
@@ -391,7 +348,6 @@ private:
     QPointer<Tag> m_currentTag;
     QueueType m_queueType;
     Storage *m_storage;
-    bool m_pomodoroFunctionalityDisabled;
     QQmlContext *m_qmlContext;
     Settings *m_settings;
 
@@ -402,26 +358,19 @@ private:
     QString m_path;
     QString m_user;
     QString m_password;
-    bool m_syncAtStartup;
 
     bool m_optionsContextMenuVisible;
     bool m_startupFinished;
 
     bool m_newTagDialogVisible;
-    bool m_keepScreenOnDuringPomodoro;
     bool m_showPomodoroOverlay;
 
     qint64 m_pomodoroStartTimeStamp;
     int m_textRenderType;
     LoadManager* m_loadManager;
-    bool m_hideEmptyTags;
-    bool m_useSystray;
-    bool m_stickyWindow;
     bool m_addingTask;
     int m_currentMenuIndex;
     bool m_expertMode;
-    bool m_showTaskAge;
-    bool m_showAllTasksView;
     Tag::Ptr m_allTasksTag;
     Tag::Ptr m_untaggedTasksTag;
 };

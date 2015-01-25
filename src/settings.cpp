@@ -23,11 +23,25 @@
 #include <QCoreApplication>
 #include <QMetaType>
 
+enum {
+    DefaultPomodoroDuration = 25
+};
+
 Settings::Settings(QObject *parent)
     : QSettings("KDAB", "flow-pomodoro", parent)
     , m_syncScheduled(false)
     , m_needsSync(false)
+    , m_defaultPomodoroDuration(DefaultPomodoroDuration)
+    , m_pomodoroFunctionalityDisabled(false)
+    , m_keepScreenOnDuringPomodoro(false)
+    , m_syncAtStartup(true)
+    , m_hideEmptyTags(false)
+    , m_showAllTasksView(false)
+    , m_useSystray(false)
+    , m_showTaskAge(false)
+    , m_stickyWindow(true)
 {
+    init();
 }
 
 Settings::Settings(const QString &filename, QObject *parent)
@@ -35,7 +49,20 @@ Settings::Settings(const QString &filename, QObject *parent)
     , m_syncScheduled(false)
     , m_needsSync(false)
 {
+    init();
+}
 
+void Settings::init()
+{
+    m_defaultPomodoroDuration = value("defaultPomodoroDuration", /*default=*/ DefaultPomodoroDuration).toInt();
+    m_pomodoroFunctionalityDisabled = value("pomodoroFunctionalityDisabled", /*default=*/ false).toBool();
+    m_syncAtStartup = value("syncAtStartup", /*default=*/ false).toBool();
+    setKeepScreenOnDuringPomodoro(value("keepScreenOnDuringPomodoro", /*default=*/ true).toBool());
+    m_hideEmptyTags = value("hideEmptyTags", /*default=*/ false).toBool();
+    m_useSystray = value("useSystray", /*default=*/ true).toBool();
+    m_stickyWindow = value("stickyWindow", /*default=*/ true).toBool();
+    m_showTaskAge = value("showTaskAge", /*default=*/ false).toBool();
+    m_showAllTasksView = value("showAllTasksView", /*default=*/ false).toBool();
 }
 
 Settings::~Settings()
@@ -69,4 +96,131 @@ void Settings::doSync()
     //qDebug() << Q_FUNC_INFO;
     m_syncScheduled = false;
     QSettings::sync();
+}
+
+
+void Settings::setHideEmptyTags(bool hide)
+{
+    if (hide != m_hideEmptyTags) {
+        m_hideEmptyTags = hide;
+        setValue("hideEmptyTags", QVariant(hide));
+        emit hideEmptyTagsChanged();
+    }
+}
+
+bool Settings::hideEmptyTags() const
+{
+    return m_hideEmptyTags;
+}
+
+void Settings::setUseSystray(bool use)
+{
+    if (use != m_useSystray) {
+        m_useSystray = use;
+        setValue("useSystray", QVariant(use));
+        emit useSystrayChanged();
+    }
+}
+
+bool Settings::useSystray() const
+{
+    return m_useSystray;
+}
+
+bool Settings::stickyWindow() const
+{
+    return m_stickyWindow;
+}
+
+void Settings::setStickyWindow(bool sticky)
+{
+    if (sticky != m_stickyWindow) {
+        m_stickyWindow = sticky;
+        setValue("stickyWindow", QVariant(sticky));
+        emit stickyWindowChanged();
+    }
+}
+
+void Settings::setShowTaskAge(bool showTaskAge)
+{
+    if (showTaskAge != m_showTaskAge) {
+        m_showTaskAge = showTaskAge;
+        setValue("showTaskAge", QVariant(showTaskAge));
+        emit showTaskAgeChanged();
+    }
+}
+
+bool Settings::showTaskAge() const
+{
+    return m_showTaskAge;
+}
+
+void Settings::setShowAllTasksView(bool showAllTasksView)
+{
+    if (showAllTasksView != m_showAllTasksView) {
+        m_showAllTasksView = showAllTasksView;
+        setValue("showAllTasksView", QVariant(showAllTasksView));
+        emit showAllTasksViewChanged();
+    }
+}
+
+bool Settings::showAllTasksView() const
+{
+    return m_showAllTasksView;
+}
+
+void Settings::setDefaultPomodoroDuration(int duration)
+{
+    if (m_defaultPomodoroDuration != duration && duration > 0 && duration < 59) {
+        m_defaultPomodoroDuration = duration;
+        setValue("defaultPomodoroDuration", QVariant(duration));
+        emit defaultPomodoroDurationChanged();
+    }
+}
+
+int Settings::defaultPomodoroDuration() const
+{
+    return m_defaultPomodoroDuration;
+}
+
+void Settings::setPomodoroFunctionalityDisabled(bool disable)
+{
+    if (disable != m_pomodoroFunctionalityDisabled) {
+        m_pomodoroFunctionalityDisabled = disable;
+        setValue("pomodoroFunctionalityDisabled", QVariant(disable));
+        emit pomodoroFunctionalityDisabledChanged();
+    }
+}
+
+bool Settings::pomodoroFunctionalityDisabled() const
+{
+    return m_pomodoroFunctionalityDisabled;
+}
+
+void Settings::setKeepScreenOnDuringPomodoro(bool keep)
+{
+    if (keep != m_keepScreenOnDuringPomodoro) {
+        m_keepScreenOnDuringPomodoro = keep;
+        setValue("keepScreenOnDuringPomodoro", keep);
+        emit keepScreenOnDuringPomodoroChanged();
+    }
+}
+
+bool Settings::keepScreenOnDuringPomodoro() const
+{
+    return m_keepScreenOnDuringPomodoro;
+}
+
+bool Settings::syncAtStartup() const
+{
+    return m_syncAtStartup;
+}
+
+void Settings::setSyncAtStartup(bool sync)
+{
+    if (m_syncAtStartup != sync) {
+        m_syncAtStartup = sync;
+        setValue("syncAtStartup", sync);
+        emit syncAtStartupChanged();
+    }
 }

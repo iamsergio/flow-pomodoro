@@ -25,7 +25,17 @@
 
 class Settings : public QSettings {
     Q_OBJECT
+    Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
+    Q_PROPERTY(bool pomodoroFunctionalityDisabled READ pomodoroFunctionalityDisabled WRITE setPomodoroFunctionalityDisabled NOTIFY pomodoroFunctionalityDisabledChanged)
+    Q_PROPERTY(bool syncAtStartup READ syncAtStartup WRITE setSyncAtStartup NOTIFY syncAtStartupChanged)
+    Q_PROPERTY(bool showAllTasksView READ showAllTasksView WRITE setShowAllTasksView NOTIFY showAllTasksViewChanged)
+    Q_PROPERTY(bool showTaskAge READ showTaskAge WRITE setShowTaskAge NOTIFY showTaskAgeChanged)
+    Q_PROPERTY(bool stickyWindow READ stickyWindow WRITE setStickyWindow NOTIFY stickyWindowChanged)
+    Q_PROPERTY(bool useSystray READ useSystray WRITE setUseSystray NOTIFY useSystrayChanged)
+    Q_PROPERTY(bool hideEmptyTags READ hideEmptyTags WRITE setHideEmptyTags NOTIFY hideEmptyTagsChanged)
+    Q_PROPERTY(bool keepScreenOnDuringPomodoro READ keepScreenOnDuringPomodoro WRITE setKeepScreenOnDuringPomodoro NOTIFY keepScreenOnDuringPomodoroChanged)
 public:
+
     explicit Settings(QObject *parent = 0);
     explicit Settings(const QString &filename, QObject *parent = 0); // Overload for unit-tests
     ~Settings();
@@ -33,13 +43,54 @@ public:
     void scheduleSync();
     bool needsSync() const;
 
+    void setDefaultPomodoroDuration(int duration);
+    int defaultPomodoroDuration() const;
+    void setPomodoroFunctionalityDisabled(bool);
+    bool pomodoroFunctionalityDisabled() const;
+    void setKeepScreenOnDuringPomodoro(bool);
+    bool keepScreenOnDuringPomodoro() const;
+    bool syncAtStartup() const;
+    void setSyncAtStartup(bool);
+    void setShowTaskAge(bool);
+    bool showTaskAge() const;
+    void setShowAllTasksView(bool);
+    bool showAllTasksView() const;
+    void setHideEmptyTags(bool);
+    bool hideEmptyTags() const;
+    void setUseSystray(bool);
+    bool useSystray() const;
+    void setStickyWindow(bool);
+    bool stickyWindow() const;
+
 private Q_SLOTS:
     void doSync();
 
+Q_SIGNALS:
+    void defaultPomodoroDurationChanged();
+    void pomodoroFunctionalityDisabledChanged();
+    void syncAtStartupChanged();
+    void showAllTasksViewChanged();
+    void showTaskAgeChanged();
+    void stickyWindowChanged();
+    void useSystrayChanged();
+    void hideEmptyTagsChanged();
+    void keepScreenOnDuringPomodoroChanged();
+
 private:
+    void init();
     void sync();
     bool m_syncScheduled;
     bool m_needsSync;
+
+    int m_defaultPomodoroDuration;
+    bool m_pomodoroFunctionalityDisabled;
+    bool m_keepScreenOnDuringPomodoro;
+    bool m_syncAtStartup;
+    bool m_hideEmptyTags;
+    bool m_showAllTasksView;
+    bool m_useSystray;
+    bool m_showTaskAge;
+    bool m_stickyWindow;
 };
 
 #endif
