@@ -52,7 +52,7 @@ public:
     void setBeingEdited(bool);
 
     QAbstractItemModel* taskModel();
-    QVariantMap toJson() const;
+    QVariantMap toJson() const Q_DECL_OVERRIDE;
     void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
 
     bool operator==(const Tag &other) const;
