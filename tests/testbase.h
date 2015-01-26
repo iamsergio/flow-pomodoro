@@ -50,6 +50,7 @@ public:
         m_kernel = new Kernel(config, this);
         m_storage = m_kernel->storage();
         m_controller = m_kernel->controller();
+        m_settings = m_kernel->settings();
 
         if (Storage::storageCount != 1) {
             qWarning() << "Storage count is " << Storage::storageCount;
@@ -123,6 +124,7 @@ public:
         m_kernel = new Kernel(config);
         m_storage = m_kernel->storage();
         m_controller = m_kernel->controller();
+        m_settings = m_kernel->settings();
         if (load)
             m_kernel->storage()->load();
     }
@@ -181,6 +183,7 @@ protected:
     QuickView *m_view;
     Storage *m_storage;
     Controller *m_controller;
+    Settings *m_settings;
 };
 
 #endif

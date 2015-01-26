@@ -40,6 +40,7 @@ Settings::Settings(QObject *parent)
     , m_useSystray(false)
     , m_showTaskAge(false)
     , m_stickyWindow(true)
+    , m_showContextMenuAfterAdd(true)
 {
     init();
 }
@@ -63,6 +64,7 @@ void Settings::init()
     m_stickyWindow = value("stickyWindow", /*default=*/ true).toBool();
     m_showTaskAge = value("showTaskAge", /*default=*/ false).toBool();
     m_showAllTasksView = value("showAllTasksView", /*default=*/ false).toBool();
+    m_showContextMenuAfterAdd = value("showContextMenuAfterAdd", true).toBool();
 
     const Position defaultPosition = PositionTop;
     m_initialPosition = static_cast<Settings::Position>(value("windowInitialPosition", defaultPosition).toInt());
@@ -262,4 +264,18 @@ void Settings::setInitialPosition(Position position)
         m_initialPosition = position;
         setValue("windowInitialPosition", position);
     }
+}
+
+void Settings::setShowContextMenuAfterAdd(bool showContextMenuAfterAdd)
+{
+    if (showContextMenuAfterAdd != m_showContextMenuAfterAdd) {
+        m_showContextMenuAfterAdd = showContextMenuAfterAdd;
+        setValue("showContextMenuAfterAdd", showContextMenuAfterAdd);
+        emit showContextMenuAfterAddChanged();
+    }
+}
+
+bool Settings::showContextMenuAfterAdd() const
+{
+    return m_showContextMenuAfterAdd;
 }

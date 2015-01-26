@@ -199,3 +199,32 @@ void TestUI::testKeyBindings()
 
     // TODO: Test more bindings
 }
+
+void TestUI::testShowMenuAfterAddTask()
+{
+    QVERIFY(m_settings->showContextMenuAfterAdd());
+
+    // Add task
+    mouseClick("addIconItem");
+    sendText("test task2");
+    sendKey(Qt::Key_Enter);
+    QCOMPARE(m_storage->taskCount(), 2);
+
+    // Check that menu is visible
+    QVERIFY(m_view->itemByName("taskContextMenu")->isVisible());
+    sendKey(Qt::Key_Escape); // Dismiss
+    QVERIFY(!m_view->itemByName("taskContextMenu")->isVisible());
+
+    // Go to configure and change setting
+    mouseClick("configureIcon");
+    mouseClick("showContextMenuAfterAddCheckbox");
+    QVERIFY(!m_settings->showContextMenuAfterAdd());
+    mouseClick("configureIcon"); // Back to today view
+
+    // Add new task
+    mouseClick("addIconItem");
+    sendText("test task3");
+    sendKey(Qt::Key_Enter);
+    QCOMPARE(m_storage->taskCount(), 3);
+    QVERIFY(!m_view->itemByName("taskContextMenu")->isVisible()); // It's not visible
+}

@@ -25,6 +25,7 @@
 
 class Settings : public QSettings {
     Q_OBJECT
+    Q_PROPERTY(bool showContextMenuAfterAdd READ showContextMenuAfterAdd WRITE setShowContextMenuAfterAdd NOTIFY showContextMenuAfterAddChanged)
     Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
     Q_PROPERTY(bool pomodoroFunctionalityDisabled READ pomodoroFunctionalityDisabled WRITE setPomodoroFunctionalityDisabled NOTIFY pomodoroFunctionalityDisabledChanged)
     Q_PROPERTY(bool syncAtStartup READ syncAtStartup WRITE setSyncAtStartup NOTIFY syncAtStartupChanged)
@@ -89,10 +90,14 @@ public:
     void setGeometryType(GeometryType);
     Settings::GeometryType geometryType() const;
 
+    void setShowContextMenuAfterAdd(bool);
+    bool showContextMenuAfterAdd() const;
+
 private Q_SLOTS:
     void doSync();
 
 Q_SIGNALS:
+    void showContextMenuAfterAddChanged();
     void defaultPomodoroDurationChanged();
     void pomodoroFunctionalityDisabledChanged();
     void syncAtStartupChanged();
@@ -122,6 +127,7 @@ private:
     bool m_stickyWindow;
     Position m_initialPosition;
     GeometryType m_geometryType;
+    bool m_showContextMenuAfterAdd;
 };
 
 #endif

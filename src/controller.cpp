@@ -1119,7 +1119,9 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
         if (m_addingTask) {
             m_addingTask = false;
             // It's a new task, lets popup the context menu to choose tags
-            if (m_queueType == QueueTypeToday && !m_storage->tasks().isEmpty()) {
+            if (m_settings->showContextMenuAfterAdd() &&
+                m_queueType == QueueTypeToday &&
+               !m_storage->tasks().isEmpty()) {
                 requestContextMenu(previousTask, /*tagOnlyMenu=*/ true);
             }
         }

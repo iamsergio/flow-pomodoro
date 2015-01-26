@@ -155,6 +155,25 @@ Item {
         }
 
         Text {
+            text: qsTr("Show tag menu after new task")
+            font.pixelSize: 12 * _controller.dpiFactor
+            verticalAlignment: Text.AlignVCenter
+            height: Math.max(showContextMenuAfterAddCheckbox.height, contentHeight)
+        }
+
+        FlowCheckBox {
+            id: showContextMenuAfterAddCheckbox
+            objectName: "showContextMenuAfterAddCheckbox"
+            width: _style.checkBoxIconSize
+            checked: _settings.showContextMenuAfterAdd
+            Binding {
+                target: _settings
+                property: "showContextMenuAfterAdd"
+                value: showContextMenuAfterAddCheckbox.checked
+            }
+        }
+
+        Text {
             visible: _controller.isAndroid
             text: qsTr("Keep screen on during pomodoro")
             font.pixelSize: 12 * _controller.dpiFactor
