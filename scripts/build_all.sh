@@ -11,7 +11,7 @@ set -e # abort if any command fails
 echo "1. Building g++ in source"
 cd $FLOW_SRC_DIR
 git clean -fdx &> $FLOW_BUILD_LOG
-qmake &> $FLOW_BUILD_LOG
+qmake DEFINES+=DEVELOPER_MODE &> $FLOW_BUILD_LOG
 $MAKECOMMAND &> $FLOW_BUILD_LOG
 #-------------------------------------------------------------------------------
 echo "2. Building g++ shadow build"
@@ -25,7 +25,7 @@ $MAKECOMMAND &> $FLOW_BUILD_LOG
 echo "3. Building Clang in source"
 cd $FLOW_SRC_DIR
 git clean -fdx &> $FLOW_BUILD_LOG
-qmake -spec linux-clang &> $FLOW_BUILD_LOG
+qmake -spec linux-clang DEFINES+=DEVELOPER_MODE &> $FLOW_BUILD_LOG
 $MAKECOMMAND &> $FLOW_BUILD_LOG
 #-------------------------------------------------------------------------------
 echo "4. Building Blackberry in source"

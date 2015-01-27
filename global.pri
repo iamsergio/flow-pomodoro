@@ -1,7 +1,3 @@
-*-g++*|*clang* {
-    QMAKE_CXXFLAGS += -Werror -Wall -Wextra
-}
-
 # qtHaveModule() doesn't work with qml only modules
 !exists($$[QT_INSTALL_QML]/QtQuick/Controls/TabView.qml) {
     error("QtQuickControls module was not found")
@@ -29,4 +25,7 @@ DEFINES += NO_WEBDAV # Will uncomment when UI is ready
 
 contains(DEFINES, DEVELOPER_MODE) {
     CONFIG += debug
+    *-g++*|*clang* {
+        QMAKE_CXXFLAGS += -Werror -Wall -Wextra
+    }
 }
