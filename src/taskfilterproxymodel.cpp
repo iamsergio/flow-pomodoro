@@ -25,15 +25,16 @@
 TaskFilterProxyModel::TaskFilterProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
     , m_filterUntagged(false)
+    , m_previousCount(0)
 {
     connect(this, &TaskFilterProxyModel::rowsInserted,
-            this, &TaskFilterProxyModel::countChanged);
+            this, &TaskFilterProxyModel::onSourceCountChanged);
     connect(this, &TaskFilterProxyModel::rowsRemoved,
-            this, &TaskFilterProxyModel::countChanged);
+            this, &TaskFilterProxyModel::onSourceCountChanged);
     connect(this, &TaskFilterProxyModel::modelReset,
-            this, &TaskFilterProxyModel::countChanged);
+            this, &TaskFilterProxyModel::onSourceCountChanged);
     connect(this, &TaskFilterProxyModel::layoutChanged,
-            this, &TaskFilterProxyModel::countChanged);
+            this, &TaskFilterProxyModel::onSourceCountChanged);
 }
 
 int TaskFilterProxyModel::count() const
@@ -101,5 +102,18 @@ void TaskFilterProxyModel::setFilterUntagged(bool filter)
 
 void TaskFilterProxyModel::invalidateFilter()
 {
-   QSortFilterProxyModel::invalidateFilter();
+    QSortFilterProxyModel::invalidateFilter();
+    m_previousCount = rowCount();
+}
+
+void TaskFilterProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
+{
+    QSortFilterProxyModel::setSourceModel(sourceModel);
+    m_previousCount = rowCount();
+}
+
+void TaskFilterProxyModel::onSourceCountChanged()
+{
+    emit countChanged(rowCount(), m_previousCount);
+    m_previousCount = rowCount();
 }

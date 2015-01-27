@@ -32,6 +32,9 @@ public:
     int count() const;
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const Q_DECL_OVERRIDE;
 
+private Q_SLOTS:
+    void onSourceCountChanged(int count, int previousCount);
+
 Q_SIGNALS:
     void countChanged();
 };

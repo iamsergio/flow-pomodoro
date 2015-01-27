@@ -35,13 +35,17 @@ public:
     void setTagName(const QString &);
     void setFilterUntagged(bool filter);
     void invalidateFilter();
+    void setSourceModel(QAbstractItemModel *sourceModel) Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
-    void countChanged();
+    void countChanged(int count, int previousCount);
+private Q_SLOTS:
+    void onSourceCountChanged();
 
 private:
     QString m_tagText;
     bool m_filterUntagged;
+    int m_previousCount;
 };
 
 #endif

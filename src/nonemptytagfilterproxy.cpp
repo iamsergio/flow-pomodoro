@@ -62,8 +62,18 @@ bool NonEmptyTagFilterProxy::filterAcceptsRow(int source_row, const QModelIndex 
         return false;
     }
 
+    if (tag->isFake()) // All and Untagged don't depend on rowCount
+        return true;
+
     connect(static_cast<TaskFilterProxyModel*>(tag.data()->taskModel()), &TaskFilterProxyModel::countChanged,
-            this, &NonEmptyTagFilterProxy::invalidate, Qt::UniqueConnection);
+            this, &NonEmptyTagFilterProxy::onSourceCountChanged, Qt::UniqueConnection);
 
     return tag->taskModel()->rowCount() > 0;
+}
+
+void NonEmptyTagFilterProxy::onSourceCountChanged(int count, int previousCount)
+{
+    if ((previousCount == 0) ^ (count == 0)) {
+        invalidate();
+    }
 }
