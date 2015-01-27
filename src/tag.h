@@ -58,6 +58,7 @@ public:
     bool operator==(const Tag &other) const;
     Kernel *kernel() const;
     void setKernel(Kernel *kernel);
+    bool isFake() const;
 
 #if defined(QT_TESTLIB_LIB)
     static int tagCount;

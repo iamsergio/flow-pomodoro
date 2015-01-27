@@ -179,6 +179,11 @@ void Tag::setKernel(Kernel *kernel)
     m_kernel = kernel;
 }
 
+bool Tag::isFake() const
+{
+    return m_isFake;
+}
+
 bool Tag::equals(Tag *other) const
 {
     return Syncable::equals(other) && m_name.trimmed().toLower() == other->name().trimmed().toLower();
