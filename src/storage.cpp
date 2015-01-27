@@ -128,6 +128,8 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     assert->setSourceModel(m_taskFilterModel);
     assert = new AssertingProxyModel(this);
     assert->setSourceModel(m_sortedTagModel);
+    assert = new AssertingProxyModel(this);
+    assert->setSourceModel(m_extendedTagsModel);
     storageCount++;
     qDebug() << "Created storage" << this << "; count is now" << storageCount;
 #endif
