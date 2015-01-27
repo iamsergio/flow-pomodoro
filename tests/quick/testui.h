@@ -40,6 +40,7 @@ private Q_SLOTS:
     void testPlayTask();
     void testKeyBindings();
     void testShowMenuAfterAddTask();
+    void testAddUntaggedBug();
 };
 
 #endif

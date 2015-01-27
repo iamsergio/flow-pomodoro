@@ -228,3 +228,21 @@ void TestUI::testShowMenuAfterAddTask()
     QCOMPARE(m_storage->taskCount(), 3);
     QVERIFY(!m_view->itemByName("taskContextMenu")->isVisible()); // It's not visible
 }
+
+void TestUI::testAddUntaggedBug()
+{
+    m_storage->clearTasks();
+
+    // Bug: Adding a tag in the untagged area shouldn't create a tag with "Untagged" tag
+    QQuickItem *switchItem = m_view->itemByName("switchItem");
+    QVERIFY(switchItem);
+    mouseClick(switchItem); // Go to archive view
+
+    // Add new task
+    mouseClick("addIconItem");
+    sendText("test task1");
+    sendKey(Qt::Key_Enter);
+    QCOMPARE(m_storage->taskCount(), 1);
+    QVERIFY(m_storage->tasks().at(0)->tags().isEmpty());
+    QCOMPARE(m_view->itemByName("archiveView")->property("count").toInt(), 1);
+}

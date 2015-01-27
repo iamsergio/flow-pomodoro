@@ -1156,7 +1156,7 @@ void Controller::addTask(const QString &text, bool startEditMode)
     emit aboutToAddTask();
     Task::Ptr task = m_storage->prependTask(text);
 
-    if (m_currentTag && queueType() == QueueTypeArchive)
+    if (m_currentTag && !m_currentTag->isFake() && queueType() == QueueTypeArchive)
         task->addTag(m_currentTag->name());
 
     task->setStaged(m_queueType == QueueTypeToday);
