@@ -2,7 +2,7 @@
     QMAKE_CXXFLAGS += -Werror -Wall -Wextra
 }
 
-# qtHaveModule() does work with qml only modules
+# qtHaveModule() doesn't work with qml only modules
 !exists($$[QT_INSTALL_QML]/QtQuick/Controls/TabView.qml) {
     error("QtQuickControls module was not found")
 }
