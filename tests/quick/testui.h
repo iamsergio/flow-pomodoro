@@ -29,6 +29,12 @@ class TestUI : public TestBase
 public:
     explicit TestUI();
 
+
+private:
+    void gotoLater();
+    void gotoToday();
+    void expandFlow();
+
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();

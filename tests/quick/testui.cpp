@@ -31,32 +31,55 @@ void TestUI::initTestCase()
     m_view->show();
 }
 
-void TestUI::cleanupTestCase()
-{
-}
-
-void TestUI::testQueueSwitchButton()
+void TestUI::expandFlow()
 {
     QQuickItem *globalMouseArea = m_view->itemByName("header");
     QVERIFY(globalMouseArea);
     QVERIFY(globalMouseArea->isVisible());
     QVERIFY(!m_controller->expanded());
     mouseClick(globalMouseArea);
+    QVERIFY(m_controller->expanded());
+}
 
+void TestUI::gotoLater()
+{
+    if (m_controller->queueType() == Controller::QueueTypeArchive)
+        return;
+
+    QCOMPARE(m_controller->currentPage(), Controller::MainPage);
     QQuickItem *switchItem = m_view->itemByName("switchItem");
     QVERIFY(switchItem);
     QVERIFY(switchItem->isVisible());
-    QCOMPARE(m_controller->currentPage(), Controller::MainPage);
-    QCOMPARE(m_controller->queueType(), Controller::QueueTypeToday);
-    mouseClick(switchItem); // Switch to later view
 
-    QVERIFY(m_controller->expanded());
-    QCOMPARE(m_controller->currentPage(), Controller::MainPage);
+    mouseClick(switchItem); // Click the switch
+
     QCOMPARE(m_controller->queueType(), Controller::QueueTypeArchive);
-    mouseClick(switchItem); // Switch to today view
+}
+
+void TestUI::gotoToday()
+{
+    if (m_controller->queueType() == Controller::QueueTypeToday)
+        return;
 
     QCOMPARE(m_controller->currentPage(), Controller::MainPage);
+    QQuickItem *switchItem = m_view->itemByName("switchItem");
+    QVERIFY(switchItem);
+    QVERIFY(switchItem->isVisible());
+
+    mouseClick(switchItem); // Click the switch
+
     QCOMPARE(m_controller->queueType(), Controller::QueueTypeToday);
+}
+
+void TestUI::cleanupTestCase()
+{
+}
+
+void TestUI::testQueueSwitchButton()
+{
+    expandFlow();
+    gotoLater();
+    gotoToday();
 }
 
 void TestUI::testGoToConfigurePage()
@@ -142,9 +165,7 @@ void TestUI::testArchiveTask()
     QQuickItem *archiveView = m_view->itemByName("archiveView");
     QCOMPARE(archiveView->property("count").toInt(), 1);
 
-    QQuickItem *switchItem = m_view->itemByName("switchItem");
-    QVERIFY(switchItem);
-    mouseClick(switchItem); // Go to archive view
+    gotoLater();
     QList<QQuickItem*> items = m_view->itemsByName("taskItem", archiveView);
     QCOMPARE(items.count(), 1);
     taskItem = items.first();
@@ -157,7 +178,7 @@ void TestUI::testArchiveTask()
 
     QCOMPARE(todayView->property("count").toInt(), 1);
     QCOMPARE(archiveView->property("count").toInt(), 0);
-    mouseClick(switchItem); // Go to today view
+    gotoToday();
     QCOMPARE(m_controller->queueType(), Controller::QueueTypeToday);
     QVERIFY(todayView->isVisible());
     items = m_view->itemsByName("taskItem", todayView);
@@ -234,9 +255,7 @@ void TestUI::testAddUntaggedBug()
     m_storage->clearTasks();
 
     // Bug: Adding a tag in the untagged area shouldn't create a tag with "Untagged" tag
-    QQuickItem *switchItem = m_view->itemByName("switchItem");
-    QVERIFY(switchItem);
-    mouseClick(switchItem); // Go to archive view
+    gotoLater();
 
     // Add new task
     mouseClick("addIconItem");
