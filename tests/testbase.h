@@ -170,13 +170,11 @@ public:
     void sendText(const QString &text)
     {
         m_view->sendText(text);
-        QTest::qWait(400);
     }
 
     void sendKey(int key, const QString &text = "", Qt::KeyboardModifiers modifiers = 0)
     {
         m_view->sendKey(key, text, modifiers);
-        QTest::qWait(200);
     }
 protected:
     Kernel *m_kernel;
