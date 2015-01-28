@@ -60,6 +60,13 @@ void TestUI::expectedArchivedTasks(int num)
     QCOMPARE(m_archiveView->property("count").toInt(), num);
 }
 
+void TestUI::newTask()
+{
+    mouseClick("addIconItem");
+    sendText("test task1");
+    sendKey(Qt::Key_Enter);
+}
+
 void TestUI::gotoLater()
 {
     if (m_controller->queueType() == Controller::QueueTypeArchive)
@@ -142,9 +149,7 @@ static void printItemTree(QQuickItem *root)
 
 void TestUI::testNewTask()
 {
-    mouseClick("addIconItem");
-    sendText("test task1");
-    sendKey(Qt::Key_Enter);
+    newTask();
     QCOMPARE(m_storage->taskCount(), 1);
     Task::Ptr task1 = m_storage->tasks().at(0);
     QCOMPARE(task1->summary(), QString("test task1"));
@@ -233,9 +238,7 @@ void TestUI::testShowMenuAfterAddTask()
     QVERIFY(m_settings->showContextMenuAfterAdd());
 
     // Add task
-    mouseClick("addIconItem");
-    sendText("test task2");
-    sendKey(Qt::Key_Enter);
+    newTask();
     QCOMPARE(m_storage->taskCount(), 2);
 
     // Check that menu is visible
@@ -250,9 +253,7 @@ void TestUI::testShowMenuAfterAddTask()
     mouseClick("configureIcon"); // Back to today view
 
     // Add new task
-    mouseClick("addIconItem");
-    sendText("test task3");
-    sendKey(Qt::Key_Enter);
+    newTask();
     QCOMPARE(m_storage->taskCount(), 3);
     QVERIFY(!m_view->itemByName("taskContextMenu")->isVisible()); // It's not visible
 }
@@ -265,9 +266,7 @@ void TestUI::testAddUntaggedBug()
     gotoLater();
 
     // Add new task
-    mouseClick("addIconItem");
-    sendText("test task1");
-    sendKey(Qt::Key_Enter);
+    newTask();
     QCOMPARE(m_storage->taskCount(), 1);
     QVERIFY(m_storage->tasks().at(0)->tags().isEmpty());
     expectedArchivedTasks(1);

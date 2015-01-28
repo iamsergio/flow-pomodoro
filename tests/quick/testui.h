@@ -36,6 +36,7 @@ private:
     void expandFlow();
     void expectedTodayTasks(int num);
     void expectedArchivedTasks(int num);
+    void newTask();
 
 private Q_SLOTS:
     void initTestCase();
