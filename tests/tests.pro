@@ -14,6 +14,7 @@ SOURCES += assertingproxymodel.cpp \
            quick/testui.cpp \
            signalspy.cpp \
            testarchivedtasksmodel.cpp \
+           testbase.cpp \
            testcheckabletagmodel.cpp \
            teststagedtasksmodel.cpp \
            teststorage.cpp \

@@ -18,6 +18,7 @@
 */
 
 #include "teststorage.h"
+#include "storage.h"
 
 TestStorage::TestStorage() : TestBase()
 {

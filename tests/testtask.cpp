@@ -18,6 +18,7 @@
 */
 
 #include "testtask.h"
+#include "storage.h"
 
 TestTask::TestTask() : TestBase()
 {

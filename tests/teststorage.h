@@ -18,6 +18,7 @@
 */
 
 #include "testbase.h"
+#include "signalspy.h"
 #include <QtTest/QtTest>
 
 class TestStorage: public TestBase

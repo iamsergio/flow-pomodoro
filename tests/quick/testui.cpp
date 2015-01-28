@@ -18,8 +18,12 @@
 */
 
 #include "testui.h"
-
+#include "quickview.h"
+#include "storage.h"
+#include "settings.h"
+#include "controller.h"
 #include <QQuickItem>
+#include <QtTest/QtTest>
 
 TestUI::TestUI() : TestBase()
 {

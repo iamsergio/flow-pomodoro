@@ -18,6 +18,11 @@
 */
 
 #include "testcheckabletagmodel.h"
+#include "task.h"
+#include "storage.h"
+#include "kernel.h"
+#include "modelsignalspy.h"
+#include <QtTest/QtTest>
 
 TestCheckableTagModel::TestCheckableTagModel()
     : TestBase()

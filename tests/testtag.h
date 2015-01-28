@@ -18,6 +18,8 @@
 */
 
 #include "testbase.h"
+#include "tag.h"
+#include "signalspy.h"
 #include <QtTest/QtTest>
 
 class TestTag: public TestBase

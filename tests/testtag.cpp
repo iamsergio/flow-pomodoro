@@ -18,6 +18,7 @@
 */
 
 #include "testtag.h"
+#include "storage.h"
 
 TestTag::TestTag() : TestBase()
 {

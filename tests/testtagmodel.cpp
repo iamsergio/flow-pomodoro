@@ -18,6 +18,11 @@
 */
 
 #include "testtagmodel.h"
+#include "modelsignalspy.h"
+#include "tag.h"
+#include "storage.h"
+#include "kernel.h"
+#include <QtTest/QtTest>
 
 TestTagModel::TestTagModel()
     : TestBase()
