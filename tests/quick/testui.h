@@ -23,17 +23,19 @@
 #include "testbase.h"
 #include <QObject>
 
+class QQuickItem;
 class TestUI : public TestBase
 {
     Q_OBJECT
 public:
     explicit TestUI();
 
-
 private:
     void gotoLater();
     void gotoToday();
     void expandFlow();
+    void expectedTodayTasks(int num);
+    void expectedArchivedTasks(int num);
 
 private Q_SLOTS:
     void initTestCase();
@@ -47,6 +49,9 @@ private Q_SLOTS:
     void testKeyBindings();
     void testShowMenuAfterAddTask();
     void testAddUntaggedBug();
+private:
+    QQuickItem *m_archiveView;
+    QQuickItem *m_stagedView;
 };
 
 #endif

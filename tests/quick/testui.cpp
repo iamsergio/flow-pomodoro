@@ -33,6 +33,11 @@ void TestUI::initTestCase()
 {
     createInstanceWithUI();
     m_view->show();
+    expandFlow();
+    m_stagedView = m_view->itemByName("stagedView");
+    m_archiveView = m_view->itemByName("archiveView");
+    QVERIFY(m_stagedView);
+    QVERIFY(m_archiveView);
 }
 
 void TestUI::expandFlow()
@@ -43,6 +48,16 @@ void TestUI::expandFlow()
     QVERIFY(!m_controller->expanded());
     mouseClick(globalMouseArea);
     QVERIFY(m_controller->expanded());
+}
+
+void TestUI::expectedTodayTasks(int num)
+{
+    QCOMPARE(m_stagedView->property("count").toInt(), num);
+}
+
+void TestUI::expectedArchivedTasks(int num)
+{
+    QCOMPARE(m_archiveView->property("count").toInt(), num);
 }
 
 void TestUI::gotoLater()
@@ -81,7 +96,6 @@ void TestUI::cleanupTestCase()
 
 void TestUI::testQueueSwitchButton()
 {
-    expandFlow();
     gotoLater();
     gotoToday();
 }
@@ -97,7 +111,6 @@ void TestUI::testGoToConfigurePage()
     QCOMPARE(m_controller->currentPage(), Controller::ConfigurePage);
     mouseClick("configurePageOKButton"); // Dismiss by clicking OK button
     QCOMPARE(m_controller->currentPage(), Controller::MainPage);
-
 }
 
 void TestUI::testGoToAboutPage()
@@ -141,16 +154,11 @@ void TestUI::testNewTask()
     QVERIFY(!contextMenu->isVisible());
     QVERIFY(m_controller->expanded());
 
-    QQuickItem *listView = m_view->itemByName("stagedView");
-    QVERIFY(listView);
-
-    QList<QQuickItem*> items = m_view->itemsByName("taskItem");
-    QCOMPARE(items.count(), 1);
+    expectedTodayTasks(1);
 
     QQuickItem *taskTextItem = m_view->itemByName("taskTextItem");
     QVERIFY(taskTextItem);
     QCOMPARE(taskTextItem->property("text").toString(), QString("test task1"));
-
 }
 
 void TestUI::testArchiveTask()
@@ -164,13 +172,10 @@ void TestUI::testArchiveTask()
     QVERIFY(archiveIcon->isVisible());
     QVERIFY(playIcon->isVisible());
     mouseClick(archiveIcon);
-    QQuickItem *todayView = m_view->itemByName("stagedView");
-    QCOMPARE(todayView->property("count").toInt(), 0);
-    QQuickItem *archiveView = m_view->itemByName("archiveView");
-    QCOMPARE(archiveView->property("count").toInt(), 1);
-
+    expectedTodayTasks(0);
+    expectedArchivedTasks(1);
     gotoLater();
-    QList<QQuickItem*> items = m_view->itemsByName("taskItem", archiveView);
+    QList<QQuickItem*> items = m_view->itemsByName("taskItem", m_archiveView);
     QCOMPARE(items.count(), 1);
     taskItem = items.first();
     moveMouseTo(taskItem);
@@ -180,12 +185,12 @@ void TestUI::testArchiveTask()
     QVERIFY(!playIcon->isVisible());
     mouseClick(archiveIcon); // Stage
 
-    QCOMPARE(todayView->property("count").toInt(), 1);
-    QCOMPARE(archiveView->property("count").toInt(), 0);
+    expectedTodayTasks(1);
+    expectedArchivedTasks(0);
     gotoToday();
     QCOMPARE(m_controller->queueType(), Controller::QueueTypeToday);
-    QVERIFY(todayView->isVisible());
-    items = m_view->itemsByName("taskItem", todayView);
+    QVERIFY(m_stagedView->isVisible());
+    items = m_view->itemsByName("taskItem", m_stagedView);
     QCOMPARE(items.count(), 1);
 }
 
@@ -200,9 +205,7 @@ void TestUI::testPlayTask()
     QQuickItem *globalMouseArea = m_view->itemByName("header");
     mouseClick(globalMouseArea);
     QVERIFY(m_controller->expanded());
-
-    QQuickItem *todayView = m_view->itemByName("stagedView");
-    QCOMPARE(todayView->property("count").toInt(), 0);
+    expectedTodayTasks(0);
     Task::Ptr task1 = m_storage->tasks().at(0);
     QCOMPARE(task1->status(), TaskStarted);
 
@@ -210,7 +213,7 @@ void TestUI::testPlayTask()
     QVERIFY(progressIndicator);
     QVERIFY(progressIndicator->isVisible());
     mouseClick(progressIndicator); // Stop
-    QCOMPARE(todayView->property("count").toInt(), 1);
+    expectedTodayTasks(1);
     QVERIFY(!progressIndicator->isVisible());
 }
 
@@ -267,5 +270,5 @@ void TestUI::testAddUntaggedBug()
     sendKey(Qt::Key_Enter);
     QCOMPARE(m_storage->taskCount(), 1);
     QVERIFY(m_storage->tasks().at(0)->tags().isEmpty());
-    QCOMPARE(m_view->itemByName("archiveView")->property("count").toInt(), 1);
+    expectedArchivedTasks(1);
 }
