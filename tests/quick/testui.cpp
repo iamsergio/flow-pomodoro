@@ -21,6 +21,7 @@
 #include "quickview.h"
 #include "storage.h"
 #include "settings.h"
+#include "kernel.h"
 #include "controller.h"
 #include <QQuickItem>
 #include <QtTest/QtTest>
@@ -256,6 +257,9 @@ void TestUI::testShowMenuAfterAddTask()
     newTask();
     QCOMPARE(m_storage->taskCount(), 3);
     QVERIFY(!m_view->itemByName("taskContextMenu")->isVisible()); // It's not visible
+
+    // Restore behaviour
+    m_kernel->settings()->setShowContextMenuAfterAdd(true);
 }
 
 void TestUI::testAddUntaggedBug()
@@ -270,4 +274,15 @@ void TestUI::testAddUntaggedBug()
     QCOMPARE(m_storage->taskCount(), 1);
     QVERIFY(m_storage->tasks().at(0)->tags().isEmpty());
     expectedArchivedTasks(1);
+}
+
+void TestUI::testEnterDismissMenu()
+{
+    gotoToday();
+    newTask();
+
+    auto menu = m_view->itemByName("taskContextMenu");
+    QVERIFY(menu->isVisible());
+    sendKey(Qt::Key_Enter);
+    QVERIFY(!menu->isVisible());
 }

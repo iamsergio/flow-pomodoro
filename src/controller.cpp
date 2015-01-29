@@ -914,9 +914,14 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
 
     const bool enterKeyPressed = keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return;
 
-    if (taskMenuVisible() && enterKeyPressed && m_currentMenuIndex != -1) {
+    if (taskMenuVisible() && enterKeyPressed) {
         // Too many situations where we can loose focus, so lets not use QML keyboard handling
-        emit enterPressed();
+        if (m_currentMenuIndex == -1) {
+            setRightClickedTask(Q_NULLPTR);
+        } else {
+            emit enterPressed();
+        }
+
         return true;
     }
 

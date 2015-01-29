@@ -50,6 +50,7 @@ private Q_SLOTS:
     void testKeyBindings();
     void testShowMenuAfterAddTask();
     void testAddUntaggedBug();
+    void testEnterDismissMenu();
 private:
     QQuickItem *m_archiveView;
     QQuickItem *m_stagedView;
