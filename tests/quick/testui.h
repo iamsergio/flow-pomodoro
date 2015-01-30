@@ -37,6 +37,8 @@ private:
     void expectedTodayTasks(int num);
     void expectedArchivedTasks(int num);
     void newTask();
+    QQuickItem *taskContextMenu() const;
+    QQuickItem *newTagDialog() const;
 
 private Q_SLOTS:
     void initTestCase();
@@ -51,6 +53,7 @@ private Q_SLOTS:
     void testShowMenuAfterAddTask();
     void testAddUntaggedBug();
     void testEnterDismissMenu();
+    void testNewTagDialog();
 private:
     QQuickItem *m_archiveView;
     QQuickItem *m_stagedView;

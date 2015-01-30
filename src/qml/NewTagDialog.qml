@@ -1,6 +1,7 @@
 import QtQuick 2.0
 
 InputPopup {
+    objectName: "newTagDialog"
     text: qsTr("Enter tag name")
     icon: "\uf02b"
     visible: _controller.newTagDialogVisible

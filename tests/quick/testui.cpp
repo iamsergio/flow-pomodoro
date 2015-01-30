@@ -68,6 +68,16 @@ void TestUI::newTask()
     sendKey(Qt::Key_Enter);
 }
 
+QQuickItem *TestUI::taskContextMenu() const
+{
+    return m_view->itemByName("taskContextMenu");
+}
+
+QQuickItem *TestUI::newTagDialog() const
+{
+    return m_view->itemByName("newTagDialog");
+}
+
 void TestUI::gotoLater()
 {
     if (m_controller->queueType() == Controller::QueueTypeArchive)
@@ -154,7 +164,7 @@ void TestUI::testNewTask()
     QCOMPARE(m_storage->taskCount(), 1);
     Task::Ptr task1 = m_storage->tasks().at(0);
     QCOMPARE(task1->summary(), QString("test task1"));
-    QQuickItem *contextMenu = m_view->itemByName("taskContextMenu");
+    QQuickItem *contextMenu = taskContextMenu();
     QVERIFY(contextMenu->isVisible());
     sendKey(Qt::Key_Escape);
     QVERIFY(!contextMenu->isVisible());
@@ -243,9 +253,9 @@ void TestUI::testShowMenuAfterAddTask()
     QCOMPARE(m_storage->taskCount(), 2);
 
     // Check that menu is visible
-    QVERIFY(m_view->itemByName("taskContextMenu")->isVisible());
+    QVERIFY(taskContextMenu()->isVisible());
     sendKey(Qt::Key_Escape); // Dismiss
-    QVERIFY(!m_view->itemByName("taskContextMenu")->isVisible());
+    QVERIFY(!taskContextMenu()->isVisible());
 
     // Go to configure and change setting
     mouseClick("configureIcon");
@@ -256,7 +266,7 @@ void TestUI::testShowMenuAfterAddTask()
     // Add new task
     newTask();
     QCOMPARE(m_storage->taskCount(), 3);
-    QVERIFY(!m_view->itemByName("taskContextMenu")->isVisible()); // It's not visible
+    QVERIFY(!taskContextMenu()->isVisible()); // It's not visible
 
     // Restore behaviour
     m_kernel->settings()->setShowContextMenuAfterAdd(true);
@@ -281,8 +291,54 @@ void TestUI::testEnterDismissMenu()
     gotoToday();
     newTask();
 
-    auto menu = m_view->itemByName("taskContextMenu");
+    auto menu = taskContextMenu();
     QVERIFY(menu->isVisible());
     sendKey(Qt::Key_Enter);
     QVERIFY(!menu->isVisible());
+}
+
+void TestUI::testNewTagDialog()
+{
+    // Test Esc dismisses
+    newTask();
+    auto menu = taskContextMenu();
+    QVERIFY(menu->isVisible());
+
+    auto newTagItem = m_view->itemsByName("taskMenuChoice").at(0); // 0 is the header
+    qDebug() << newTagItem << "foo" << newTagItem->property("fontAwesomeIconCode");
+    QVERIFY(newTagItem);
+    QTest::qWait(400); // otherwise test fails for some reason
+    mouseClick(newTagItem);
+    auto tagDialog = newTagDialog();
+    QVERIFY(tagDialog->isVisible());
+    sendKey(Qt::Key_Escape);
+    QVERIFY(!tagDialog->isVisible());
+    QVERIFY(menu->isVisible());
+    sendKey(Qt::Key_Escape);
+    QVERIFY(!menu->isVisible());
+
+    // Test Enter dismisses if no text
+    newTask();
+    QVERIFY(menu->isVisible());
+
+    const int tagCount = m_storage->tags().count();
+
+    newTagItem = m_view->itemsByName("taskMenuChoice").at(0); // 0 is the header
+    qDebug() << newTagItem << "foo" << newTagItem->property("fontAwesomeIconCode");
+    QVERIFY(newTagItem);
+    QTest::qWait(400); // otherwise test fails for some reason
+    mouseClick(newTagItem);
+    QVERIFY(tagDialog->isVisible());
+    sendKey(Qt::Key_Enter);
+    QVERIFY(!tagDialog->isVisible());
+    QCOMPARE(tagCount, m_storage->tags().count());
+    QVERIFY(menu->isVisible());
+    newTagItem = m_view->itemsByName("taskMenuChoice").at(0); // 0 is the header
+    mouseClick(newTagItem);
+    sendText("Hello");
+    sendKey(Qt::Key_Enter);
+    sendKey(Qt::Key_Escape);
+    QVERIFY(!menu->isVisible());
+    QCOMPARE(tagCount + 1, m_storage->tags().count());
+    QVERIFY(m_storage->containsTag("Hello"));
 }

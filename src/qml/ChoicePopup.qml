@@ -135,6 +135,7 @@ Item {
                         id: repeater
                         model: root.model
                         Choice {
+                            objectName: "taskMenuChoice"
                             anchors.left: column.left
                             anchors.right: column.right
                             topLineVisible: index > 0
