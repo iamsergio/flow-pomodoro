@@ -127,18 +127,6 @@ Page {
                             font.pixelSize: _style.smallTextSize
                             color: _style.smallTextColor
                             renderType: _controller.textRenderType
-                            text: "C"
-                        }
-                        Text  {
-                            font.pixelSize: _style.smallTextSize
-                            color: _style.smallTextColor
-                            text: qsTr("Opens configuration dialog")
-                            renderType: _controller.textRenderType
-                        }
-                        Text  {
-                            font.pixelSize: _style.smallTextSize
-                            color: _style.smallTextColor
-                            renderType: _controller.textRenderType
                             text: "Up/Down"
                         }
                         Text  {
