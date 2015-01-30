@@ -934,15 +934,20 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
 
     const bool enterKeyPressed = keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return;
 
-    if (taskMenuVisible() && enterKeyPressed) {
-        // Too many situations where we can loose focus, so lets not use QML keyboard handling
-        if (m_currentMenuIndex == -1) {
-            setRightClickedTask(Q_NULLPTR);
-        } else {
-            emit enterPressed();
-        }
+    if (enterKeyPressed) {
+        if (newTagDialogVisible())
+            return false;
 
-        return true;
+        if (taskMenuVisible()) {
+            // Too many situations where we can loose focus, so lets not use QML keyboard handling
+            if (m_currentMenuIndex == -1) {
+                setRightClickedTask(Q_NULLPTR);
+            } else {
+                emit enterPressed();
+            }
+
+            return true;
+        }
     }
 
     const bool archiveVisible = m_queueType == QueueTypeArchive && m_page == MainPage;
