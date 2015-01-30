@@ -68,7 +68,6 @@ Rectangle {
         onClicked: {
             if (mouse.button === Qt.LeftButton) {
                 _controller.editTask(null, Controller.EditModeNone)
-                _controller.toggleSelectedTask(task)
             } else {
                 _controller.requestContextMenu(task)
             }

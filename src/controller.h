@@ -231,7 +231,6 @@ public Q_SLOTS:
     void stopPomodoro();
     void pausePomodoro();
 
-    void toggleSelectedTask(Task *task);
     void cycleTaskSelectionUp();
     void cycleTaskSelectionDown();
 
@@ -311,6 +310,7 @@ Q_SIGNALS:
     void pathChanged();
 
 private:
+    void validateSelectedTask();
     void updateExtendedTagModel();
     bool anyOverlayVisible() const;
     bool taskMenuVisible() const;

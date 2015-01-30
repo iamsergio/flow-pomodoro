@@ -191,19 +191,37 @@ void Controller::pausePomodoro()
     }
 }
 
-void Controller::toggleSelectedTask(Task *task)
+void Controller::validateSelectedTask()
 {
-    setSelectedTask(m_selectedTask == task ? Task::Ptr() : task->toStrongRef());
+    if (!m_selectedTask)
+        return;
+
+    // The selected task must exist in the current view
+    QAbstractItemModel *model = currentTabTaskModel();
+    if (!model) {
+        setSelectedTask(Task::Ptr());
+        return;
+    }
+
+    for (int i = 0; i < model->rowCount(); ++i) {
+        Task::Ptr task = model->data(model->index(i, 0), Storage::TaskPtrRole).value<Task::Ptr>();
+        if (task.data() == m_selectedTask) // found, lets leae
+            return;
+    }
+
+    // Selected task is not in our list anymore, clear it
+    m_selectedTask.clear();
 }
 
 void Controller::cycleTaskSelectionUp()
 {
     Task::Ptr firstTask = taskAtCurrentTab(0);
-    if (!firstTask)
+    if (!firstTask || !m_selectedTask || m_selectedTask == firstTask.data()) {
+        setSelectedTask(Task::Ptr());
         return;
+    }
 
-    if (m_currentTag && m_selectedTask && !m_selectedTask->containsTag(m_currentTag->name()))
-        m_selectedTask.clear();
+    validateSelectedTask();
 
     if (!m_selectedTask) {
         setSelectedTask(firstTask);
@@ -220,8 +238,7 @@ void Controller::cycleTaskSelectionDown()
     if (!lastTask || m_selectedTask == lastTask.data())
         return;
 
-    if (m_currentTag && m_selectedTask && !m_selectedTask->containsTag(m_currentTag->name()))
-        m_selectedTask.clear();
+    validateSelectedTask();
 
     if (!m_selectedTask) {
         setSelectedTask(firstTask);
@@ -843,7 +860,10 @@ Task::Ptr Controller::taskAtCurrentTab(int taskIndex) const
 
 QAbstractItemModel *Controller::currentTabTaskModel() const
 {
-    return m_currentTag ? m_currentTag->taskModel() : m_storage->taskFilterModel();
+    if (m_queueType == QueueTypeToday)
+        return m_storage->stagedTasksModel();
+
+    return m_currentTag ? m_currentTag->taskModel() : Q_NULLPTR;
 }
 
 void Controller::setTagEditStatus(TagEditStatus status)
