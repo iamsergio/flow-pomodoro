@@ -36,6 +36,7 @@ class QQmlContext;
 
 class Controller : public QObject {
     Q_OBJECT
+    Q_PROPERTY(int selectedTaskIndex READ selectedTaskIndex NOTIFY selectedTaskIndexChanged)
     Q_PROPERTY(QAbstractItemModel* tagsModel READ tagsModel NOTIFY tagsModelChanged)
     Q_PROPERTY(Tag* untaggedTasksTag READ untaggedTasksTag CONSTANT)
     Q_PROPERTY(Tag* allTasksTag READ allTasksTag CONSTANT)
@@ -221,6 +222,8 @@ public:
 
     QAbstractItemModel* tagsModel() const;
 
+    int selectedTaskIndex() const;
+
 public Q_SLOTS:
     void updateWebDavCredentials();
     void setCurrentTag(Tag *);
@@ -268,6 +271,7 @@ private Q_SLOTS:
     void setStartupFinished();
 
 Q_SIGNALS:
+    void selectedTaskIndexChanged();
     void tagsModelChanged();
     void aboutToAddTask();
     void enterPressed();
@@ -310,6 +314,7 @@ Q_SIGNALS:
     void pathChanged();
 
 private:
+    void setSelectedTaskIndex(int);
     void validateSelectedTask();
     void updateExtendedTagModel();
     bool anyOverlayVisible() const;
@@ -373,6 +378,7 @@ private:
     bool m_expertMode;
     Tag::Ptr m_allTasksTag;
     Tag::Ptr m_untaggedTasksTag;
+    int m_selectedTaskIndex;
 };
 
 #endif

@@ -77,6 +77,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_expertMode(false)
     , m_allTasksTag(0)
     , m_untaggedTasksTag(0)
+    , m_selectedTaskIndex(-1)
 {
     m_tickTimer->setInterval(TickInterval);
     connect(m_tickTimer, &QTimer::timeout, this, &Controller::onTimerTick);
@@ -471,6 +472,7 @@ void Controller::setSelectedTask(const Task::Ptr &task)
 {
     if (m_selectedTask.data() != task) {
         m_selectedTask = task.data();
+        setSelectedTaskIndex(indexOfTaskInCurrentTab(task));
         emit selectedTaskChanged();
     }
 }
@@ -1305,4 +1307,17 @@ QAbstractItemModel* Controller::tagsModel() const
 {
     return m_settings->hideEmptyTags() ? m_storage->nonEmptyTagsModel()
                                        : m_storage->extendedTagsModel();
+}
+
+void Controller::setSelectedTaskIndex(int selectedTaskIndex)
+{
+    if (selectedTaskIndex != m_selectedTaskIndex) {
+        m_selectedTaskIndex = selectedTaskIndex;
+        emit selectedTaskIndexChanged();
+    }
+}
+
+int Controller::selectedTaskIndex() const
+{
+    return m_selectedTaskIndex;
 }
