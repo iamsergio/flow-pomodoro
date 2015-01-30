@@ -17,11 +17,12 @@ Rectangle {
     color: _style.taskBackgroundColor
     anchors.left: parent.left
     anchors.right: parent.right
-    anchors.leftMargin: _style.marginSmall
+    anchors.leftMargin: selected ? selectionTaskRectangle.width + _style.marginSmall
+                                 : _style.marginSmall
     anchors.rightMargin: _style.marginSmall
     height: _style.taskHeight
     border.color: _style.taskBorderColor
-    border.width: selected ? _style.selectedTaskBorderWidth : 1
+    border.width: 1 * _controller.dpiFactor
     radius: _style.taskBorderRadius
 
     Gradient {
@@ -32,7 +33,20 @@ Rectangle {
         GradientStop { color: _style.taskBackgroundColor ; position: 1 }
     }
 
-    gradient: selected ? null : grad1
+    gradient: grad1
+
+    Rectangle {
+        id: selectionTaskRectangle
+        width: _style.tagTabSelectionHeight
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.topMargin: 2 * _controller.dpiFactor
+        anchors.bottomMargin: 2 * _controller.dpiFactor
+        anchors.left: parent.left
+        anchors.leftMargin: -width - 2 * _controller.dpiFactor
+        color: "#43ACE8"
+        visible: root.selected
+    }
 
     Row {
         id: tagRow
