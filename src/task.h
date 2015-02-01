@@ -52,6 +52,11 @@ class SortedTaskContextMenuModel;
 
 class Task : public QObject, public Syncable {
     Q_OBJECT
+    Q_PROPERTY(bool dueToday READ dueToday NOTIFY dueDateChanged)
+    Q_PROPERTY(bool isOverdue READ isOverdue NOTIFY dueDateChanged)
+    Q_PROPERTY(QString prettyDueDateString READ prettyDueDateString NOTIFY dueDateChanged)
+    Q_PROPERTY(QString dueDateString READ dueDateString NOTIFY dueDateChanged)
+    Q_PROPERTY(QDate dueDate READ dueDate WRITE setDueDate NOTIFY dueDateChanged)
     Q_PROPERTY(int daysSinceLastPomodoro READ daysSinceLastPomodoro NOTIFY daysSinceLastPomodoroChanged)
     Q_PROPERTY(int daysSinceCreation READ daysSinceCreation NOTIFY daysSinceCreationChanged)
     Q_PROPERTY(bool staged READ staged WRITE setStaged NOTIFY stagedChanged)
@@ -95,6 +100,7 @@ public:
     Q_INVOKABLE void addTag(const QString &tagName);
     Q_INVOKABLE void removeTag(const QString &tagName);
     Q_INVOKABLE void toggleTag(const QString &tagName);
+    Q_INVOKABLE void removeDueDate();
 
     TaskStatus status() const;
     void setStatus(TaskStatus status);
@@ -133,7 +139,14 @@ public:
     int daysSinceCreation() const; // days since creation date
     int daysSinceLastPomodoro() const;
 
+    QString dueDateString() const;
+    QString prettyDueDateString() const;
+
+    bool isOverdue() const;
+    bool dueToday() const;
+
 Q_SIGNALS:
+    void dueDateStringChanged();
     void daysSinceLastPomodoroChanged();
     void daysSinceCreationChanged();
     void summaryChanged();
@@ -143,9 +156,11 @@ Q_SIGNALS:
     void stagedChanged();
     void changed();
     void tagToggled(const QString &tag);
+    void dueDateChanged();
 
 private Q_SLOTS:
     void onEdited();
+    void onDayChanged();
 
 private:
     explicit Task(Kernel *kernel, const QString &name = QString());

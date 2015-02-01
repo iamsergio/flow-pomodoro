@@ -73,11 +73,13 @@ Task::Task(Kernel *kernel, const QString &summary)
     connect(this, &Task::descriptionChanged, &Task::onEdited);
     connect(this, &Task::statusChanged, &Task::onEdited);
     connect(this, &Task::stagedChanged, &Task::onEdited);
+    connect(this, &Task::dueDateChanged, &Task::onEdited);
+
+    connect(kernel, &Kernel::dayChanged, this, &Task::onDayChanged);
 
 #if defined(UNIT_TEST_RUN)
     taskCount++;
 #endif
-
 
     if (kernel)
         modelSetup();
@@ -254,6 +256,11 @@ void Task::toggleTag(const QString &tagName)
     }
 }
 
+void Task::removeDueDate()
+{
+    setDueDate(QDate());
+}
+
 TaskStatus Task::status() const
 {
     return m_status;
@@ -307,7 +314,10 @@ QDate Task::dueDate() const
 
 void Task::setDueDate(const QDate &date)
 {
-    m_dueDate = date;
+    if (date != m_dueDate) {
+        m_dueDate = date;
+        emit dueDateChanged();
+    }
 }
 
 bool Task::running() const
@@ -389,9 +399,11 @@ void Task::fromJson(const QVariantMap &map)
     if (lastPomodoroDate.isValid())
         setLastPomodoroDate(lastPomodoroDate);
 
-    QDate dueDate = QDate::fromJulianDay(map.value("dueDate", QDate()).toLongLong());
-    if (dueDate.isValid())
-        setDueDate(dueDate);
+    if (map.contains("dueDate")) { // from julian of QDate() then toJulian returns a valid date, so check map
+        QDate dueDate = QDate::fromJulianDay(map.value("dueDate").toLongLong());
+        if (dueDate.isValid() && dueDate.toJulianDay() != 0)
+            setDueDate(dueDate);
+    }
 
     QVariantList tagsVariant = map.value("tags").toList();
     TagRef::List tags;
@@ -468,6 +480,15 @@ void Task::onEdited()
     emit changed();
 }
 
+void Task::onDayChanged()
+{
+    if (m_dueDate.isValid()) {
+        emit dueDateChanged();
+        if (dueToday() || isOverdue())
+            setStaged(true);
+    }
+}
+
 int Task::daysSinceCreation() const
 {
     if (!m_creationDate.isValid())
@@ -482,4 +503,46 @@ int Task::daysSinceLastPomodoro() const
         return -1;
 
     return m_lastPomodoroDate.toLocalTime().date().daysTo(QDate::currentDate());
+}
+
+QString Task::dueDateString() const
+{
+    return m_dueDate.isValid() ? m_dueDate.toString() : QString();
+}
+
+QString Task::prettyDueDateString() const
+{
+    if (!m_dueDate.isValid())
+        return "";
+
+    const QDate today = QDate::currentDate();
+    if (m_dueDate == today)
+        return tr("today");
+
+    if (m_dueDate == today.addDays(1))
+        return tr("tomorrow");
+
+    const int daysTo = today.daysTo(m_dueDate);
+
+    if (daysTo < 0) {
+        return tr("overdue");
+    }
+
+    if (daysTo <= 7) {
+        return tr("next %1").arg(m_dueDate.toString("dddd")); // Next Monday, for example.
+    }
+
+    // Year is visual noise if equal to current year
+    return m_dueDate.year() == today.year() ? m_dueDate.toString("MMMM d")
+                                            : m_dueDate.toString(Qt::ISODate);
+}
+
+bool Task::isOverdue() const
+{
+    return m_dueDate.isValid() && m_dueDate < QDate::currentDate();
+}
+
+bool Task::dueToday() const
+{
+    return m_dueDate.isValid() && m_dueDate == QDate::currentDate();
 }

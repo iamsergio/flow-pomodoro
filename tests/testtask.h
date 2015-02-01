@@ -36,6 +36,7 @@ private Q_SLOTS:
     void testAddAndRemoveTag();
     void testJson();
     void testToggleTag();
+    void testDueDate();
 private:
     Task::Ptr m_task1;
     Task::Ptr m_task2;

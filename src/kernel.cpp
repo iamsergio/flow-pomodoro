@@ -167,6 +167,9 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     m_currentDate = currentDateTime.date();
     connect(&m_dayChangedTimer, &QTimer::timeout, this, &Kernel::checkDayChanged);
     setupDayChangedTimer(currentDateTime);
+
+    // Startup counts as dayChanged, so handlers are run
+    QMetaObject::invokeMethod(this, "dayChanged", Qt::QueuedConnection);
 }
 
 Storage *Kernel::storage() const

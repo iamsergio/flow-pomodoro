@@ -145,3 +145,13 @@ void TestTask::testToggleTag()
     task->toggleTag("tagA");
     QVERIFY(!task->containsTag("tagA"));
 }
+
+void TestTask::testDueDate()
+{
+    Task::Ptr task = Task::createTask(m_kernel, "testDueDate");
+    QCOMPARE(task->dueDateString(), QString());
+    task->setDueDate(QDate::currentDate());
+    QCOMPARE(task->dueDateString(), QDate::currentDate().toString());
+    task->removeDueDate();
+    QCOMPARE(task->dueDateString(), QString());
+}
