@@ -54,6 +54,7 @@ class Storage : public QObject
     Q_PROPERTY(ArchivedTasksFilterModel* archivedTasksModel READ archivedTasksModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* taskFilterModel READ taskFilterModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* untaggedTasksModel READ untaggedTasksModel CONSTANT)
+    Q_PROPERTY(TaskFilterProxyModel* dueDateTasksModel READ dueDateTasksModel CONSTANT)
     Q_PROPERTY(bool webDAVSyncSupported READ webDAVSyncSupported CONSTANT)
 
 public:
@@ -121,6 +122,7 @@ public:
 // Stuff for tasks
     TaskFilterProxyModel* taskFilterModel() const;
     TaskFilterProxyModel* untaggedTasksModel() const;
+    TaskFilterProxyModel* dueDateTasksModel() const;
     ArchivedTasksFilterModel* stagedTasksModel() const;
     ArchivedTasksFilterModel* archivedTasksModel() const;
     Task::Ptr taskAt(int proxyIndex) const;
@@ -182,6 +184,7 @@ private:
     int m_savingDisabled;
     TaskFilterProxyModel *m_taskFilterModel;
     TaskFilterProxyModel *m_untaggedTasksModel;
+    TaskFilterProxyModel *m_dueDateTasksModel;
     ArchivedTasksFilterModel *m_stagedTasksModel;
     ArchivedTasksFilterModel *m_archivedTasksModel;
     NonEmptyTagFilterProxy* m_nonEmptyTagsModel;

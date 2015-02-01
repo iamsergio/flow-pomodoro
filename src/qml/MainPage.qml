@@ -58,10 +58,11 @@ Page {
                         return qsTr("No archived tasks found.")
                     } else if (_controller.currentTag === _controller.untaggedTasksTag) {
                         return qsTr("No archived untagged tasks found.")
+                    } else if (_controller.currentTag === _controller.dueDateTasksTag) {
+                        return qsTr("No tasks with due date found.")
                     } else {
                         return qsTr("No archived tasks found with tag %1").arg(_controller.currentTag.name)
                     }
-
                 }
 
                 model: _controller.currentTag ? _controller.currentTag.taskModel : null

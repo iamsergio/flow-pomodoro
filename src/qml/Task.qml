@@ -229,7 +229,7 @@ Rectangle {
                                                                              : _style.taskTagFontColor
                             : _style.taskTagFontColor
         text: root.taskObj ? root.taskObj.prettyDueDateString : ""
-        visible: root.taskObj !== null && _settings.supportsDueDate && root.taskObj.prettyDueDateString
+        visible: root.taskObj !== null && _settings.supportsDueDate && root.taskObj.prettyDueDateString && !(_controller.editMode == Controller.EditModeInline && _controller.taskBeingEdited === root.taskObj)
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.leftMargin: _controller.dpiFactor * 20

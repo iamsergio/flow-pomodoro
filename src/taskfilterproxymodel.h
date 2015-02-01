@@ -32,8 +32,10 @@ public:
 
     int count() const;
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const Q_DECL_OVERRIDE;
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const Q_DECL_OVERRIDE;
     void setTagName(const QString &);
     void setFilterUntagged(bool filter);
+    void setFilterDueDated(bool filter);
     void invalidateFilter();
     void setSourceModel(QAbstractItemModel *sourceModel) Q_DECL_OVERRIDE;
 
@@ -46,6 +48,7 @@ private:
     QString m_tagText;
     bool m_filterUntagged;
     int m_previousCount;
+    bool m_filterDueDated;
 };
 
 #endif

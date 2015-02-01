@@ -26,6 +26,7 @@ TaskFilterProxyModel::TaskFilterProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
     , m_filterUntagged(false)
     , m_previousCount(0)
+    , m_filterDueDated(false)
 {
     connect(this, &TaskFilterProxyModel::rowsInserted,
             this, &TaskFilterProxyModel::onSourceCountChanged);
@@ -71,6 +72,10 @@ bool TaskFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &s
     if (m_filterUntagged)
         return task->tags().isEmpty();
 
+    if (m_filterDueDated) {
+        return task->dueDate().isValid();
+    }
+
     if (m_tagText.isEmpty())
         return true;
 
@@ -82,6 +87,17 @@ bool TaskFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &s
     }
 
     return false;
+}
+
+bool TaskFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
+{
+    if (m_filterDueDated) {
+        Task::Ptr leftTask = left.data(Storage::TaskPtrRole).value<Task::Ptr>();
+        Task::Ptr rightTask = right.data(Storage::TaskPtrRole).value<Task::Ptr>();
+        return leftTask->dueDate() < rightTask->dueDate();
+    } else {
+        return QSortFilterProxyModel::lessThan(left, right);
+    }
 }
 
 void TaskFilterProxyModel::setTagName(const QString &tagText)
@@ -96,6 +112,14 @@ void TaskFilterProxyModel::setFilterUntagged(bool filter)
 {
     if (m_filterUntagged != filter) {
         m_filterUntagged = filter;
+        invalidateFilter();
+    }
+}
+
+void TaskFilterProxyModel::setFilterDueDated(bool filter)
+{
+    if (m_filterDueDated != filter) {
+        m_filterDueDated = filter;
         invalidateFilter();
     }
 }

@@ -75,8 +75,6 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_loadManager(new LoadManager(this))
     , m_currentMenuIndex(-1)
     , m_expertMode(false)
-    , m_allTasksTag(0)
-    , m_untaggedTasksTag(0)
     , m_selectedTaskIndex(-1)
 {
     m_tickTimer->setInterval(TickInterval);
@@ -92,6 +90,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     connect(m_settings, &Settings::showAllTasksViewChanged, this, &Controller::onShowAllTasksViewChanged);
     connect(m_settings, &Settings::useSystrayChanged, this, &Controller::onUseSystrayChanged);
     connect(m_settings, &Settings::hideEmptyTagsChanged, this, &Controller::onHideEmptyTagsChanged);
+    connect(m_settings, &Settings::supportsDueDateChanged, this, &Controller::onSupportsDueDateChanged);
 
     m_host = m_settings->value("webdavHost").toString();
     m_user = m_settings->value("webdavUser").toString();
@@ -111,6 +110,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
 
     m_untaggedTasksTag = Tag::Ptr(new Tag(tr("Untagged"), m_storage->untaggedTasksModel()));
     m_allTasksTag = Tag::Ptr(new Tag(tr("All"), m_storage->archivedTasksModel()));
+    m_dueDateTasksTag = Tag::Ptr(new Tag(tr("with date"), m_storage->dueDateTasksModel()));
     m_currentTag = m_untaggedTasksTag.data();
     updateExtendedTagModel();
 }
@@ -747,6 +747,10 @@ void Controller::updateExtendedTagModel()
         extraTags << m_allTasksTag;
     }
 
+    if (m_settings->supportsDueDate()) {
+        extraTags << m_dueDateTasksTag;
+    }
+
     extraTags << m_untaggedTasksTag;
     m_storage->extendedTagsModel()->setExtraRows(extraTags);
 }
@@ -804,6 +808,11 @@ void Controller::onPomodoroFunctionalityDisabledChanged()
 }
 
 void Controller::onShowAllTasksViewChanged()
+{
+    updateExtendedTagModel();
+}
+
+void Controller::onSupportsDueDateChanged()
 {
     updateExtendedTagModel();
 }
@@ -1104,6 +1113,9 @@ bool Controller::renameTag(const QString &oldName, const QString &newName)
 
 void Controller::editTask(Task *t, Controller::EditMode editMode)
 {
+    if (!t && !m_taskBeingEdited)
+        return;
+
     Task::Ptr task = t ? t->toStrongRef() : Task::Ptr();
     if ((!task && editMode != EditModeNone) ||
         (task && editMode == EditModeNone)) {
@@ -1184,8 +1196,12 @@ void Controller::addTask(const QString &text, bool startEditMode)
     emit aboutToAddTask();
     Task::Ptr task = m_storage->prependTask(text);
 
-    if (m_currentTag && !m_currentTag->isFake() && queueType() == QueueTypeArchive)
-        task->addTag(m_currentTag->name());
+    if (m_currentTag && queueType() == QueueTypeArchive) {
+        if (!m_currentTag->isFake())
+            task->addTag(m_currentTag->name());
+        else if (m_currentTag.data() == m_dueDateTasksTag && !task->dueDate().isValid())
+            task->setDueDate(QDate::currentDate());
+    }
 
     task->setStaged(m_queueType == QueueTypeToday);
     editTask(Q_NULLPTR, EditModeNone);
@@ -1301,6 +1317,11 @@ Tag* Controller::allTasksTag() const
 Tag* Controller::untaggedTasksTag() const
 {
     return m_untaggedTasksTag.data();
+}
+
+Tag *Controller::dueDateTasksTag() const
+{
+    return m_dueDateTasksTag.data();
 }
 
 QAbstractItemModel* Controller::tagsModel() const

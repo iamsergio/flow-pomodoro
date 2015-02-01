@@ -40,6 +40,7 @@ class Controller : public QObject {
     Q_PROPERTY(QAbstractItemModel* tagsModel READ tagsModel NOTIFY tagsModelChanged)
     Q_PROPERTY(Tag* untaggedTasksTag READ untaggedTasksTag CONSTANT)
     Q_PROPERTY(Tag* allTasksTag READ allTasksTag CONSTANT)
+    Q_PROPERTY(Tag* dueDateTasksTag READ dueDateTasksTag CONSTANT)
     Q_PROPERTY(bool expertMode READ expertMode CONSTANT)
     Q_PROPERTY(QString buildOptionsText READ buildOptionsText CONSTANT)
     Q_PROPERTY(int currentMenuIndex READ currentMenuIndex WRITE setCurrentMenuIndex NOTIFY currentMenuIndexChanged)
@@ -219,6 +220,7 @@ public:
 
     Tag* allTasksTag() const;
     Tag* untaggedTasksTag() const;
+    Tag* dueDateTasksTag() const;
 
     QAbstractItemModel* tagsModel() const;
 
@@ -266,6 +268,7 @@ private Q_SLOTS:
     void onKeepScreenOnDuringPomodoroChanged();
     void onPomodoroFunctionalityDisabledChanged();
     void onShowAllTasksViewChanged();
+    void onSupportsDueDateChanged();
     void onUseSystrayChanged();
     void onHideEmptyTagsChanged();
     void setStartupFinished();
@@ -378,6 +381,7 @@ private:
     bool m_expertMode;
     Tag::Ptr m_allTasksTag;
     Tag::Ptr m_untaggedTasksTag;
+    Tag::Ptr m_dueDateTasksTag;
     int m_selectedTaskIndex;
 };
 

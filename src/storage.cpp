@@ -66,6 +66,7 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     , m_savingDisabled(0)
     , m_taskFilterModel(new TaskFilterProxyModel(this))
     , m_untaggedTasksModel(new TaskFilterProxyModel(this))
+    , m_dueDateTasksModel(new TaskFilterProxyModel(this))
     , m_stagedTasksModel(new ArchivedTasksFilterModel(this))
     , m_archivedTasksModel(new ArchivedTasksFilterModel(this))
     , m_nonEmptyTagsModel(new NonEmptyTagFilterProxy(this))
@@ -95,6 +96,7 @@ Storage::Storage(Kernel *kernel, QObject *parent)
 
     m_taskFilterModel->setSourceModel(m_data.tasks);
     m_untaggedTasksModel->setSourceModel(m_archivedTasksModel);
+    m_dueDateTasksModel->setSourceModel(m_archivedTasksModel);
 
     QAbstractItemModel *tasksModel = m_data.tasks; // android doesn't build if you use m_data.tasks directly in the connect statement
     connect(tasksModel, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
@@ -112,6 +114,9 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     m_archivedTasksModel->setAcceptArchived(true);
     m_untaggedTasksModel->setFilterUntagged(true);
     m_untaggedTasksModel->setObjectName("Untagged and archived tasks model");
+    m_dueDateTasksModel->setFilterDueDated(true);
+    m_dueDateTasksModel->setObjectName("Archived tasks with due date");
+    m_dueDateTasksModel->sort(0, Qt::AscendingOrder);
 
 #if defined(UNIT_TEST_RUN)
     AssertingProxyModel *assert = new AssertingProxyModel(this);
@@ -130,6 +135,8 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     assert->setSourceModel(m_sortedTagModel);
     assert = new AssertingProxyModel(this);
     assert->setSourceModel(m_extendedTagsModel);
+    assert = new AssertingProxyModel(this);
+    assert->setSourceModel(m_dueDateTasksModel);
     storageCount++;
     qDebug() << "Created storage" << this << "; count is now" << storageCount;
 #endif
@@ -378,6 +385,12 @@ TaskFilterProxyModel *Storage::untaggedTasksModel() const
     return m_untaggedTasksModel;
 }
 
+TaskFilterProxyModel *Storage::dueDateTasksModel() const
+{
+    return m_dueDateTasksModel;
+}
+
+
 ArchivedTasksFilterModel *Storage::stagedTasksModel() const
 {
     return m_stagedTasksModel;
@@ -503,6 +516,8 @@ void Storage::connectTask(const Task::Ptr &task)
     connect(task.data(), &Task::stagedChanged, m_archivedTasksModel,
             &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
     connect(task.data(), &Task::tagsChanged, m_untaggedTasksModel,
+            &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
+    connect(task.data(), &Task::dueDateChanged, m_dueDateTasksModel,
             &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
     connect(task.data(), &Task::statusChanged, m_stagedTasksModel,
             &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
