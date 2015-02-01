@@ -222,4 +222,18 @@ Rectangle {
         anchors.bottomMargin: _controller.dpiFactor * 2
         font.pixelSize: _controller.dpiFactor * 11
     }
+
+    Text {
+        color: root.taskObj ? root.taskObj.isOverdue ? "red"
+                                                     : root.taskObj.dueToday ? "yellow"
+                                                                             : _style.taskTagFontColor
+                            : _style.taskTagFontColor
+        text: root.taskObj ? root.taskObj.prettyDueDateString : ""
+        visible: root.taskObj !== null && _settings.supportsDueDate && root.taskObj.prettyDueDateString
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.leftMargin: _controller.dpiFactor * 20
+        anchors.bottomMargin: _controller.dpiFactor * 2
+        font.pixelSize: _controller.dpiFactor * 11
+    }
 }

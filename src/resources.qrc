@@ -20,6 +20,7 @@
     <file>qml/FlowSwitch.qml</file>
     <file>qml/GlobalContextMenu.qml</file>
     <file>qml/InputPopup.qml</file>
+    <file>qml/Overlay.qml</file>
     <file>qml/Popup.qml</file>
     <file>qml/PomodoroOverlay.qml</file>
     <file>qml/PushButton.qml</file>
@@ -40,6 +41,7 @@
     <file>qml/TagDelegate.qml</file>
     <file>qml/Task.qml</file>
     <file>qml/TaskContextMenu.qml</file>
+    <file>qml/TaskEditor.qml</file>
     <file>qml/TaskListView.qml</file>
     <file>qml/TaskTextField.qml</file>
     <file>qml/ToolTip.qml</file>

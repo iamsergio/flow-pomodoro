@@ -121,6 +121,13 @@ Rectangle {
         z: 2
     }
 
+    TaskEditor {
+        visible: _controller.editMode == Controller.EditModeEditor
+        anchors.fill: parent
+        task: _controller.taskBeingEdited
+        z: 2
+    }
+
     Loader {
         anchors.fill: parent
         enabled: !_controller.popupVisible

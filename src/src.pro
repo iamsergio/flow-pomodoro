@@ -55,13 +55,15 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/MobileStyle.qml \
                qml/MobileTabView.qml \
                qml/NewTagDialog.qml \
-               qml/Page.qml           \
+               qml/Overlay.qml \
+               qml/Page.qml \
                qml/PomodoroOverlay.qml \
                qml/QuestionPopup.qml  \
                qml/SmallText.qml      \
                qml/TagDelegate.qml \
                qml/Task.qml           \
                qml/TaskContextMenu.qml \
+               qml/TaskEditor.qml \
                qml/qml/TaskListView.qml \
                qml/TaskTextField.qml \
                qml/ToolTip.qml

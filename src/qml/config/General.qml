@@ -292,5 +292,22 @@ Item {
                 value: showAllTasksView.checked
             }
         }
+
+        Text {
+            visible: showSupportsDueDate.visible
+            text: qsTr("Due date support")
+            font.pixelSize: 12 * _controller.dpiFactor
+        }
+
+        FlowCheckBox {
+            id: showSupportsDueDate
+            visible: _controller.expertMode
+            checked: _settings.supportsDueDate
+            Binding {
+                target: _settings
+                property: "supportsDueDate"
+                value: showSupportsDueDate.checked
+            }
+        }
     }
 }

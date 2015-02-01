@@ -20,7 +20,7 @@ Item {
         {
             if (!_controller.rightClickedTask.contextMenuModel.tagOnlyMenu) {
                 if (index === TaskContextMenuModel.OptionTypeEdit) {
-                    _controller.editTask(_controller.rightClickedTask, Controller.EditModeInline)
+                    _controller.editTask(_controller.rightClickedTask, Controller.EditModeEditor)
                 } else if (index ===  TaskContextMenuModel.OptionTypeDelete) {
                     _controller.removeTask(_controller.rightClickedTask)
                 } else if (index ===  TaskContextMenuModel.OptionTypeQueue) {
