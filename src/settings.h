@@ -25,6 +25,7 @@
 
 class Settings : public QSettings {
     Q_OBJECT
+    Q_PROPERTY(bool supportsDueDate READ supportsDueDate WRITE setSupportsDueDate NOTIFY supportsDueDateChanged)
     Q_PROPERTY(bool showContextMenuAfterAdd READ showContextMenuAfterAdd WRITE setShowContextMenuAfterAdd NOTIFY showContextMenuAfterAddChanged)
     Q_PROPERTY(int defaultPomodoroDuration READ defaultPomodoroDuration WRITE setDefaultPomodoroDuration NOTIFY defaultPomodoroDurationChanged)
     Q_PROPERTY(bool pomodoroFunctionalityDisabled READ pomodoroFunctionalityDisabled WRITE setPomodoroFunctionalityDisabled NOTIFY pomodoroFunctionalityDisabledChanged)
@@ -93,6 +94,8 @@ public:
     void setShowContextMenuAfterAdd(bool);
     bool showContextMenuAfterAdd() const;
 
+    void setSupportsDueDate(bool);
+    bool supportsDueDate() const;
 private Q_SLOTS:
     void doSync();
 
@@ -109,6 +112,7 @@ Q_SIGNALS:
     void keepScreenOnDuringPomodoroChanged();
     void geometryTypeChanged();
     void initialPositionChanged();
+    void supportsDueDateChanged();
 
 private:
     void init();
@@ -128,6 +132,7 @@ private:
     Position m_initialPosition;
     GeometryType m_geometryType;
     bool m_showContextMenuAfterAdd;
+    bool m_supportsDueDate;
 };
 
 #endif

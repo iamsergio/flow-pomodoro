@@ -41,6 +41,7 @@ Settings::Settings(QObject *parent)
     , m_showTaskAge(false)
     , m_stickyWindow(true)
     , m_showContextMenuAfterAdd(true)
+    , m_supportsDueDate(false)
 {
     init();
 }
@@ -65,6 +66,7 @@ void Settings::init()
     m_showTaskAge = value("showTaskAge", /*default=*/ false).toBool();
     m_showAllTasksView = value("showAllTasksView", /*default=*/ false).toBool();
     m_showContextMenuAfterAdd = value("showContextMenuAfterAdd", true).toBool();
+    m_supportsDueDate = value("supportsDueDate", false).toBool();
 
     const Position defaultPosition = PositionTop;
     m_initialPosition = static_cast<Settings::Position>(value("windowInitialPosition", defaultPosition).toInt());
@@ -278,4 +280,18 @@ void Settings::setShowContextMenuAfterAdd(bool showContextMenuAfterAdd)
 bool Settings::showContextMenuAfterAdd() const
 {
     return m_showContextMenuAfterAdd;
+}
+
+void Settings::setSupportsDueDate(bool supportsDueDate)
+{
+    if (supportsDueDate != m_supportsDueDate) {
+        m_supportsDueDate = supportsDueDate;
+        setValue("supportsDueDate", QVariant(supportsDueDate));
+        emit supportsDueDateChanged();
+    }
+}
+
+bool Settings::supportsDueDate() const
+{
+    return m_supportsDueDate;
 }
