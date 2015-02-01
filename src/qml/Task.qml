@@ -191,7 +191,7 @@ Rectangle {
             FontAwesomeIcon {
                 id: archiveIcon
                 objectName: "archiveIcon"
-                toolTip: (taskObj !== null && taskObj.staged) ? qsTr("Archive task") : qsTr("Queue for today")
+                toolTip: (taskObj !== null && taskObj.staged) ? qsTr("Queue for later") : qsTr("Queue for today")
                 size: 30
                 text: (taskObj !== null && taskObj.staged) ? "\uf187" : "\uf06a"
                 visible: root.buttonsVisible
