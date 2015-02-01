@@ -24,6 +24,7 @@
 #include "runtimeconfiguration.h"
 
 #include <QObject>
+#include <QTimer>
 
 class Settings;
 class Storage;
@@ -60,15 +61,18 @@ public:
 
 Q_SIGNALS:
     void systrayLeftClicked();
+    void dayChanged();
 
 private Q_SLOTS:
     void onTaskStatusChanged();
+    void checkDayChanged();
     void maybeLoadPlugins();
 #if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
     void onSystrayActivated(QSystemTrayIcon::ActivationReason reason);
 #endif
 
 private:
+    void setupDayChangedTimer(const QDateTime &currentDateTime);
     void loadPlugins();
     void notifyPlugins(TaskStatus newStatus);
 
@@ -85,6 +89,8 @@ private:
     QSystemTrayIcon *m_systrayIcon;
     QMenu *m_trayMenu;
 #endif
+    QTimer m_dayChangedTimer;
+    QDate m_currentDate;
 
     static QPointer<Kernel> s_kernel; // QPointer, so unit-tests can delete and recreate
 };

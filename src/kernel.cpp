@@ -162,6 +162,11 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
 
     if (m_settings->useSystray())
         setupSystray();
+
+    const QDateTime currentDateTime = QDateTime::currentDateTime();
+    m_currentDate = currentDateTime.date();
+    connect(&m_dayChangedTimer, &QTimer::timeout, this, &Kernel::checkDayChanged);
+    setupDayChangedTimer(currentDateTime);
 }
 
 Storage *Kernel::storage() const
@@ -308,10 +313,26 @@ void Kernel::onTaskStatusChanged()
     notifyPlugins(m_controller->currentTask()->status());
 }
 
+void Kernel::checkDayChanged()
+{
+    const QDateTime currentDateTime = QDateTime::currentDateTime();
+    if (m_currentDate != currentDateTime.date())
+        emit dayChanged();
+    m_currentDate = currentDateTime.date();
+    setupDayChangedTimer(currentDateTime);
+}
+
 void Kernel::maybeLoadPlugins()
 {
     if (!Utils::isMobile() && m_runtimeConfiguration.pluginsSupported())
         loadPlugins();
+}
+
+// Receives by argument so we don't query for the time twice, since we might get different results
+void Kernel::setupDayChangedTimer(const QDateTime &currentDateTime)
+{
+    const QDate tomorrow = currentDateTime.date().addDays(1);
+    m_dayChangedTimer.start(currentDateTime.msecsTo(QDateTime(tomorrow, QTime(0, 1))));
 }
 
 #if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
