@@ -6,6 +6,8 @@ DEFINES += UNIT_TEST_RUN
 include ("../global.pri")
 include("../src/src.pri")
 
+DEFINES-=DEVELOPER_MODE
+
 INCLUDEPATH += $$PWD/../src/
 
 SOURCES += assertingproxymodel.cpp \
