@@ -1,5 +1,4 @@
 import QtQuick 2.0
-
 import Controller 1.0
 
 Page {
@@ -48,7 +47,7 @@ Page {
                         id: copyrightText
                         anchors.verticalCenter: parent.verticalCenter
                         text: "<html>Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, <a href=\"mailto:info@kdab.com\">info@kdab.com</a><br>" +
-                              "Copyright (C) 2014 Sérgio Martins &lt;<a href=\"mailto:iamsergio@gmail.com\">iamsergio@gmail.com</a>&gt;"
+                              "Copyright (C) 2014-2015 Sérgio Martins &lt;<a href=\"mailto:iamsergio@gmail.com\">iamsergio@gmail.com</a>&gt;"
                         onLinkActivated: {
                             Qt.openUrlExternally(link)
                         }
