@@ -8,8 +8,8 @@ pkgdesc="A sticky task manager and pomodoro that blocks distractions."
 arch=('i686' 'x86_64')
 url="https://github.com/iamsergio/flow-pomodoro"
 license=('GPL')
-depends=('qt5-base>=5.3.0', 'qt5-declarative>=5.3.0', 'qt5-quickcontrols>=5.3.0')
-makedepends=('qt5-base>=5.3.0', 'qt5-declarative>=5.3.0', 'qt5-quickcontrols>=5.3.0')
+depends=('qt5-base>=5.3.0' 'qt5-declarative>=5.3.0' 'qt5-quickcontrols>=5.3.0')
+makedepends=('qt5-base>=5.3.0' 'qt5-declarative>=5.3.0' 'qt5-quickcontrols>=5.3.0')
 
 source=(https://github.com/iamsergio/flow-pomodoro/archive/v${pkgver}.zip)
 sha1sums=('b3a7881ace12f4d0d34f4128ad725c7b520ab1c1')
