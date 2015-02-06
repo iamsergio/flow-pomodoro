@@ -305,7 +305,6 @@ void TestUI::testNewTagDialog()
     QVERIFY(menu->isVisible());
 
     auto newTagItem = m_view->itemsByName("taskMenuChoice").at(0); // 0 is the header
-    qDebug() << newTagItem << "foo" << newTagItem->property("fontAwesomeIconCode");
     QVERIFY(newTagItem);
     QTest::qWait(400); // otherwise test fails for some reason
     mouseClick(newTagItem);
@@ -324,7 +323,6 @@ void TestUI::testNewTagDialog()
     const int tagCount = m_storage->tags().count();
 
     newTagItem = m_view->itemsByName("taskMenuChoice").at(0); // 0 is the header
-    qDebug() << newTagItem << "foo" << newTagItem->property("fontAwesomeIconCode");
     QVERIFY(newTagItem);
     QTest::qWait(400); // otherwise test fails for some reason
     mouseClick(newTagItem);
