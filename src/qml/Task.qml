@@ -139,6 +139,7 @@ Rectangle {
 
         Rectangle {
             id: menuIndicator
+            objectName: "menuIndicator"
             anchors.left: parent.left
             anchors.leftMargin: 6 * _controller.dpiFactor
             width: 10 * _controller.dpiFactor

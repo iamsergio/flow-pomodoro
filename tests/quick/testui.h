@@ -36,9 +36,15 @@ private:
     void expandFlow();
     void expectedTodayTasks(int num);
     void expectedArchivedTasks(int num);
-    void newTask();
+    void newTask(bool dismissMenu = false);
     QQuickItem *taskContextMenu() const;
     QQuickItem *newTagDialog() const;
+    QQuickItem *menuIndicator() const;
+    QQuickItem *taskEditor() const;
+    QQuickItem *dueDateExpander() const;
+    void refreshEditItem();
+    void clickEditItem();
+    void clickMenuIndicator();
 
 private Q_SLOTS:
     void initTestCase();
@@ -54,9 +60,11 @@ private Q_SLOTS:
     void testAddUntaggedBug();
     void testEnterDismissMenu();
     void testNewTagDialog();
+    void testDueDate();
 private:
-    QQuickItem *m_archiveView;
-    QQuickItem *m_stagedView;
+    QQuickItem *m_archiveView = nullptr;
+    QQuickItem *m_stagedView = nullptr;
+    QQuickItem *m_editItem = nullptr;
 };
 
 #endif

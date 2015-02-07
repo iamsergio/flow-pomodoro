@@ -61,11 +61,13 @@ void TestUI::expectedArchivedTasks(int num)
     QCOMPARE(m_archiveView->property("count").toInt(), num);
 }
 
-void TestUI::newTask()
+void TestUI::newTask(bool dismissMenu)
 {
     mouseClick("addIconItem");
     sendText("test task1");
     sendKey(Qt::Key_Enter);
+    if (dismissMenu)
+        sendKey(Qt::Key_Escape);
 }
 
 QQuickItem *TestUI::taskContextMenu() const
@@ -76,6 +78,49 @@ QQuickItem *TestUI::taskContextMenu() const
 QQuickItem *TestUI::newTagDialog() const
 {
     return m_view->itemByName("newTagDialog");
+}
+
+QQuickItem *TestUI::menuIndicator() const
+{
+    auto view = m_controller->queueType() == Controller::QueueTypeToday ? m_stagedView
+                                                                        : m_archiveView;
+    auto items = m_view->itemsByName("menuIndicator", view);
+    return items.isEmpty() ? nullptr : items.first();
+}
+
+QQuickItem *TestUI::taskEditor() const
+{
+    return m_view->itemByName("taskEditor");
+}
+
+QQuickItem *TestUI::dueDateExpander() const
+{
+    return m_view->itemByName("dueDateExpanded");
+}
+
+void TestUI::refreshEditItem()
+{
+    if (m_view->itemsByName("taskMenuChoice").count() < 2) {
+        qDebug() << m_settings->showAllTasksView();
+        QVERIFY(false);
+    }
+
+    m_editItem = m_view->itemsByName("taskMenuChoice").at(1);
+    QVERIFY(m_editItem);
+}
+
+void TestUI::clickEditItem()
+{
+    refreshEditItem();
+    mouseClick(m_editItem);
+}
+
+void TestUI::clickMenuIndicator()
+{
+    auto indicatorItem = menuIndicator();
+    QVERIFY(m_stagedView->isVisible());
+    QVERIFY(indicatorItem);
+    mouseClick(indicatorItem);
 }
 
 void TestUI::gotoLater()
@@ -339,4 +384,50 @@ void TestUI::testNewTagDialog()
     QVERIFY(!menu->isVisible());
     QCOMPARE(tagCount + 1, m_storage->tags().count());
     QVERIFY(m_storage->containsTag("Hello"));
+}
+
+void TestUI::testDueDate()
+{
+    gotoToday();
+    Storage::Data data = m_storage->data();
+    data.tasks.clear();
+    m_storage->setData(data);
+    newTask(true);
+    m_settings->setSupportsDueDate(true);
+    Task::Ptr task = m_storage->tasks().at(0);
+    QVERIFY(!task->dueDate().isValid());
+    //----------------------------------------------------------------------------------------------
+    // Test that Esc dismisses
+    clickMenuIndicator();
+    clickEditItem();
+    auto taskEditorItem = taskEditor();
+    QVERIFY(taskEditorItem);
+    QVERIFY(taskEditorItem->isVisible());
+    sendKey(Qt::Key_Escape);
+    QVERIFY(!taskEditorItem->isVisible());
+    QVERIFY(!task->dueDate().isValid());
+    QVERIFY(!taskContextMenu()->isVisible());
+    //----------------------------------------------------------------------------------------------
+    // Test set today
+    clickMenuIndicator();
+    clickEditItem();
+    auto dueDateExpanderItem = dueDateExpander();
+    QVERIFY(dueDateExpanderItem);
+    mouseClick(dueDateExpanderItem);
+    sendKey(Qt::Key_Enter);
+    QVERIFY(task->dueDate().isValid());
+    QCOMPARE(task->dueDate(), QDate::currentDate());
+    QVERIFY(!taskEditorItem->isVisible());
+    QVERIFY(!taskContextMenu()->isVisible());
+    //----------------------------------------------------------------------------------------------
+    // Test unset today
+    clickMenuIndicator();
+    clickEditItem();
+    QVERIFY(dueDateExpanderItem);
+    mouseClick(dueDateExpanderItem);
+    mouseClick(m_view->itemByName("okTaskEditor"));
+    QVERIFY(!task->dueDate().isValid());
+    QVERIFY(!taskEditorItem->isVisible());
+    QVERIFY(!taskContextMenu()->isVisible());
+    //----------------------------------------------------------------------------------------------
 }

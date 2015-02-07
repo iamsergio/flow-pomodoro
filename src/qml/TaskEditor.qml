@@ -7,6 +7,7 @@ Overlay {
     id: root
     property QtObject task: null
     property string prettyDueDateString: task ? task.prettyDueDateString : ""
+    objectName: "taskEditor"
 
     contentHeight: height - contentTopMargin - _style.pageMargin - _style.marginSmall
     centerPopup: false
@@ -65,6 +66,7 @@ Overlay {
                 spacing: 5 * _controller.dpiFactor
                 FontAwesomeIcon {
                     id: dueDateExpanded
+                    objectName: "dueDateExpanded"
                     anchors.top: titleText.top
                     anchors.topMargin: 2 * _controller.dpiFactor
                     property bool expanded: root.prettyDueDateString !== ""
@@ -192,6 +194,7 @@ Overlay {
         PushButton {
             id: buttonOk
             text: qsTr("OK")
+            objectName: "okTaskEditor"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 10 * _controller.dpiFactor
