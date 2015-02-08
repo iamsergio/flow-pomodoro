@@ -97,7 +97,7 @@ static void registerQmlTypes()
                                             1, 0, "LoadManager",
                                             "LoadManager is not creatable");
 
-    qmlRegisterUncreatableType<Task>("Controller",
+    qmlRegisterUncreatableType<Task>("Task",
                                      1, 0, "Task_",
                                      "Task is not creatable");
 

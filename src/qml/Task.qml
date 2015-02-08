@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Controller 1.0
+import Task 1.0
 
 Rectangle {
     id: root
@@ -176,6 +177,8 @@ Rectangle {
             anchors.right: parent.right
             anchors.rightMargin: _style.buttonsRightMargin
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: (!root.taskObj || root.taskObj.priority === Task_.PriorityNone) ? 0
+                                                                                                          : -3 * _controller.dpiFactor
             spacing: _style.buttonsSpacing
 
             /*FontAwesomeIcon {
@@ -193,7 +196,7 @@ Rectangle {
                 id: archiveIcon
                 objectName: "archiveIcon"
                 toolTip: (taskObj !== null && taskObj.staged) ? qsTr("Queue for later") : qsTr("Queue for today")
-                size: 30
+                size: 29
                 text: (taskObj !== null && taskObj.staged) ? "\uf187" : "\uf06a"
                 visible: root.buttonsVisible
                 onClicked: {
@@ -204,7 +207,7 @@ Rectangle {
             FontAwesomeIcon {
                 id: playIcon
                 objectName: "playIcon"
-                size: 30
+                size: 29
                 text: "\uf01d"
                 visible: root.buttonsVisible && (taskObj !== null && taskObj.staged) && !_settings.pomodoroFunctionalityDisabled
                 onClicked: {
@@ -217,11 +220,32 @@ Rectangle {
         color: _style.taskTagFontColor
         text: root.taskObj ? root.taskObj.daysSinceCreation : ""
         visible: root.taskObj !== null && _settings.showTaskAge
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.rightMargin: _controller.dpiFactor * 3
+        anchors.topMargin: _controller.dpiFactor * 2
+        font.pixelSize: _controller.dpiFactor * 11
+    }
+
+    Text {
+        function colorForPriority(priority)
+        {
+            if (priority === Task_.PriorityLow) {
+                return "green"
+            } else if (priority === Task_.PriorityHigh) {
+                return "red"
+            }
+            return "white" // or whatever color
+        }
+
+        color: root.taskObj ? colorForPriority(root.taskObj.priority) : "white"
+        text: root.taskObj ? root.taskObj.priorityStr : ""
+        visible: root.taskObj !== null && root.taskObj.priority !== Controller.PriorityNone
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: _controller.dpiFactor * 3
         anchors.bottomMargin: _controller.dpiFactor * 2
-        font.pixelSize: _controller.dpiFactor * 11
+        font.pixelSize: _controller.dpiFactor * 10
     }
 
     Text {
