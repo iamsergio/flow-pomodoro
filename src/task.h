@@ -52,6 +52,7 @@ class SortedTaskContextMenuModel;
 
 class Task : public QObject, public Syncable {
     Q_OBJECT
+    Q_PROPERTY(QString priorityStr READ priorityStr NOTIFY priorityChanged)
     Q_PROPERTY(Priority priority READ priority WRITE setPriority NOTIFY priorityChanged)
     Q_PROPERTY(bool dueToday READ dueToday NOTIFY dueDateChanged)
     Q_PROPERTY(bool isOverdue READ isOverdue NOTIFY dueDateChanged)
@@ -156,6 +157,8 @@ public:
 
     void setPriority(Priority);
     Priority priority() const;
+
+    QString priorityStr() const;
 
 Q_SIGNALS:
     void priorityChanged();
