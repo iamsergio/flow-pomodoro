@@ -518,9 +518,7 @@ void Storage::connectTask(const Task::Ptr &task)
     connect(task.data(), &Task::tagsChanged, m_untaggedTasksModel,
             &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
     connect(task.data(), &Task::dueDateChanged, m_dueDateTasksModel,
-            &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
-    connect(task.data(), &Task::dueDateChanged, m_dueDateTasksModel,
-            &TaskFilterProxyModel::invalidate, Qt::UniqueConnection);
+            &TaskFilterProxyModel::invalidate, Qt::UniqueConnection); // invalidate sorting too
     connect(task.data(), &Task::statusChanged, m_stagedTasksModel,
             &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
 }
