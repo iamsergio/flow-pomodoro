@@ -65,6 +65,7 @@ Task::Task(Kernel *kernel, const QString &summary)
     , m_contextMenuModel(0)
     , m_sortedContextMenuModel(0)
     , m_kernel(kernel)
+    , m_priority(PriorityNone)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 
@@ -74,6 +75,7 @@ Task::Task(Kernel *kernel, const QString &summary)
     connect(this, &Task::statusChanged, &Task::onEdited);
     connect(this, &Task::stagedChanged, &Task::onEdited);
     connect(this, &Task::dueDateChanged, &Task::onEdited);
+    connect(this, &Task::priorityChanged, &Task::onEdited);
 
     connect(kernel, &Kernel::dayChanged, this, &Task::onDayChanged);
 
@@ -367,6 +369,9 @@ QVariantMap Task::toJson() const
     if (m_dueDate.isValid())
         map.insert("dueDate", m_dueDate.toJulianDay());
 
+    if (m_priority != PriorityNone)
+        map.insert("priority", QVariant(m_priority));
+
     return map;
 }
 
@@ -386,6 +391,7 @@ void Task::fromJson(const QVariantMap &map)
     QString description = map.value("description").toString();
     setDescription(description);
     setStaged(map.value("staged", false).toBool());
+    setPriority(static_cast<Priority>(map.value("priority", PriorityNone).toInt()));
 
     QDateTime creationDate = QDateTime::fromMSecsSinceEpoch(map.value("creationTimestamp", QDateTime()).toLongLong());
     if (creationDate.isValid()) // If invalid it uses the ones set in CTOR
@@ -545,4 +551,17 @@ bool Task::isOverdue() const
 bool Task::dueToday() const
 {
     return m_dueDate.isValid() && m_dueDate == QDate::currentDate();
+}
+
+void Task::setPriority(Priority priority)
+{
+    if (priority != m_priority) {
+        m_priority = priority;
+        emit priorityChanged();
+    }
+}
+
+Task::Priority Task::priority() const
+{
+    return m_priority;
 }

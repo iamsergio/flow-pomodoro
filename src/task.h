@@ -52,6 +52,7 @@ class SortedTaskContextMenuModel;
 
 class Task : public QObject, public Syncable {
     Q_OBJECT
+    Q_PROPERTY(Priority priority READ priority WRITE setPriority NOTIFY priorityChanged)
     Q_PROPERTY(bool dueToday READ dueToday NOTIFY dueDateChanged)
     Q_PROPERTY(bool isOverdue READ isOverdue NOTIFY dueDateChanged)
     Q_PROPERTY(QString prettyDueDateString READ prettyDueDateString NOTIFY dueDateChanged)
@@ -74,6 +75,15 @@ class Task : public QObject, public Syncable {
 public:
     typedef QSharedPointer<Task> Ptr;
     typedef GenericListModel<Ptr> List;
+
+    enum Priority {
+        // Don't change the numbering, 1 is the highest, per rfc2445
+        PriorityNone   = 0,
+        PriorityHigh,
+        PriorityMedium,
+        PriorityLow,
+    };
+    Q_ENUMS(Priority)
 
     ~Task();
 
@@ -145,7 +155,11 @@ public:
     bool isOverdue() const;
     bool dueToday() const;
 
+    void setPriority(Priority);
+    Priority priority() const;
+
 Q_SIGNALS:
+    void priorityChanged();
     void dueDateStringChanged();
     void daysSinceLastPomodoroChanged();
     void daysSinceCreationChanged();
@@ -182,6 +196,7 @@ private:
     TaskContextMenuModel *m_contextMenuModel;
     SortedTaskContextMenuModel *m_sortedContextMenuModel;
     Kernel *m_kernel;
+    Priority m_priority;
 };
 
 inline QDebug operator<<(QDebug dbg, const Task::Ptr &task)
