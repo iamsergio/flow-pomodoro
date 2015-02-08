@@ -94,7 +94,15 @@ bool TaskFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &
     if (m_filterDueDated) {
         Task::Ptr leftTask = left.data(Storage::TaskPtrRole).value<Task::Ptr>();
         Task::Ptr rightTask = right.data(Storage::TaskPtrRole).value<Task::Ptr>();
-        return leftTask->dueDate() < rightTask->dueDate();
+        if (leftTask->dueDate() == rightTask->dueDate()) {
+            if (leftTask->creationDate() == rightTask->creationDate()) {
+                return QSortFilterProxyModel::lessThan(left, right);
+            } else {
+                return leftTask->creationDate() > rightTask->creationDate();
+            }
+        } else {
+            return leftTask->dueDate() < rightTask->dueDate();
+        }
     } else {
         return QSortFilterProxyModel::lessThan(left, right);
     }

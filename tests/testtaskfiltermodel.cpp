@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2014 Sérgio Martins <iamsergio@gmail.com>
+  Copyright (C) 2014-2015 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -18,6 +18,10 @@
 */
 
 #include "testtaskfiltermodel.h"
+#include "controller.h"
+#include "storage.h"
+#include "taskfilterproxymodel.h"
+#include <QtTest/QtTest>
 
 TestTaskFilterModel::TestTaskFilterModel()
     : TestBase()
@@ -30,4 +34,28 @@ void TestTaskFilterModel::initTestCase()
 
 void TestTaskFilterModel::cleanupTestCase()
 {
+}
+
+void TestTaskFilterModel::testDueDateFiltering()
+{
+    Storage::Data emptyData;
+    m_storage->setData(emptyData);
+    m_controller->setQueueType(Controller::QueueTypeArchive);
+    m_controller->setCurrentTag(m_controller->dueDateTasksTag());
+    m_controller->addTask("task2", false);
+    m_controller->addTask("task1", false);
+
+    Task::Ptr task1 = m_storage->tasks().at(0);
+    Task::Ptr task2 = m_storage->tasks().at(1);
+
+    QCOMPARE(task1->summary(), QString("task1"));
+    QCOMPARE(task2->summary(), QString("task2"));
+
+    TaskFilterProxyModel *proxyModel = m_storage->dueDateTasksModel();
+    Task::Ptr taskAt0 = proxyModel->data(proxyModel->index(0, 0), Storage::TaskPtrRole).value<Task::Ptr>();
+    Task::Ptr taskAt1 = proxyModel->data(proxyModel->index(1, 0), Storage::TaskPtrRole).value<Task::Ptr>();
+
+    QCOMPARE(task1->summary(), taskAt0->summary());
+    QCOMPARE(task2->summary(), taskAt1->summary());
+
 }
