@@ -227,6 +227,10 @@ public:
     int selectedTaskIndex() const;
 
 public Q_SLOTS:
+
+    void dismissTaskMenuDelayed();
+    void dismissTaskMenu();
+
     void updateWebDavCredentials();
     void setCurrentTag(Tag *);
     void addTask(const QString &text, bool startEditMode);

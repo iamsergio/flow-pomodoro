@@ -1342,3 +1342,14 @@ int Controller::selectedTaskIndex() const
 {
     return m_selectedTaskIndex;
 }
+
+void Controller::dismissTaskMenu()
+{
+    setRightClickedTask(0);
+}
+
+void Controller::dismissTaskMenuDelayed()
+{
+    // No technical reason for calling it delayed. Just looks better when using the UI.
+    QTimer::singleShot(200, this, &Controller::dismissTaskMenu);
+}

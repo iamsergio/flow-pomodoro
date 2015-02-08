@@ -37,6 +37,11 @@ Item {
 
         onChoiceToggled: {
             _controller.rightClickedTask.toggleTag(itemText)
+            if (checkState && _controller.rightClickedTask.contextMenuModel.tagOnlyMenu) {
+                // When adding a new task we get an automatic tag only context menu
+                // dismiss after choosing 1 tag, for convinence
+                _controller.dismissTaskMenuDelayed()
+            }
         }
 
         onDismissPopup: {
