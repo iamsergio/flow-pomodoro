@@ -80,7 +80,6 @@ public:
         // Don't change the numbering, 1 is the highest, per rfc2445
         PriorityNone   = 0,
         PriorityHigh,
-        PriorityMedium,
         PriorityLow,
     };
     Q_ENUMS(Priority)
