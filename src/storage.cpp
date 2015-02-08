@@ -519,6 +519,8 @@ void Storage::connectTask(const Task::Ptr &task)
             &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
     connect(task.data(), &Task::dueDateChanged, m_dueDateTasksModel,
             &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
+    connect(task.data(), &Task::dueDateChanged, m_dueDateTasksModel,
+            &TaskFilterProxyModel::invalidate, Qt::UniqueConnection);
     connect(task.data(), &Task::statusChanged, m_stagedTasksModel,
             &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
 }

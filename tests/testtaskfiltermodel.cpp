@@ -55,7 +55,16 @@ void TestTaskFilterModel::testDueDateFiltering()
     Task::Ptr taskAt0 = proxyModel->data(proxyModel->index(0, 0), Storage::TaskPtrRole).value<Task::Ptr>();
     Task::Ptr taskAt1 = proxyModel->data(proxyModel->index(1, 0), Storage::TaskPtrRole).value<Task::Ptr>();
 
-    QCOMPARE(task1->summary(), taskAt0->summary());
-    QCOMPARE(task2->summary(), taskAt1->summary());
+    QCOMPARE(task1, taskAt0);
+    QCOMPARE(task2, taskAt1);
 
+    QDate today = QDate::currentDate();
+    task1->setDueDate(today.addDays(2));
+    task2->setDueDate(today.addDays(1));
+
+    taskAt0 = proxyModel->data(proxyModel->index(0, 0), Storage::TaskPtrRole).value<Task::Ptr>();
+    taskAt1 = proxyModel->data(proxyModel->index(1, 0), Storage::TaskPtrRole).value<Task::Ptr>();
+
+    QCOMPARE(task1, taskAt1);
+    QCOMPARE(task2, taskAt0);
 }
