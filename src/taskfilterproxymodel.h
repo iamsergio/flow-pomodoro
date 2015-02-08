@@ -45,6 +45,7 @@ private Q_SLOTS:
     void onSourceCountChanged();
 
 private:
+    bool defaultLessThan(const Task::Ptr &leftTask, const Task::Ptr &rightTask) const;
     QString m_tagText;
     bool m_filterUntagged;
     int m_previousCount;

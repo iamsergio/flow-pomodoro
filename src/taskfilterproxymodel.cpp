@@ -91,20 +91,16 @@ bool TaskFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &s
 
 bool TaskFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
+    Task::Ptr leftTask = left.data(Storage::TaskPtrRole).value<Task::Ptr>();
+    Task::Ptr rightTask = right.data(Storage::TaskPtrRole).value<Task::Ptr>();
     if (m_filterDueDated) {
-        Task::Ptr leftTask = left.data(Storage::TaskPtrRole).value<Task::Ptr>();
-        Task::Ptr rightTask = right.data(Storage::TaskPtrRole).value<Task::Ptr>();
         if (leftTask->dueDate() == rightTask->dueDate()) {
-            if (leftTask->creationDate() == rightTask->creationDate()) {
-                return QSortFilterProxyModel::lessThan(left, right);
-            } else {
-                return leftTask->creationDate() > rightTask->creationDate();
-            }
+            return defaultLessThan(leftTask, rightTask);
         } else {
             return leftTask->dueDate() < rightTask->dueDate();
         }
     } else {
-        return QSortFilterProxyModel::lessThan(left, right);
+        return defaultLessThan(leftTask, rightTask);
     }
 }
 
@@ -148,4 +144,20 @@ void TaskFilterProxyModel::onSourceCountChanged()
 {
     emit countChanged(rowCount(), m_previousCount);
     m_previousCount = rowCount();
+}
+
+bool TaskFilterProxyModel::defaultLessThan(const Task::Ptr &leftTask, const Task::Ptr &rightTask) const
+{
+    const int leftPriority = leftTask->priority() == Task::PriorityNone ? 1000 : leftTask->priority();
+    const int rightPriority = rightTask->priority() == Task::PriorityNone ? 1000 : rightTask->priority();
+
+    if (leftPriority == rightPriority) {
+        if (leftTask->creationDate() == rightTask->creationDate()) {
+            return leftTask->summary() < rightTask->summary();
+        } else {
+            return leftTask->creationDate() > rightTask->creationDate();
+        }
+    } else {
+        return leftPriority < rightPriority;
+    }
 }
