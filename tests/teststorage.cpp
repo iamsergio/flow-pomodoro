@@ -190,10 +190,11 @@ void TestStorage::testPrependTask()
     Task::Ptr task0 = m_storage->prependTask("t1");
     Task::Ptr task1 = m_storage->prependTask("t2");
     Task::Ptr task2 = m_storage->prependTask("t3");
+    auto tasks = m_storage->tasks();
 
-    QCOMPARE(task0, m_storage->taskAt(2));
-    QCOMPARE(task1, m_storage->taskAt(1));
-    QCOMPARE(task2, m_storage->taskAt(0));
+    QCOMPARE(task0, tasks.at(2));
+    QCOMPARE(task1, tasks.at(1));
+    QCOMPARE(task2, tasks.at(0));
 
     QCOMPARE(2, m_storage->indexOfItem(m_storage->tasks(), task0));
     QCOMPARE(1, m_storage->indexOfItem(m_storage->tasks(), task1));
