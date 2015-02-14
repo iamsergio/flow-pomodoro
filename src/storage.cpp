@@ -521,6 +521,11 @@ void Storage::connectTask(const Task::Ptr &task)
             &TaskFilterProxyModel::invalidate, Qt::UniqueConnection); // invalidate sorting too
     connect(task.data(), &Task::statusChanged, m_stagedTasksModel,
             &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
+
+    connect(task.data(), &Task::priorityChanged, m_stagedTasksModel,
+            &ArchivedTasksFilterModel::invalidate, Qt::UniqueConnection);
+    connect(task.data(), &Task::priorityChanged, m_archivedTasksModel,
+            &ArchivedTasksFilterModel::invalidate, Qt::UniqueConnection);
 }
 
 void Storage::removeTask(const Task::Ptr &task)

@@ -61,6 +61,7 @@ private Q_SLOTS:
     void testEnterDismissMenu();
     void testNewTagDialog();
     void testDueDate();
+    void testPriority();
 private:
     QQuickItem *m_archiveView = nullptr;
     QQuickItem *m_stagedView = nullptr;

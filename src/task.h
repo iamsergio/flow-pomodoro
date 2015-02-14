@@ -80,8 +80,8 @@ public:
     enum Priority {
         // Don't change the numbering, 1 is the highest, per rfc2445
         PriorityNone   = 0,
-        PriorityHigh,
-        PriorityLow,
+        PriorityHigh   = 1,
+        PriorityLow    = 10,
     };
     Q_ENUMS(Priority)
 

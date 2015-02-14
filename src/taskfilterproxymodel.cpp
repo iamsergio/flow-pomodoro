@@ -36,6 +36,8 @@ TaskFilterProxyModel::TaskFilterProxyModel(QObject *parent)
             this, &TaskFilterProxyModel::onSourceCountChanged);
     connect(this, &TaskFilterProxyModel::layoutChanged,
             this, &TaskFilterProxyModel::onSourceCountChanged);
+
+    sort(0);
 }
 
 int TaskFilterProxyModel::count() const
@@ -148,8 +150,8 @@ void TaskFilterProxyModel::onSourceCountChanged()
 
 bool TaskFilterProxyModel::defaultLessThan(const Task::Ptr &leftTask, const Task::Ptr &rightTask) const
 {
-    const int leftPriority = leftTask->priority() == Task::PriorityNone ? 1000 : leftTask->priority();
-    const int rightPriority = rightTask->priority() == Task::PriorityNone ? 1000 : rightTask->priority();
+    const int leftPriority = leftTask->priority() == Task::PriorityNone ? 9 : leftTask->priority();
+    const int rightPriority = rightTask->priority() == Task::PriorityNone ? 9 : rightTask->priority();
 
     if (leftPriority == rightPriority) {
         if (leftTask->creationDate() == rightTask->creationDate()) {

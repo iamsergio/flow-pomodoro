@@ -434,3 +434,24 @@ void TestUI::testDueDate()
     QVERIFY(!taskContextMenu()->isVisible());
     //----------------------------------------------------------------------------------------------
 }
+
+void TestUI::testPriority()
+{
+    //----------------------------------------------------------------------------------------------
+    // Clear tasks
+    gotoToday();
+    Storage::Data data = m_storage->data();
+    data.tasks.clear();
+    m_storage->setData(data);
+    newTask(true);
+    //----------------------------------------------------------------------------------------------
+    // Create initial task, of high priority
+    auto task1 = m_storage->tasks().at(0);
+    task1->setPriority(Task::PriorityHigh);
+    //----------------------------------------------------------------------------------------------
+    // Create second task
+    // Tests a bug, where the previous task would be editing inline, instead of the new task
+    newTask(true);
+    //----------------------------------------------------------------------------------------------
+    // TODO: Lots of priority tasks missing
+}
