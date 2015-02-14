@@ -15,13 +15,9 @@ ListView {
         // HACK: For some reason the first inserted element takes more than 1 event loop.
         // It doesn't go immediately into the list view after we insert it into the model in controller.cpp
         // that event loop run breaks focus, so restore it here.
-
         // Make the newly inserted task visible
-        var indexToFocus = 0 // root.count - 1
-        if (_controller.editMode !== Controller.EditModeNone)
-           currentIndex = indexToFocus
 
-        _controller.forceFocus(indexToFocus)
+        _controller.forceFocusOnTaskBeingEdited()
     }
 
     delegate: Task {

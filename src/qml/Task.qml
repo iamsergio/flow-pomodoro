@@ -131,6 +131,7 @@ Rectangle {
             id: taskTextFieldComponent
             TaskTextField {
                 id: textField
+                task: root.taskObj
                 objectName: "inline text field"
                 visible: root.inlineEditMode
                 anchors.fill: parent

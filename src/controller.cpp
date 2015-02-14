@@ -740,6 +740,12 @@ void Controller::setStartupFinished()
     emit startupFinishedChanged();
 }
 
+void Controller::forceFocusOnTaskBeingEdited()
+{
+    if (m_editMode == EditModeInline && m_taskBeingEdited)
+        emit forceFocus(m_taskBeingEdited);
+}
+
 void Controller::updateExtendedTagModel()
 {
     Tag::List extraTags;
@@ -1208,10 +1214,8 @@ void Controller::addTask(const QString &text, bool startEditMode)
 
     if (startEditMode) {
         setExpanded(true);
-        //int lastIndex = m_storage->taskFilterModel()->rowCount()-1;
-        int lastIndex = 0;
-        editTask(m_storage->taskAt(lastIndex).data(), EditModeInline);
-        emit forceFocus(lastIndex);
+        editTask(task.data(), EditModeInline);
+        forceFocusOnTaskBeingEdited();
         emit addingNewTask();
         m_addingTask = true;
     }

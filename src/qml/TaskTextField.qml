@@ -7,6 +7,7 @@ import Controller 1.0
 TextField {
     id: textField
     property int taskIndex: -1
+    property QtObject task: null
     text: _controller.taskBeingEdited.summary
     focus: true
     onVisibleChanged: {
@@ -20,7 +21,7 @@ TextField {
     Connections {
         target: _controller
         onForceFocus: {
-            if (textField.visible && index === taskIndex && taskIndex !== -1) {
+            if (textField.visible && task === root.taskObj) {
                 textField.forceActiveFocus()
                 textField.selectAll()
             }

@@ -265,6 +265,7 @@ public Q_SLOTS:
     void webDavSync();
     void setRightClickedTask(Task *, bool tagOnlyMenu = false);
     void toggleConfigurePage();
+    void forceFocusOnTaskBeingEdited();
 
 private Q_SLOTS:
     void onTimerTick();
@@ -291,7 +292,7 @@ Q_SIGNALS:
     void expandedChanged();
     void firstSecondsAfterAddingChanged();
     void currentPageChanged();
-    void forceFocus(int index);
+    void forceFocus(Task *task);
     void currentTaskChanged();
     void popupVisibleChanged();
     void popupTextChanged();
