@@ -64,6 +64,9 @@ void TestUI::expectedArchivedTasks(int num)
 void TestUI::newTask(bool dismissMenu)
 {
     mouseClick("addIconItem");
+    QCOMPARE(m_controller->editMode(), Controller::EditModeInline);
+    QVERIFY(m_controller->taskBeingEdited());
+    QCOMPARE(m_controller->taskBeingEdited()->summary(), QString("New Task"));
     sendText("test task1");
     sendKey(Qt::Key_Enter);
     if (dismissMenu)
