@@ -11,6 +11,14 @@ Overlay {
 
     contentHeight: height - contentTopMargin - _style.pageMargin - _style.marginSmall
     centerPopup: false
+
+    ListModel {
+        id: priorityModel
+        ListElement { label: "none"; priorityValue: 0; priorityColor: "black" }
+        ListElement { label: "low"; priorityValue: 10; priorityColor: "green" }
+        ListElement { label: "high"; priorityValue: 1; priorityColor: "red" }
+    }
+
     contentItem:
     Item {
         anchors.fill: parent
@@ -56,6 +64,51 @@ Overlay {
                     anchors.top: textInput.bottom
                     anchors.left: textInput.left
                     color: "black"
+                }
+            }
+            Item {
+                height: 20 * _controller.dpiFactor
+                width: parent.width
+                Text {
+                    id: priorityText
+                    text: qsTr("Priority") + ":"
+                    anchors.left: parent.left
+                    font.pixelSize: 13 * _controller.dpiFactor
+                }
+
+
+                Row {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 10 * _controller.dpiFactor
+                    Repeater {
+                        model: priorityModel
+                        Item {
+                            height: priText.height + 5 * _controller.dpiFactor
+                            width: priText.width + 10 * _controller.dpiFactor
+                            Text {
+                                id: priText
+                                text: label
+                                color: "black"
+                                font.pixelSize: 14 * _controller.dpiFactor
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
+                            Rectangle {
+                                height: 3 * _controller.dpiFactor
+                                color: priorityColor
+                                anchors.bottom: parent.bottom
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                visible: root.task && root.task.priority === priorityValue
+                            }
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    root.task.priority = priorityValue
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
