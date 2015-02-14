@@ -125,7 +125,7 @@ public:
     TaskFilterProxyModel* dueDateTasksModel() const;
     ArchivedTasksFilterModel* stagedTasksModel() const;
     ArchivedTasksFilterModel* archivedTasksModel() const;
-    Task::Ptr taskAt(int proxyIndex) const;
+    Task::Ptr taskAt(int index) const;
     Task::Ptr addTask(const QString &taskText, const QString &uid = QString());
     Task::Ptr prependTask(const QString &taskText);
     void removeTask(const Task::Ptr &task);

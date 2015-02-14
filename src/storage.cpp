@@ -479,9 +479,9 @@ QByteArray Storage::instanceId()
     return m_data.instanceId;
 }
 
-Task::Ptr Storage::taskAt(int proxyIndex) const
+Task::Ptr Storage::taskAt(int index) const
 {
-    return m_data.tasks.value(proxyRowToSource(proxyIndex));
+    return m_data.tasks.value(index);
 }
 
 Task::Ptr Storage::addTask(const QString &taskText, const QString &uid)
