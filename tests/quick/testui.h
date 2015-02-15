@@ -21,6 +21,7 @@
 #define TEST_UI_H
 
 #include "testbase.h"
+#include "task.h"
 #include <QObject>
 
 class QQuickItem;
@@ -39,12 +40,15 @@ private:
     void newTask(bool dismissMenu = false);
     QQuickItem *taskContextMenu() const;
     QQuickItem *newTagDialog() const;
-    QQuickItem *menuIndicator() const;
+    QQuickItem *menuIndicator(int index) const;
     QQuickItem *taskEditor() const;
     QQuickItem *dueDateExpander() const;
     void refreshEditItem();
     void clickEditItem();
-    void clickMenuIndicator();
+    void okTaskEditor();
+    void clickMenuIndicator(int index);
+    QList<QQuickItem*> taskItems(QQuickItem* view) const;
+    Task::List tasksForItems(QList<QQuickItem*> items) const;
 
 private Q_SLOTS:
     void initTestCase();

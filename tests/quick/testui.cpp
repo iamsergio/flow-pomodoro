@@ -83,12 +83,12 @@ QQuickItem *TestUI::newTagDialog() const
     return m_view->itemByName("newTagDialog");
 }
 
-QQuickItem *TestUI::menuIndicator() const
+QQuickItem *TestUI::menuIndicator(int index) const
 {
     auto view = m_controller->queueType() == Controller::QueueTypeToday ? m_stagedView
                                                                         : m_archiveView;
     auto items = m_view->itemsByName("menuIndicator", view);
-    return items.isEmpty() ? nullptr : items.first();
+    return items.isEmpty() ? nullptr : items.at(index);
 }
 
 QQuickItem *TestUI::taskEditor() const
@@ -118,12 +118,35 @@ void TestUI::clickEditItem()
     mouseClick(m_editItem);
 }
 
-void TestUI::clickMenuIndicator()
+void TestUI::okTaskEditor()
 {
-    auto indicatorItem = menuIndicator();
+    auto item = m_view->itemByName("okTaskEditor");
+    QVERIFY(item);
+    QVERIFY(item->isVisible());
+    mouseClick(item);
+}
+
+void TestUI::clickMenuIndicator(int index)
+{
+    auto indicatorItem = menuIndicator(index);
     QVERIFY(m_stagedView->isVisible());
     QVERIFY(indicatorItem);
     mouseClick(indicatorItem);
+}
+
+QList<QQuickItem *> TestUI::taskItems(QQuickItem *view) const
+{
+    return m_view->itemsByName("taskItem", view);
+}
+
+Task::List TestUI::tasksForItems(QList<QQuickItem *> items) const
+{
+    Task::List tasks;
+    foreach (auto item, items) {
+        Task* task = item->property("taskObj").value<Task*>();
+        tasks << task->toStrongRef();
+    }
+    return tasks;
 }
 
 void TestUI::gotoLater()
@@ -399,7 +422,7 @@ void TestUI::testDueDate()
     QVERIFY(!task->dueDate().isValid());
     //----------------------------------------------------------------------------------------------
     // Test that Esc dismisses
-    clickMenuIndicator();
+    clickMenuIndicator(0);
     clickEditItem();
     auto taskEditorItem = taskEditor();
     QVERIFY(taskEditorItem);
@@ -410,7 +433,7 @@ void TestUI::testDueDate()
     QVERIFY(!taskContextMenu()->isVisible());
     //----------------------------------------------------------------------------------------------
     // Test set today
-    clickMenuIndicator();
+    clickMenuIndicator(0);
     clickEditItem();
     auto dueDateExpanderItem = dueDateExpander();
     QVERIFY(dueDateExpanderItem);
@@ -422,11 +445,11 @@ void TestUI::testDueDate()
     QVERIFY(!taskContextMenu()->isVisible());
     //----------------------------------------------------------------------------------------------
     // Test unset today
-    clickMenuIndicator();
+    clickMenuIndicator(0);
     clickEditItem();
     QVERIFY(dueDateExpanderItem);
     mouseClick(dueDateExpanderItem);
-    mouseClick(m_view->itemByName("okTaskEditor"));
+    okTaskEditor();
     QVERIFY(!task->dueDate().isValid());
     QVERIFY(!taskEditorItem->isVisible());
     QVERIFY(!taskContextMenu()->isVisible());
@@ -449,5 +472,54 @@ void TestUI::testPriority()
     // Tests a bug, where the previous task would be editing inline, instead of the new task
     newTask(true);
     //----------------------------------------------------------------------------------------------
-    // TODO: Lots of priority tasks missing
+    // Test ordering, after setting priority
+    clearTasks();
+    task1 = m_storage->addTask("task1");
+    auto task2 = m_storage->addTask("task2");
+    auto task3 = m_storage->addTask("task3");
+    task1->setStaged(true);
+    task2->setStaged(true);
+    task3->setStaged(true);
+    QTest::qWait(400); // The view takes more than 1 event loop to fill
+
+    auto tasks = tasksForItems(taskItems(m_stagedView));
+    QCOMPARE(tasks.count(), 3);
+
+    // Newest tasks come first
+    QCOMPARE(tasks.at(0), task3);
+    QCOMPARE(tasks.at(1), task2);
+    QCOMPARE(tasks.at(2), task1);
+
+    // Now set high priority on task1
+    clickMenuIndicator(2);
+    clickEditItem();
+    auto priorityRow = m_view->itemByName("priorityRow");
+    QVERIFY(priorityRow);
+    qDebug() << priorityRow->children();
+    auto highItem = priorityRow->childItems().at(2);
+    QVERIFY(highItem);
+    m_view->mouseClick(highItem);
+    okTaskEditor();
+
+    tasks = tasksForItems(taskItems(m_stagedView));
+    QCOMPARE(tasks.at(0), task1); // high pri
+    QCOMPARE(tasks.at(1), task3);
+    QCOMPARE(tasks.at(2), task2);
+
+    // Now set low pri for task3
+    clickMenuIndicator(1);
+    clickEditItem();
+    QVERIFY(priorityRow);
+    auto lowItem = priorityRow->childItems().at(0);
+    QVERIFY(lowItem);
+    m_view->mouseClick(lowItem);
+    okTaskEditor();
+
+    tasks = tasksForItems(taskItems(m_stagedView));
+    QCOMPARE(tasks.at(0), task1); // high pri
+    QCOMPARE(tasks.at(1), task2);
+    QCOMPARE(tasks.at(2), task3);
+
+    //----------------------------------------------------------------------------------------------
+
 }

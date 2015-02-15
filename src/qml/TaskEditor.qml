@@ -78,6 +78,7 @@ Overlay {
 
 
                 Row {
+                    objectName: "priorityRow"
                     anchors.horizontalCenter: parent.horizontalCenter
                     spacing: 10 * _controller.dpiFactor
                     Repeater {
