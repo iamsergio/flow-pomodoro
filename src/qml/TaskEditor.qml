@@ -14,8 +14,8 @@ Overlay {
 
     ListModel {
         id: priorityModel
-        ListElement { label: "none"; priorityValue: 0; priorityColor: "black" }
         ListElement { label: "low"; priorityValue: 10; priorityColor: "green" }
+        ListElement { label: "none"; priorityValue: 0; priorityColor: "black" }
         ListElement { label: "high"; priorityValue: 1; priorityColor: "red" }
     }
 
