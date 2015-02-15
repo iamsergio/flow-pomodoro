@@ -24,7 +24,6 @@
 #include "extendedtagsmodel.h"
 #include "jsonstorage.h"
 #include "sortedtagsmodel.h"
-#include "archivedtasksfiltermodel.h"
 #include "taskfilterproxymodel.h"
 #include "webdavsyncer.h"
 #include "runtimeconfiguration.h"
@@ -67,8 +66,8 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     , m_taskFilterModel(new TaskFilterProxyModel(this))
     , m_untaggedTasksModel(new TaskFilterProxyModel(this))
     , m_dueDateTasksModel(new TaskFilterProxyModel(this))
-    , m_stagedTasksModel(new ArchivedTasksFilterModel(this))
-    , m_archivedTasksModel(new ArchivedTasksFilterModel(this))
+    , m_stagedTasksModel(new TaskFilterProxyModel(this))
+    , m_archivedTasksModel(new TaskFilterProxyModel(this))
     , m_nonEmptyTagsModel(new NonEmptyTagFilterProxy(this))
     , m_extendedTagsModel(new ExtendedTagsModel(this))
     , m_savingInProgress(false)
@@ -108,10 +107,10 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     m_data.tasks.insertRole("task", Q_NULLPTR, TaskRole);
     m_data.tasks.insertRole("taskPtr", Q_NULLPTR, TaskPtrRole);
     m_stagedTasksModel->setSourceModel(m_data.tasks);
-    m_stagedTasksModel->setAcceptArchived(false);
+    m_stagedTasksModel->setFilterStaged(true);
 
     m_archivedTasksModel->setSourceModel(m_data.tasks);
-    m_archivedTasksModel->setAcceptArchived(true);
+    m_archivedTasksModel->setFilterArchived(true);
     m_untaggedTasksModel->setFilterUntagged(true);
     m_untaggedTasksModel->setObjectName("Untagged and archived tasks model");
     m_dueDateTasksModel->setFilterDueDated(true);
@@ -391,12 +390,12 @@ TaskFilterProxyModel *Storage::dueDateTasksModel() const
 }
 
 
-ArchivedTasksFilterModel *Storage::stagedTasksModel() const
+TaskFilterProxyModel *Storage::stagedTasksModel() const
 {
     return m_stagedTasksModel;
 }
 
-ArchivedTasksFilterModel *Storage::archivedTasksModel() const
+TaskFilterProxyModel *Storage::archivedTasksModel() const
 {
     return m_archivedTasksModel;
 }
@@ -512,20 +511,20 @@ void Storage::connectTask(const Task::Ptr &task)
     connect(task.data(), &Task::changed, this,
             &Storage::scheduleSave, Qt::UniqueConnection);
     connect(task.data(), &Task::stagedChanged, m_stagedTasksModel,
-            &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
+            &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
     connect(task.data(), &Task::stagedChanged, m_archivedTasksModel,
-            &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
+            &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
     connect(task.data(), &Task::tagsChanged, m_untaggedTasksModel,
             &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
     connect(task.data(), &Task::dueDateChanged, m_dueDateTasksModel,
             &TaskFilterProxyModel::invalidate, Qt::UniqueConnection); // invalidate sorting too
     connect(task.data(), &Task::statusChanged, m_stagedTasksModel,
-            &ArchivedTasksFilterModel::invalidateFilter, Qt::UniqueConnection);
+            &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
 
     connect(task.data(), &Task::priorityChanged, m_stagedTasksModel,
-            &ArchivedTasksFilterModel::invalidate, Qt::UniqueConnection);
+            &TaskFilterProxyModel::invalidate, Qt::UniqueConnection);
     connect(task.data(), &Task::priorityChanged, m_archivedTasksModel,
-            &ArchivedTasksFilterModel::invalidate, Qt::UniqueConnection);
+            &TaskFilterProxyModel::invalidate, Qt::UniqueConnection);
 }
 
 void Storage::removeTask(const Task::Ptr &task)

@@ -30,7 +30,6 @@
 
 class Kernel;
 class SortedTagsModel;
-class ArchivedTasksFilterModel;
 class TaskFilterProxyModel;
 class NonEmptyTagFilterProxy;
 class ExtendedTagsModel;
@@ -50,8 +49,8 @@ class Storage : public QObject
     Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged)
     Q_PROPERTY(QAbstractItemModel* nonEmptyTagsModel READ nonEmptyTagsModel CONSTANT)
     Q_PROPERTY(QAbstractItemModel* tagsModel READ tagsModel CONSTANT)
-    Q_PROPERTY(ArchivedTasksFilterModel* stagedTasksModel READ stagedTasksModel CONSTANT)
-    Q_PROPERTY(ArchivedTasksFilterModel* archivedTasksModel READ archivedTasksModel CONSTANT)
+    Q_PROPERTY(TaskFilterProxyModel* stagedTasksModel READ stagedTasksModel CONSTANT)
+    Q_PROPERTY(TaskFilterProxyModel* archivedTasksModel READ archivedTasksModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* taskFilterModel READ taskFilterModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* untaggedTasksModel READ untaggedTasksModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* dueDateTasksModel READ dueDateTasksModel CONSTANT)
@@ -123,8 +122,8 @@ public:
     TaskFilterProxyModel* taskFilterModel() const;
     TaskFilterProxyModel* untaggedTasksModel() const;
     TaskFilterProxyModel* dueDateTasksModel() const;
-    ArchivedTasksFilterModel* stagedTasksModel() const;
-    ArchivedTasksFilterModel* archivedTasksModel() const;
+    TaskFilterProxyModel* stagedTasksModel() const;
+    TaskFilterProxyModel* archivedTasksModel() const;
     Task::Ptr taskAt(int index) const;
     Task::Ptr addTask(const QString &taskText, const QString &uid = QString());
     Task::Ptr prependTask(const QString &taskText);
@@ -185,8 +184,8 @@ private:
     TaskFilterProxyModel *m_taskFilterModel;
     TaskFilterProxyModel *m_untaggedTasksModel;
     TaskFilterProxyModel *m_dueDateTasksModel;
-    ArchivedTasksFilterModel *m_stagedTasksModel;
-    ArchivedTasksFilterModel *m_archivedTasksModel;
+    TaskFilterProxyModel *m_stagedTasksModel;
+    TaskFilterProxyModel *m_archivedTasksModel;
     NonEmptyTagFilterProxy* m_nonEmptyTagsModel;
     ExtendedTagsModel *m_extendedTagsModel;
     bool m_savingInProgress;

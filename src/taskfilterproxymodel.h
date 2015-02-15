@@ -36,6 +36,8 @@ public:
     void setTagName(const QString &);
     void setFilterUntagged(bool filter);
     void setFilterDueDated(bool filter);
+    void setFilterArchived(bool filter);
+    void setFilterStaged(bool filter);
     void invalidateFilter();
     void setSourceModel(QAbstractItemModel *sourceModel) Q_DECL_OVERRIDE;
 
@@ -50,6 +52,8 @@ private:
     bool m_filterUntagged;
     int m_previousCount;
     bool m_filterDueDated;
+    bool m_filterArchived;
+    bool m_filterStaged;
 };
 
 #endif

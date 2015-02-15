@@ -27,6 +27,8 @@ TaskFilterProxyModel::TaskFilterProxyModel(QObject *parent)
     , m_filterUntagged(false)
     , m_previousCount(0)
     , m_filterDueDated(false)
+    , m_filterArchived(false)
+    , m_filterStaged(false)
 {
     connect(this, &TaskFilterProxyModel::rowsInserted,
             this, &TaskFilterProxyModel::onSourceCountChanged);
@@ -71,12 +73,17 @@ bool TaskFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &s
     if (task->status() == TaskStarted)
         return false;
 
+    if (m_filterArchived && task->staged())
+        return false;
+
+    if (m_filterStaged && !task->staged())
+        return false;
+
     if (m_filterUntagged)
         return task->tags().isEmpty();
 
-    if (m_filterDueDated) {
+    if (m_filterDueDated)
         return task->dueDate().isValid();
-    }
 
     if (m_tagText.isEmpty())
         return true;
@@ -126,6 +133,26 @@ void TaskFilterProxyModel::setFilterDueDated(bool filter)
 {
     if (m_filterDueDated != filter) {
         m_filterDueDated = filter;
+        invalidateFilter();
+    }
+}
+
+void TaskFilterProxyModel::setFilterArchived(bool filter)
+{
+    if (filter != m_filterArchived) {
+        m_filterArchived = filter;
+        if (filter)
+            setFilterStaged(false);
+        invalidateFilter();
+    }
+}
+
+void TaskFilterProxyModel::setFilterStaged(bool filter)
+{
+    if (filter != m_filterStaged) {
+        m_filterStaged = filter;
+        if (filter)
+            setFilterArchived(false);
         invalidateFilter();
     }
 }
