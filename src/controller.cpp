@@ -22,7 +22,6 @@
 #include "settings.h"
 #include "taskcontextmenumodel.h"
 #include "taskfilterproxymodel.h"
-#include "archivedtasksfiltermodel.h"
 #include "extendedtagsmodel.h"
 #include "sortedtaskcontextmenumodel.h"
 #include "storage.h"

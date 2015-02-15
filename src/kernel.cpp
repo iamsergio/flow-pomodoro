@@ -25,7 +25,6 @@
 #include "settings.h"
 #include "circularprogressindicator.h"
 #include "taskfilterproxymodel.h"
-#include "archivedtasksfiltermodel.h"
 #include "task.h"
 #include "tag.h"
 #include "settings.h"
@@ -73,9 +72,6 @@ static void registerQmlTypes()
                                                      1, 0, "TaskFilterProxyModel",
                                                      "TaskFilterProxyModel is not creatable");
 
-    qmlRegisterUncreatableType<ArchivedTasksFilterModel>("Controller",
-                                                         1, 0, "ArchivedTasksFilterModel",
-                                                         "ArchivedTasksFilterModel is not creatable");
 
     qmlRegisterUncreatableType<ExtendedTagsModel>("Controller",
                                                   1, 0, "ExtendedTagsModel",

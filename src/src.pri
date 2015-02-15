@@ -1,7 +1,6 @@
 QT += quick
 
-SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
-           $$PWD/checkabletagmodel.cpp \
+SOURCES += $$PWD/checkabletagmodel.cpp \
            $$PWD/circularprogressindicator.cpp \
            $$PWD/checkbox.cpp \
            $$PWD/controller.cpp  \
@@ -26,8 +25,7 @@ SOURCES += $$PWD/archivedtasksfiltermodel.cpp \
            $$PWD/tooltipcontroller.cpp \
            $$PWD/utils.cpp
 
-HEADERS += $$PWD/archivedtasksfiltermodel.h \
-           $$PWD/checkabletagmodel.h \
+HEADERS += $$PWD/checkabletagmodel.h \
            $$PWD/checkbox.h \
            $$PWD/circularprogressindicator.h \
            $$PWD/controller.h      \

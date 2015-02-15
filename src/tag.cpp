@@ -19,7 +19,6 @@
 
 #include "tag.h"
 #include "taskfilterproxymodel.h"
-#include "archivedtasksfiltermodel.h"
 #include "taskfilterproxymodel.h"
 #if defined(UNIT_TEST_RUN)
 # include "assertingproxymodel.h"

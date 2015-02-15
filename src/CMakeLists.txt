@@ -1,6 +1,5 @@
 
 set(flow_SRC
-    archivedtasksfiltermodel.cpp
     checkabletagmodel.cpp
     circularprogressindicator.cpp
     checkbox.cpp
