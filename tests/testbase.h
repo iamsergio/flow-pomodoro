@@ -49,6 +49,7 @@ public:
     void mouseClick(const QString &objectName);
     void sendText(const QString &text);
     void sendKey(int key, const QString &text = "", Qt::KeyboardModifiers modifiers = 0);
+    void clearTasks();
 protected:
     Kernel *m_kernel;
     QuickView *m_view;

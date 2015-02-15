@@ -171,3 +171,10 @@ void TestBase::sendKey(int key, const QString &text, Qt::KeyboardModifiers modif
 {
     m_view->sendKey(key, text, modifiers);
 }
+
+void TestBase::clearTasks()
+{
+    Storage::Data data = m_storage->data();
+    data.tasks.clear();
+    m_storage->setData(data);
+}

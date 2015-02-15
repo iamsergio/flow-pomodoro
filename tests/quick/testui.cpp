@@ -392,9 +392,7 @@ void TestUI::testNewTagDialog()
 void TestUI::testDueDate()
 {
     gotoToday();
-    Storage::Data data = m_storage->data();
-    data.tasks.clear();
-    m_storage->setData(data);
+    clearTasks();
     newTask(true);
     m_settings->setSupportsDueDate(true);
     Task::Ptr task = m_storage->tasks().at(0);
@@ -440,9 +438,7 @@ void TestUI::testPriority()
     //----------------------------------------------------------------------------------------------
     // Clear tasks
     gotoToday();
-    Storage::Data data = m_storage->data();
-    data.tasks.clear();
-    m_storage->setData(data);
+    clearTasks();
     newTask(true);
     //----------------------------------------------------------------------------------------------
     // Create initial task, of high priority
