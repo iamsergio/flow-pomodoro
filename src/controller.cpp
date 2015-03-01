@@ -1162,9 +1162,9 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
         Task *previousTask = m_taskBeingEdited.data();
         m_taskBeingEdited.clear(); // clear before calling requestContextMenu, due to re-entrancy of editTask(nullptr) being called by requestContextMenu()
 
-        if (m_addingTask) {
+        if (m_addingTask && previousTask) {
             m_addingTask = false;
-            QString summary = previousTask ? previousTask->summary() : QString();
+            QString summary = previousTask->summary();
             if (m_queueType == QueueTypeToday) {
                 Tag::Ptr tag = tagForSummary(/*by-ref*/summary); // transforms "books: foo" into "foo" + tag books
                 if (tag) {
