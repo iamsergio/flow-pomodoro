@@ -72,6 +72,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_pomodoroStartTimeStamp(0)
     , m_textRenderType(NativeRendering)
     , m_loadManager(new LoadManager(this))
+    , m_addingTask(false)
     , m_currentMenuIndex(-1)
     , m_expertMode(false)
     , m_selectedTaskIndex(-1)
