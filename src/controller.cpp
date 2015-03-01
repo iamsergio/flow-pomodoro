@@ -1163,11 +1163,16 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
 
         if (m_addingTask) {
             m_addingTask = false;
-            // It's a new task, lets popup the context menu to choose tags
-            if (m_settings->showContextMenuAfterAdd() &&
-                m_queueType == QueueTypeToday &&
-               !m_storage->tasks().isEmpty()) {
-                requestContextMenu(previousTask, /*tagOnlyMenu=*/ true);
+            QString summary = previousTask ? previousTask->summary() : QString();
+            if (m_queueType == QueueTypeToday) {
+                Tag::Ptr tag = tagForSummary(/*by-ref*/summary); // transforms "books: foo" into "foo" + tag books
+                if (tag) {
+                    previousTask->addTag(tag->name());
+                    previousTask->setSummary(summary);
+                } else if (m_settings->showContextMenuAfterAdd() && !m_storage->tasks().isEmpty()) {
+                    // It's a new task, lets popup the context menu to choose tags
+                    requestContextMenu(previousTask, /*tagOnlyMenu=*/ true);
+                }
             }
         }
     } else {
@@ -1193,6 +1198,21 @@ void Controller::requestContextMenu(Task *task, bool tagOnlyMenu)
 {
     editTask(Q_NULLPTR, EditModeNone);
     setRightClickedTask(task, tagOnlyMenu);
+}
+
+Tag::Ptr Controller::tagForSummary(QString &summary_inout) const
+{
+    QStringList splitted = summary_inout.split(":");
+    if (splitted.count() < 2 || splitted.first().contains(" "))
+        return Tag::Ptr();
+
+    Tag::Ptr tag = m_storage->tag(splitted.first(), /*create=*/false);
+    if (tag) {
+        splitted.removeAt(0);
+        summary_inout = splitted.join("").trimmed();
+    }
+
+    return tag;
 }
 
 void Controller::addTask(const QString &text, bool startEditMode)

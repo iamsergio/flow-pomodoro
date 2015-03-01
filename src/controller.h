@@ -322,6 +322,7 @@ Q_SIGNALS:
     void pathChanged();
 
 private:
+    Tag::Ptr tagForSummary(QString &summary_inout) const; // Transforms "books: Foo" into "Foo" and returns tag books
     void setSelectedTaskIndex(int);
     void validateSelectedTask();
     void updateExtendedTagModel();
