@@ -377,7 +377,8 @@ void TestUI::testNewTagDialog()
 
     auto newTagItem = m_view->itemsByName("taskMenuChoice").at(0); // 0 is the header
     QVERIFY(newTagItem);
-    QTest::qWait(400); // otherwise test fails for some reason
+    QVERIFY(newTagItem->isVisible());
+    qApp->processEvents();
     mouseClick(newTagItem);
     auto tagDialog = newTagDialog();
     QVERIFY(tagDialog->isVisible());
@@ -395,7 +396,7 @@ void TestUI::testNewTagDialog()
 
     newTagItem = m_view->itemsByName("taskMenuChoice").at(0); // 0 is the header
     QVERIFY(newTagItem);
-    QTest::qWait(400); // otherwise test fails for some reason
+    qApp->processEvents();
     mouseClick(newTagItem);
     QVERIFY(tagDialog->isVisible());
     sendKey(Qt::Key_Enter);
@@ -480,7 +481,7 @@ void TestUI::testPriority()
     task1->setStaged(true);
     task2->setStaged(true);
     task3->setStaged(true);
-    QTest::qWait(400); // The view takes more than 1 event loop to fill
+    qApp->processEvents();
 
     auto tasks = tasksForItems(taskItems(m_stagedView));
     QCOMPARE(tasks.count(), 3);

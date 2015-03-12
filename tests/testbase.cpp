@@ -153,13 +153,13 @@ void TestBase::moveMouseTo(QQuickItem *item)
 {
     QVERIFY(item->isVisible());
     m_view->moveMouseTo(item);
-    QTest::qWait(400);
+    qApp->processEvents();
 }
 
 void TestBase::mouseClick(const QString &objectName)
 {
     m_view->mouseClick(objectName);
-    QTest::qWait(400);
+    qApp->processEvents();
 }
 
 void TestBase::sendText(const QString &text)
