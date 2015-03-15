@@ -162,10 +162,21 @@ Overlay {
                 spacing: 2 * _controller.dpiFactor
                 Calendar {
                     id: calendar
+
+                    function selectedDate_workaround()
+                    {
+                        return (root.task && root.task.dueDateString) ? root.task.dueDate
+                                                                      : _controller.currentDate
+                    }
+
                     width: parent.width
                     height: 230 * _controller.dpiFactor
                     minimumDate: new Date()
-                    selectedDate: (root.task && root.task.dueDateString) ? root.task.dueDate : _controller.currentDate
+                    selectedDate: selectedDate_workaround()
+                    onSelectedDateChanged: {
+                        // HACK: Due to QTBUG-45008, the binding breaks after we click the calendar, so rebind
+                        selectedDate = Qt.binding(function() { return selectedDate_workaround(); })
+                    }
 
                     onClicked: {
                         root.task.dueDate = date
