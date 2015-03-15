@@ -165,7 +165,7 @@ Overlay {
                     width: parent.width
                     height: 230 * _controller.dpiFactor
                     minimumDate: new Date()
-                    selectedDate: (root.task && root.task.dueDateString) ? root.task.dueDate : new Date()
+                    selectedDate: (root.task && root.task.dueDateString) ? root.task.dueDate : _controller.currentDate
 
                     onClicked: {
                         root.task.dueDate = date

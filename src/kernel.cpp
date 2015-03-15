@@ -198,6 +198,11 @@ RuntimeConfiguration Kernel::runtimeConfiguration() const
     return m_runtimeConfiguration;
 }
 
+QDate Kernel::currentDate() const
+{
+    return m_currentDate;
+}
+
 #ifndef NO_WEBDAV
 WebDAVSyncer *Kernel::webdavSyncer() const
 {

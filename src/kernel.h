@@ -51,6 +51,7 @@ public:
     QQmlEngine *qmlEngine() const;
     Settings *settings() const;
     RuntimeConfiguration runtimeConfiguration() const;
+    QDate currentDate() const;
 
 #ifndef NO_WEBDAV
     WebDAVSyncer *webdavSyncer() const;

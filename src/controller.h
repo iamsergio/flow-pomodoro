@@ -88,6 +88,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool newTagDialogVisible READ newTagDialogVisible WRITE setNewTagDialogVisible NOTIFY newTagDialogVisibleChanged)
     Q_PROPERTY(bool optionsContextMenuVisible READ optionsContextMenuVisible WRITE setOptionsContextMenuVisible NOTIFY optionsContextMenuVisibleChanged)
     Q_PROPERTY(bool startupFinished READ startupFinished NOTIFY startupFinishedChanged)
+    Q_PROPERTY(QDate currentDate READ currentDate NOTIFY currentDateChanged)
 
 public:
     enum Page {
@@ -225,6 +226,7 @@ public:
     QAbstractItemModel* tagsModel() const;
 
     int selectedTaskIndex() const;
+    QDate currentDate() const;
 
 public Q_SLOTS:
     void dismissTaskMenuDelayed();
@@ -279,6 +281,7 @@ private Q_SLOTS:
     void setStartupFinished();
 
 Q_SIGNALS:
+    void currentDateChanged();
     void selectedTaskIndexChanged();
     void tagsModelChanged();
     void aboutToAddTask();

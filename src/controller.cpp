@@ -92,6 +92,8 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     connect(m_settings, &Settings::hideEmptyTagsChanged, this, &Controller::onHideEmptyTagsChanged);
     connect(m_settings, &Settings::supportsDueDateChanged, this, &Controller::onSupportsDueDateChanged);
 
+    connect(m_kernel, &Kernel::dayChanged, this, &Controller::currentDateChanged);
+
     m_host = m_settings->value("webdavHost").toString();
     m_user = m_settings->value("webdavUser").toString();
     m_path = m_settings->value("webdavPath").toString();
@@ -1370,6 +1372,11 @@ void Controller::setSelectedTaskIndex(int selectedTaskIndex)
 int Controller::selectedTaskIndex() const
 {
     return m_selectedTaskIndex;
+}
+
+QDate Controller::currentDate() const
+{
+    return m_kernel->currentDate();
 }
 
 void Controller::dismissTaskMenu()
