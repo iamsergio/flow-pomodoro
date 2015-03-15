@@ -1183,6 +1183,11 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
     emit taskBeingEditedChanged();
 }
 
+void Controller::dismissTaskEditor()
+{
+    emit taskEditorDismissed();
+}
+
 void Controller::endAddingNewTag(const QString &tagName)
 {
     if (tagName.isEmpty()) {

@@ -82,7 +82,7 @@ Rectangle {
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: {
             if (mouse.button === Qt.LeftButton) {
-                _controller.editTask(null, Controller.EditModeNone)
+                _controller.dismissTaskEditor()
             } else {
                 _controller.requestContextMenu(task)
             }

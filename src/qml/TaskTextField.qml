@@ -38,8 +38,21 @@ TextField {
     font.pixelSize: 13 * _controller.dpiFactor
     textColor: _controller.isAndroid ? "white" : "black"
 
-    onAccepted: {
+    function save()
+    {
         _controller.taskBeingEdited.summary = textField.text
         _controller.editTask(null, Controller.EditModeNone)
+    }
+
+    onAccepted: {
+        textField.save()
+    }
+
+    Connections {
+        target: textField.visible ? _controller : null
+        ignoreUnknownSignals: true
+        onTaskEditorDismissed: {
+            textField.save()
+        }
     }
 }

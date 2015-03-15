@@ -227,7 +227,6 @@ public:
     int selectedTaskIndex() const;
 
 public Q_SLOTS:
-
     void dismissTaskMenuDelayed();
     void dismissTaskMenu();
 
@@ -257,6 +256,7 @@ public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);
 
     void editTask(Task *, EditMode);
+    void dismissTaskEditor();
 
     void endAddingNewTag(const QString &tagName);
 
@@ -312,6 +312,7 @@ Q_SIGNALS:
     void startupFinishedChanged();
     void newTagDialogVisibleChanged();
     void showPomodoroOverlayChanged();
+    void taskEditorDismissed();
 
     // webdav stuff
     void hostChanged();

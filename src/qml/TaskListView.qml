@@ -65,7 +65,7 @@ ListView {
         anchors.fill: parent
         onClicked: {
             if (_controller.taskBeingEdited !== null) {
-                _controller.editTask(null, Controller.EditModeNone)
+                _controller.dismissTaskEditor()
             } else {
                 _controller.expanded = false
             }
