@@ -222,6 +222,17 @@ Overlay {
                             }
                         }
 
+                        dayDelegate:
+                            Rectangle {
+                                Text {
+                                    anchors.centerIn: parent
+                                    color: "black"
+                                    font.pixelSize: (styleData.today ? 16 : 11) * _controller.dpiFactor
+                                    font.bold: styleData.today
+                                    text: styleData.today ? qsTr("T") : styleData.date.getDate()
+                                }
+                            }
+
                         dayOfWeekDelegate: Rectangle {
                             height: 25 * _controller.dpiFactor
                             Text {
