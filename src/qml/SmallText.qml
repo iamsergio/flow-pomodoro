@@ -9,5 +9,4 @@ Text {
     anchors.right: parent.right
     anchors.rightMargin: _style.marginMedium
     wrapMode: Text.WordWrap
-    width: parent.width
 }

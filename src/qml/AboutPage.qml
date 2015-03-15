@@ -41,7 +41,7 @@ Page {
                     id: copyrectRect
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    height: copyrightText.height + 5 * _controller.dpiFactor
+                    height: copyrightText.implicitHeight + 5 * _controller.dpiFactor
 
                     SmallText {
                         id: copyrightText
