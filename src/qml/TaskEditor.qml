@@ -224,9 +224,10 @@ Overlay {
 
                         dayDelegate:
                             Rectangle {
+                                color: styleData.selected ? "#308CC6" : "white"
                                 Text {
                                     anchors.centerIn: parent
-                                    color: "black"
+                                    color: styleData.selected ? "white" : "black"
                                     font.pixelSize: (styleData.today ? 16 : 11) * _controller.dpiFactor
                                     font.bold: styleData.today
                                     text: styleData.today ? qsTr("T") : styleData.date.getDate()
