@@ -141,6 +141,11 @@ static QString defaultDataFileName()
     return filename;
 }
 
+static void onFocusObjectChanged(QObject *obj)
+{
+    qDebug() << "Focus object changed to " << obj;
+}
+
 int main(int argc, char *argv[])
 {
     Utils::printTimeInfo("main");
@@ -169,6 +174,8 @@ int main(int argc, char *argv[])
     RuntimeConfiguration defaultConfig;
     defaultConfig.setDataFileName(defaultDataFileName());
     Kernel kernel(defaultConfig);
+
+    // app.connect(&app, &Application::focusObjectChanged, &onFocusObjectChanged);
 
     Utils::printTimeInfo("main: created Kernel::instance()");
     QuickView window(&kernel);

@@ -43,7 +43,7 @@ Overlay {
 
                 TextInput {
                     id: textInput
-                    focus: true
+                    focus: root.visible
                     inputMethodHints: Qt.ImhNoPredictiveText
                     font.pixelSize: 14 * _controller.dpiFactor
                     anchors.left: summaryText.right

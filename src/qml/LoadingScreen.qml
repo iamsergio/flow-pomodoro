@@ -6,6 +6,7 @@ Rectangle {
 
     Loader {
         id: loader
+        enabled: sourceComponent != null
         anchors.fill: parent
         objectName: "mainMobileLoader"
         sourceComponent: _controller.startupFinished ? Qt.createComponent("MainMobile.qml")
