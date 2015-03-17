@@ -28,4 +28,7 @@ contains(DEFINES, DEVELOPER_MODE) {
     *-g++*|*clang* {
         QMAKE_CXXFLAGS += -Werror -Wall -Wextra
     }
+    *clang* {
+        QMAKE_CXXFLAGS += -Wno-error=inconsistent-missing-override
+    }
 }
