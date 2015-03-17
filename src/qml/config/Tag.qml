@@ -44,6 +44,7 @@ Item {
             TextField {
                 id: textField
                 focus: true
+                inputMethodHints: Qt.ImhNoPredictiveText
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 visible: root.beingEdited

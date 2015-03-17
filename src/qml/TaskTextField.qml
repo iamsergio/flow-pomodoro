@@ -10,6 +10,7 @@ TextField {
     property QtObject task: null
     text: _controller.taskBeingEdited.summary
     focus: true
+    inputMethodHints: Qt.ImhNoPredictiveText
     onVisibleChanged: {
         if (visible) {
             forceActiveFocus()
