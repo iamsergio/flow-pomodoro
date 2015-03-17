@@ -25,6 +25,7 @@ Popup {
         TextInput {
             id: textInput
             focus: true
+            inputMethodHints: Qt.ImhNoPredictiveText
             font.pixelSize: 14 * _controller.dpiFactor
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter

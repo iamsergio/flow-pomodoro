@@ -44,6 +44,7 @@ Overlay {
                 TextInput {
                     id: textInput
                     focus: true
+                    inputMethodHints: Qt.ImhNoPredictiveText
                     font.pixelSize: 14 * _controller.dpiFactor
                     anchors.left: summaryText.right
                     anchors.leftMargin: 10 * _controller.dpiFactor
