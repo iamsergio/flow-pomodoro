@@ -1124,6 +1124,9 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
     if (!t && !m_taskBeingEdited)
         return;
 
+    if (editMode == EditModeEditor && !m_settings->supportsDueDate())
+        editMode = EditModeInline;
+
     Task::Ptr task = t ? t->toStrongRef() : Task::Ptr();
     if ((!task && editMode != EditModeNone) ||
         (task && editMode == EditModeNone)) {
