@@ -3,6 +3,7 @@ import QtQuick.Controls 1.0
 
 Loader {
     id: root
+    objectName: "pushButtonLoader"
     signal clicked()
     property string text: ""
 

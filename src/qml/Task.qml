@@ -125,6 +125,7 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: _style.marginMedium
             sourceComponent: _loadManager.inlineEditorRequested ? taskTextFieldComponent : null
+            objectName: "taskTextFieldLoader"
         }
 
         Component {

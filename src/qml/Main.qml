@@ -27,6 +27,7 @@ Rectangle {
         sourceComponent: _loadManager.questionPopupRequested ? Qt.createComponent("QuestionPopup.qml") : null
         anchors.fill: parent
         z: main.z + 1
+        objectName: "loader1"
     }
 
     Rectangle {
@@ -79,6 +80,7 @@ Rectangle {
                 anchors.bottomMargin: _style.marginMedium
                 sourceComponent: _loadManager.configurePageRequested ? Qt.createComponent("ConfigurePage.qml") : null
                 z: 2
+                objectName: "loader2"
             }
 
             Loader {
@@ -91,6 +93,7 @@ Rectangle {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: _style.marginMedium
                 sourceComponent: _loadManager.aboutPageRequested ? Qt.createComponent("AboutPage.qml") : null
+                objectName: "loader3"
             }
         }
 
@@ -133,5 +136,6 @@ Rectangle {
         enabled: !_controller.popupVisible
         visible: _controller.rightClickedTask !== null
         sourceComponent: _loadManager.taskContextMenuRequested ? Qt.createComponent("TaskContextMenu.qml") : null
+        objectName: "loader4"
     }
 }

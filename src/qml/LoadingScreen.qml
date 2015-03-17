@@ -7,6 +7,7 @@ Rectangle {
     Loader {
         id: loader
         anchors.fill: parent
+        objectName: "mainMobileLoader"
         sourceComponent: _controller.startupFinished ? Qt.createComponent("MainMobile.qml")
                                                      : null // Delayed loading
     }

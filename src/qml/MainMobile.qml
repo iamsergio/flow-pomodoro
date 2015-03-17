@@ -19,6 +19,7 @@ Main {
     Loader {
         sourceComponent: _loadManager.configurePopupRequested ? Qt.createComponent("MobileOptionsContextMenu.qml") : null
         anchors.fill: parent
+        objectName: "menuLoader"
     }
 
     PomodoroOverlay {}

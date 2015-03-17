@@ -29,6 +29,7 @@ Page {
             asynchronous: true
             visible: _controller.queueType === Controller.QueueTypeToday
             sourceComponent: _loadManager.taskListRequested ? taskListComponent : null
+            objectName: "taskListLoader"
         }
 
         Loader {
@@ -41,6 +42,7 @@ Page {
             anchors.top: parent.top
             height: _style.tagTabHeight
             sourceComponent:  _loadManager.archiveRequested ? Qt.createComponent("DecentTabView.qml") : null
+            objectName: "tabViewLoader"
         }
 
         Component {
@@ -78,6 +80,7 @@ Page {
             anchors.bottom: parent.bottom
             visible: tabView.visible
             sourceComponent: _loadManager.archiveRequested ? archiveViewComponent : null
+            objectName: "archiveViewLoader"
         }
     }
 }
