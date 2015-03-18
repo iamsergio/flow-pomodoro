@@ -141,10 +141,12 @@ static QString defaultDataFileName()
     return filename;
 }
 
+/*
 static void onFocusObjectChanged(QObject *obj)
 {
     qDebug() << "Focus object changed to " << obj;
 }
+*/
 
 int main(int argc, char *argv[])
 {
