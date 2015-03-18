@@ -45,7 +45,7 @@ typedef QGuiApplication Application;
 #include <QScreen>
 #include <QDir>
 
-void initDBus(Controller *controller)
+void initDBus(Kernel *kernel)
 {
 #ifdef FLOW_DBUS
     if (!QDBusConnection::sessionBus().isConnected()) {
@@ -60,10 +60,10 @@ void initDBus(Controller *controller)
         return;
     }
 
-    Flow *flowDBusInterface = new Flow(controller, qApp);
+    Flow *flowDBusInterface = new Flow(kernel, qApp);
     QDBusConnection::sessionBus().registerObject("/", flowDBusInterface, QDBusConnection::ExportScriptableSlots);
 #else
-    Q_UNUSED(controller);
+    Q_UNUSED(kernel);
 #endif
 }
 
@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
     Utils::printTimeInfo("main: created Kernel::instance()");
     QuickView window(&kernel);
     Utils::printTimeInfo("main: created QuickView");
-    initDBus(kernel.controller());
+    initDBus(&kernel);
     Utils::printTimeInfo("main: initialized dbus");
 
     if (Utils::isMobile()) {

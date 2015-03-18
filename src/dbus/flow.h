@@ -4,6 +4,8 @@
   Copyright (C) 2013 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
+  Copyright (C) 2015 Sérgio Martins <iamsergio@gmail.com>
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -24,19 +26,19 @@
 #include <QObject>
 #include <QPointer>
 
-class Controller;
+class Kernel;
 
 class Flow : public QObject {
     Q_OBJECT
 public:
-    explicit Flow(Controller *controller, QObject *parent = 0);
+    explicit Flow(Kernel *kernel, QObject *parent = 0);
 
 public Q_SLOTS:
     Q_SCRIPTABLE void toggleExpand();
     Q_SCRIPTABLE void newTask(const QString &text, bool startEditor, bool expand);
 
 private:
-    QPointer<Controller> m_controller;
+    QPointer<Kernel> m_kernel;
 };
 
 #endif

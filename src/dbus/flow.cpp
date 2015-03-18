@@ -4,6 +4,8 @@
   Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
+  Copyright (C) 2015 Sérgio Martins <iamsergio@gmail.com>
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -19,25 +21,25 @@
 */
 
 #include "flow.h"
+#include "kernel.h"
 #include "controller.h"
 
-Flow::Flow(Controller *controller, QObject *parent)
+Flow::Flow(Kernel *kernel, QObject *parent)
     : QObject(parent)
-
+    , m_kernel(kernel)
 {
-    m_controller = controller;
 }
 
 void Flow::toggleExpand()
 {
-    if (m_controller)
-        m_controller->setExpanded(!m_controller->expanded());
+    if (m_kernel)
+        m_kernel->controller()->setExpanded(!m_kernel->controller()->expanded());
 }
 
 void Flow::newTask(const QString &text, bool startEditor, bool expand)
 {
-    if (m_controller) {
-        m_controller->setExpanded(expand);
-        m_controller->addTask(text, startEditor);
+    if (m_kernel) {
+        m_kernel->controller()->setExpanded(expand);
+        m_kernel->controller()->addTask(text, startEditor);
     }
 }
