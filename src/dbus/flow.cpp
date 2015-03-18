@@ -24,6 +24,8 @@
 #include "kernel.h"
 #include "controller.h"
 
+#include <QUrl>
+
 Flow::Flow(Kernel *kernel, QObject *parent)
     : QObject(parent)
     , m_kernel(kernel)
@@ -41,5 +43,17 @@ void Flow::newTask(const QString &text, bool startEditor, bool expand)
     if (m_kernel) {
         m_kernel->controller()->setExpanded(expand);
         m_kernel->controller()->addTask(text, startEditor);
+    }
+}
+
+void Flow::saveOrOpenUrl(const QString &urlStr)
+{
+    if (!urlStr.isEmpty()) {
+        QUrl url(urlStr);
+        if (url.scheme().isEmpty()) {
+            url = QUrl("http://" + urlStr);
+        }
+
+        m_kernel->saveOrOpenUrl(url);
     }
 }

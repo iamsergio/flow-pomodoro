@@ -50,6 +50,7 @@
 #ifdef QT_WIDGETS_LIB
 #include <QSystemTrayIcon>
 #include <QAction>
+#include <QMessageBox>
 #include <QMenu>
 #endif
 
@@ -242,6 +243,29 @@ void Kernel::destroySystray()
     delete m_trayMenu;
     m_systrayIcon = 0;
     m_trayMenu = 0;
+#endif
+}
+
+void Kernel::saveOrOpenUrl(const QUrl &url)
+{
+    if (url.isEmpty())
+        return;
+
+#if defined(QT_WIDGETS_LIB)
+    QMessageBox msgBox;
+    msgBox.setText(tr("Do you want to save as a new task or open %1 now?").arg(url.url()));
+    msgBox.setWindowTitle("Queue or open url");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Open | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+
+    if (ret == QMessageBox::Save) {
+        Task::Ptr task = m_storage->addTask(url.url());
+        task->setStaged(true);
+        task->addTag("web");
+    } else if (ret == QMessageBox::Open) {
+        Utils::openUrl(url);
+    }
 #endif
 }
 

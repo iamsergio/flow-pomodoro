@@ -34,6 +34,7 @@ class PluginModel;
 class QQmlEngine;
 class QQmlContext;
 class QMenu;
+class QUrl;
 
 #ifdef QT_WIDGETS_LIB
 #include <QSystemTrayIcon>
@@ -59,6 +60,8 @@ public:
 
     void setupSystray();
     void destroySystray();
+
+    void saveOrOpenUrl(const QUrl &url);
 
 Q_SIGNALS:
     void systrayLeftClicked();

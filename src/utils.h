@@ -20,9 +20,13 @@
 #ifndef FLOW_UTILS_H
 #define FLOW_UTILS_H
 
-#include <QString>
+#include <qglobal.h>
+
+class QUrl;
+class QString;
 
 namespace Utils {
+    void openUrl(const QUrl &);
     void printTimeInfo(const QString &location);
     void keepScreenOn(bool);
     bool isMobile();

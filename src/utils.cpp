@@ -21,9 +21,11 @@
 
 #include <QDebug>
 #include <QElapsedTimer>
-#include <qglobal.h>
 #include <QScreen>
 #include <QGuiApplication>
+#include <QString>
+#include <QUrl>
+#include <QProcess>
 
 #ifdef Q_OS_ANDROID
 # include <QAndroidJniObject>
@@ -94,4 +96,22 @@ qreal Utils::dpiFactor()
     }
 
     return factor;
+}
+
+void Utils::openUrl(const QUrl &url)
+{
+    QString command;
+#if defined(Q_OS_LINUX)
+    command = "xdg-open";
+#elif defined(Q_OS_WIN)
+    command = "start"
+#elif defined(Q_OS_OSX)
+    command = "open";
+#ese
+    qWarning() << "Will try opening" << url << "with firefox";
+    command = "firefox";
+#endif
+
+    if (!QProcess::startDetached(command, QStringList() << url.url()))
+        qWarning() << "Failed to start command " << command << url.url();
 }

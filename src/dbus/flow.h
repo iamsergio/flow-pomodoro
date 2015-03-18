@@ -34,6 +34,7 @@ public:
     explicit Flow(Kernel *kernel, QObject *parent = 0);
 
 public Q_SLOTS:
+    Q_SCRIPTABLE void saveOrOpenUrl(const QString &url);
     Q_SCRIPTABLE void toggleExpand();
     Q_SCRIPTABLE void newTask(const QString &text, bool startEditor, bool expand);
 
