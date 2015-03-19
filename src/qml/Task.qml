@@ -89,7 +89,11 @@ Rectangle {
         }
 
         onDoubleClicked: {
-            _controller.editTask(task, Controller.EditModeInline)
+            if (task.isUrl) {
+                _controller.openUrl(task.summary)
+            } else {
+                _controller.editTask(task, Controller.EditModeInline)
+            }
         }
 
         onPressAndHold: {

@@ -269,6 +269,8 @@ public Q_SLOTS:
     void toggleConfigurePage();
     void forceFocusOnTaskBeingEdited();
 
+    void openUrl(const QString &url);
+
 private Q_SLOTS:
     void onTimerTick();
     void onCurrentTagDestroyed();

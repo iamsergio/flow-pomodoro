@@ -100,6 +100,9 @@ qreal Utils::dpiFactor()
 
 void Utils::openUrl(const QUrl &url)
 {
+    if (url.isEmpty())
+        return;
+
     QString command;
 #if defined(Q_OS_LINUX)
     command = "xdg-open";

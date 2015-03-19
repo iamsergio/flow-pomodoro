@@ -52,6 +52,7 @@ class SortedTaskContextMenuModel;
 
 class Task : public QObject, public Syncable {
     Q_OBJECT
+    Q_PROPERTY(bool isUrl READ isUrl NOTIFY summaryChanged)
     Q_PROPERTY(QString priorityStr READ priorityStr NOTIFY priorityChanged)
     Q_PROPERTY(Priority priority READ priority WRITE setPriority NOTIFY priorityChanged)
     Q_PROPERTY(bool dueToday READ dueToday NOTIFY dueDateChanged)
@@ -159,6 +160,7 @@ public:
     Priority priority() const;
 
     QString priorityStr() const;
+    bool isUrl() const;
 
 Q_SIGNALS:
     void priorityChanged();

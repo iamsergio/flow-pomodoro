@@ -576,3 +576,9 @@ QString Task::priorityStr() const
         return QString();
     }
 }
+
+bool Task::isUrl() const
+{
+    // We only want to open http urls, so don't use QUrl::scheme()
+    return m_summary.toLower().startsWith("http://") || m_summary.toLower().startsWith("https://");
+}

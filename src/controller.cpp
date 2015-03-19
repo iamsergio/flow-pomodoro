@@ -748,6 +748,11 @@ void Controller::forceFocusOnTaskBeingEdited()
         emit forceFocus(m_taskBeingEdited);
 }
 
+void Controller::openUrl(const QString &url)
+{
+    Utils::openUrl(QUrl(url));
+}
+
 void Controller::updateExtendedTagModel()
 {
     Tag::List extraTags;
