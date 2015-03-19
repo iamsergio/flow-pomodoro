@@ -80,20 +80,22 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         acceptedButtons: Qt.LeftButton | Qt.RightButton
+        cursorShape: (task && task.isUrl) ? Qt.PointingHandCursor : Qt.ArrowCursor
+
         onClicked: {
             if (mouse.button === Qt.LeftButton) {
-                _controller.dismissTaskEditor()
+                if (_controller.editMode != Controller.EditModeNone) {
+                    _controller.dismissTaskEditor()
+                } else if (task.isUrl) {
+                    _controller.openUrl(task.summary)
+                }
             } else {
                 _controller.requestContextMenu(task)
             }
         }
 
         onDoubleClicked: {
-            if (task.isUrl) {
-                _controller.openUrl(task.summary)
-            } else {
-                _controller.editTask(task, Controller.EditModeInline)
-            }
+            _controller.editTask(task, Controller.EditModeInline)
         }
 
         onPressAndHold: {
