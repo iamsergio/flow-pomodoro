@@ -11,7 +11,7 @@ macro(add_flow_plugin _name _has_resources)
         add_library(${_name} SHARED ${_name}.cpp)
     endif()
     qt5_use_modules(${_name} Gui Quick DBus)
-    install(TARGETS ${_name} DESTINATION lib/flow-pomodoro/plugins/distractions/)
+    install(TARGETS ${_name} DESTINATION lib${LIB_SUFFIX}/flow-pomodoro/plugins/distractions/)
 endmacro()
 
 add_subdirectory(kmail)
