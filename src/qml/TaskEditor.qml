@@ -2,6 +2,7 @@ import QtQuick 2.2
 import QtQuick.Controls 1.3
 import QtQuick.Controls.Styles 1.2
 import Controller 1.0
+import Task 1.0
 
 Overlay {
     id: root
@@ -19,12 +20,21 @@ Overlay {
         ListElement { label: "high"; priorityValue: 1; priorityColor: "red" }
     }
 
+    ListModel {
+        id: recurrenceModel
+        ListElement { label: "none"   ; value: Task_.PeriodTypeNone   ; }
+        ListElement { label: "daily"  ; value: Task_.PeriodTypeDaily  ; }
+        ListElement { label: "weekly" ; value: Task_.PeriodTypeWeekly ; }
+        ListElement { label: "monthly"; value: Task_.PeriodTypeMonthly; }
+        ListElement { label: "yearly" ; value: Task_.PeriodTypeYearly ; }
+    }
+
     contentItem:
     Item {
         anchors.fill: parent
         Column {
             id: column
-            spacing: 10 * _controller.dpiFactor
+            spacing: 6 * _controller.dpiFactor
             height: childrenRect.height
             anchors.left: parent.left
             anchors.right: parent.right
@@ -76,7 +86,6 @@ Overlay {
                     anchors.left: parent.left
                     font.pixelSize: 13 * _controller.dpiFactor
                 }
-
 
                 Row {
                     objectName: "priorityRow"
@@ -139,6 +148,7 @@ Overlay {
                         }
                     }
                 }
+
                 Text {
                     id: dueDateText
 
@@ -161,6 +171,16 @@ Overlay {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: parent.width - 40 * _controller.dpiFactor
                 spacing: 2 * _controller.dpiFactor
+
+                Text {
+                    text: qsTr("Task will be moved to \"Today's queue\" at this date.")
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    wrapMode: Text.Wrap
+                    font.pixelSize: 12 * _controller.dpiFactor
+                    color: "#444444"
+                }
+
                 Calendar {
                     id: calendar
 
@@ -257,14 +277,111 @@ Overlay {
                         }
                     }
                 }
+            }
 
-                Text {
-                    text: qsTr("Task will be automatically moved to \"Today's queue\" at this date")
+            Item {
+                visible: dueDateExpanded.expanded
+                height: Math.max(recIcon.height, recRow.implicitHeight)
+                width: parent.width
+
+                FontAwesomeIcon {
+                    id: recIcon
+                    enabled: false
                     anchors.left: parent.left
+                    anchors.leftMargin: (column.width - calendar.width) / 2
+                    color: "black"
+                    text: "\uf021"
+                    onClicked: {
+                        root.task.toggleRecurrenceType(root.task.periodType)
+                    }
+                }
+
+                Row {
+                    id: recRow
+                    objectName: "recRow"
+                    anchors.leftMargin: 10 * _controller.dpiFactor
+                    anchors.left: recIcon.right
                     anchors.right: parent.right
-                    wrapMode: Text.Wrap
-                    font.pixelSize: 12 * _controller.dpiFactor
-                    color: "#444444"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: -3 * _controller.dpiFactor
+                    spacing: 10 * _controller.dpiFactor
+
+                    Repeater {
+                        model: recurrenceModel
+                        Item {
+                            height: recLabel.implicitHeight + highlight.height
+                            width: recLabel.implicitWidth
+
+                            Text {
+                                id: recLabel
+                                text: label
+                                color: "black"
+                                font.pixelSize: 14 * _controller.dpiFactor
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
+
+                            Rectangle {
+                                id: highlight
+                                height: 3 * _controller.dpiFactor
+                                color: "black"
+                                anchors.bottom: parent.bottom
+                                anchors.bottomMargin: -3 * _controller.dpiFactor
+                                anchors.leftMargin: -2 * _controller.dpiFactor
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.rightMargin: -2 * _controller.dpiFactor
+                                visible: value === root.task.periodType
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    root.task.toggleRecurrenceType(value)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Item {
+                visible: dueDateExpanded.expanded && root.task.recurs
+                height: frequency.implicitHeight
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.leftMargin: recIcon.width + recRow.anchors.leftMargin + recIcon.anchors.leftMargin
+                Row {
+                    spacing: 10 * _controller.dpiFactor
+                    Text {
+                        id: frequency
+                        text: qsTr("every")
+                        font.pixelSize: 13 * _controller.dpiFactor
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    TextInput {
+                        text: root.task.frequency
+                        width: 25 * _controller.dpiFactor
+                        horizontalAlignment: Text.AlignHCenter
+                        font.pixelSize: 14 * _controller.dpiFactor
+                        Rectangle {
+                            anchors.bottom: parent.bottom
+                            width: parent.width
+                            height: 1 * _controller.dpiFactor
+                            color: "black"
+                        }
+                        onTextChanged: {
+                            if (text)
+                                root.task.frequency = parseInt(text)
+                        }
+                    }
+
+                    Text {
+                        text: root.task.frequencyWord
+                        font.pixelSize: 13 * _controller.dpiFactor
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
                 }
             }
         }
