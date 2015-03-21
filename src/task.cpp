@@ -151,6 +151,14 @@ void Task::setStaged(bool staged)
     if (m_staged != staged) {
         m_staged = staged;
         emit stagedChanged();
+
+        const QDate today = m_kernel->currentDate();
+        if (!staged && recurs() && m_dueDate.date() <= today) {
+            do {
+                m_dueDate.makeNext();
+            } while (m_dueDate.date() <= today);
+            emit dueDateChanged();
+        }
     }
 }
 
@@ -260,7 +268,7 @@ void Task::toggleTag(const QString &tagName)
 
 void Task::removeDueDate()
 {
-    setDueDate(QDate());
+    setDueDate(DueDate());
 }
 
 TaskStatus Task::status() const
@@ -311,10 +319,10 @@ QDateTime Task::lastPomodoroDate() const
 
 QDate Task::dueDate() const
 {
-    return m_dueDate;
+    return m_dueDate.date();
 }
 
-void Task::setDueDate(const QDate &date)
+void Task::setDueDate(const DueDate &date)
 {
     if (date != m_dueDate) {
         m_dueDate = date;
@@ -366,8 +374,14 @@ QVariantMap Task::toJson() const
     if (m_lastPomodoroDate.isValid())
         map.insert("lastPomodoroDate", m_lastPomodoroDate.toMSecsSinceEpoch());
 
-    if (m_dueDate.isValid())
+    if (m_dueDate.isValid()) {
         map.insert("dueDate", m_dueDate.toJulianDay());
+        if (m_dueDate.recurs()) {
+            map.insert("periodType", m_dueDate.periodType());
+            if (m_dueDate.frequency() > 1)
+                map.insert("frequency", m_dueDate.frequency());
+        }
+    }
 
     if (m_priority != PriorityNone)
         map.insert("priority", QVariant(m_priority));
@@ -406,9 +420,12 @@ void Task::fromJson(const QVariantMap &map)
         setLastPomodoroDate(lastPomodoroDate);
 
     if (map.contains("dueDate")) { // from julian of QDate() then toJulian returns a valid date, so check map
-        QDate dueDate = QDate::fromJulianDay(map.value("dueDate").toLongLong());
-        if (dueDate.isValid() && dueDate.toJulianDay() != 0)
-            setDueDate(dueDate);
+        QDate date = QDate::fromJulianDay(map.value("dueDate").toLongLong());
+        if (date.isValid() && date.toJulianDay() != 0) {
+            int periodType = map.value("periodType", DueDate::PeriodTypeNone).toInt();
+            int frequency = map.value("frequency", 1).toInt();
+            setDueDate(DueDate(date, static_cast<DueDate::PeriodType>(periodType), frequency));
+        }
     }
 
     QVariantList tagsVariant = map.value("tags").toList();
@@ -513,7 +530,7 @@ int Task::daysSinceLastPomodoro() const
 
 QString Task::dueDateString() const
 {
-    return m_dueDate.isValid() ? m_dueDate.toString() : QString();
+    return m_dueDate.isValid() ? m_dueDate.date().toString() : QString();
 }
 
 QString Task::prettyDueDateString() const
@@ -521,36 +538,41 @@ QString Task::prettyDueDateString() const
     if (!m_dueDate.isValid())
         return "";
 
+    const QDate date = m_dueDate.date();
+
+    QString pretty;
+
     const QDate today = QDate::currentDate();
-    if (m_dueDate == today)
-        return tr("today");
+    const int daysTo = today.daysTo(date);
+    if (date == today)
+        pretty = tr("today");
+    else if (date == today.addDays(1))
+        pretty = tr("tomorrow");
+    else if (daysTo < 0)
+        pretty = tr("overdue");
+     else if (daysTo <= 7)
+        pretty = tr("next %1").arg(m_dueDate.date().toString("dddd")); // Next Monday, for example.
+    else // Year is visual noise if equal to current year
+        pretty = date.year() == today.year() ? date.toString("MMMM d")
+                                             : date.toString(Qt::ISODate);
 
-    if (m_dueDate == today.addDays(1))
-        return tr("tomorrow");
+    return pretty;
+}
 
-    const int daysTo = today.daysTo(m_dueDate);
-
-    if (daysTo < 0) {
-        return tr("overdue");
-    }
-
-    if (daysTo <= 7) {
-        return tr("next %1").arg(m_dueDate.toString("dddd")); // Next Monday, for example.
-    }
-
-    // Year is visual noise if equal to current year
-    return m_dueDate.year() == today.year() ? m_dueDate.toString("MMMM d")
-                                            : m_dueDate.toString(Qt::ISODate);
+QString Task::prettyDueDateRecurString() const
+{
+    return prettyDueDateString() + (m_dueDate.recurs() ? (" (" + m_dueDate.recurrenceString() + ")")
+                                                       : "");
 }
 
 bool Task::isOverdue() const
 {
-    return m_dueDate.isValid() && m_dueDate < QDate::currentDate();
+    return m_dueDate.isValid() && m_dueDate.date() < QDate::currentDate();
 }
 
 bool Task::dueToday() const
 {
-    return m_dueDate.isValid() && m_dueDate == QDate::currentDate();
+    return m_dueDate.isValid() && m_dueDate.date() == QDate::currentDate();
 }
 
 void Task::setPriority(Priority priority)
@@ -581,4 +603,47 @@ bool Task::isUrl() const
 {
     // We only want to open http urls, so don't use QUrl::scheme()
     return m_summary.toLower().startsWith("http://") || m_summary.toLower().startsWith("https://");
+}
+
+DueDate::PeriodType Task::periodType() const
+{
+    return m_dueDate.periodType();
+}
+
+bool Task::recurs() const
+{
+    return m_dueDate.recurs();
+}
+
+QString Task::frequencyWord() const
+{
+    return m_dueDate.frequencyWord();
+}
+
+uint Task::frequency() const
+{
+    return m_dueDate.frequency();
+}
+
+void Task::setFrequency(uint frequency)
+{
+    if (frequency != m_dueDate.frequency()) {
+        m_dueDate.setFrequency(frequency);
+        emit dueDateChanged();
+    }
+}
+
+void Task::toggleRecurrenceType(PeriodType type)
+{
+    if (!m_dueDate.isValid())
+        return;
+
+    DueDate::PeriodType ptype = static_cast<DueDate::PeriodType>(type);
+    if (ptype <= DueDate::PeriodTypeNone || ptype >= DueDate::PeriodTypeCount) {
+        m_dueDate.setPeriodType(DueDate::PeriodTypeNone);
+    } else {
+        m_dueDate.setPeriodType(ptype == m_dueDate.periodType() ? DueDate::PeriodTypeNone : ptype);
+    }
+
+    emit dueDateChanged();
 }

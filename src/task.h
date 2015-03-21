@@ -25,6 +25,7 @@
 #include "tagref.h"
 #include "syncable.h"
 #include "genericlistmodel.h"
+#include "duedate.h"
 
 #include <QString>
 #include <QMetaType>
@@ -58,6 +59,7 @@ class Task : public QObject, public Syncable {
     Q_PROPERTY(bool dueToday READ dueToday NOTIFY dueDateChanged)
     Q_PROPERTY(bool isOverdue READ isOverdue NOTIFY dueDateChanged)
     Q_PROPERTY(QString prettyDueDateString READ prettyDueDateString NOTIFY dueDateChanged)
+    Q_PROPERTY(QString prettyDueDateRecurString READ prettyDueDateRecurString NOTIFY dueDateChanged)
     Q_PROPERTY(QString dueDateString READ dueDateString NOTIFY dueDateChanged)
     Q_PROPERTY(QDate dueDate READ dueDate WRITE setDueDate NOTIFY dueDateChanged)
     Q_PROPERTY(int daysSinceLastPomodoro READ daysSinceLastPomodoro NOTIFY daysSinceLastPomodoroChanged)
@@ -74,6 +76,11 @@ class Task : public QObject, public Syncable {
 
     Q_PROPERTY(TaskContextMenuModel* contextMenuModel READ contextMenuModel CONSTANT)
     Q_PROPERTY(SortedTaskContextMenuModel* sortedContextMenuModel READ sortedContextMenuModel CONSTANT)
+    Q_PROPERTY(int periodType READ periodType NOTIFY dueDateChanged)
+    Q_PROPERTY(bool recurs READ recurs NOTIFY dueDateChanged)
+    Q_PROPERTY(uint frequency READ frequency WRITE setFrequency NOTIFY dueDateChanged)
+    Q_PROPERTY(QString frequencyWord READ frequencyWord NOTIFY dueDateChanged)
+
 public:
     typedef QSharedPointer<Task> Ptr;
     typedef GenericListModel<Ptr> List;
@@ -85,6 +92,16 @@ public:
         PriorityLow    = 10,
     };
     Q_ENUMS(Priority)
+
+    enum PeriodType { // Duplicated otherwise we can't use it in QML
+        PeriodTypeNone = DueDate::PeriodTypeNone,
+        PeriodTypeDaily,
+        PeriodTypeWeekly,
+        PeriodTypeMonthly,
+        PeriodTypeYearly,
+        PeriodTypeCount
+    };
+    Q_ENUMS(PeriodType)
 
     ~Task();
 
@@ -120,7 +137,7 @@ public:
     QDateTime modificationDate() const;
     QDateTime lastPomodoroDate() const;
     QDate dueDate() const;
-    void setDueDate(const QDate &);
+    void setDueDate(const DueDate &);
     void setLastPomodoroDate(const QDateTime &);
 
     bool running() const;
@@ -152,6 +169,7 @@ public:
 
     QString dueDateString() const;
     QString prettyDueDateString() const;
+    QString prettyDueDateRecurString() const;
 
     bool isOverdue() const;
     bool dueToday() const;
@@ -161,6 +179,15 @@ public:
 
     QString priorityStr() const;
     bool isUrl() const;
+
+    DueDate::PeriodType periodType() const;
+    bool recurs() const;
+    QString frequencyWord() const;
+    uint frequency() const;
+    void setFrequency(uint);
+
+public Q_SLOTS:
+    void toggleRecurrenceType(PeriodType type);
 
 Q_SIGNALS:
     void priorityChanged();
@@ -196,7 +223,7 @@ private:
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
     QDateTime m_lastPomodoroDate;
-    QDate m_dueDate;
+    DueDate m_dueDate;
     TaskContextMenuModel *m_contextMenuModel;
     SortedTaskContextMenuModel *m_sortedContextMenuModel;
     Kernel *m_kernel;

@@ -4,6 +4,7 @@ SOURCES += $$PWD/checkabletagmodel.cpp \
            $$PWD/circularprogressindicator.cpp \
            $$PWD/checkbox.cpp \
            $$PWD/controller.cpp  \
+           $$PWD/duedate.cpp \
            $$PWD/extendedtagsmodel.cpp \
            $$PWD/jsonstorage.cpp \
            $$PWD/kernel.cpp \
@@ -28,7 +29,8 @@ SOURCES += $$PWD/checkabletagmodel.cpp \
 HEADERS += $$PWD/checkabletagmodel.h \
            $$PWD/checkbox.h \
            $$PWD/circularprogressindicator.h \
-           $$PWD/controller.h      \
+           $$PWD/controller.h \
+           $$PWD/duedate.h \
            $$PWD/extendedtagsmodel.h \
            $$PWD/jsonstorage.h      \
            $$PWD/kernel.h \
@@ -39,7 +41,7 @@ HEADERS += $$PWD/checkabletagmodel.h \
            $$PWD/quickview.h \
            $$PWD/nonemptytagfilterproxy.h \
            $$PWD/runtimeconfiguration.h \
-           $$PWD/settings.h        \
+           $$PWD/settings.h \
            $$PWD/sortedtagsmodel.h \
            $$PWD/sortedtaskcontextmenumodel.h \
            $$PWD/storage.h \
