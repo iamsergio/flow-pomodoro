@@ -107,10 +107,10 @@ void Utils::openUrl(const QUrl &url)
 #if defined(Q_OS_LINUX)
     command = "xdg-open";
 #elif defined(Q_OS_WIN)
-    command = "start"
+    command = "start";
 #elif defined(Q_OS_OSX)
     command = "open";
-#ese
+#else
     qWarning() << "Will try opening" << url << "with firefox";
     command = "firefox";
 #endif
