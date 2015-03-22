@@ -2,6 +2,7 @@
 #include "testtask.h"
 #include "testtag.h"
 #include "testtagmodel.h"
+#include "testduedate.h"
 #include "testcheckabletagmodel.h"
 #include "testtaskfiltermodel.h"
 #include "teststagedtasksmodel.h"
@@ -78,10 +79,17 @@ int main(int argc, char *argv[])
 #endif
 
     {
+        TestDueDate test10;
+        success &= QTest::qExec(&test10, argc, argv) == 0;
+        Q_ASSERT(success);
+    }
+
+    {
         TestUI uiTest;
         success &= QTest::qExec(&uiTest, argc, argv) == 0;
         Q_ASSERT(success);
     }
+
     if (success)
         qDebug() << "Success!";
     else

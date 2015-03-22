@@ -18,6 +18,7 @@ SOURCES += assertingproxymodel.cpp \
            testarchivedtasksmodel.cpp \
            testbase.cpp \
            testcheckabletagmodel.cpp \
+           testduedate.cpp \
            teststagedtasksmodel.cpp \
            teststorage.cpp \
            testtaskfiltermodel.cpp \
@@ -39,6 +40,7 @@ HEADERS += assertingproxymodel.h \
            signalspy.h \
            testarchivedtasksmodel.h \
            testcheckabletagmodel.h \
+           testduedate.h \
            testtaskfiltermodel.h \
            teststorage.h \
            testbase.h \
