@@ -20,10 +20,15 @@
 #include "duedate.h"
 #include <QObject>
 
-static DueDate::PeriodType cap(DueDate::PeriodType type)
+static DueDate::PeriodType capPeriod(DueDate::PeriodType type)
 {
     return (type < DueDate::PeriodTypeNone || type >= DueDate::PeriodTypeCount) ? DueDate::PeriodTypeNone
                                                                                 : type;
+}
+
+static uint capFrequency(uint frequency)
+{
+    return frequency == 0 ? 1 : frequency;
 }
 
 DueDate::DueDate()
@@ -34,14 +39,14 @@ DueDate::DueDate()
 
 DueDate::DueDate(const QDate &date, PeriodType period, uint frequency)
     : m_date(date)
-    , m_periodType(cap(period))
-    , m_frequency(frequency == 0 ? 1 : frequency)
+    , m_periodType(capPeriod(period))
+    , m_frequency(capFrequency(frequency))
 {
 }
 
 void DueDate::setPeriodType(DueDate::PeriodType type)
 {
-    m_periodType = cap(type);
+    m_periodType = capPeriod(type);
 }
 
 DueDate::PeriodType DueDate::periodType() const
@@ -56,7 +61,7 @@ uint DueDate::frequency() const
 
 void DueDate::setFrequency(uint frequency)
 {
-    m_frequency = frequency;
+    m_frequency = capFrequency(frequency);
 }
 
 QDate DueDate::date() const
