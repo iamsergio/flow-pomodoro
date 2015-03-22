@@ -48,8 +48,6 @@ public:
 
     QDate date() const;
     qint64 toJulianDay() const;
-    QVariantMap toJson() const;
-    void fromJson(const QVariantMap &);
 
     bool recurs() const;
     bool isValid() const;
