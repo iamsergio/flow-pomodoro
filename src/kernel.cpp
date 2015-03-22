@@ -157,7 +157,7 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     QMetaObject::invokeMethod(this, "maybeLoadPlugins", Qt::QueuedConnection);
     QMetaObject::invokeMethod(m_controller, "updateWebDavCredentials", Qt::QueuedConnection);
 
-    if (m_settings->useSystray())
+    if (m_runtimeConfiguration.useSystray() && m_settings->useSystray())
         setupSystray();
 
     const QDateTime currentDateTime = QDateTime::currentDateTime();

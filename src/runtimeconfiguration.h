@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2014 Sérgio Martins <iamsergio@gmail.com>
+  Copyright (C) 2014-2015 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -44,12 +44,16 @@ public:
     QString webDAVFileName() const;
     void setWebDAVFileName(const QString &);
 
+    bool useSystray() const;
+    void setUseSystray(bool);
+
 private:
     QString m_dataFileName;
     bool m_pluginsSupported;
     Settings *m_settings;
     bool m_saveEnabled;
     QString m_webDAVFileName;
+    bool m_useSystray;
 };
 
 #endif
