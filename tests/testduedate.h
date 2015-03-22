@@ -30,4 +30,5 @@ private Q_SLOTS:
     void testCTOR();
     void testSetPeriodType();
     void testSetFrequency();
+    void testMakeNext();
 };

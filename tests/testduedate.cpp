@@ -17,8 +17,7 @@ void TestDueDate::testCTOR()
     QCOMPARE(date.periodType(), DueDate::PeriodTypeNone);
     QVERIFY(!date.recurs());
 
-    const QDate today = QDate::currentDate();
-    DueDate date2(today, DueDate::PeriodTypeYearly, 2);
+    DueDate date2(QDate::currentDate(), DueDate::PeriodTypeYearly, 2);
     QCOMPARE(date2.frequency(), (uint)2);
     QCOMPARE(date2.periodType(), DueDate::PeriodTypeYearly);
     QVERIFY(date2.recurs());
@@ -55,4 +54,24 @@ void TestDueDate::testSetFrequency()
     QCOMPARE(date.frequency(), (uint)1);
     date.setFrequency(1000);
     QCOMPARE(date.frequency(), (uint)1000);
+}
+
+void TestDueDate::testMakeNext()
+{
+    const QDate today = QDate::currentDate();
+    DueDate date(today, DueDate::PeriodTypeNone, 1);
+    date.makeNext();
+    QCOMPARE(date.date(), today);
+
+    date.setPeriodType(DueDate::PeriodTypeWeekly);
+    date.makeNext();
+    QCOMPARE(date.date(), today.addDays(7));
+
+    date.setFrequency(2);
+    date.makeNext();
+    QCOMPARE(date.date(), today.addDays(7 * 3));
+
+    date.setPeriodType(DueDate::PeriodTypeDaily);
+    date.makeNext();
+    QCOMPARE(date.date(), today.addDays(7 * 3 + 2));
 }
