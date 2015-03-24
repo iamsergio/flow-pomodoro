@@ -49,14 +49,33 @@ static QVariant tagsDataFunction(const TagList &list, int index, int role)
 
 static QVariant tasksDataFunction(const TaskList &list, int index, int role)
 {
-    switch (role) {
+    Task::Ptr task = list.at(index);
+
+    switch (static_cast<Storage::TaskModelRole>(role)) {
     case Storage::TaskRole:
-        return QVariant::fromValue<Task*>(list.at(index).data());
+        return QVariant::fromValue<Task*>(task.data());
     case Storage::TaskPtrRole:
-        return QVariant::fromValue<Task::Ptr>(list.at(index));
-    default:
-        return QVariant();
+        return QVariant::fromValue<Task::Ptr>(task);
+    case Storage::DueDateSectionRole:
+        if (task && task->dueDate().isValid()) {
+            const QDate today = QDate::currentDate();
+            const QDate date = task->dueDate();
+            if (today.year() == date.year()) {
+                if (date.weekNumber() == today.weekNumber()) {
+                    return QObject::tr("This week");
+                } else if (date.month() == today.month()) {
+                    return QObject::tr("This month");
+                } else {
+                    return QDate::longMonthName(date.month());
+                }
+            } else {
+                return date.year();
+            }
+        }
+        break;
     }
+
+    return QVariant();
 }
 
 Storage::Storage(Kernel *kernel, QObject *parent)
@@ -106,6 +125,7 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     m_data.tasks.setDataFunction(&tasksDataFunction);
     m_data.tasks.insertRole("task", Q_NULLPTR, TaskRole);
     m_data.tasks.insertRole("taskPtr", Q_NULLPTR, TaskPtrRole);
+    m_data.tasks.insertRole("dueDateSection", Q_NULLPTR, DueDateSectionRole);
     m_stagedTasksModel->setSourceModel(m_data.tasks);
     m_stagedTasksModel->setFilterStaged(true);
 

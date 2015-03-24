@@ -65,7 +65,8 @@ public:
 
     enum TaskModelRole {
         TaskRole = Qt::UserRole + 1,
-        TaskPtrRole
+        TaskPtrRole,
+        DueDateSectionRole
     };
 
     struct Data {

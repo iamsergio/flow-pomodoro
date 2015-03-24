@@ -61,6 +61,25 @@ ListView {
 
     contentItem.z: 2
 
+    Component {
+        id: sectionComponent
+        Text {
+            color: "black"
+            text: section
+
+            height: implicitHeight + 5 * _controller.dpiFactor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignBottom
+            font.bold: true
+            font.pixelSize: 13 * _controller.dpiFactor
+            width: parent.width
+        }
+    }
+
+    section.property: _controller.currentTag === _controller.dueDateTasksTag ? "dueDateSection" : ""
+    section.criteria: ViewSection.FullString
+    section.delegate: sectionComponent
+
     MouseArea {
         anchors.fill: parent
         onClicked: {

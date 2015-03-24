@@ -12,4 +12,7 @@ v1.1
 weekly, monthly or yearly tasks. They will automatically be moved to "today"
 when they are due. When you archive them, they will increment their due date
 to the next occurrence.
+
+* "with date" tab in later queue now has sections: "This week", "This month",
+"April", "May", etc.
 --------------------------------------------------------------------------------
