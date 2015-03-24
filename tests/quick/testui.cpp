@@ -496,7 +496,6 @@ void TestUI::testPriority()
     clickEditItem();
     auto priorityRow = m_view->itemByName("priorityRow");
     QVERIFY(priorityRow);
-    qDebug() << priorityRow->children();
     auto highItem = priorityRow->childItems().at(2);
     QVERIFY(highItem);
     m_view->mouseClick(highItem);
@@ -520,7 +519,31 @@ void TestUI::testPriority()
     QCOMPARE(tasks.at(0), task1); // high pri
     QCOMPARE(tasks.at(1), task2);
     QCOMPARE(tasks.at(2), task3);
+}
 
-    //----------------------------------------------------------------------------------------------
+void TestUI::testRecurrence()
+{
+    // Clear tasks
+    gotoToday();
+    clearTasks();
+    newTask(true);
+    auto task = m_storage->tasks().at(0);
+    QVERIFY(!task->recurs());
 
+    clickMenuIndicator(0);
+    clickEditItem();
+
+    auto dueDateExpanderItem = dueDateExpander();
+    QVERIFY(dueDateExpanderItem);
+    mouseClick(dueDateExpanderItem);
+
+    auto recRow = m_view->itemByName("recRow");
+    QCOMPARE(recRow->childItems().size(), 6);
+
+    m_view->mouseClick(recRow->childItems().at(2));
+    okTaskEditor();
+
+    QVERIFY(task->recurs());
+    QCOMPARE(task->frequency(), (uint)1);
+    QCOMPARE(task->periodType(), DueDate::PeriodTypeWeekly);
 }

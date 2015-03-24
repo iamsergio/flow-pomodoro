@@ -66,6 +66,7 @@ private Q_SLOTS:
     void testNewTagDialog();
     void testDueDate();
     void testPriority();
+    void testRecurrence();
 private:
     QQuickItem *m_archiveView = nullptr;
     QQuickItem *m_stagedView = nullptr;
