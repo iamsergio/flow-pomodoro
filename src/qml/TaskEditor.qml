@@ -163,6 +163,7 @@ Overlay {
                 spacing: 2 * _controller.dpiFactor
                 Calendar {
                     id: calendar
+                    property bool doingHack: false
 
                     function selectedDate_workaround()
                     {
@@ -175,8 +176,14 @@ Overlay {
                     minimumDate: new Date()
                     selectedDate: selectedDate_workaround()
                     onSelectedDateChanged: {
-                        // HACK: Due to QTBUG-45008, the binding breaks after we click the calendar, so rebind
-                        selectedDate = Qt.binding(function() { return selectedDate_workaround(); })
+                        if (!doingHack) {
+                            doingHack = true // prevent infinit loop
+
+                            // HACK: Due to QTBUG-45008, the binding breaks after we click the calendar, so rebind
+                            selectedDate = Qt.binding(function() { return selectedDate_workaround(); })
+
+                            doingHack = false
+                        }
                     }
 
                     onClicked: {
