@@ -331,7 +331,7 @@ Overlay {
                                 anchors.left: parent.left
                                 anchors.right: parent.right
                                 anchors.rightMargin: -2 * _controller.dpiFactor
-                                visible: value === root.task.periodType
+                                visible: root.task && value === root.task.periodType
                             }
 
                             MouseArea {
@@ -361,7 +361,7 @@ Overlay {
                     }
 
                     TextInput {
-                        text: root.task.frequency
+                        text: root.task ? root.task.frequency : null
                         width: 25 * _controller.dpiFactor
                         horizontalAlignment: Text.AlignHCenter
                         font.pixelSize: 14 * _controller.dpiFactor
@@ -378,7 +378,7 @@ Overlay {
                     }
 
                     Text {
-                        text: root.task.frequencyWord
+                        text: root.task ? root.task.frequencyWord : null
                         font.pixelSize: 13 * _controller.dpiFactor
                         anchors.verticalCenter: parent.verticalCenter
                     }
