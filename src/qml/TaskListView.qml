@@ -76,7 +76,7 @@ ListView {
         }
     }
 
-    section.property: _controller.currentTag === _controller.dueDateTasksTag ? "dueDateSection" : ""
+    section.property: (_controller.queueType == Controller.QueueTypeArchive && _controller.currentTag === _controller.dueDateTasksTag) ? "dueDateSection" : ""
     section.criteria: ViewSection.FullString
     section.delegate: sectionComponent
 
