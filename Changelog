@@ -15,4 +15,6 @@ to the next occurrence.
 
 * "with date" tab in later queue now has sections: "This week", "This month",
 "April", "May", etc.
+
+* Due date can be enabled in settings, doesn't require "expert config mode"
 --------------------------------------------------------------------------------

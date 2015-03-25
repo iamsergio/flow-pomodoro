@@ -301,7 +301,6 @@ Item {
 
         FlowCheckBox {
             id: showSupportsDueDate
-            visible: _controller.expertMode
             checked: _settings.supportsDueDate
             Binding {
                 target: _settings
