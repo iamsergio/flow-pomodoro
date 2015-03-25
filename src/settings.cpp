@@ -42,6 +42,7 @@ Settings::Settings(QObject *parent)
     , m_stickyWindow(true)
     , m_showContextMenuAfterAdd(true)
     , m_supportsDueDate(false)
+    , m_supportsPriority(false)
 {
     init();
 }
@@ -67,6 +68,7 @@ void Settings::init()
     m_showAllTasksView = value("showAllTasksView", /*default=*/ false).toBool();
     m_showContextMenuAfterAdd = value("showContextMenuAfterAdd", true).toBool();
     m_supportsDueDate = value("supportsDueDate", false).toBool();
+    m_supportsPriority = value("supportsPriority", false).toBool();
 
     const Position defaultPosition = PositionTop;
     m_initialPosition = static_cast<Settings::Position>(value("windowInitialPosition", defaultPosition).toInt());
@@ -299,4 +301,18 @@ bool Settings::supportsDueDate() const
     // <= 5.3 doesn't support Calendar QtQuick control
     return false;
 #endif
+}
+
+bool Settings::supportsPriority() const
+{
+    return m_supportsPriority;
+}
+
+void Settings::setSupportsPriority(bool supports)
+{
+    if (m_supportsPriority != supports) {
+        m_supportsPriority = supports;
+        setValue("supportsDueDate", supports);
+        emit supportsPriorityChanged();
+    }
 }

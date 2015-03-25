@@ -78,6 +78,7 @@ Overlay {
                 }
             }
             Item {
+                visible: _settings.supportsPriority
                 height: 20 * _controller.dpiFactor
                 width: parent.width
                 Text {
