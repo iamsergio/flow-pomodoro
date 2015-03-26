@@ -12,8 +12,8 @@ android {
 }
 
 win32:!mingw {
-	# Some Qt 5.4 madness going on here, link explicitly
-	LIBS += Shell32.lib
+    # Some Qt 5.4 madness going on here, link explicitly
+    LIBS += Shell32.lib
 }
 
 INCLUDEPATH += src
