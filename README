@@ -12,7 +12,7 @@ PREBUILT PACKAGES
 --------------------------------------------------------------------------------
 DEPENDENCIES
 
-  Qt >= 5.3.0 (QtDeclarative and QtQuickControls)
+  Qt >= 5.4.0 (QtDeclarative and QtQuickControls)
 --------------------------------------------------------------------------------
 BUILD
 

@@ -17,4 +17,6 @@ to the next occurrence.
 "April", "May", etc.
 
 * Due date can be enabled in settings, doesn't require "expert config mode"
+
+* Qt >= 5.4 is now required
 --------------------------------------------------------------------------------

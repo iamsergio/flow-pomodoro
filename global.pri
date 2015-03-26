@@ -3,6 +3,10 @@
     error("QtQuickControls module was not found")
 }
 
+lessThan(QT_MAJOR_VERSION, 5) | lessThan(QT_MINOR_VERSION, 4) {
+    error("You need at least Qt 5.4.")
+}
+
 android {
     QT += androidextras
 }

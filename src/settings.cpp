@@ -295,12 +295,7 @@ void Settings::setSupportsDueDate(bool supportsDueDate)
 
 bool Settings::supportsDueDate() const
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 4, 0))
     return m_supportsDueDate;
-#else
-    // <= 5.3 doesn't support Calendar QtQuick control
-    return false;
-#endif
 }
 
 bool Settings::supportsPriority() const
