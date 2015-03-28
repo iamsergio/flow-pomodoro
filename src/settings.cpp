@@ -41,7 +41,7 @@ Settings::Settings(QObject *parent)
     , m_showTaskAge(false)
     , m_stickyWindow(true)
     , m_showContextMenuAfterAdd(true)
-    , m_supportsDueDate(false)
+    , m_supportsDueDate(true)
     , m_supportsPriority(false)
 {
     init();
