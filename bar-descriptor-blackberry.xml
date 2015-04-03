@@ -15,17 +15,18 @@
     <env var="QT_PLUGIN_PATH" value="app/native/runtime/qt/plugins:$QT_PLUGIN_PATH"/>
     <env var="QML_IMPORT_PATH" value="app/native/runtime/qt/imports:$QML_IMPORT_PATH"/>
     <env var="QML2_IMPORT_PATH" value="app/native/runtime/qt/qml:$QML2_IMPORT_PATH"/>
-    
-    <asset path="/data/extra2/installation/qt/blackberry-5.3/lib/libQt5Core.so.5">runtime/qt/lib/libQt5Core.so.5</asset>
-    <asset path="/data/extra2/installation/qt/blackberry-5.3/lib/libQt5Gui.so.5">runtime/qt/lib/libQt5Gui.so.5</asset>
-    <asset path="/data/extra2/installation/qt/blackberry-5.3/lib/libQt5Qml.so.5">runtime/qt/lib/libQt5Qml.so.5</asset>
-    <asset path="/data/extra2/installation/qt/blackberry-5.3/lib/libQt5Quick.so.5">runtime/qt/lib/libQt5Quick.so.5</asset>
-    <asset path="/data/extra2/installation/qt/blackberry-5.3/lib/libQt5Network.so.5">runtime/qt/lib/libQt5Network.so.5</asset>
-    <asset path="/data/extra2/installation/qt/blackberry-5.3/lib/libQt5Xml.so.5">runtime/qt/lib/libQt5Xml.so.5</asset>
-    
-    <asset path="/data/extra2/installation/qt/blackberry-5.3/plugins">runtime/qt/plugins</asset>
-    <asset path="/data/extra2/installation/qt/blackberry-5.3/qml">runtime/qt/qml</asset>
-    
+
+    <asset path="/data/extra2/installation/qt/blackberry-5.4/lib/libQt5Core.so.5">runtime/qt/lib/libQt5Core.so.5</asset>
+    <asset path="/data/extra2/installation/qt/blackberry-5.4/lib/libQt5Gui.so.5">runtime/qt/lib/libQt5Gui.so.5</asset>
+    <asset path="/data/extra2/installation/qt/blackberry-5.4/lib/libQt5Qml.so.5">runtime/qt/lib/libQt5Qml.so.5</asset>
+    <asset path="/data/extra2/installation/qt/blackberry-5.4/lib/libQt5Quick.so.5">runtime/qt/lib/libQt5Quick.so.5</asset>
+    <asset path="/data/extra2/installation/qt/blackberry-5.4/lib/libQt5Network.so.5">runtime/qt/lib/libQt5Network.so.5</asset>
+    <asset path="/data/extra2/installation/qt/blackberry-5.4/lib/libQt5Xml.so.5">runtime/qt/lib/libQt5Xml.so.5</asset>
+    <asset path="/data/extra2/installation/qt/blackberry-5.4/lib/libQt5DBus.so.5">runtime/qt/lib/libQt5DBus.so.5</asset>
+
+    <asset path="/data/extra2/installation/qt/blackberry-5.4/plugins">runtime/qt/plugins</asset>
+    <asset path="/data/extra2/installation/qt/blackberry-5.4/qml">runtime/qt/qml</asset>
+
     <asset path="../src/img/icon.png">icon.png</asset>
     <icon>
         <image>icon.png</image>
