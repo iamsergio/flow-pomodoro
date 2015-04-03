@@ -640,7 +640,7 @@ void Task::toggleRecurrenceType(PeriodType type)
     if (!m_dueDate.isValid())
         return;
 
-    DueDate::PeriodType ptype = static_cast<DueDate::PeriodType>(type);
+    auto ptype = static_cast<DueDate::PeriodType>(type);
     if (ptype <= DueDate::PeriodTypeNone || ptype >= DueDate::PeriodTypeCount) {
         m_dueDate.setPeriodType(DueDate::PeriodTypeNone);
     } else {

@@ -913,7 +913,7 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
     if (!object->inherits("QWindow")) // Filters out duplicated events
         return false;
 
-    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+    auto *keyEvent = static_cast<QKeyEvent*>(event);
     if (keyEvent->key() == Qt::Key_Back) {
         if (m_page == MainPage) {
             if (m_queueType != QueueTypeToday) {

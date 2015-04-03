@@ -227,7 +227,7 @@ void QuickView::createStyleComponent()
     Utils::printTimeInfo("QuickView: created style item");
 
     if (styleObject) {
-        QQuickItem *item = qobject_cast<QQuickItem*>(styleObject);
+        auto *item = qobject_cast<QQuickItem*>(styleObject);
         Q_ASSERT(item);
         rootContext()->setContextProperty("_style", styleObject);
         item->setParent(this);

@@ -195,6 +195,6 @@ bool operator==(const Tag::Ptr &tag1, const Tag::Ptr &tag2)
 
 void Tag::onTaskStagedChanged()
 {
-    //Task *task = qobject_cast<Task*>(sender());
+    //auto *task = qobject_cast<Task*>(sender());
     //Q_ASSERT(task);
 }

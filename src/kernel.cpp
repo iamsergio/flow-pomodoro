@@ -317,7 +317,7 @@ void Kernel::loadPlugins()
 #endif
 
     foreach (QObject *pluginObject, plugins) {
-        PluginInterface *pluginInterface = qobject_cast<PluginInterface*>(pluginObject);
+        auto *pluginInterface = qobject_cast<PluginInterface*>(pluginObject);
         if (!pluginInterface)
             continue;
         pluginInterface->setTaskStatus(TaskStopped);

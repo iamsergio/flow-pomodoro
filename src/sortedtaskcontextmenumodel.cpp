@@ -65,8 +65,8 @@ int SortedTaskContextMenuModel::count() const
 
 void SortedTaskContextMenuModel::toggleTag(int idx)
 {
-    TaskContextMenuModel *src = qobject_cast<TaskContextMenuModel*>(sourceModel());
-    if (src) {
-        src->toggleTag(mapToSource(index(idx, 0)).row());
+    auto *srcModel = qobject_cast<TaskContextMenuModel*>(sourceModel());
+    if (srcModel) {
+        srcModel->toggleTag(mapToSource(index(idx, 0)).row());
     }
 }

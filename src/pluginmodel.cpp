@@ -103,7 +103,7 @@ void PluginModel::setPluginEnabled(bool enabled, int i)
     Q_ASSERT(i >= 0 && i < count());
     PluginInterface *plugin = m_plugins.at(i);
     plugin->setEnabled(enabled);
-    QObject *pluginObj = dynamic_cast<QObject*>(plugin);
+    auto *pluginObj = dynamic_cast<QObject*>(plugin);
     if (!pluginObj) {
         qWarning() << Q_FUNC_INFO << "pluginObj is null" << enabled << i;
         return;

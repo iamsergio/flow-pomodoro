@@ -46,7 +46,7 @@ void TestCheckableTagModel::testHasTags()
     QCOMPARE(m_storage->tasks().count(), 2);
 
     foreach (const Task::Ptr &task, m_storage->tasks()) {
-        QIdentityProxyModel *model = qobject_cast<QIdentityProxyModel*>(task->checkableTagModel());
+        auto *model = qobject_cast<QIdentityProxyModel*>(task->checkableTagModel());
         Q_ASSERT(model);
         QVERIFY(model->sourceModel());
         QCOMPARE(task->checkableTagModel()->rowCount(), 2);
