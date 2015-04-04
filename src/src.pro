@@ -7,7 +7,7 @@ qtHaveModule(widgets):!android:!blackberry:!ios {
     QT += widgets
 }
 
-contains(QT_CONFIG, dbus) {
+!android:!blackberry:!ios {
     QT += dbus
     SOURCES += dbus/flow.cpp
     HEADERS += dbus/flow.h

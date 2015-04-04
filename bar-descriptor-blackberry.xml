@@ -21,8 +21,6 @@
     <asset path="/data/extra2/installation/qt/blackberry-v5.4.1/lib/libQt5Qml.so.5">runtime/qt/lib/libQt5Qml.so.5</asset>
     <asset path="/data/extra2/installation/qt/blackberry-v5.4.1/lib/libQt5Quick.so.5">runtime/qt/lib/libQt5Quick.so.5</asset>
     <asset path="/data/extra2/installation/qt/blackberry-v5.4.1/lib/libQt5Network.so.5">runtime/qt/lib/libQt5Network.so.5</asset>
-    <asset path="/data/extra2/installation/qt/blackberry-v5.4.1/lib/libQt5Xml.so.5">runtime/qt/lib/libQt5Xml.so.5</asset>
-    <asset path="/data/extra2/installation/qt/blackberry-v5.4.1/lib/libQt5DBus.so.5">runtime/qt/lib/libQt5DBus.so.5</asset>
 
     <asset path="/data/extra2/installation/qt/blackberry-v5.4.1/plugins">runtime/qt/plugins</asset>
     <asset path="/data/extra2/installation/qt/blackberry-v5.4.1/qml">runtime/qt/qml</asset>
