@@ -18,10 +18,11 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PLUGIN_MODEL_H
-#define _PLUGIN_MODEL_H
+#ifndef PLUGIN_MODEL_H
+#define PLUGIN_MODEL_H
 
 #include "plugininterface.h"
+
 #include <QAbstractListModel>
 
 class Kernel;
@@ -54,6 +55,7 @@ public:
 
 Q_SIGNALS:
     void countChanged();
+
 private:
     PluginInterface::List m_plugins;
     Kernel *m_kernel;
