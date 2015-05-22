@@ -74,6 +74,9 @@ Q_SIGNALS:
     void taskCountChanged(int oldValue, int newValue);
     void beingEditedChanged();
 
+protected:
+    QVector<QString> supportedFields() const Q_DECL_OVERRIDE;
+
 private:
     Tag();
     Tag(const Tag &other);
