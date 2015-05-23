@@ -379,9 +379,9 @@ QVariantMap Task::toJson() const
     if (m_dueDate.isValid()) {
         map.insert("dueDate", m_dueDate.toJulianDay());
         if (m_dueDate.recurs()) {
-            map.insert("periodType", m_dueDate.periodType());
+            map.insert("periodType", m_dueDate.periodType()); // since 1.1
             if (m_dueDate.frequency() > 1)
-                map.insert("frequency", m_dueDate.frequency());
+                map.insert("frequency", m_dueDate.frequency()); // since 1.1
         }
     }
 
