@@ -36,13 +36,19 @@ public:
     void setUuid(const QString &uuid);
 
     virtual void fromJson(const QVariantMap &);
+
 protected:
+    virtual QVector<QString> supportedFields() const;
     bool equals(Syncable *) const;
     void setRevision(int);
     virtual QVariantMap toJson() const;
+    QVariantMap m_unknownFieldsMap;
     int m_revision;
     int m_revisionOnWebDAVServer;
     mutable QString m_uuid;
+
+private:
+    void parseUnknownFields(const QVariantMap &);
 };
 
 #endif

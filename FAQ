@@ -30,3 +30,10 @@ FAQ:
    If you think you have decent OpenGL graphic drivers simply delete the shipped OpenGL32.dll
    and flow will pick the system one. If you have nvidia or ATI chances are it will work.
    This question only applies if you downloaded the pre-built flow for windows.
+
+6. How do I specify the screen coordinates where flow appears ?
+   Go to settings, choose "Last Position" on the "Initial window position" combo
+   Move the window to where you want.
+
+   Under Windows you can't move frameless windows, but you can go to HKEY_CURRENT_USER\Software\KDAB\flow-pomodoro
+   to edit windowLastPositionX and windowLastPositionY. Be sure to quit flow before editing.
