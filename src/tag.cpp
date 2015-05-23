@@ -198,3 +198,15 @@ void Tag::onTaskStagedChanged()
     //auto *task = qobject_cast<Task*>(sender());
     //Q_ASSERT(task);
 }
+
+QVector<QString> Tag::supportedFields() const
+{
+    static QVector<QString> fields;
+    if (fields.isEmpty()) {
+        fields = Syncable::supportedFields();
+        fields.reserve(1); // so I don't forget reserve when adding more fields
+        fields << "name"; // since 0.9
+    }
+
+    return fields;
+}

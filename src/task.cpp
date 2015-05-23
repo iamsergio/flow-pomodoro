@@ -391,6 +391,28 @@ QVariantMap Task::toJson() const
     return map;
 }
 
+QVector<QString> Task::supportedFields() const
+{
+    static QVector<QString> fields;
+    if (fields.isEmpty()) {
+        fields = Syncable::supportedFields();
+        fields.reserve(1); // so I don't forget reserve when adding more fields
+        fields << "summary"                 // Since 0.9
+               << "staged"                  // Since 0.9
+               << "description"             // Since 0.9
+               << "creationTimestamp"       // Since 0.9
+               << "tags"                    // Since 0.9
+               << "modificationTimestamp"   // Since 0.9
+               << "lastPomodoroDate"        // Since 0.9
+               << "dueDate"                 // Since 1.0
+               << "priority"                // Since 1.0
+               << "periodType"              // Since 1.1
+               << "frequency";              // Since 1.1
+    }
+
+    return fields;
+}
+
 void Task::fromJson(const QVariantMap &map)
 {
     Syncable::fromJson(map);

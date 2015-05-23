@@ -19,6 +19,9 @@
 
 #include "syncable.h"
 #include <QUuid>
+#include <QVariantMap>
+#include <QVector>
+#include <QDebug>
 
 Syncable::Syncable()
     : m_revision(0)
@@ -28,7 +31,6 @@ Syncable::Syncable()
 
 Syncable::~Syncable()
 {
-
 }
 
 int Syncable::revision() const
@@ -54,8 +56,24 @@ QString Syncable::uuid() const
     return m_uuid;
 }
 
+void Syncable::parseUnknownFields(const QVariantMap &map)
+{
+    m_unknownFieldsMap.clear();
+    QVector<QString> goodFields = supportedFields();
+    QVariantMap::const_iterator it = map.cbegin();
+    QVariantMap::const_iterator end = map.cend();
+    for (; it != end; ++it) {
+        if (!goodFields.contains(it.key())) {
+            m_unknownFieldsMap.insert(it.key(), it.value());
+            qWarning() << "Syncable::parseUnknownFields() Unknown field:" << it.key() << "; will be read-only";
+        }
+    }
+}
+
 void Syncable::fromJson(const QVariantMap &map)
 {
+    parseUnknownFields(map);
+
     QString uuid = map.value("uuid").toString();
     if (uuid.isEmpty())
         uuid = QUuid::createUuid().toString();
@@ -85,5 +103,23 @@ QVariantMap Syncable::toJson() const
     map.insert("revision", m_revision);
     map.insert("revisionOnWebDAVServer", m_revisionOnWebDAVServer);
     map.insert("uuid", uuid());
+
+    QVariantMap::const_iterator it = m_unknownFieldsMap.cbegin();
+    QVariantMap::const_iterator end = m_unknownFieldsMap.cend();
+    for (; it != end; ++it)
+        map.insert(it.key(), it.value());
+
     return map;
+}
+
+QVector<QString> Syncable::supportedFields() const
+{
+    static QVector<QString> fields;
+    if (fields.isEmpty()) {
+        fields << "uuid"                     // since 0.9
+               << "revision"                 // since 0.9
+               << "revisionOnWebDAVServer";  // since 0.9
+    }
+
+    return fields;
 }

@@ -205,6 +205,9 @@ Q_SIGNALS:
     void tagToggled(const QString &tag);
     void dueDateChanged();
 
+protected:
+    QVector<QString> supportedFields() const Q_DECL_OVERRIDE;
+
 private Q_SLOTS:
     void onEdited();
     void onDayChanged();
