@@ -29,4 +29,4 @@ cp ../plugins/*.dll plugins
 
 cd ..
 
-zip -r flow-Windows-v1.0.X.zip flow/
+zip -r flow-Windows-v1.1.X.zip flow/
