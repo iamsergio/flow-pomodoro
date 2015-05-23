@@ -17,7 +17,7 @@ contains(QT_CONFIG, dbus) {
 static {
     DEFINES += FLOW_STATIC_BUILD
     LIBS += -lshellscript -lhosts
-    LIBPATH += ../plugins/
+    LIBPATH += ../plugins/distractions/
 }
 
 include("src.pri")
