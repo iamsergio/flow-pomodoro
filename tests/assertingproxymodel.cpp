@@ -35,6 +35,14 @@ AssertingProxyModel::AssertingProxyModel(QObject *parent)
     connect(this, &AssertingProxyModel::dataChanged, this, &AssertingProxyModel::onDataChanged);
 }
 
+void AssertingProxyModel::setSourceModel(QAbstractItemModel *model)
+{
+    QIdentityProxyModel::setSourceModel(model);
+    if (model) {
+        m_rowCountSourceToldUsAbout = model->rowCount();
+    }
+}
+
 void AssertingProxyModel::onModelAboutToBeReset()
 {
     Q_ASSERT(m_expectingSignal.isEmpty());
