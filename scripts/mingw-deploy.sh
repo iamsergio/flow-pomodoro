@@ -1,4 +1,4 @@
-QT=/data/extra2/installation/qt/x86_64-mingw-5.4/
+QT=/data/installation/qt/x86_64-mingw-5.5/
 
 rm -rf flow &> /dev/null
 mkdir flow
