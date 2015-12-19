@@ -37,7 +37,6 @@
 #include "extendedtagsmodel.h"
 #include "sortedtaskcontextmenumodel.h"
 
-#include <QStandardPaths>
 #include <QAbstractListModel>
 #include <QAbstractItemModel>
 #include <QQmlEngine>
