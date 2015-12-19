@@ -126,8 +126,9 @@ static QString defaultDataFileName()
 #if defined(Q_OS_ANDROID) && defined(DEVELOPER_MODE)
     return "/storage/sdcard0/flow.dat";
 #endif
-    QString filename;
-    QString directory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    const QByteArray env_path = qgetenv("FLOW_DATA_FILE");
+    const QString directory = env_path.isEmpty() ? QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+                                                 : QString::fromLatin1(env_path);
     if (!QFile::exists(directory)) {
         QDir dir(directory);
         if (!dir.mkpath(directory)) {
@@ -137,8 +138,7 @@ static QString defaultDataFileName()
         }
     }
 
-    filename += directory + "/flow.dat";
-    return filename;
+    return directory + "/flow.dat";
 }
 
 /*
