@@ -48,6 +48,7 @@ protected:
     mutable QString m_uuid;
 
 private:
+    Q_DISABLE_COPY(Syncable);
     void parseUnknownFields(const QVariantMap &);
 };
 

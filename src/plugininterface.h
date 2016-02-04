@@ -51,6 +51,8 @@ public:
     virtual QQuickItem* configureItem() const = 0;
     virtual void setSettings(QSettings *) = 0;
     virtual bool enabledByDefault() const = 0;
+private:
+    Q_DISABLE_COPY(PluginInterface);
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, "com.kdab.flow.PluginInterface/v0.9.3")

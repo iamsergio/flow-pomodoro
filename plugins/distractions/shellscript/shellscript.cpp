@@ -62,6 +62,7 @@ public:
     }
 
 private:
+    Q_DISABLE_COPY(RunScriptTask);
     void run()
     {
         QMutexLocker locker(m_mutex);
