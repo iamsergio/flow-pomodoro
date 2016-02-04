@@ -63,52 +63,52 @@ static void registerQmlTypes()
 {
     qmlRegisterUncreatableType<QAbstractItemModel>("Controller",
                                                    1, 0, "QAbstractItemModel",
-                                                   "QAbstractItemModel is not creatable");
+                                                   QStringLiteral("QAbstractItemModel is not creatable"));
 
     qmlRegisterUncreatableType<QAbstractListModel>("Controller",
                                                    1, 0, "QAbstractListModel",
-                                                   "QAbstractListModel is not creatable");
+                                                   QStringLiteral("QAbstractListModel is not creatable"));
 
     qmlRegisterUncreatableType<TaskFilterProxyModel>("Controller",
                                                      1, 0, "TaskFilterProxyModel",
-                                                     "TaskFilterProxyModel is not creatable");
+                                                     QStringLiteral("TaskFilterProxyModel is not creatable"));
 
 
     qmlRegisterUncreatableType<ExtendedTagsModel>("Controller",
                                                   1, 0, "ExtendedTagsModel",
-                                                  "ExtendedTagsModel is not creatable");
+                                                  QStringLiteral("ExtendedTagsModel is not creatable"));
 
     qmlRegisterUncreatableType<Controller>("Controller",
                                            1, 0, "Controller",
-                                           "Controller is not creatable");
+                                           QStringLiteral("Controller is not creatable"));
 
     qmlRegisterUncreatableType<QuickView>("Controller",
                                           1, 0, "QuickView",
-                                          "QuickView is not creatable");
+                                          QStringLiteral("QuickView is not creatable"));
 
     qmlRegisterUncreatableType<Settings>("Controller",
                                           1, 0, "Settings",
-                                          "Settings is not creatable");
+                                          QStringLiteral("Settings is not creatable"));
 
     qmlRegisterUncreatableType<LoadManager>("Controller",
                                             1, 0, "LoadManager",
-                                            "LoadManager is not creatable");
+                                            QStringLiteral("LoadManager is not creatable"));
 
     qmlRegisterUncreatableType<Task>("Task",
                                      1, 0, "Task_",
-                                     "Task is not creatable");
+                                     QStringLiteral("Task is not creatable"));
 
     qmlRegisterUncreatableType<Tag>("Controller",
                                     1, 0, "Tag_",
-                                    "Tag is not creatable");
+                                    QStringLiteral("Tag is not creatable"));
 
     qmlRegisterUncreatableType<TaskContextMenuModel>("Controller",
                                                      1, 0, "TaskContextMenuModel",
-                                                     "TaskContextMenuModel is not creatable");
+                                                     QStringLiteral("TaskContextMenuModel is not creatable"));
 
     qmlRegisterUncreatableType<SortedTaskContextMenuModel>("Controller",
                                                            1, 0, "SortedTaskContextMenuModel",
-                                                           "SortedTaskContextMenuModel is not creatable");
+                                                           QStringLiteral("SortedTaskContextMenuModel is not creatable"));
 
     qmlRegisterType<CircularProgressIndicator>("com.kdab.flowpomodoro", 1, 0, "CircularProgressIndicator");
     qmlRegisterType<CheckBoxImpl>("com.kdab.flowpomodoro", 1, 0, "CheckBoxPrivate");
@@ -136,17 +136,17 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     , m_trayMenu(0)
 #endif
 {
-    QFontDatabase::addApplicationFont(":/fonts/fontawesome-webfont.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/open-sans/OpenSans-Regular.ttf");
-    qApp->setFont(QFont("Open Sans"));
+    QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/fontawesome-webfont.ttf"));
+    QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/open-sans/OpenSans-Regular.ttf"));
+    qApp->setFont(QFont(QStringLiteral("Open Sans")));
 
-    m_qmlEngine->rootContext()->setObjectName("QQmlContext"); // GammaRay convenience
+    m_qmlEngine->rootContext()->setObjectName(QStringLiteral("QQmlContext")); // GammaRay convenience
     registerQmlTypes();
-    qmlContext()->setContextProperty("_controller", m_controller);
-    qmlContext()->setContextProperty("_storage", m_storage);
-    qmlContext()->setContextProperty("_pluginModel", m_pluginModel);
-    qmlContext()->setContextProperty("_loadManager", m_controller->loadManager());
-    qmlContext()->setContextProperty("_settings", m_settings);
+    qmlContext()->setContextProperty(QStringLiteral("_controller"), m_controller);
+    qmlContext()->setContextProperty(QStringLiteral("_storage"), m_storage);
+    qmlContext()->setContextProperty(QStringLiteral("_pluginModel"), m_pluginModel);
+    qmlContext()->setContextProperty(QStringLiteral("_loadManager"), m_controller->loadManager());
+    qmlContext()->setContextProperty(QStringLiteral("_settings"), m_settings);
 #ifndef NO_WEBDAV
     qmlContext()->setContextProperty("_webdavSync", m_webDavSyncer);
 #endif
@@ -254,7 +254,7 @@ void Kernel::saveOrOpenUrl(const QUrl &url)
 #if defined(QT_WIDGETS_LIB)
     QMessageBox msgBox;
     msgBox.setText(tr("Do you want to save as a new task or open %1 now?").arg(url.url()));
-    msgBox.setWindowTitle("Queue or open url");
+    msgBox.setWindowTitle(QStringLiteral("Queue or open url"));
     msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Open | QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Save);
     int ret = msgBox.exec();
@@ -262,7 +262,7 @@ void Kernel::saveOrOpenUrl(const QUrl &url)
     if (ret == QMessageBox::Save) {
         Task::Ptr task = m_storage->addTask(url.url());
         task->setStaged(true);
-        task->addTag("web");
+        task->addTag(QStringLiteral("web"));
     } else if (ret == QMessageBox::Open) {
         Utils::openUrl(url);
     }
@@ -274,7 +274,7 @@ void Kernel::loadPlugins()
     if (Utils::isMobile())
         return;
 
-    static const QStringList pluginTypes = QStringList() << "distractions";
+    static const QStringList pluginTypes = QStringList() << QStringLiteral("distractions");
     QObjectList plugins;
 
 #ifdef FLOW_STATIC_BUILD
@@ -323,7 +323,7 @@ void Kernel::loadPlugins()
         pluginInterface->setTaskStatus(TaskStopped);
         bool enabledByDefault = pluginInterface->enabledByDefault();
         const QString pluginName = pluginObject->metaObject()->className();
-        m_settings->beginGroup("plugins");
+        m_settings->beginGroup(QStringLiteral("plugins"));
         const bool enabled = m_settings->value(pluginName + ".enabled", /**defaul=*/ enabledByDefault).toBool();
         m_settings->endGroup();
         pluginInterface->setEnabled(enabled);

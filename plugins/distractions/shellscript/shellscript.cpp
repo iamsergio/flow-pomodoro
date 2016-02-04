@@ -38,7 +38,7 @@ static QString linuxTextEditor()
     static QString editor;
     if (editor.isNull()) {
         QStringList candidates;
-        candidates << "kwrite" << "kate" << "gedit" << "mousepad" << "leafpad" << "emacs";
+        candidates << QStringLiteral("kwrite") << QStringLiteral("kate") << QStringLiteral("gedit") << QStringLiteral("mousepad") << QStringLiteral("leafpad") << QStringLiteral("emacs");
         foreach (const QString &candidate, candidates) {
             if (!QStandardPaths::findExecutable(candidate).isEmpty()) {
                 editor = candidate;
@@ -83,12 +83,12 @@ ShellScriptPlugin::ShellScriptPlugin() : QObject(), PluginInterface()
   , m_qmlEngine(0)
   , m_configItem(0)
 {
-    m_scriptName = "shell_script_plugin";
+    m_scriptName = QStringLiteral("shell_script_plugin");
     const QString suffix =
 #ifdef Q_OS_WIN
     ".bat";
 #else
-    ".sh";
+    QStringLiteral(".sh");
 #endif
 
     // Fixes crash in static mode, because qqmlimport calls QPluginLoader::staticPlugins() before us.
@@ -131,12 +131,12 @@ void ShellScriptPlugin::update(bool allowDistractions)
 
     m_allowingDistractions = allowDistractions;
 
-    setLastError("");
+    setLastError(QString());
     if (!checkSanity())
         return;
 
     QStringList args;
-    args << (allowDistractions ? "allow" : "disallow");
+    args << (allowDistractions ? QStringLiteral("allow") : QStringLiteral("disallow"));
 
     RunScriptTask *task = new RunScriptTask(m_scriptName, args, &m_mutex);
     QThreadPool::globalInstance()->start(task);
@@ -175,7 +175,7 @@ void ShellScriptPlugin::setQmlEngine(QQmlEngine *engine)
 
     m_qmlEngine = engine;
 
-    QQmlComponent *component = new QQmlComponent(engine, QUrl("qrc:/plugins/shellscript/Config.qml"),
+    QQmlComponent *component = new QQmlComponent(engine, QUrl(QStringLiteral("qrc:/plugins/shellscript/Config.qml")),
                                                  QQmlComponent::PreferSynchronous, this);
 
     if (component->isError()) {
@@ -185,10 +185,10 @@ void ShellScriptPlugin::setQmlEngine(QQmlEngine *engine)
 
     QQmlContext *subContext = new QQmlContext(engine->rootContext());
     m_configItem = qobject_cast<QQuickItem*>(component->create(subContext));
-    subContext->setContextProperty("_plugin", this);
+    subContext->setContextProperty(QStringLiteral("_plugin"), this);
 
     if (!m_configItem) {
-        setLastError("Error creating item");
+        setLastError(QStringLiteral("Error creating item"));
         return;
     }
 }

@@ -52,8 +52,8 @@ QuickView::QuickView(Kernel *kernel)
     , m_contractedWidth(0)
     , m_contractedHeight(0)
 {
-    rootContext()->setContextProperty("_window", this);
-    rootContext()->setContextProperty("_toolTipController", new ToolTipController(this));
+    rootContext()->setContextProperty(QStringLiteral("_window"), this);
+    rootContext()->setContextProperty(QStringLiteral("_toolTipController"), new ToolTipController(this));
     createStyleComponent();
 
     setIcon(QIcon(":/img/icon.png"));
@@ -61,16 +61,17 @@ QuickView::QuickView(Kernel *kernel)
     connect(m_kernel->settings(), &Settings::geometryTypeChanged, this, &QuickView::onWindowGeometryTypeChanged);
     connect(m_kernel->settings(), &Settings::stickyWindowChanged, this, &QuickView::setupWindowFlags);
 
-    QString main = Utils::isMobile() ? "LoadingScreen.qml" : "MainDesktop.qml";
+    QString main = Utils::isMobile() ? QStringLiteral("LoadingScreen.qml")
+                                     : QStringLiteral("MainDesktop.qml");
 
-    Utils::printTimeInfo("QuickView: Set Source START");
+    Utils::printTimeInfo(QStringLiteral("QuickView: Set Source START"));
     if (m_useqresources) {
         // So that F5 reloads QML without having to restart the application
         setSource(QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/" + main));
     } else {
         setSource(QUrl("qrc:/qml/" + main));
     }
-    Utils::printTimeInfo("QuickView: Set Source END");
+    Utils::printTimeInfo(QStringLiteral("QuickView: Set Source END"));
 
 #ifdef Q_OS_WIN
 
@@ -94,7 +95,7 @@ QuickView::QuickView(Kernel *kernel)
     }
 
     connect(m_controller, &Controller::requestActivateWindow, this, &QuickView::requestActivate);
-    Utils::printTimeInfo("QuickView: CTOR END");
+    Utils::printTimeInfo(QStringLiteral("QuickView: CTOR END"));
 
     connect(kernel, &Kernel::systrayLeftClicked, this, &QuickView::toggleVisible);
 }
@@ -104,8 +105,8 @@ QuickView::~QuickView()
     // qDebug() << "~QuickView";
     Settings *settings = m_kernel->settings();
     if (settings->initialPosition() == Settings::PositionLast) {
-        settings->setValue("windowLastPositionX", x());
-        settings->setValue("windowLastPositionY", y());
+        settings->setValue(QStringLiteral("windowLastPositionX"), x());
+        settings->setValue(QStringLiteral("windowLastPositionY"), y());
         settings->scheduleSync();
     }
 }
@@ -114,10 +115,10 @@ void QuickView::reloadQML()
 {
     qDebug() << "Reloading QML ...";
     engine()->clearComponentCache();
-    Utils::printTimeInfo("QuickView: cleared component cache");
+    Utils::printTimeInfo(QStringLiteral("QuickView: cleared component cache"));
     createStyleComponent();
     setSource(source());
-    Utils::printTimeInfo("QuickView: setted Source");
+    Utils::printTimeInfo(QStringLiteral("QuickView: setted Source"));
 }
 
 void QuickView::setupGeometry()
@@ -162,8 +163,8 @@ void QuickView::setupGeometry()
     case Settings::PositionNone:
         return;
     case Settings::PositionLast:
-        x = qBound(0, m_kernel->settings()->value("windowLastPositionX").toInt(), maxX);
-        y = qBound(0, m_kernel->settings()->value("windowLastPositionY").toInt(), maxY);
+        x = qBound(0, m_kernel->settings()->value(QStringLiteral("windowLastPositionX")).toInt(), maxX);
+        y = qBound(0, m_kernel->settings()->value(QStringLiteral("windowLastPositionY")).toInt(), maxY);
         break;
     case Settings::PositionTop:
         y = 0;
@@ -208,7 +209,8 @@ QUrl QuickView::styleFileName() const
         // User can override the default style by creating a Style.qml file in /home/<user>/.local/share/KDAB/flow/
         return QUrl::fromLocalFile(fileName);
     } else {
-        const QString filename = Utils::isMobile() ? "MobileStyle.qml" : "DefaultStyle.qml";
+        const QString filename = Utils::isMobile() ? QStringLiteral("MobileStyle.qml")
+                                                   : QStringLiteral("DefaultStyle.qml");
         // Developer mode doesn't use qrc:, so we can reload with F5
         return m_useqresources ? QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/" + filename)
                                : QUrl("qrc:/qml/" + filename);
@@ -217,25 +219,25 @@ QUrl QuickView::styleFileName() const
 
 void QuickView::createStyleComponent()
 {
-    Utils::printTimeInfo("QuickView: create style component START");
+    Utils::printTimeInfo(QStringLiteral("QuickView: create style component START"));
     QQmlComponent *styleComponent = new QQmlComponent(engine(),
                                                       styleFileName(),
                                                       QQmlComponent::PreferSynchronous,
                                                       this);
-    Utils::printTimeInfo("QuickView: create style component END");
+    Utils::printTimeInfo(QStringLiteral("QuickView: create style component END"));
     QObject *styleObject = styleComponent->create();
-    Utils::printTimeInfo("QuickView: created style item");
+    Utils::printTimeInfo(QStringLiteral("QuickView: created style item"));
 
     if (styleObject) {
         auto *item = qobject_cast<QQuickItem*>(styleObject);
         Q_ASSERT(item);
-        rootContext()->setContextProperty("_style", styleObject);
+        rootContext()->setContextProperty(QStringLiteral("_style"), styleObject);
         item->setParent(this);
     } else {
         qWarning() << styleComponent->errorString();
         Q_ASSERT(false);
     }
-    Utils::printTimeInfo("QuickView: createStyleComponent END");
+    Utils::printTimeInfo(QStringLiteral("QuickView: createStyleComponent END"));
 }
 
 void QuickView::keyReleaseEvent(QKeyEvent *event)

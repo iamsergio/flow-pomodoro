@@ -124,7 +124,7 @@ QAbstractItemModel *Tag::taskModel()
         TaskFilterProxyModel *model = new TaskFilterProxyModel(this);
         model->setTagName(m_name);
         model->setSourceModel(m_kernel->storage()->archivedTasksModel());
-        model->setObjectName(QString("Tasks with tag %1 model").arg(m_name));
+        model->setObjectName(QStringLiteral("Tasks with tag %1 model").arg(m_name));
         m_taskModel = model;
 
         connect(this, &Tag::taskCountChanged,
@@ -143,7 +143,7 @@ QVariantMap Tag::toJson() const
 {
     Q_ASSERT(!m_isFake);
     QVariantMap map = Syncable::toJson();
-    map.insert("name", m_name);
+    map.insert(QStringLiteral("name"), m_name);
     return map;
 }
 
@@ -151,7 +151,7 @@ void Tag::fromJson(const QVariantMap &map)
 {
     Q_ASSERT(!m_isFake);
     Syncable::fromJson(map);
-    QString name = map.value("name").toString();
+    QString name = map.value(QStringLiteral("name")).toString();
     if (name.isEmpty()) {
         qWarning() << Q_FUNC_INFO << "empty tag name";
     } else {
@@ -205,7 +205,7 @@ QVector<QString> Tag::supportedFields() const
     if (fields.isEmpty()) {
         fields = Syncable::supportedFields();
         fields.reserve(1); // so I don't forget reserve when adding more fields
-        fields << "name"; // since 0.9
+        fields << QStringLiteral("name"); // since 0.9
     }
 
     return fields;

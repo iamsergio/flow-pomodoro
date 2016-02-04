@@ -132,9 +132,9 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     m_archivedTasksModel->setSourceModel(m_data.tasks);
     m_archivedTasksModel->setFilterArchived(true);
     m_untaggedTasksModel->setFilterUntagged(true);
-    m_untaggedTasksModel->setObjectName("Untagged and archived tasks model");
+    m_untaggedTasksModel->setObjectName(QStringLiteral("Untagged and archived tasks model"));
     m_dueDateTasksModel->setFilterDueDated(true);
-    m_dueDateTasksModel->setObjectName("Archived tasks with due date");
+    m_dueDateTasksModel->setObjectName(QStringLiteral("Archived tasks with due date"));
     m_dueDateTasksModel->sort(0, Qt::AscendingOrder);
 
 #if defined(UNIT_TEST_RUN)
@@ -220,12 +220,12 @@ void Storage::load()
     if (m_data.tags.isEmpty()) {
         // Create default tags. We always use the same uuids for these so we don't get
         // duplicates when synching with other devices
-        createTag(tr("work"), "{bb2ab284-8bb7-4aec-a452-084d64e85697}");
-        createTag(tr("personal"), "{73533168-9a57-4fc0-ba9a-9120bbadcb6c}");
-        createTag(tr("family"), "{4e81dd75-84c4-4359-912c-f3ead717f694}");
-        createTag(tr("bills"), "{4b4ae5fb-f35d-4389-9417-96b7ddcb3b8f}");
-        createTag(tr("books"), "{b2697470-f457-461c-9310-7d4b56aea395}");
-        createTag(tr("movies"), "{387be44a-1eb7-4895-954a-cf5bc82d8f03}");
+        createTag(tr("work"), QStringLiteral("{bb2ab284-8bb7-4aec-a452-084d64e85697}"));
+        createTag(tr("personal"), QStringLiteral("{73533168-9a57-4fc0-ba9a-9120bbadcb6c}"));
+        createTag(tr("family"), QStringLiteral("{4e81dd75-84c4-4359-912c-f3ead717f694}"));
+        createTag(tr("bills"), QStringLiteral("{4b4ae5fb-f35d-4389-9417-96b7ddcb3b8f}"));
+        createTag(tr("books"), QStringLiteral("{b2697470-f457-461c-9310-7d4b56aea395}"));
+        createTag(tr("movies"), QStringLiteral("{387be44a-1eb7-4895-954a-cf5bc82d8f03}"));
     }
     m_loadingInProgress = false;
     emit taskCountChanged();

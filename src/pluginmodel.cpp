@@ -109,7 +109,7 @@ void PluginModel::setPluginEnabled(bool enabled, int i)
         return;
     }
     const QString pluginName = pluginObj->metaObject()->className();
-    m_kernel->settings()->beginGroup("plugins");
+    m_kernel->settings()->beginGroup(QStringLiteral("plugins"));
     m_kernel->settings()->setValue(pluginName + ".enabled", enabled);
     m_kernel->settings()->endGroup();
     plugin->setEnabled(enabled);

@@ -27,7 +27,7 @@ CheckableTagModel::CheckableTagModel(Task *parent)
     , m_parentTask(parent)
 {
     Q_ASSERT(parent);
-    setObjectName("CheckableTagModel");
+    setObjectName(QStringLiteral("CheckableTagModel"));
     connect(this, &CheckableTagModel::rowsInserted, this, &CheckableTagModel::countChanged);
     connect(this, &CheckableTagModel::rowsRemoved, this, &CheckableTagModel::countChanged);
     connect(this, &CheckableTagModel::modelReset, this, &CheckableTagModel::countChanged);

@@ -60,7 +60,7 @@ static QString hostsFileName()
 #if defined(Q_OS_WIN)
     return "C:\\Windows\\System32\\drivers\\etc\\hosts";
 #else
-    return "/etc/hosts";
+    return QStringLiteral("/etc/hosts");
 #endif
 }
 
@@ -89,7 +89,7 @@ bool HostsPlugin::enabled() const
 
 void HostsPlugin::update(bool allowDistractions)
 {
-    setLastError("");
+    setLastError(QString());
     updateHosts(allowDistractions);
 }
 
@@ -120,7 +120,7 @@ void HostsPlugin::setQmlEngine(QQmlEngine *engine)
     Q_ASSERT(!m_qmlEngine && engine);
     m_qmlEngine = engine;
 
-    QQmlComponent *component = new QQmlComponent(engine, QUrl("qrc:/plugins/hosts/Config.qml"),
+    QQmlComponent *component = new QQmlComponent(engine, QUrl(QStringLiteral("qrc:/plugins/hosts/Config.qml")),
                                                  QQmlComponent::PreferSynchronous, this);
 
     if (component->isError()) {
@@ -130,10 +130,10 @@ void HostsPlugin::setQmlEngine(QQmlEngine *engine)
 
     QQmlContext *subContext = new QQmlContext(engine->rootContext());
     m_configItem = qobject_cast<QQuickItem*>(component->create(subContext));
-    subContext->setContextProperty("_plugin", this);
+    subContext->setContextProperty(QStringLiteral("_plugin"), this);
 
     if (!m_configItem) {
-        setLastError("Error creating item");
+        setLastError(QStringLiteral("Error creating item"));
         return;
     }
 }
@@ -147,16 +147,16 @@ void HostsPlugin::setSettings(QSettings *settings)
 {
     Q_ASSERT(!m_settings && settings);
     m_settings = settings;
-    m_settings->beginGroup("hosts");
-    bool firstRun = m_settings->value("firstRun", /*default=*/ true).toBool();
+    m_settings->beginGroup(QStringLiteral("hosts"));
+    bool firstRun = m_settings->value(QStringLiteral("firstRun"), /*default=*/ true).toBool();
     if (firstRun) {
-        m_settings->setValue("firstRun", false);
-        QString examples = "www.facebook.com\nwww.9gag.com\n";
-        m_settings->setValue("hosts", examples);
+        m_settings->setValue(QStringLiteral("firstRun"), false);
+        QString examples = QStringLiteral("www.facebook.com\nwww.9gag.com\n");
+        m_settings->setValue(QStringLiteral("hosts"), examples);
         m_settings->sync();
     }
 
-    setHosts(m_settings->value("hosts").toString());
+    setHosts(m_settings->value(QStringLiteral("hosts")).toString());
     m_settings->endGroup();
 }
 
@@ -246,7 +246,7 @@ void HostsPlugin::updateHosts(bool allow)
 
     if (!allow) {
         data += s_startTag;
-        QStringList hosts = m_hosts.split("\n");
+        QStringList hosts = m_hosts.split(QStringLiteral("\n"));
         foreach (QString host, hosts) {
             QUrl url(host); // In case user enters http://
             host = url.host().isEmpty() ? host : url.host();
@@ -276,8 +276,8 @@ void HostsPlugin::setHosts(const QString &hosts)
 {
     if (hosts != m_hosts) {
         m_hosts = hosts;
-        m_settings->beginGroup("hosts");
-        m_settings->setValue("hosts", hosts);
+        m_settings->beginGroup(QStringLiteral("hosts"));
+        m_settings->setValue(QStringLiteral("hosts"), hosts);
         m_settings->endGroup();
         m_settings->sync();
         emit hostsChanged();

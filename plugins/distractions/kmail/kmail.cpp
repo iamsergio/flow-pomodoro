@@ -44,7 +44,8 @@ bool KMailPlugin::enabled() const
 
 void KMailPlugin::setSystrayIconsNotificationsEnabled(bool enable)
 {
-    QDBusMessage message = QDBusMessage::createMethodCall("org.kde.kmail2", "/KMail", "", "setSystrayIconNotificationsEnabled");
+    QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("org.kde.kmail2"), QStringLiteral("/KMail"),
+                                                          QString(), QStringLiteral("setSystrayIconNotificationsEnabled"));
     message << enable;
 
     const bool queued = QDBusConnection::sessionBus().send(message);
@@ -55,7 +56,9 @@ void KMailPlugin::setSystrayIconsNotificationsEnabled(bool enable)
 
 void KMailPlugin::setNewMailAgentEnabled(bool enable)
 {
-    QDBusMessage message = QDBusMessage::createMethodCall("org.freedesktop.Akonadi.NewMailNotifierAgent", "/NewMailNotifierAgent", "", "setEnableAgent");
+    QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.Akonadi.NewMailNotifierAgent"),
+                                                          QStringLiteral("/NewMailNotifierAgent"), QString(),
+                                                          QStringLiteral("setEnableAgent"));
     message << enable;
 
     const bool queued = QDBusConnection::sessionBus().send(message);
@@ -66,7 +69,7 @@ void KMailPlugin::setNewMailAgentEnabled(bool enable)
 
 void KMailPlugin::update(bool enable)
 {
-    setLastError("");
+    setLastError(QString());
     setSystrayIconsNotificationsEnabled(enable);
     setNewMailAgentEnabled(enable);
 }

@@ -24,7 +24,7 @@
 SortedTagsModel::SortedTagsModel(QAbstractItemModel *source, QObject *parent) :
     QSortFilterProxyModel(parent)
 {
-    setObjectName("SortedTagsModel");
+    setObjectName(QStringLiteral("SortedTagsModel"));
     Q_ASSERT(source);
     setSourceModel(source);
 

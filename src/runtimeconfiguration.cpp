@@ -23,7 +23,7 @@ RuntimeConfiguration::RuntimeConfiguration()
     : m_pluginsSupported(true)
     , m_settings(0)
     , m_saveEnabled(true)
-    , m_webDAVFileName("flow.dat")
+    , m_webDAVFileName(QStringLiteral("flow.dat"))
     , m_useSystray(true)
 {
 }

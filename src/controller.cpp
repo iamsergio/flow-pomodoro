@@ -96,14 +96,14 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
 
     connect(m_kernel, &Kernel::dayChanged, this, &Controller::currentDateChanged);
 
-    m_host = m_settings->value("webdavHost").toString();
-    m_user = m_settings->value("webdavUser").toString();
-    m_path = m_settings->value("webdavPath").toString();
-    m_password = m_settings->value("webdavPassword").toString();
-    m_isHttps = m_settings->value("webdavIsHttps", false).toBool();
-    m_port = m_settings->value("webdavPort", 80).toInt();
+    m_host = m_settings->value(QStringLiteral("webdavHost")).toString();
+    m_user = m_settings->value(QStringLiteral("webdavUser")).toString();
+    m_path = m_settings->value(QStringLiteral("webdavPath")).toString();
+    m_password = m_settings->value(QStringLiteral("webdavPassword")).toString();
+    m_isHttps = m_settings->value(QStringLiteral("webdavIsHttps"), false).toBool();
+    m_port = m_settings->value(QStringLiteral("webdavPort"), 80).toInt();
 
-    m_expertMode = qApp->arguments().contains("--expert");
+    m_expertMode = qApp->arguments().contains(QStringLiteral("--expert"));
 
     connect(this, &Controller::invalidateTaskModel,
             m_storage->taskFilterModel(), &TaskFilterProxyModel::invalidateFilter,
@@ -552,7 +552,7 @@ void Controller::setIsHttps(bool is)
 {
     if (is != m_isHttps) {
         m_isHttps = is;
-        m_settings->setValue("webdavIsHttps", m_isHttps);
+        m_settings->setValue(QStringLiteral("webdavIsHttps"), m_isHttps);
         emit isHttpsChanged();
         updateWebDavCredentials();
     }
@@ -567,7 +567,7 @@ void Controller::setHost(const QString &host)
 {
     if (host != m_host) {
         m_host = host;
-        m_settings->setValue("webdavHost", m_host);
+        m_settings->setValue(QStringLiteral("webdavHost"), m_host);
         updateWebDavCredentials();
         emit hostChanged();
     }
@@ -575,14 +575,14 @@ void Controller::setHost(const QString &host)
 
 QString Controller::path() const
 {
-    return m_path.startsWith("/") ? m_path : ("/" + m_path);
+    return m_path.startsWith(QLatin1String("/")) ? m_path : ("/" + m_path);
 }
 
 void Controller::setPath(const QString &path)
 {
     if (path != m_path) {
         m_path = path;
-        m_settings->setValue("webdavPath", m_path);
+        m_settings->setValue(QStringLiteral("webdavPath"), m_path);
         emit pathChanged();
         updateWebDavCredentials();
     }
@@ -597,7 +597,7 @@ void Controller::setUser(const QString &user)
 {
     if (user != m_user) {
         m_user = user;
-        m_settings->setValue("webdavUser", m_user);
+        m_settings->setValue(QStringLiteral("webdavUser"), m_user);
         emit userChanged();
         updateWebDavCredentials();
     }
@@ -612,7 +612,7 @@ void Controller::setPassword(const QString &pass)
 {
     if (pass != m_password) {
         m_password = pass;
-        m_settings->setValue("webdavPassword", m_password);
+        m_settings->setValue(QStringLiteral("webdavPassword"), m_password);
         emit passwordChanged();
         updateWebDavCredentials();
     }
@@ -627,14 +627,14 @@ void Controller::setPort(int port)
 {
     if (port != m_port) {
         m_port = port;
-        m_settings->setValue("webdavPort", m_port);
+        m_settings->setValue(QStringLiteral("webdavPort"), m_port);
         emit portChanged();
         updateWebDavCredentials();
     }
 }
 
 QString Controller::currentTitleText() const
-{    
+{
     if (m_page == ConfigurePage && m_expanded) {
         return tr("Configuration");
     } else if (m_page == AboutPage && m_expanded) {
@@ -654,7 +654,7 @@ QString Controller::currentTitleText() const
 
 QString Controller::version() const
 {
-    return STR(FLOW_VERSION);
+    return QStringLiteral(STR(FLOW_VERSION));
 }
 
 bool Controller::optionsContextMenuVisible() const
@@ -1005,7 +1005,7 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
            break;
        case Qt::Key_N:
            setExpanded(true);
-           addTask("New Task", /**open editor=*/true); // Detect on which tab we're on and tag it properly
+           addTask(QStringLiteral("New Task"), /**open editor=*/true); // Detect on which tab we're on and tag it properly
            return true;
            break;
        case Qt::Key_Delete:
@@ -1220,14 +1220,14 @@ void Controller::requestContextMenu(Task *task, bool tagOnlyMenu)
 
 Tag::Ptr Controller::tagForSummary(QString &summary_inout) const
 {
-    QStringList splitted = summary_inout.split(":");
-    if (splitted.count() < 2 || splitted.first().contains(" "))
+    QStringList splitted = summary_inout.split(QStringLiteral(":"));
+    if (splitted.count() < 2 || splitted.first().contains(QStringLiteral(" ")))
         return Tag::Ptr();
 
     Tag::Ptr tag = m_storage->tag(splitted.first(), /*create=*/false);
     if (tag) {
         splitted.removeAt(0);
-        summary_inout = splitted.join("").trimmed();
+        summary_inout = splitted.join(QString()).trimmed();
     }
 
     return tag;
@@ -1294,7 +1294,7 @@ LoadManager* Controller::loadManager() const
 
 QString Controller::gitDate() const
 {
-    return STR(FLOW_VERSION_DATE);
+    return QStringLiteral(STR(FLOW_VERSION_DATE));
 }
 
 QString Controller::qtVersion() const
@@ -1323,22 +1323,22 @@ int Controller::currentMenuIndex() const
 QString Controller::buildOptionsText() const
 {
     QStringList options;
-    options << (isMobile() ? "mobile" : "desktop");
+    options << (isMobile() ? QStringLiteral("mobile") : QStringLiteral("desktop"));
 
     if (m_storage->webDAVSyncSupported()) {
-        options << "webdav";
-        options << (openSSLSupported() ? "openssl" : "no-openssl");
+        options << QStringLiteral("webdav");
+        options << (openSSLSupported() ? QStringLiteral("openssl") : QStringLiteral("no-openssl"));
     } else {
-        options << "no-webdav";
+        options << QStringLiteral("no-webdav");
     }
 
     if (hackingMenuSupported())
-        options << "hacking";
+        options << QStringLiteral("hacking");
 
     QString text = tr("Build options") + ": ";
     for (int i = 0; i < options.count(); ++i) {
         if (i > 0)
-            text += ", ";
+            text += QLatin1String(", ");
         text += options.at(i);
     }
 

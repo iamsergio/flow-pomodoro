@@ -26,7 +26,7 @@ TaskContextMenuModel::TaskContextMenuModel(Task *task, QObject *parent)
     , m_task(task)
     , m_tagOnlyMenu(false)
 {
-    setObjectName("TaskContextMenuModel");
+    setObjectName(QStringLiteral("TaskContextMenuModel"));
 
     Option option;
     option.text = tr("Edit ...");

@@ -28,7 +28,7 @@ enum {
 };
 
 Settings::Settings(QObject *parent)
-    : QSettings("KDAB", "flow-pomodoro", parent)
+    : QSettings(QStringLiteral("KDAB"), QStringLiteral("flow-pomodoro"), parent)
     , m_syncScheduled(false)
     , m_needsSync(false)
     , m_defaultPomodoroDuration(DefaultPomodoroDuration)
@@ -57,27 +57,27 @@ Settings::Settings(const QString &filename, QObject *parent)
 
 void Settings::init()
 {
-    m_defaultPomodoroDuration = value("defaultPomodoroDuration", /*default=*/ DefaultPomodoroDuration).toInt();
-    m_pomodoroFunctionalityDisabled = value("pomodoroFunctionalityDisabled", /*default=*/ false).toBool();
-    m_syncAtStartup = value("syncAtStartup", /*default=*/ false).toBool();
-    setKeepScreenOnDuringPomodoro(value("keepScreenOnDuringPomodoro", /*default=*/ true).toBool());
-    m_hideEmptyTags = value("hideEmptyTags", /*default=*/ false).toBool();
-    m_useSystray = value("useSystray", /*default=*/ true).toBool();
-    m_stickyWindow = value("stickyWindow", /*default=*/ true).toBool();
-    m_showTaskAge = value("showTaskAge", /*default=*/ false).toBool();
-    m_showAllTasksView = value("showAllTasksView", /*default=*/ false).toBool();
-    m_showContextMenuAfterAdd = value("showContextMenuAfterAdd", true).toBool();
-    m_supportsDueDate = value("supportsDueDate", false).toBool();
-    m_supportsPriority = value("supportsPriority", false).toBool();
+    m_defaultPomodoroDuration = value(QStringLiteral("defaultPomodoroDuration"), /*default=*/ DefaultPomodoroDuration).toInt();
+    m_pomodoroFunctionalityDisabled = value(QStringLiteral("pomodoroFunctionalityDisabled"), /*default=*/ false).toBool();
+    m_syncAtStartup = value(QStringLiteral("syncAtStartup"), /*default=*/ false).toBool();
+    setKeepScreenOnDuringPomodoro(value(QStringLiteral("keepScreenOnDuringPomodoro"), /*default=*/ true).toBool());
+    m_hideEmptyTags = value(QStringLiteral("hideEmptyTags"), /*default=*/ false).toBool();
+    m_useSystray = value(QStringLiteral("useSystray"), /*default=*/ true).toBool();
+    m_stickyWindow = value(QStringLiteral("stickyWindow"), /*default=*/ true).toBool();
+    m_showTaskAge = value(QStringLiteral("showTaskAge"), /*default=*/ false).toBool();
+    m_showAllTasksView = value(QStringLiteral("showAllTasksView"), /*default=*/ false).toBool();
+    m_showContextMenuAfterAdd = value(QStringLiteral("showContextMenuAfterAdd"), true).toBool();
+    m_supportsDueDate = value(QStringLiteral("supportsDueDate"), false).toBool();
+    m_supportsPriority = value(QStringLiteral("supportsPriority"), false).toBool();
 
     const Position defaultPosition = PositionTop;
-    m_initialPosition = static_cast<Settings::Position>(value("windowInitialPosition", defaultPosition).toInt());
+    m_initialPosition = static_cast<Settings::Position>(value(QStringLiteral("windowInitialPosition"), defaultPosition).toInt());
     if (m_initialPosition < PositionNone || m_initialPosition >= MaxPositions) {
         setInitialPosition(defaultPosition);
     }
 
     const GeometryType defaultGeometry = GeometryStandard;
-    m_geometryType = static_cast<GeometryType>(value("windowGeometryType", defaultGeometry).toInt());
+    m_geometryType = static_cast<GeometryType>(value(QStringLiteral("windowGeometryType"), defaultGeometry).toInt());
     if (m_geometryType < GeometryStandard || m_geometryType >= MaxGeometryTypes) {
         setGeometryType(defaultGeometry);
     }
@@ -121,7 +121,7 @@ void Settings::setHideEmptyTags(bool hide)
 {
     if (hide != m_hideEmptyTags) {
         m_hideEmptyTags = hide;
-        setValue("hideEmptyTags", QVariant(hide));
+        setValue(QStringLiteral("hideEmptyTags"), QVariant(hide));
         emit hideEmptyTagsChanged();
     }
 }
@@ -135,7 +135,7 @@ void Settings::setUseSystray(bool use)
 {
     if (use != m_useSystray) {
         m_useSystray = use;
-        setValue("useSystray", QVariant(use));
+        setValue(QStringLiteral("useSystray"), QVariant(use));
         emit useSystrayChanged();
     }
 }
@@ -154,7 +154,7 @@ void Settings::setStickyWindow(bool sticky)
 {
     if (sticky != m_stickyWindow) {
         m_stickyWindow = sticky;
-        setValue("stickyWindow", QVariant(sticky));
+        setValue(QStringLiteral("stickyWindow"), QVariant(sticky));
         emit stickyWindowChanged();
     }
 }
@@ -163,7 +163,7 @@ void Settings::setShowTaskAge(bool showTaskAge)
 {
     if (showTaskAge != m_showTaskAge) {
         m_showTaskAge = showTaskAge;
-        setValue("showTaskAge", QVariant(showTaskAge));
+        setValue(QStringLiteral("showTaskAge"), QVariant(showTaskAge));
         emit showTaskAgeChanged();
     }
 }
@@ -177,7 +177,7 @@ void Settings::setShowAllTasksView(bool showAllTasksView)
 {
     if (showAllTasksView != m_showAllTasksView) {
         m_showAllTasksView = showAllTasksView;
-        setValue("showAllTasksView", QVariant(showAllTasksView));
+        setValue(QStringLiteral("showAllTasksView"), QVariant(showAllTasksView));
         emit showAllTasksViewChanged();
     }
 }
@@ -191,7 +191,7 @@ void Settings::setDefaultPomodoroDuration(int duration)
 {
     if (m_defaultPomodoroDuration != duration && duration > 0 && duration < 59) {
         m_defaultPomodoroDuration = duration;
-        setValue("defaultPomodoroDuration", QVariant(duration));
+        setValue(QStringLiteral("defaultPomodoroDuration"), QVariant(duration));
         emit defaultPomodoroDurationChanged();
     }
 }
@@ -205,7 +205,7 @@ void Settings::setPomodoroFunctionalityDisabled(bool disable)
 {
     if (disable != m_pomodoroFunctionalityDisabled) {
         m_pomodoroFunctionalityDisabled = disable;
-        setValue("pomodoroFunctionalityDisabled", QVariant(disable));
+        setValue(QStringLiteral("pomodoroFunctionalityDisabled"), QVariant(disable));
         emit pomodoroFunctionalityDisabledChanged();
     }
 }
@@ -219,7 +219,7 @@ void Settings::setKeepScreenOnDuringPomodoro(bool keep)
 {
     if (keep != m_keepScreenOnDuringPomodoro) {
         m_keepScreenOnDuringPomodoro = keep;
-        setValue("keepScreenOnDuringPomodoro", keep);
+        setValue(QStringLiteral("keepScreenOnDuringPomodoro"), keep);
         emit keepScreenOnDuringPomodoroChanged();
     }
 }
@@ -238,7 +238,7 @@ void Settings::setSyncAtStartup(bool sync)
 {
     if (m_syncAtStartup != sync) {
         m_syncAtStartup = sync;
-        setValue("syncAtStartup", sync);
+        setValue(QStringLiteral("syncAtStartup"), sync);
         emit syncAtStartupChanged();
     }
 }
@@ -247,7 +247,7 @@ void Settings::setGeometryType(GeometryType geometryType)
 {
     if (geometryType != m_geometryType) {
         m_geometryType = geometryType;
-        setValue("windowGeometryType", geometryType);
+        setValue(QStringLiteral("windowGeometryType"), geometryType);
         emit geometryTypeChanged();
     }
 }
@@ -266,7 +266,7 @@ void Settings::setInitialPosition(Position position)
 {
     if (m_initialPosition != position) {
         m_initialPosition = position;
-        setValue("windowInitialPosition", position);
+        setValue(QStringLiteral("windowInitialPosition"), position);
     }
 }
 
@@ -274,7 +274,7 @@ void Settings::setShowContextMenuAfterAdd(bool showContextMenuAfterAdd)
 {
     if (showContextMenuAfterAdd != m_showContextMenuAfterAdd) {
         m_showContextMenuAfterAdd = showContextMenuAfterAdd;
-        setValue("showContextMenuAfterAdd", showContextMenuAfterAdd);
+        setValue(QStringLiteral("showContextMenuAfterAdd"), showContextMenuAfterAdd);
         emit showContextMenuAfterAddChanged();
     }
 }
@@ -288,7 +288,7 @@ void Settings::setSupportsDueDate(bool supportsDueDate)
 {
     if (supportsDueDate != m_supportsDueDate) {
         m_supportsDueDate = supportsDueDate;
-        setValue("supportsDueDate", QVariant(supportsDueDate));
+        setValue(QStringLiteral("supportsDueDate"), QVariant(supportsDueDate));
         emit supportsDueDateChanged();
     }
 }
@@ -307,7 +307,7 @@ void Settings::setSupportsPriority(bool supports)
 {
     if (m_supportsPriority != supports) {
         m_supportsPriority = supports;
-        setValue("supportsDueDate", supports);
+        setValue(QStringLiteral("supportsDueDate"), supports);
         emit supportsPriorityChanged();
     }
 }

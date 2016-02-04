@@ -74,12 +74,12 @@ void Syncable::fromJson(const QVariantMap &map)
 {
     parseUnknownFields(map);
 
-    QString uuid = map.value("uuid").toString();
+    QString uuid = map.value(QStringLiteral("uuid")).toString();
     if (uuid.isEmpty())
         uuid = QUuid::createUuid().toString();
     setUuid(uuid);
-    setRevision(map.value("revision", 0).toInt());
-    setRevisionOnWebDAVServer(map.value("revisionOnWebDAVServer", -1).toInt());
+    setRevision(map.value(QStringLiteral("revision"), 0).toInt());
+    setRevisionOnWebDAVServer(map.value(QStringLiteral("revisionOnWebDAVServer"), -1).toInt());
 }
 
 void Syncable::setUuid(const QString &uuid)
@@ -100,9 +100,9 @@ void Syncable::setRevision(int revision)
 QVariantMap Syncable::toJson() const
 {
     QVariantMap map;
-    map.insert("revision", m_revision);
-    map.insert("revisionOnWebDAVServer", m_revisionOnWebDAVServer);
-    map.insert("uuid", uuid());
+    map.insert(QStringLiteral("revision"), m_revision);
+    map.insert(QStringLiteral("revisionOnWebDAVServer"), m_revisionOnWebDAVServer);
+    map.insert(QStringLiteral("uuid"), uuid());
 
     QVariantMap::const_iterator it = m_unknownFieldsMap.cbegin();
     QVariantMap::const_iterator end = m_unknownFieldsMap.cend();
@@ -116,9 +116,9 @@ QVector<QString> Syncable::supportedFields() const
 {
     static QVector<QString> fields;
     if (fields.isEmpty()) {
-        fields << "uuid"                     // since 0.9
-               << "revision"                 // since 0.9
-               << "revisionOnWebDAVServer";  // since 0.9
+        fields << QStringLiteral("uuid")                     // since 0.9
+               << QStringLiteral("revision")                 // since 0.9
+               << QStringLiteral("revisionOnWebDAVServer");  // since 0.9
     }
 
     return fields;

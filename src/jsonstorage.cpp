@@ -50,15 +50,15 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
     }
 
     QVariantMap rootMap = document.toVariant().toMap();
-    QVariantList tagList = rootMap.value("tags").toList();
-    QVariantList taskList = rootMap.value("tasks").toList();
-    result.instanceId = rootMap.value("instanceId").toByteArray();
+    QVariantList tagList = rootMap.value(QStringLiteral("tags")).toList();
+    QVariantList taskList = rootMap.value(QStringLiteral("tasks")).toList();
+    result.instanceId = rootMap.value(QStringLiteral("instanceId")).toByteArray();
     if (result.instanceId.isEmpty())
         result.instanceId = QUuid::createUuid().toByteArray();
 
-    int serializerVersion = rootMap.value("JsonSerializerVersion", JsonSerializerVersion1).toInt();
+    int serializerVersion = rootMap.value(QStringLiteral("JsonSerializerVersion"), JsonSerializerVersion1).toInt();
     if (serializerVersion > result.serializerVersion) {
-        errorMsg = QString("Found serializer version %1 which is bigger than %2. Update your application").arg(serializerVersion).arg(result.serializerVersion);
+        errorMsg = QStringLiteral("Found serializer version %1 which is bigger than %2. Update your application").arg(serializerVersion).arg(result.serializerVersion);
         return result;
     }
 
@@ -166,10 +166,10 @@ QVariantMap JsonStorage::toJsonVariantMap(const Data &data)
         tasksVariant << data.tasks.at(i)->toJson();
     }
 
-    map.insert("instanceId", data.instanceId);
-    map.insert("tags", tagsVariant);
-    map.insert("tasks", tasksVariant);
-    map.insert("JsonSerializerVersion", data.serializerVersion);
+    map.insert(QStringLiteral("instanceId"), data.instanceId);
+    map.insert(QStringLiteral("tags"), tagsVariant);
+    map.insert(QStringLiteral("tasks"), tasksVariant);
+    map.insert(QStringLiteral("JsonSerializerVersion"), data.serializerVersion);
 
     return map;
 }

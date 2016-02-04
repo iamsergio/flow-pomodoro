@@ -83,7 +83,7 @@ static QString logFile()
 static bool acceptsWarning(const QString &warning)
 {
     // False positive binding loop or a bug in QtQuick.Controls, ignore it.
-    if (warning.contains("Binding loop detected for property") && warning.contains("FlowCheckBox.qml"))
+    if (warning.contains(QStringLiteral("Binding loop detected for property")) && warning.contains(QStringLiteral("FlowCheckBox.qml")))
         return false;
 
     return true;
@@ -98,19 +98,19 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
     QString level;
     switch (type) {
     case QtDebugMsg:
-        level = "Debug: ";
+        level = QStringLiteral("Debug: ");
         break;
     case QtWarningMsg:
-        level = "Warning: ";
+        level = QStringLiteral("Warning: ");
         break;
     case QtCriticalMsg:
-        level = "Critical: ";
+        level = QStringLiteral("Critical: ");
         break;
     case QtInfoMsg:
-        level = "Info: ";
+        level = QStringLiteral("Info: ");
         break;
     case QtFatalMsg:
-        level = "Fatal: ";
+        level = QStringLiteral("Fatal: ");
         abort();
     }
 
@@ -153,7 +153,7 @@ static void onFocusObjectChanged(QObject *obj)
 
 int main(int argc, char *argv[])
 {
-    Utils::printTimeInfo("main");
+    Utils::printTimeInfo(QStringLiteral("main"));
 
     // qputenv("QML_DISABLE_DISTANCEFIELD", "1");
 #ifdef Q_OS_WIN
@@ -167,14 +167,14 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(hostsplugin);
 #endif
     Application app(argc, argv);
-    Utils::printTimeInfo("main: created QApplication");
-    app.setOrganizationName("KDAB");
-    app.setApplicationName("flow");
+    Utils::printTimeInfo(QStringLiteral("main: created QApplication"));
+    app.setOrganizationName(QStringLiteral("KDAB"));
+    app.setApplicationName(QStringLiteral("flow"));
 
     QTranslator translator;
-    translator.load(QString(":/translations/flow_%1").arg(QLocale::system().name())); // export LANG="pt_PT" to change
+    translator.load(QStringLiteral(":/translations/flow_%1").arg(QLocale::system().name())); // export LANG="pt_PT" to change
     app.installTranslator(&translator);
-    Utils::printTimeInfo("main: installed QTranslator");
+    Utils::printTimeInfo(QStringLiteral("main: installed QTranslator"));
 
     RuntimeConfiguration defaultConfig;
     defaultConfig.setDataFileName(defaultDataFileName());
@@ -182,11 +182,11 @@ int main(int argc, char *argv[])
 
     // app.connect(&app, &Application::focusObjectChanged, &onFocusObjectChanged);
 
-    Utils::printTimeInfo("main: created Kernel::instance()");
+    Utils::printTimeInfo(QStringLiteral("main: created Kernel::instance()"));
     QuickView window(&kernel);
-    Utils::printTimeInfo("main: created QuickView");
+    Utils::printTimeInfo(QStringLiteral("main: created QuickView"));
     initDBus(&kernel);
-    Utils::printTimeInfo("main: initialized dbus");
+    Utils::printTimeInfo(QStringLiteral("main: initialized dbus"));
 
     if (Utils::isMobile()) {
         window.showMaximized(); // Don't use fullscreen on android
@@ -203,6 +203,6 @@ int main(int argc, char *argv[])
         window.show();
     }
 
-    Utils::printTimeInfo("main: starting app.exec()");
+    Utils::printTimeInfo(QStringLiteral("main: starting app.exec()"));
     return app.exec();
 }

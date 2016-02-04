@@ -105,7 +105,7 @@ void Utils::openUrl(const QUrl &url)
 
     QString command;
 #if defined(Q_OS_LINUX)
-    command = "xdg-open";
+    command = QStringLiteral("xdg-open");
 #elif defined(Q_OS_WIN)
     command = "start";
 #elif defined(Q_OS_OSX)

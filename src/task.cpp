@@ -361,34 +361,34 @@ void Task::setWeakPointer(const QWeakPointer<Task> &ptr)
 QVariantMap Task::toJson() const
 {
     QVariantMap map = Syncable::toJson();
-    map.insert("summary", m_summary);
-    map.insert("staged", m_staged);
-    map.insert("description", m_description);
+    map.insert(QStringLiteral("summary"), m_summary);
+    map.insert(QStringLiteral("staged"), m_staged);
+    map.insert(QStringLiteral("description"), m_description);
     QVariantList tags;
     const int numTags = m_tags.count();
     tags.reserve(numTags);
     for (int i = 0; i < numTags; ++i)
         tags << m_tags.at(i).tagName();
-    map.insert("tags", tags);
-    map.insert("creationTimestamp", m_creationDate.toMSecsSinceEpoch());
+    map.insert(QStringLiteral("tags"), tags);
+    map.insert(QStringLiteral("creationTimestamp"), m_creationDate.toMSecsSinceEpoch());
 
     if (m_modificationDate.isValid())
-        map.insert("modificationTimestamp", m_modificationDate.toMSecsSinceEpoch());
+        map.insert(QStringLiteral("modificationTimestamp"), m_modificationDate.toMSecsSinceEpoch());
 
     if (m_lastPomodoroDate.isValid())
-        map.insert("lastPomodoroDate", m_lastPomodoroDate.toMSecsSinceEpoch());
+        map.insert(QStringLiteral("lastPomodoroDate"), m_lastPomodoroDate.toMSecsSinceEpoch());
 
     if (m_dueDate.isValid()) {
-        map.insert("dueDate", m_dueDate.toJulianDay());
+        map.insert(QStringLiteral("dueDate"), m_dueDate.toJulianDay());
         if (m_dueDate.recurs()) {
-            map.insert("periodType", m_dueDate.periodType());
+            map.insert(QStringLiteral("periodType"), m_dueDate.periodType());
             if (m_dueDate.frequency() > 1)
-                map.insert("frequency", m_dueDate.frequency());
+                map.insert(QStringLiteral("frequency"), m_dueDate.frequency());
         }
     }
 
     if (m_priority != PriorityNone)
-        map.insert("priority", QVariant(m_priority));
+        map.insert(QStringLiteral("priority"), QVariant(m_priority));
 
     return map;
 }
@@ -399,17 +399,17 @@ QVector<QString> Task::supportedFields() const
     if (fields.isEmpty()) {
         fields = Syncable::supportedFields();
         fields.reserve(1); // so I don't forget reserve when adding more fields
-        fields << "summary"                 // Since 0.9
-               << "staged"                  // Since 0.9
-               << "description"             // Since 0.9
-               << "creationTimestamp"       // Since 0.9
-               << "tags"                    // Since 0.9
-               << "modificationTimestamp"   // Since 0.9
-               << "lastPomodoroDate"        // Since 0.9
-               << "dueDate"                 // Since 1.0
-               << "priority"                // Since 1.0
-               << "periodType"              // Since 1.1
-               << "frequency";              // Since 1.1
+        fields << QStringLiteral("summary")                 // Since 0.9
+               << QStringLiteral("staged")                  // Since 0.9
+               << QStringLiteral("description")             // Since 0.9
+               << QStringLiteral("creationTimestamp")       // Since 0.9
+               << QStringLiteral("tags")                    // Since 0.9
+               << QStringLiteral("modificationTimestamp")   // Since 0.9
+               << QStringLiteral("lastPomodoroDate")        // Since 0.9
+               << QStringLiteral("dueDate")                 // Since 1.0
+               << QStringLiteral("priority")                // Since 1.0
+               << QStringLiteral("periodType")              // Since 1.1
+               << QStringLiteral("frequency");              // Since 1.1
     }
 
     return fields;
@@ -419,7 +419,7 @@ void Task::fromJson(const QVariantMap &map)
 {
     Syncable::fromJson(map);
 
-    QString summary = map.value("summary").toString();
+    QString summary = map.value(QStringLiteral("summary")).toString();
     if (summary.isEmpty()) {
         qWarning() << Q_FUNC_INFO << "empty task summary";
         summary = tr("New Task");
@@ -428,33 +428,33 @@ void Task::fromJson(const QVariantMap &map)
     blockSignals(true); // so we don't increment revision while calling setters
     setSummary(summary);
 
-    QString description = map.value("description").toString();
+    QString description = map.value(QStringLiteral("description")).toString();
     setDescription(description);
-    setStaged(map.value("staged", false).toBool());
-    setPriority(static_cast<Priority>(map.value("priority", PriorityNone).toInt()));
+    setStaged(map.value(QStringLiteral("staged"), false).toBool());
+    setPriority(static_cast<Priority>(map.value(QStringLiteral("priority"), PriorityNone).toInt()));
 
-    QDateTime creationDate = QDateTime::fromMSecsSinceEpoch(map.value("creationTimestamp", QDateTime()).toLongLong());
+    QDateTime creationDate = QDateTime::fromMSecsSinceEpoch(map.value(QStringLiteral("creationTimestamp"), QDateTime()).toLongLong());
     if (creationDate.isValid()) // If invalid it uses the ones set in CTOR
         setCreationDate(creationDate);
 
-    QDateTime modificationDate = QDateTime::fromMSecsSinceEpoch(map.value("modificationTimestamp", QDateTime()).toLongLong());
+    QDateTime modificationDate = QDateTime::fromMSecsSinceEpoch(map.value(QStringLiteral("modificationTimestamp"), QDateTime()).toLongLong());
     if (modificationDate.isValid())
         setModificationDate(modificationDate);
 
-    QDateTime lastPomodoroDate = QDateTime::fromMSecsSinceEpoch(map.value("lastPomodoroDate", QDateTime()).toLongLong());
+    QDateTime lastPomodoroDate = QDateTime::fromMSecsSinceEpoch(map.value(QStringLiteral("lastPomodoroDate"), QDateTime()).toLongLong());
     if (lastPomodoroDate.isValid())
         setLastPomodoroDate(lastPomodoroDate);
 
-    if (map.contains("dueDate")) { // from julian of QDate() then toJulian returns a valid date, so check map
-        QDate date = QDate::fromJulianDay(map.value("dueDate").toLongLong());
+    if (map.contains(QStringLiteral("dueDate"))) { // from julian of QDate() then toJulian returns a valid date, so check map
+        QDate date = QDate::fromJulianDay(map.value(QStringLiteral("dueDate")).toLongLong());
         if (date.isValid() && date.toJulianDay() != 0) {
-            int periodType = map.value("periodType", DueDate::PeriodTypeNone).toInt();
-            int frequency = map.value("frequency", 1).toInt();
+            int periodType = map.value(QStringLiteral("periodType"), DueDate::PeriodTypeNone).toInt();
+            int frequency = map.value(QStringLiteral("frequency"), 1).toInt();
             setDueDate(DueDate(date, static_cast<DueDate::PeriodType>(periodType), frequency));
         }
     }
 
-    QVariantList tagsVariant = map.value("tags").toList();
+    QVariantList tagsVariant = map.value(QStringLiteral("tags")).toList();
     TagRef::List tags;
     foreach (const QVariant &tag, tagsVariant) {
         if (!tag.toString().isEmpty())
@@ -562,7 +562,7 @@ QString Task::dueDateString() const
 QString Task::prettyDueDateString() const
 {
     if (!m_dueDate.isValid())
-        return "";
+        return QString();
 
     const QDate date = m_dueDate.date();
 
@@ -577,9 +577,9 @@ QString Task::prettyDueDateString() const
     else if (daysTo < 0)
         pretty = tr("overdue");
      else if (daysTo <= 7)
-        pretty = tr("next %1").arg(m_dueDate.date().toString("dddd")); // Next Monday, for example.
+        pretty = tr("next %1").arg(m_dueDate.date().toString(QStringLiteral("dddd"))); // Next Monday, for example.
     else // Year is visual noise if equal to current year
-        pretty = date.year() == today.year() ? date.toString("MMMM d")
+        pretty = date.year() == today.year() ? date.toString(QStringLiteral("MMMM d"))
                                              : date.toString(Qt::ISODate);
 
     return pretty;
@@ -588,7 +588,7 @@ QString Task::prettyDueDateString() const
 QString Task::prettyDueDateRecurString() const
 {
     return prettyDueDateString() + (m_dueDate.recurs() ? (" (" + m_dueDate.recurrenceString() + ")")
-                                                       : "");
+                                                       : QString());
 }
 
 bool Task::isOverdue() const
@@ -628,7 +628,7 @@ QString Task::priorityStr() const
 bool Task::isUrl() const
 {
     // We only want to open http urls, so don't use QUrl::scheme()
-    return m_summary.toLower().startsWith("http://") || m_summary.toLower().startsWith("https://");
+    return m_summary.toLower().startsWith(QLatin1String("http://")) || m_summary.toLower().startsWith(QLatin1String("https://"));
 }
 
 DueDate::PeriodType Task::periodType() const

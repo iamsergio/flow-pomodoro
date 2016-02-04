@@ -44,8 +44,10 @@ bool PidginPlugin::enabled() const
 
 void PidginPlugin::update(bool enable)
 {
-    setLastError("");
-    QDBusMessage message = QDBusMessage::createMethodCall("im.pidgin.purple.PurpleService", "/im/pidgin/purple/PurpleObject", "", "PurplePrefsSetBool");
+    setLastError(QString());
+    QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("im.pidgin.purple.PurpleService"),
+                                                          QStringLiteral("/im/pidgin/purple/PurpleObject"),
+                                                          QString(), QStringLiteral("PurplePrefsSetBool"));
     message << "/pidgin/docklet/change_icon_on_unread" << (enable ? 1 : 0);
     const bool queued = QDBusConnection::sessionBus().send(message);
     if (!queued) {

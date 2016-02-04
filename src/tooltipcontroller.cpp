@@ -45,6 +45,6 @@ void ToolTipController::showToolTip(QQuickItem *item, const QString &text)
 void ToolTipController::hideToolTip()
 {
 #ifdef QT_WIDGETS_LIB
-    QToolTip::showText(QPoint(), "");
+    QToolTip::showText(QPoint(), QString());
 #endif
 }

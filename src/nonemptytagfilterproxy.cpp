@@ -33,7 +33,7 @@ NonEmptyTagFilterProxy::NonEmptyTagFilterProxy(QObject *parent)
             this, &NonEmptyTagFilterProxy::countChanged);
     connect(this, &NonEmptyTagFilterProxy::layoutChanged,
             this, &NonEmptyTagFilterProxy::countChanged);
-    setObjectName("NonEmptyTagFilterProxy");
+    setObjectName(QStringLiteral("NonEmptyTagFilterProxy"));
 }
 
 int NonEmptyTagFilterProxy::count() const
