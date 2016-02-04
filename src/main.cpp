@@ -106,6 +106,9 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
     case QtCriticalMsg:
         level = "Critical: ";
         break;
+    case QtInfoMsg:
+        level = "Info: ";
+        break;
     case QtFatalMsg:
         level = "Fatal: ";
         abort();
