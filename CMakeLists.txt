@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.8.8)
 
 project(flow)
 
-find_package(Qt5Gui 5.4)
-find_package(Qt5Qml 5.4)
-find_package(Qt5Quick 5.4)
+find_package(Qt5Gui 5.5)
+find_package(Qt5Qml 5.5)
+find_package(Qt5Quick 5.5)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
