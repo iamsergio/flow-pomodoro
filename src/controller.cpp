@@ -1397,5 +1397,5 @@ void Controller::dismissTaskMenu()
 void Controller::dismissTaskMenuDelayed()
 {
     // No technical reason for calling it delayed. Just looks better when using the UI.
-    QTimer::singleShot(200, this, SLOT(dismissTaskMenu()));
+    QTimer::singleShot(200, this, &Controller::dismissTaskMenu);
 }
