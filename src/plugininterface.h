@@ -36,12 +36,13 @@ class QSettings;
 class PluginInterface
 {
 public:
-	typedef QList<PluginInterface*> List;
+    typedef QList<PluginInterface*> List;
 
+    PluginInterface() = default;
     virtual ~PluginInterface() {}
 
     virtual bool enabled() const = 0;
-	virtual void setEnabled(bool enabled) = 0;
+    virtual void setEnabled(bool enabled) = 0;
     virtual void setTaskStatus(TaskStatus status) = 0;
     virtual QString text() const = 0;
     virtual QString helpText() const = 0;
