@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 SUPPORTED PLATFORMS
 
-    Tested: Linux, Windows 7, 8, OSX, Android {4.4, 5.0}, BlackBerry 10, iOS
+    Tested: Linux, Windows 7, 8, 10, OSX, Android {4.4, 5.0}, iOS
 --------------------------------------------------------------------------------
 PREBUILT PACKAGES
 
@@ -12,7 +12,7 @@ PREBUILT PACKAGES
 --------------------------------------------------------------------------------
 DEPENDENCIES
 
-  Qt >= 5.4.0 (QtDeclarative and QtQuickControls)
+  Qt >= 5.5.0 (QtDeclarative and QtQuickControls)
 --------------------------------------------------------------------------------
 BUILD
 

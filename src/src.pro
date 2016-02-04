@@ -3,11 +3,11 @@ include ("../global.pri")
 TEMPLATE = app
 TARGET = flow
 
-qtHaveModule(widgets):!android:!blackberry:!ios {
+qtHaveModule(widgets):!android:!ios {
     QT += widgets
 }
 
-!android:!blackberry:!ios {
+!android:!ios {
     QT += dbus
     SOURCES += dbus/flow.cpp
     HEADERS += dbus/flow.h

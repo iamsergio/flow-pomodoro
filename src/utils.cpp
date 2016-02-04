@@ -70,7 +70,7 @@ void Utils::keepScreenOn(bool keep)
 
 bool Utils::isMobile()
 {
-#if defined(Q_OS_ANDROID) || defined(Q_OS_BLACKBERRY) || defined(Q_OS_IOS) || defined(Q_OS_WINRT)
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WINRT)
     return true;
 #else
     return false;

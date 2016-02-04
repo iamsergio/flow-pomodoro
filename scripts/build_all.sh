@@ -28,11 +28,6 @@ git clean -fdx &> $FLOW_BUILD_LOG
 qmake -spec linux-clang DEFINES+=DEVELOPER_MODE &> $FLOW_BUILD_LOG
 $MAKECOMMAND &> $FLOW_BUILD_LOG
 #-------------------------------------------------------------------------------
-echo "4. Building Blackberry in source"
-cd $FLOW_SRC_DIR
-git clean -fdx &> $FLOW_BUILD_LOG
-sh build-blackberry.sh &> $FLOW_BUILD_LOG
-#-------------------------------------------------------------------------------
 echo "5. Building Android in source"
 cd $FLOW_SRC_DIR
 git clean -fdx &> $FLOW_BUILD_LOG

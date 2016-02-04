@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 
-!android:!blackberry:!ios {
+!android:!ios {
     contains(QT_CONFIG, dbus) {
         SUBDIRS += kmail
         SUBDIRS += pidgin
