@@ -251,7 +251,7 @@ public Q_SLOTS:
 
     void cycleTagSelectionLeft();
     void cycleTagSelectionRight();
-    void selectTagByFirstLetter(const QChar &);
+    void selectTagByFirstLetter(QChar);
 
     void showQuestionPopup(QObject *obj, const QString &text, const QString &callback);
     void onPopupButtonClicked(bool okClicked);

@@ -139,7 +139,7 @@ public:
     QDateTime modificationDate() const;
     QDateTime lastPomodoroDate() const;
     QDate dueDate() const;
-    void setDueDate(const DueDate &);
+    void setDueDate(DueDate );
     void setLastPomodoroDate(const QDateTime &);
 
     bool running() const;

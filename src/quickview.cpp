@@ -305,7 +305,7 @@ int QuickView::contractedHeight() const
     return m_contractedHeight;
 }
 
-void QuickView::showWidgetContextMenu(const QPoint &pos)
+void QuickView::showWidgetContextMenu(QPoint pos)
 {
 #ifdef QT_WIDGETS_LIB
 

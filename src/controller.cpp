@@ -295,7 +295,7 @@ void Controller::cycleTagSelectionRight()
         setCurrentTag(m->data(m->index(currentIndex + 1, 0), Storage::TagRole).value<Tag*>());
 }
 
-void Controller::selectTagByFirstLetter(const QChar &c)
+void Controller::selectTagByFirstLetter(QChar c)
 {
     int count = tagsModel()->rowCount();
     for (int i = 0; i < count; ++i) {

@@ -324,7 +324,7 @@ QDate Task::dueDate() const
     return m_dueDate.date();
 }
 
-void Task::setDueDate(const DueDate &date)
+void Task::setDueDate(DueDate date)
 {
     if (date != m_dueDate) {
         m_dueDate = date;

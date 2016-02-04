@@ -53,7 +53,7 @@ public:
 #endif
 
 public Q_SLOTS:
-    void showWidgetContextMenu(const QPoint &pos);
+    void showWidgetContextMenu(QPoint pos);
 
 protected:
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;

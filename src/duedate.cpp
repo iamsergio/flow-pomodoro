@@ -37,7 +37,7 @@ DueDate::DueDate()
 {
 }
 
-DueDate::DueDate(const QDate &date, PeriodType period, uint frequency)
+DueDate::DueDate(QDate date, PeriodType period, uint frequency)
     : m_date(date)
     , m_periodType(capPeriod(period))
     , m_frequency(capFrequency(frequency))
@@ -79,14 +79,14 @@ bool DueDate::recurs() const
     return isValid() && m_periodType > PeriodTypeNone && m_periodType < PeriodTypeCount;
 }
 
-bool DueDate::operator==(const DueDate &other) const
+bool DueDate::operator==(DueDate other) const
 {
     return m_periodType == other.m_periodType &&
            m_date == other.m_date &&
            m_frequency == other.m_frequency;
 }
 
-bool DueDate::operator!=(const DueDate &other) const
+bool DueDate::operator!=(DueDate other) const
 {
     return !(*this == other);
 }

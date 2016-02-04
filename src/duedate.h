@@ -39,7 +39,7 @@ public:
     };
 
     DueDate();
-    DueDate(const QDate &date, PeriodType = PeriodTypeNone, uint frequency = 1);
+    DueDate(QDate date, PeriodType = PeriodTypeNone, uint frequency = 1);
 
     void setPeriodType(PeriodType);
     PeriodType periodType() const;
@@ -57,8 +57,8 @@ public:
     QString frequencyWord() const;
     QString recurrenceString() const;
 
-    bool operator==(const DueDate &) const;
-    bool operator!=(const DueDate &) const;
+    bool operator==(DueDate) const;
+    bool operator!=(DueDate) const;
 
 private:
     QDate m_date;
