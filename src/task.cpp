@@ -365,7 +365,9 @@ QVariantMap Task::toJson() const
     map.insert("staged", m_staged);
     map.insert("description", m_description);
     QVariantList tags;
-    for (int i = 0; i < m_tags.count(); ++i)
+    const int numTags = m_tags.count();
+    tags.reserve(numTags);
+    for (int i = 0; i < numTags; ++i)
         tags << m_tags.at(i).tagName();
     map.insert("tags", tags);
     map.insert("creationTimestamp", m_creationDate.toMSecsSinceEpoch());

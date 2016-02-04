@@ -154,11 +154,15 @@ QVariantMap JsonStorage::toJsonVariantMap(const Data &data)
     QVariantMap map;
     QVariantList tasksVariant;
     QVariantList tagsVariant;
-    for (int i = 0; i < data.tags.count(); ++i) {
+    const int numTags = data.tags.count();
+    tagsVariant.reserve(numTags);
+    for (int i = 0; i < numTags; ++i) {
         tagsVariant << data.tags.at(i)->toJson();
     }
 
-    for (int i = 0; i < data.tasks.count(); ++i) {
+    const int numTasks = data.tasks.count();
+    tasksVariant.reserve(numTasks);
+    for (int i = 0; i < numTasks; ++i) {
         tasksVariant << data.tasks.at(i)->toJson();
     }
 
