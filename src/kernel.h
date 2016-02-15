@@ -76,7 +76,6 @@ private Q_SLOTS:
 #endif
 
 private:
-    void setupDayChangedTimer(const QDateTime &currentDateTime);
     void loadPlugins();
     void notifyPlugins(TaskStatus newStatus);
 
