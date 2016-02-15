@@ -37,7 +37,6 @@
 #include "extendedtagsmodel.h"
 #include "sortedtaskcontextmenumodel.h"
 
-#include <QStandardPaths>
 #include <QAbstractListModel>
 #include <QAbstractItemModel>
 #include <QQmlEngine>
@@ -163,7 +162,7 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     const QDateTime currentDateTime = QDateTime::currentDateTime();
     m_currentDate = currentDateTime.date();
     connect(&m_dayChangedTimer, &QTimer::timeout, this, &Kernel::checkDayChanged);
-    setupDayChangedTimer(currentDateTime);
+    m_dayChangedTimer.start(5 * 60 * 1000); // every 5 minutes instead of daily in case of suspend
 
     // Startup counts as dayChanged, so handlers are run
     QMetaObject::invokeMethod(this, "dayChanged", Qt::QueuedConnection);
@@ -344,23 +343,16 @@ void Kernel::onTaskStatusChanged()
 void Kernel::checkDayChanged()
 {
     const QDateTime currentDateTime = QDateTime::currentDateTime();
-    if (m_currentDate != currentDateTime.date())
+    if (m_currentDate != currentDateTime.date()) {
+        m_currentDate = currentDateTime.date();
         emit dayChanged();
-    m_currentDate = currentDateTime.date();
-    setupDayChangedTimer(currentDateTime);
+    }
 }
 
 void Kernel::maybeLoadPlugins()
 {
     if (!Utils::isMobile() && m_runtimeConfiguration.pluginsSupported())
         loadPlugins();
-}
-
-// Receives by argument so we don't query for the time twice, since we might get different results
-void Kernel::setupDayChangedTimer(const QDateTime &currentDateTime)
-{
-    const QDate tomorrow = currentDateTime.date().addDays(1);
-    m_dayChangedTimer.start(currentDateTime.msecsTo(QDateTime(tomorrow, QTime(0, 1))));
 }
 
 #if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)

@@ -28,7 +28,6 @@
 #include "utils.h"
 #include "settings.h"
 
-#include <QStandardPaths>
 #include <QQmlContext>
 #include <QString>
 #include <QScreen>
@@ -202,7 +201,7 @@ void QuickView::setupGeometry()
 
 QUrl QuickView::styleFileName() const
 {
-    const QString &dataDirectory = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    const QString &dataDirectory = m_kernel->runtimeConfiguration().dataFileName();
     const QString fileName = dataDirectory + "/Style.qml";
 
     if (QFile::exists(fileName)) {

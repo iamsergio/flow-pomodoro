@@ -28,6 +28,7 @@ class AssertingProxyModel : public QIdentityProxyModel
 public:
     explicit AssertingProxyModel(QObject *parent = 0);
 
+    void setSourceModel(QAbstractItemModel *model) override;
 
 private Q_SLOTS:
     void onModelReset();

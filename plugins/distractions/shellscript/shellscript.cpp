@@ -28,7 +28,6 @@
 #include <QQuickItem>
 #include <QQmlContext>
 #include <QQmlEngine>
-#include <QStandardPaths>
 
 #ifdef Q_OS_LINUX
 static QString linuxTextEditor()

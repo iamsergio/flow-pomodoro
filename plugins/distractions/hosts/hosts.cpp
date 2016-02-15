@@ -20,7 +20,6 @@
 #include "hosts.h"
 
 #include <QDebug>
-#include <QStandardPaths>
 #include <QFile>
 #include <QRunnable>
 #include <QThreadPool>
