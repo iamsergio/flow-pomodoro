@@ -8,7 +8,7 @@ PREBUILT PACKAGES
     Windows, OSX : https://github.com/iamsergio/flow-pomodoro/releases
     Android      : https://play.google.com/store/apps/details?id=com.kdab.flow_pomodoro
     Archlinux    : https://aur.archlinux.org/packages/flow-pomodoro/
-    Gentoo       : https://github.com/mrueg/mrueg-overlay/tree/master/x11-misc/flow-pomodoro
+    Gentoo       : https://github.com/gentoo/gentoo/tree/master/x11-misc/flow-pomodoro
 --------------------------------------------------------------------------------
 DEPENDENCIES
 
