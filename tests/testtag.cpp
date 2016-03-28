@@ -56,11 +56,12 @@ void TestTag::testSetName()
     QCOMPARE(m_spyA.count(), 0);
 
     m_tagA->setName("X");
-    QCOMPARE(m_spyA.caughtSignals(), {"nameChanged"});
+    const QStringList expectedSignals = { "nameChanged" };
+    QCOMPARE(m_spyA.caughtSignals(), expectedSignals);
     m_spyA.clear();
     m_tagA->setName("tagA ");
     QCOMPARE(m_tagA->name(), QString("tagA"));
-    QCOMPARE(m_spyA.caughtSignals(), {"nameChanged"});
+    QCOMPARE(m_spyA.caughtSignals(), expectedSignals);
     QVERIFY(checkStorageConsistency());
 }
 
