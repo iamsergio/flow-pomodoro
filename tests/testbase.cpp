@@ -149,6 +149,7 @@ void TestBase::mouseClick(QQuickItem *item)
     QVERIFY(item->isVisible());
     m_view->mouseClick(item);
     QTest::qWait(400);
+    QTest::waitForEvents();
 }
 
 void TestBase::moveMouseTo(QQuickItem *item)
