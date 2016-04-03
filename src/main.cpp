@@ -121,14 +121,20 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
     out << level << msg << "\r\n";
 }
 
-static QString defaultDataFileName()
+static QString defaultFlowDir()
 {
 #if defined(Q_OS_ANDROID) && defined(DEVELOPER_MODE)
-    return "/storage/sdcard0/flow.dat";
+    return QStringLiteral("/storage/sdcard0/");
 #endif
-    const QByteArray env_path = qgetenv("FLOW_DATA_FILE");
-    const QString directory = env_path.isEmpty() ? QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-                                                 : QString::fromLatin1(env_path);
+    const QByteArray env_path = qgetenv("FLOW_DIR");
+    return env_path.isEmpty() ? QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+                              : QString::fromLatin1(env_path);
+}
+
+static QString defaultDataFileName()
+{
+    const QString directory = defaultFlowDir();
+
     if (!QFile::exists(directory)) {
         QDir dir(directory);
         if (!dir.mkpath(directory)) {
