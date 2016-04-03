@@ -162,6 +162,7 @@ void TestUI::gotoLater()
     QVERIFY(switchItem->isVisible());
 
     mouseClick(switchItem); // Click the switch
+    waitUntil([this] { return m_controller->queueType() == Controller::QueueTypeArchive; } );
 
     QCOMPARE(m_controller->queueType(), Controller::QueueTypeArchive);
 }
@@ -347,6 +348,7 @@ void TestUI::testShowMenuAfterAddTask()
 
 void TestUI::testAddUntaggedBug()
 {
+    QTest::waitForEvents();
     m_storage->clearTasks();
 
     // Bug: Adding a tag in the untagged area shouldn't create a tag with "Untagged" tag

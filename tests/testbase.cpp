@@ -141,8 +141,12 @@ void TestBase::waitForIt()
 
 void TestBase::waitUntil(std::function<bool ()> pred)
 {
+    const int waitStep = 50;
+    int timeWaited = 0;
     while (!pred()) {
-        QTest::qWait(50);
+        QTest::qWait(waitStep);
+        timeWaited += waitStep;
+        QVERIFY(timeWaited < 3000);
     }
 }
 
