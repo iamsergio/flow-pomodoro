@@ -24,6 +24,8 @@
 #include <QObject>
 #include <qnamespace.h>
 
+#include <functional>
+
 class Kernel;
 class QuickView;
 class Storage;
@@ -43,6 +45,8 @@ public:
     void createNewKernel(const QString &dataFilename, bool load = true);
     void createInstanceWithUI();
     void waitForIt();
+    void waitUntil(std::function<bool()> pred);
+    bool textInputHasFocus() const;
     void stopWaiting();
     void mouseClick(QQuickItem *item);
     void moveMouseTo(QQuickItem *item);

@@ -139,6 +139,19 @@ void TestBase::waitForIt()
     QVERIFY(!QTestEventLoop::instance().timeout());
 }
 
+void TestBase::waitUntil(std::function<bool ()> pred)
+{
+    while (!pred()) {
+        QTest::qWait(50);
+    }
+}
+
+bool TestBase::textInputHasFocus() const
+{
+    QQuickItem *focusedItem = m_view->activeFocusItem();
+    return focusedItem && QString(focusedItem->metaObject()->className()).startsWith("TextInputWithHandles");
+}
+
 void TestBase::stopWaiting()
 {
     QTestEventLoop::instance().exitLoop();
