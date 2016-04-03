@@ -138,7 +138,7 @@ static QString defaultDataFileName()
         }
     }
 
-    return directory + "/flow.dat";
+    return QDir::toNativeSeparators(QDir(directory).absoluteFilePath(QStringLiteral("flow.dat")));
 }
 
 /*
