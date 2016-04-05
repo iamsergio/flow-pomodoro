@@ -401,9 +401,13 @@ void TestUI::testNewTagDialog()
     newTagItem = m_view->itemsByName("taskMenuChoice").at(0); // 0 is the header
     QVERIFY(newTagItem);
     qApp->processEvents();
+    QTest::waitForEvents();
+    QTest::qWait(500);
     mouseClick(newTagItem);
+    waitUntil([tagDialog] { return tagDialog->isVisible(); });
     QVERIFY(tagDialog->isVisible());
     sendKey(Qt::Key_Enter);
+    waitUntil([tagDialog] { return !tagDialog->isVisible(); });
     QVERIFY(!tagDialog->isVisible());
     QCOMPARE(tagCount, m_storage->tags().count());
     QVERIFY(menu->isVisible());
