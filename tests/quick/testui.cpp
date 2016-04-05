@@ -467,6 +467,7 @@ void TestUI::testDueDate()
 
 void TestUI::testPriority()
 {
+    m_settings->setSupportsPriority(true);
     //----------------------------------------------------------------------------------------------
     // Clear tasks
     gotoToday();
@@ -527,6 +528,8 @@ void TestUI::testPriority()
     QCOMPARE(tasks.at(0), task1); // high pri
     QCOMPARE(tasks.at(1), task2);
     QCOMPARE(tasks.at(2), task3);
+    //----------------------------------------------------------------------------------------------
+    m_settings->setSupportsPriority(false);
 }
 
 void TestUI::testRecurrence()
