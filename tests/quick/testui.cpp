@@ -259,6 +259,7 @@ void TestUI::testArchiveTask()
     QVERIFY(!archiveIcon->isVisible());
     QQuickItem* taskItem = m_view->itemByName("taskItem");
     moveMouseTo(taskItem);
+    waitUntil([archiveIcon] { return archiveIcon->isVisible(); } );
     QVERIFY(archiveIcon->isVisible());
     QVERIFY(playIcon->isVisible());
     mouseClick(archiveIcon);
