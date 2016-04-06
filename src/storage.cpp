@@ -610,6 +610,13 @@ int Storage::taskCount() const
     return m_data.tasks.count();
 }
 
+int Storage::nonRecurringTaskCount() const
+{
+    return std::count_if(m_data.tasks.cbegin(), m_data.tasks.cend(), [](const Task::Ptr &t) {
+       return !t->recurs();
+    });
+}
+
 int Storage::ageAverage() const
 {
     if (m_data.tasks.isEmpty())
