@@ -4,6 +4,8 @@
   Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
+  Copyright (C) 2016 Sérgio Martins <iamsergio@gmail.com>
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -22,6 +24,7 @@
 #include "task.h"
 #include <QCoreApplication>
 #include <QMetaType>
+#include <QDir>
 
 enum {
     DefaultPomodoroDuration = 25
@@ -310,4 +313,9 @@ void Settings::setSupportsPriority(bool supports)
         setValue("supportsDueDate", supports);
         emit supportsPriorityChanged();
     }
+}
+
+QString Settings::fileName() const
+{
+    return QDir::toNativeSeparators(QSettings::fileName());
 }

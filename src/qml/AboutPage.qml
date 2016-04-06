@@ -207,7 +207,20 @@ Page {
                             anchors.rightMargin: _style.marginMedium
                             color: _style.smallTextColor
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                            text: qsTr("Data file") + ": " + _storage.dataFile();
+                            text: qsTr("Data") + ": " + _storage.dataFile();
+                        }
+
+                        Text {
+                            id: settingsPathText
+                            renderType: _controller.textRenderType
+                            font.pixelSize: _style.smallTextSize
+                            anchors.left: parent.left
+                            anchors.leftMargin: _style.marginMedium
+                            anchors.right: parent.right
+                            anchors.rightMargin: _style.marginMedium
+                            color: _style.smallTextColor
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                            text: qsTr("Settings") + ": " + _settings.fileName;
                         }
 
                         SmallText {

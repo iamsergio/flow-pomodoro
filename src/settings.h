@@ -4,6 +4,8 @@
   Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
+  Copyright (C) 2016 Sérgio Martins <iamsergio@gmail.com>
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -39,6 +41,7 @@ class Settings : public QSettings {
     Q_PROPERTY(bool keepScreenOnDuringPomodoro READ keepScreenOnDuringPomodoro WRITE setKeepScreenOnDuringPomodoro NOTIFY keepScreenOnDuringPomodoroChanged)
     Q_PROPERTY(GeometryType geometryType READ geometryType WRITE setGeometryType NOTIFY geometryTypeChanged)
     Q_PROPERTY(Position initialPosition READ initialPosition WRITE setInitialPosition NOTIFY initialPositionChanged)
+    Q_PROPERTY(QString fileName READ fileName CONSTANT)
 public:
     enum Position {
         PositionNone = 0, // Window will appear where WM puts it
@@ -99,6 +102,8 @@ public:
     bool supportsDueDate() const;
     bool supportsPriority() const;
     void setSupportsPriority(bool);
+
+    QString fileName() const;
 
 private Q_SLOTS:
     void doSync();
