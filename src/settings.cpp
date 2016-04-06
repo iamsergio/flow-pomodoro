@@ -28,7 +28,7 @@ enum {
 };
 
 Settings::Settings(QObject *parent)
-    : QSettings("KDAB", "flow-pomodoro", parent)
+    : QSettings(QSettings::IniFormat, QSettings::UserScope, "KDAB", "flow-pomodoro", parent)
     , m_syncScheduled(false)
     , m_needsSync(false)
     , m_defaultPomodoroDuration(DefaultPomodoroDuration)
