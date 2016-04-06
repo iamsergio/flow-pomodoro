@@ -139,6 +139,23 @@ void TestBase::waitForIt()
     QVERIFY(!QTestEventLoop::instance().timeout());
 }
 
+void TestBase::waitUntil(std::function<bool ()> pred)
+{
+    const int waitStep = 50;
+    int timeWaited = 0;
+    while (!pred()) {
+        QTest::qWait(waitStep);
+        timeWaited += waitStep;
+        QVERIFY(timeWaited < 3000);
+    }
+}
+
+bool TestBase::textInputHasFocus() const
+{
+    QQuickItem *focusedItem = m_view->activeFocusItem();
+    return focusedItem && QString(focusedItem->metaObject()->className()).startsWith("TextInputWithHandles");
+}
+
 void TestBase::stopWaiting()
 {
     QTestEventLoop::instance().exitLoop();
@@ -149,6 +166,7 @@ void TestBase::mouseClick(QQuickItem *item)
     QVERIFY(item->isVisible());
     m_view->mouseClick(item);
     QTest::qWait(400);
+    QTest::waitForEvents();
 }
 
 void TestBase::moveMouseTo(QQuickItem *item)

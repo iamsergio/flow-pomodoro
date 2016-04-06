@@ -37,3 +37,7 @@ FAQ:
 
    Under Windows you can't move frameless windows, but you can go to HKEY_CURRENT_USER\Software\KDAB\flow-pomodoro
    to edit windowLastPositionX and windowLastPositionY. Be sure to quit flow before editing.
+
+7. How do I change flow's data directory ?
+   By default it's ~/.local/share/KDAB/flow/ on Linux and C:\Users\<user>\AppData\Local\KDAB\flow\ on Windows.
+   You can set FLOW_DIR environment variable and flow will store it's flow.dat file there.

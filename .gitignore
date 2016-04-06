@@ -53,3 +53,6 @@ lib*.a
 /tests/unit-test-settings.ini
 *.qrc.depends
 install_manifest.txt
+target_wrapper.bat
+tests.exe
+/tests/target_wrapper.sh

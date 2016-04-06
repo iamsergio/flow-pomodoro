@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2015 Sérgio Martins <iamsergio@gmail.com>
+  Copyright (C) 2015-2016 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -67,6 +67,8 @@ void TestUI::newTask(bool dismissMenu)
     QCOMPARE(m_controller->editMode(), Controller::EditModeInline);
     QVERIFY(m_controller->taskBeingEdited());
     QCOMPARE(m_controller->taskBeingEdited()->summary(), QString("New Task"));
+    waitUntil([this] { return textInputHasFocus(); });
+
     sendText("test task1");
     sendKey(Qt::Key_Enter);
     if (dismissMenu)
@@ -160,6 +162,7 @@ void TestUI::gotoLater()
     QVERIFY(switchItem->isVisible());
 
     mouseClick(switchItem); // Click the switch
+    waitUntil([this] { return m_controller->queueType() == Controller::QueueTypeArchive; } );
 
     QCOMPARE(m_controller->queueType(), Controller::QueueTypeArchive);
 }
@@ -256,6 +259,7 @@ void TestUI::testArchiveTask()
     QVERIFY(!archiveIcon->isVisible());
     QQuickItem* taskItem = m_view->itemByName("taskItem");
     moveMouseTo(taskItem);
+    waitUntil([archiveIcon] { return archiveIcon->isVisible(); } );
     QVERIFY(archiveIcon->isVisible());
     QVERIFY(playIcon->isVisible());
     mouseClick(archiveIcon);
@@ -345,6 +349,7 @@ void TestUI::testShowMenuAfterAddTask()
 
 void TestUI::testAddUntaggedBug()
 {
+    QTest::waitForEvents();
     m_storage->clearTasks();
 
     // Bug: Adding a tag in the untagged area shouldn't create a tag with "Untagged" tag
@@ -397,9 +402,13 @@ void TestUI::testNewTagDialog()
     newTagItem = m_view->itemsByName("taskMenuChoice").at(0); // 0 is the header
     QVERIFY(newTagItem);
     qApp->processEvents();
+    QTest::waitForEvents();
+    QTest::qWait(500);
     mouseClick(newTagItem);
+    waitUntil([tagDialog] { return tagDialog->isVisible(); });
     QVERIFY(tagDialog->isVisible());
     sendKey(Qt::Key_Enter);
+    waitUntil([tagDialog] { return !tagDialog->isVisible(); });
     QVERIFY(!tagDialog->isVisible());
     QCOMPARE(tagCount, m_storage->tags().count());
     QVERIFY(menu->isVisible());
@@ -459,6 +468,7 @@ void TestUI::testDueDate()
 
 void TestUI::testPriority()
 {
+    m_settings->setSupportsPriority(true);
     //----------------------------------------------------------------------------------------------
     // Clear tasks
     gotoToday();
@@ -519,6 +529,8 @@ void TestUI::testPriority()
     QCOMPARE(tasks.at(0), task1); // high pri
     QCOMPARE(tasks.at(1), task2);
     QCOMPARE(tasks.at(2), task3);
+    //----------------------------------------------------------------------------------------------
+    m_settings->setSupportsPriority(false);
 }
 
 void TestUI::testRecurrence()

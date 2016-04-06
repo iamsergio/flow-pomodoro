@@ -1,6 +1,6 @@
 TEMPLATE = app
 QT += testlib widgets
-CONFIG += testcase debug
+CONFIG += testcase
 DEFINES += UNIT_TEST_RUN
 
 include ("../global.pri")

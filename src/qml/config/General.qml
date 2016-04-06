@@ -247,7 +247,7 @@ Item {
             checked: _settings.stickyWindow
             width: _style.checkBoxIconSize
             Binding {
-                target: _controller
+                target: _settings
                 property: "stickyWindow"
                 value: stickyWindowBox.checked
             }

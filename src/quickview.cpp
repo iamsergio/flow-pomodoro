@@ -4,6 +4,8 @@
   Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
+  Copyright (C) 2016 Sérgio Martins <iamsergio@gmail.com>
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -38,6 +40,8 @@
 #ifdef QT_WIDGETS_LIB
 # include <QMenu>
 #endif
+#include <QFileInfo>
+#include <QDir>
 
 QuickView::QuickView(Kernel *kernel)
     : QQuickView(kernel->qmlEngine(), 0)
@@ -201,12 +205,13 @@ void QuickView::setupGeometry()
 
 QUrl QuickView::styleFileName() const
 {
-    const QString &dataDirectory = m_kernel->runtimeConfiguration().dataFileName();
-    const QString fileName = dataDirectory + "/Style.qml";
+    QFileInfo info(m_kernel->runtimeConfiguration().dataFileName());
+    QDir dataDir = info.absoluteDir();
+    const QString customStyleFileName = dataDir.absoluteFilePath("Style.qml");
 
-    if (QFile::exists(fileName)) {
-        // User can override the default style by creating a Style.qml file in /home/<user>/.local/share/KDAB/flow/
-        return QUrl::fromLocalFile(fileName);
+    if (QFile::exists(customStyleFileName)) {
+        // User can override the default style by creating a Style.qml file in /home/<user>/.local/share/KDAB/flow/, or in FLOW_DIR (env variable)
+        return QUrl::fromLocalFile(customStyleFileName);
     } else {
         const QString filename = Utils::isMobile() ? QStringLiteral("MobileStyle.qml")
                                                    : QStringLiteral("DefaultStyle.qml");

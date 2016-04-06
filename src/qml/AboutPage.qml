@@ -47,7 +47,7 @@ Page {
                         id: copyrightText
                         anchors.verticalCenter: parent.verticalCenter
                         text: "<html>Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, <a href=\"mailto:info@kdab.com\">info@kdab.com</a><br>" +
-                              "Copyright (C) 2014-2015 Sérgio Martins &lt;<a href=\"mailto:iamsergio@gmail.com\">iamsergio@gmail.com</a>&gt;"
+                              "Copyright (C) 2014-2016 Sérgio Martins &lt;<a href=\"mailto:iamsergio@gmail.com\">iamsergio@gmail.com</a>&gt;"
                         onLinkActivated: {
                             Qt.openUrlExternally(link)
                         }
@@ -207,7 +207,20 @@ Page {
                             anchors.rightMargin: _style.marginMedium
                             color: _style.smallTextColor
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                            text: qsTr("Data file") + ": " + _storage.dataFile();
+                            text: qsTr("Data") + ": " + _storage.dataFile();
+                        }
+
+                        Text {
+                            id: settingsPathText
+                            renderType: _controller.textRenderType
+                            font.pixelSize: _style.smallTextSize
+                            anchors.left: parent.left
+                            anchors.leftMargin: _style.marginMedium
+                            anchors.right: parent.right
+                            anchors.rightMargin: _style.marginMedium
+                            color: _style.smallTextColor
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                            text: qsTr("Settings") + ": " + _settings.fileName;
                         }
 
                         SmallText {
@@ -231,7 +244,7 @@ Page {
                 SmallText {
                     id: countText
                     anchors.left: parent.left
-                    text: qsTr("Task count: %1").arg(_storage.taskCount)
+                    text: qsTr("Task count: %1").arg(_storage.nonRecurringTaskCount)
                 }
             }
 

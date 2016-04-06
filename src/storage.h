@@ -47,6 +47,7 @@ class Storage : public QObject
     Q_PROPERTY(ExtendedTagsModel* extendedTagsModel READ extendedTagsModel CONSTANT)
     Q_PROPERTY(int ageAverage READ ageAverage NOTIFY taskCountChanged)
     Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged)
+    Q_PROPERTY(int nonRecurringTaskCount READ nonRecurringTaskCount NOTIFY taskCountChanged)
     Q_PROPERTY(QAbstractItemModel* nonEmptyTagsModel READ nonEmptyTagsModel CONSTANT)
     Q_PROPERTY(QAbstractItemModel* tagsModel READ tagsModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* stagedTasksModel READ stagedTasksModel CONSTANT)
@@ -153,6 +154,7 @@ public:
 
     QAbstractItemModel* nonEmptyTagsModel() const;
     int taskCount() const;
+    int nonRecurringTaskCount() const;
     int ageAverage() const;
 
 public Q_SLOTS:

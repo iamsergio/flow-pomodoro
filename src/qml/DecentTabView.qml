@@ -43,7 +43,7 @@ Item {
         model: _controller.tagsModel
         delegate:
             TagDelegate {
-                height: parent.height
+                height: flickable.height
                 isLastIndex: index === flickable.model.count - 1
                 tagObj: tag
                 isSelected: tag === _controller.currentTag
