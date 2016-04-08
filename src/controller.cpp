@@ -1017,6 +1017,12 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
            return true;
            break;
        case Qt::Key_F2:
+           if (m_selectedTask) {
+               editTask(m_selectedTask, EditModeInline);
+               return true;
+           }
+           return false;
+           break;
        case Qt::Key_E:
            if (m_selectedTask) {
                requestContextMenu(m_selectedTask);
