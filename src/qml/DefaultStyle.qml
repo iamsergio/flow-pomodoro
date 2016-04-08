@@ -74,7 +74,7 @@ Item {
 
     property string taskFontColor       : "white"
     property int taskFontSize           : 14 * _controller.dpiFactor
-    property color queueBackgroundColor : Qt.rgba(0.9, 0.9, 0.5, 1)
+    property color queueBackgroundColor : "#FEFFC1"
 
     property bool deleteAnimationEnabled : true
     property int deleteAnimationDuration : 300
