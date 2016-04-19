@@ -16,7 +16,7 @@ Page {
                 id: stagedView
                 objectName: "stagedView"
                 model: _storage.stagedTasksModel
-                emptyText: qsTr("No queued tasks for today.") + "\n"+ qsTr("Please create new ones or pick some from your archive.")
+                emptyText: qsTr("No tasks queued for today.") + "\n"+ qsTr("Create new ones or pick some from your archive.")
             }
         }
 

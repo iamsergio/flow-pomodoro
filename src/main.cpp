@@ -106,15 +106,17 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
     case QtCriticalMsg:
         level = QStringLiteral("Critical: ");
         break;
+#if QT_VERSION >= QT_VERSION_CHECK(5,5,0)
     case QtInfoMsg:
-        level = QStringLiteral("Info: ");
+        level = "Info: ";
         break;
+#endif
     case QtFatalMsg:
         level = QStringLiteral("Fatal: ");
         abort();
     }
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN) && !defined(DEVELOPER_MODE)
     QFile file(logFile());
     file.open(QIODevice::Append | QIODevice::WriteOnly);
     QTextStream out(&file);

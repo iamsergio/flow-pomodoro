@@ -33,7 +33,6 @@ Overlay {
     Item {
         anchors.fill: parent
 
-
         Flickable {
             id: flik
 
