@@ -60,22 +60,23 @@ Overlay {
                 Item {
                     height: 20 * _controller.dpiFactor
                     width: parent.width
-                    Text {
-                        id: summaryText
-                        text: qsTr("Summary") + ":"
-                        anchors.left: parent.left
-                        font.pixelSize: 13 * _controller.dpiFactor
-                    }
 
                     TextInput {
                         id: textInput
                         focus: root.visible
                         inputMethodHints: Qt.ImhNoPredictiveText
                         font.pixelSize: 14 * _controller.dpiFactor
-                        anchors.left: summaryText.right
-                        anchors.leftMargin: 10 * _controller.dpiFactor
+
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                        }
+
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 0.70 * parent.width
+                        width: 0.90 * parent.width
+                        height: 20
+                        clip: true
+                        wrapMode: TextInput.WordWrap
                         text: root.task ? root.task.summary : ""
                         onAccepted: {
                             root.accept()
