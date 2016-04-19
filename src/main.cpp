@@ -116,7 +116,7 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
         abort();
     }
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN) && !defined(DEVELOPER_MODE)
     QFile file(logFile());
     file.open(QIODevice::Append | QIODevice::WriteOnly);
     QTextStream out(&file);
