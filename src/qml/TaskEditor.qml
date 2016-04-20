@@ -409,6 +409,32 @@ Overlay {
                         }
                     }
                 }
+
+                TextArea {
+                    id: descriptionArea
+
+                    Text {
+                        id: placeholderText
+                        text: "enter description.."
+                        enabled: false
+                        color: "gray"
+                        visible: descriptionArea.text.length == 0 && !descriptionArea.focus
+                        anchors {
+                            left: parent.left
+                            leftMargin: 3 * _controller.dpiFactor
+                            top: parent.top
+                            topMargin: 3 * _controller.dpiFactor
+                        }
+                    }
+
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                    }
+
+                    height: Math.max(contentHeight, placeholderText.height * 1.5)
+                    text: root.task.description
+                }
             }
         }
 
@@ -427,8 +453,13 @@ Overlay {
 
     function accept()
     {
-        if (task && textInput.text)
-            task.summary = textInput.text
+        if (task) {
+            if (textInput.text) { // Mandatory summary
+                task.summary = textInput.text
+            }
+
+            task.description = descriptionArea.text
+        }
 
         _controller.editTask(null, Controller.EditModeNone)
     }

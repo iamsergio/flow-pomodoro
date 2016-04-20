@@ -190,6 +190,11 @@ void Task::setDescription(const QString &text)
     }
 }
 
+bool Task::hasDescription() const
+{
+    return !m_description.isEmpty();
+}
+
 bool Task::containsTag(const QString &name) const
 {
     return indexOfTag(name) != -1;

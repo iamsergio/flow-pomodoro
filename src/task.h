@@ -69,6 +69,7 @@ class Task : public QObject, public Syncable {
     Q_PROPERTY(bool staged READ staged WRITE setStaged NOTIFY stagedChanged)
     Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
+    Q_PROPERTY(bool hasDescription READ hasDescription NOTIFY descriptionChanged)
     Q_PROPERTY(QObject * tagModel READ tagModel CONSTANT)
     Q_PROPERTY(QObject * checkableTagModel READ checkableTagModel CONSTANT)
     // Shortcuts
@@ -119,6 +120,7 @@ public:
 
     QString description() const;
     void setDescription(const QString &text);
+    bool hasDescription() const;
 
     bool containsTag(const QString &name) const;
     int indexOfTag(const QString &name) const;
