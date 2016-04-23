@@ -388,6 +388,7 @@ void Controller::setCurrentPage(Controller::Page page)
             m_loadManager->setAboutPageRequested(true);
             std::cout << "Task count: " << m_storage->taskCount()
                       << "; Non recurring: " << m_storage->nonRecurringTaskCount()
+                      << "; Non dated: " << m_storage->nonDatedTaskCount()
                       << "; Age average: " << m_storage->ageAverage()
                       << "\n";
         }

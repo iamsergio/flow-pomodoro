@@ -155,6 +155,11 @@ public:
     QAbstractItemModel* nonEmptyTagsModel() const;
     int taskCount() const;
     int nonRecurringTaskCount() const;
+    int nonDatedTaskCount() const;
+
+    /**
+     * Returns the age average, in days since creation, of all tasks that don't have due date
+     */
     int ageAverage() const;
 
 public Q_SLOTS:

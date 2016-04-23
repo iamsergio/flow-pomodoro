@@ -633,17 +633,24 @@ int Storage::nonRecurringTaskCount() const
     });
 }
 
+int Storage::nonDatedTaskCount() const
+{
+    return std::count_if(m_data.tasks.cbegin(), m_data.tasks.cend(), [](const Task::Ptr &t) {
+       return !t->hasDueDate();
+    });
+}
+
 int Storage::ageAverage() const
 {
-    if (m_data.tasks.isEmpty())
-        return 0;
-
     int totalAge = 0;
+    const int numTasksWithoutDueDate = nonDatedTaskCount();
     foreach (const Task::Ptr &task, m_data.tasks) {
-        totalAge += task->daysSinceCreation();
+        if (!task->hasDueDate()) {
+            totalAge += task->daysSinceCreation();
+        }
     }
 
-    return totalAge / m_data.tasks.count();
+    return numTasksWithoutDueDate == 0 ? 0 : totalAge / numTasksWithoutDueDate;
 }
 
 ExtendedTagsModel* Storage::extendedTagsModel() const
