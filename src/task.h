@@ -58,12 +58,12 @@ class Task : public QObject, public Syncable {
     Q_PROPERTY(bool isUrl READ isUrl NOTIFY summaryChanged)
     Q_PROPERTY(QString priorityStr READ priorityStr NOTIFY priorityChanged)
     Q_PROPERTY(Priority priority READ priority WRITE setPriority NOTIFY priorityChanged)
-    Q_PROPERTY(bool dueToday READ dueToday NOTIFY dueDateChanged)
-    Q_PROPERTY(bool isOverdue READ isOverdue NOTIFY dueDateChanged)
-    Q_PROPERTY(QString prettyDueDateString READ prettyDueDateString NOTIFY dueDateChanged)
-    Q_PROPERTY(QString prettyDueDateRecurString READ prettyDueDateRecurString NOTIFY dueDateChanged)
-    Q_PROPERTY(QString dueDateString READ dueDateString NOTIFY dueDateChanged)
-    Q_PROPERTY(QDate dueDate READ dueDate WRITE setDueDate NOTIFY dueDateChanged)
+    Q_PROPERTY(bool dueToday READ dueToday NOTIFY dueDateDisplayTextChanged)
+    Q_PROPERTY(bool isOverdue READ isOverdue NOTIFY dueDateDisplayTextChanged)
+    Q_PROPERTY(QString prettyDueDateString READ prettyDueDateString NOTIFY dueDateDisplayTextChanged)
+    Q_PROPERTY(QString prettyDueDateRecurString READ prettyDueDateRecurString NOTIFY dueDateDisplayTextChanged)
+    Q_PROPERTY(QString dueDateString READ dueDateString NOTIFY dueDateDisplayTextChanged)
+    Q_PROPERTY(QDate dueDate READ dueDate WRITE setDueDate NOTIFY dueDateDisplayTextChanged)
     Q_PROPERTY(int daysSinceLastPomodoro READ daysSinceLastPomodoro NOTIFY daysSinceLastPomodoroChanged)
     Q_PROPERTY(int daysSinceCreation READ daysSinceCreation NOTIFY daysSinceCreationChanged)
     Q_PROPERTY(bool staged READ staged WRITE setStaged NOTIFY stagedChanged)
@@ -78,10 +78,10 @@ class Task : public QObject, public Syncable {
 
     Q_PROPERTY(TaskContextMenuModel* contextMenuModel READ contextMenuModel CONSTANT)
     Q_PROPERTY(SortedTaskContextMenuModel* sortedContextMenuModel READ sortedContextMenuModel CONSTANT)
-    Q_PROPERTY(int periodType READ periodType NOTIFY dueDateChanged)
-    Q_PROPERTY(bool recurs READ recurs NOTIFY dueDateChanged)
-    Q_PROPERTY(uint frequency READ frequency WRITE setFrequency NOTIFY dueDateChanged)
-    Q_PROPERTY(QString frequencyWord READ frequencyWord NOTIFY dueDateChanged)
+    Q_PROPERTY(int periodType READ periodType NOTIFY dueDateDisplayTextChanged)
+    Q_PROPERTY(bool recurs READ recurs NOTIFY dueDateDisplayTextChanged)
+    Q_PROPERTY(uint frequency READ frequency WRITE setFrequency NOTIFY dueDateDisplayTextChanged)
+    Q_PROPERTY(QString frequencyWord READ frequencyWord NOTIFY dueDateDisplayTextChanged)
 
 public:
     typedef QSharedPointer<Task> Ptr;
@@ -204,6 +204,7 @@ Q_SIGNALS:
     void changed();
     void tagToggled(const QString &tag);
     void dueDateChanged();
+    void dueDateDisplayTextChanged();
 
 protected:
     QVector<QString> supportedFields() const Q_DECL_OVERRIDE;

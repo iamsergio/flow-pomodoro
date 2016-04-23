@@ -79,6 +79,8 @@ Task::Task(Kernel *kernel, const QString &summary)
     connect(this, &Task::dueDateChanged, &Task::onEdited);
     connect(this, &Task::priorityChanged, &Task::onEdited);
 
+    connect(this, &Task::dueDateChanged, &Task::dueDateDisplayTextChanged);
+
     connect(kernel, &Kernel::dayChanged, this, &Task::onDayChanged);
 
 #if defined(UNIT_TEST_RUN)
@@ -530,7 +532,7 @@ void Task::onEdited()
 void Task::onDayChanged()
 {
     if (m_dueDate.isValid()) {
-        emit dueDateChanged();
+        emit dueDateDisplayTextChanged();
         if (dueToday() || isOverdue())
             setStaged(true);
     }
