@@ -178,6 +178,7 @@ protected:
     virtual void save_impl() = 0;
 
 private:
+    void verifyLoadedData();
     void connectTask(const Task::Ptr &);
     int proxyRowToSource(int proxyIndex) const;
     QTimer m_scheduleTimer;

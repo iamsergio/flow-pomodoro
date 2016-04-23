@@ -48,9 +48,9 @@ void Syncable::setRevisionOnWebDAVServer(int revision)
     m_revisionOnWebDAVServer = revision;
 }
 
-QString Syncable::uuid() const
+QString Syncable::uuid(bool createIfEmpty) const
 {
-    if (m_uuid.isEmpty()) // Delayed creation, since it can be expensive and we don't need to create it in CTOR because it's going to be set when loading
+    if (createIfEmpty && m_uuid.isEmpty()) // Delayed creation, since it can be expensive and we don't need to create it in CTOR because it's going to be set when loading
         m_uuid = QUuid::createUuid().toString();
 
     return m_uuid;
@@ -75,8 +75,10 @@ void Syncable::fromJson(const QVariantMap &map)
     parseUnknownFields(map);
 
     QString uuid = map.value(QStringLiteral("uuid")).toString();
-    if (uuid.isEmpty())
+    if (uuid.isEmpty()) {
+        qWarning() << Q_FUNC_INFO << "Tag doesn't have uuid, creating one:" << this;
         uuid = QUuid::createUuid().toString();
+    }
     setUuid(uuid);
     setRevision(map.value(QStringLiteral("revision"), 0).toInt());
     setRevisionOnWebDAVServer(map.value(QStringLiteral("revisionOnWebDAVServer"), -1).toInt());
