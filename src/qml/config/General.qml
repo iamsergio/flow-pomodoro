@@ -263,7 +263,6 @@ Item {
 
         FlowCheckBox {
             id: showTaskAgeBox
-            visible: _controller.expertMode
             checked: _settings.showTaskAge
             width: _style.checkBoxIconSize
             Binding {
