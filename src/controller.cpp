@@ -41,6 +41,8 @@
 #include <QKeyEvent>
 #include <qglobal.h>
 
+#include <iostream>
+
 enum {
     AfterAddingTimeout = 1000,
     TickInterval = 1000*60 // Ticks every minute
@@ -384,6 +386,10 @@ void Controller::setCurrentPage(Controller::Page page)
             m_loadManager->setConfigurePageRequested(true);
         } else if (page == AboutPage) {
             m_loadManager->setAboutPageRequested(true);
+            std::cout << "Task count: " << m_storage->taskCount()
+                      << "; Non recurring: " << m_storage->nonRecurringTaskCount()
+                      << "; Age average: " << m_storage->ageAverage()
+                      << "\n";
         }
 
         m_page = page;
