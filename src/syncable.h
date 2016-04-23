@@ -32,7 +32,7 @@ public:
     int revision() const;
     int revisionOnWebDAVServer() const;
     void setRevisionOnWebDAVServer(int);
-    QString uuid() const;
+    QString uuid(bool createIfEmpty = true) const;
     void setUuid(const QString &uuid);
 
     virtual void fromJson(const QVariantMap &);

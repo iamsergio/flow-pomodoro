@@ -55,8 +55,8 @@ void TestTagModel::testFromFile_data()
     QStringList expectedSignals;
     QStringList expectedSignalsInUnsortedModel;
     for (int i = 0; i < expectedNumTags; ++i) {
-        expectedSignals << "rowsAboutToBeInserted" << "rowsInserted";
-        expectedSignalsInUnsortedModel << "rowsAboutToBeInserted" << "rowsInserted";
+        // expectedSignals << "rowsAboutToBeInserted" << "rowsInserted";
+        // expectedSignalsInUnsortedModel << "rowsAboutToBeInserted" << "rowsInserted";
     }
 
     expectedSignals << "modelAboutToBeReset" << "modelReset" // Because of final assignment when loading
@@ -110,7 +110,7 @@ void TestTagModel::testFromFile()
         // qDebug() << "tag " << tag->name() << tag->taskCount();
     }
 
-    //spy->dumpDebugInfo();
+    // tagsModelSpy->dumpDebugInfo();
     QCOMPARE(tagsModelSpy->count(), expectedSignals.count());
 
     for (int i = 0; i < expectedSignals.count(); ++i) {

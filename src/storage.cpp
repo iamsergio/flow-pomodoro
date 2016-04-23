@@ -227,8 +227,24 @@ void Storage::load()
         createTag(tr("books"), "{b2697470-f457-461c-9310-7d4b56aea395}");
         createTag(tr("movies"), "{387be44a-1eb7-4895-954a-cf5bc82d8f03}");
     }
+
     m_loadingInProgress = false;
+
+    verifyLoadedData();
+
     emit taskCountChanged();
+}
+
+void Storage::verifyLoadedData()
+{
+    foreach (const Tag::Ptr &tag, m_data.tags) {
+        if (tag->uuid(/*createIfEmpty=*/false).isEmpty()) {
+            qWarning() << Q_FUNC_INFO << "No uuid for tag" << tag;
+#ifdef UNIT_TEST_RUN
+           //  Q_ASSERT(false);
+#endif
+        }
+    }
 }
 
 void Storage::save()
