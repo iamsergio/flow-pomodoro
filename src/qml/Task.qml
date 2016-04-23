@@ -227,7 +227,7 @@ Rectangle {
     Text {
         color: _style.taskTagFontColor
         text: root.taskObj ? root.taskObj.daysSinceCreation : ""
-        visible: root.taskObj !== null && _settings.showTaskAge
+        visible: root.taskObj !== null && _settings.showTaskAge && !root.taskObj.hasDueDate
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.rightMargin: _controller.dpiFactor * 3

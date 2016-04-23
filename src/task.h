@@ -64,6 +64,7 @@ class Task : public QObject, public Syncable {
     Q_PROPERTY(QString prettyDueDateRecurString READ prettyDueDateRecurString NOTIFY dueDateDisplayTextChanged)
     Q_PROPERTY(QString dueDateString READ dueDateString NOTIFY dueDateDisplayTextChanged)
     Q_PROPERTY(QDate dueDate READ dueDate WRITE setDueDate NOTIFY dueDateDisplayTextChanged)
+    Q_PROPERTY(bool hasDueDate READ hasDueDate NOTIFY dueDateChanged)
     Q_PROPERTY(int daysSinceLastPomodoro READ daysSinceLastPomodoro NOTIFY daysSinceLastPomodoroChanged)
     Q_PROPERTY(int daysSinceCreation READ daysSinceCreation NOTIFY daysSinceCreationChanged)
     Q_PROPERTY(bool staged READ staged WRITE setStaged NOTIFY stagedChanged)
@@ -142,6 +143,7 @@ public:
     QDateTime lastPomodoroDate() const;
     QDate dueDate() const;
     void setDueDate(DueDate );
+    bool hasDueDate() const;
     void setLastPomodoroDate(const QDateTime &);
 
     bool running() const;

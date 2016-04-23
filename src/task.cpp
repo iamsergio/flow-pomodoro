@@ -339,6 +339,11 @@ void Task::setDueDate(DueDate date)
     }
 }
 
+bool Task::hasDueDate() const
+{
+    return m_dueDate.isValid();
+}
+
 bool Task::running() const
 {
     return m_status == TaskStarted;
