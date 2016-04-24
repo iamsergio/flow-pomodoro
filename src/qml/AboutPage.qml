@@ -28,9 +28,7 @@ Page {
                 text: "Flow " + _controller.version + (_controller.gitDate ? " (" + _controller.gitDate + ")" : "") + "; Qt-" + _controller.qtVersion
             }
 
-            Column {
-                id: mainColumn
-                spacing: 5 * _controller.dpiFactor
+            Flickable {
                 anchors {
                     top: versionText.bottom
                     topMargin: 10 * _controller.dpiFactor
@@ -40,6 +38,18 @@ Page {
                     rightMargin: 10 * _controller.dpiFactor
                     bottom: pushButton.top
                     bottomMargin: 5 * _controller.dpiFactor
+                }
+
+                contentHeight: mainColumn.height
+                boundsBehavior: Flickable.StopAtBounds
+                clip: true
+
+            Column {
+                id: mainColumn
+                spacing: 5 * _controller.dpiFactor
+                anchors {
+                    left: parent.left
+                    right: parent.right
                 }
 
                 Rectangle {
@@ -273,6 +283,7 @@ Page {
                     anchors.left: parent.left
                     text: qsTr("Task count: %1").arg(_storage.nonRecurringTaskCount)
                 }
+            }
             }
 
             PushButton {
