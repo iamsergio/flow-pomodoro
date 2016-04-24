@@ -17,10 +17,13 @@ Page {
 
             SmallText {
                 id: versionText
-                anchors.top: parent.top
-                anchors.topMargin: _style.marginMedium
-                anchors.left: parent.left
-                anchors.right: parent.right
+                anchors {
+                    top: parent.top
+                    topMargin: _style.marginMedium
+                    left: parent.left
+                    right: parent.right
+                }
+
                 horizontalAlignment: Text.AlignRight
                 text: "Flow " + _controller.version + (_controller.gitDate ? " (" + _controller.gitDate + ")" : "") + "; Qt-" + _controller.qtVersion
             }
@@ -28,19 +31,24 @@ Page {
             Column {
                 id: mainColumn
                 spacing: 5 * _controller.dpiFactor
-                anchors.top: versionText.bottom
-                anchors.topMargin: 10 * _controller.dpiFactor
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: 10 * _controller.dpiFactor
-                anchors.rightMargin: 10 * _controller.dpiFactor
-                anchors.bottom: pushButton.top
-                anchors.bottomMargin: 5 * _controller.dpiFactor
+                anchors {
+                    top: versionText.bottom
+                    topMargin: 10 * _controller.dpiFactor
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: 10 * _controller.dpiFactor
+                    rightMargin: 10 * _controller.dpiFactor
+                    bottom: pushButton.top
+                    bottomMargin: 5 * _controller.dpiFactor
+                }
 
                 Rectangle {
                     id: copyrectRect
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                    }
+
                     height: copyrightText.implicitHeight + 5 * _controller.dpiFactor
 
                     SmallText {
@@ -59,8 +67,10 @@ Page {
 
                 Rectangle {
                     id: bindingsRect
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                    }
                     height: childrenRect.height + 5
                     visible: !_controller.isMobile
                     Text {
@@ -77,10 +87,13 @@ Page {
 
                     Grid {
                         id: keyGrid
-                        anchors.top: keysText.bottom
-                        anchors.topMargin: _style.marginSmall
-                        anchors.left: parent.left
-                        anchors.leftMargin: _style.marginMedium
+                        anchors {
+                            top: keysText.bottom
+                            topMargin: _style.marginSmall
+                            left: parent.left
+                            leftMargin: _style.marginMedium
+                        }
+
                         columns: 2
                         columnSpacing: _style.marginMedium
 
@@ -177,22 +190,30 @@ Page {
 
                 Rectangle {
                     id: githubRect
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                    }
+
                     height: column.height
                     Column {
                         id: column
                         spacing: 7 * _controller.dpiFactor
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                            top: parent.top
+                        }
                         height: childrenRect.height + 10
                         Text {
                             id: optionsText
                             renderType: _controller.textRenderType
                             font.pixelSize: _style.smallTextSize
-                            anchors.left: parent.left
-                            anchors.leftMargin: _style.marginMedium
+                            anchors {
+                                left: parent.left
+                                leftMargin: _style.marginMedium
+                            }
+
                             color: _style.smallTextColor
                             text: _controller.buildOptionsText
                         }
@@ -201,10 +222,13 @@ Page {
                             id: dataPathText
                             renderType: _controller.textRenderType
                             font.pixelSize: _style.smallTextSize
-                            anchors.left: parent.left
-                            anchors.leftMargin: _style.marginMedium
-                            anchors.right: parent.right
-                            anchors.rightMargin: _style.marginMedium
+                            anchors {
+                                left: parent.left
+                                leftMargin: _style.marginMedium
+                                right: parent.right
+                                rightMargin: _style.marginMedium
+                            }
+
                             color: _style.smallTextColor
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                             text: qsTr("Data") + ": " + _storage.dataFile();
@@ -214,10 +238,13 @@ Page {
                             id: settingsPathText
                             renderType: _controller.textRenderType
                             font.pixelSize: _style.smallTextSize
-                            anchors.left: parent.left
-                            anchors.leftMargin: _style.marginMedium
-                            anchors.right: parent.right
-                            anchors.rightMargin: _style.marginMedium
+                            anchors {
+                                left: parent.left
+                                leftMargin: _style.marginMedium
+                                right: parent.right
+                                rightMargin: _style.marginMedium
+                            }
+
                             color: _style.smallTextColor
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                             text: qsTr("Settings") + ": " + _settings.fileName;
@@ -252,9 +279,11 @@ Page {
                 z: 2
                 id: pushButton
                 text: qsTr("OK")
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: _style.marginSmall
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    bottom: parent.bottom
+                    bottomMargin: _style.marginSmall
+                }
 
                 onClicked: {
                     _controller.currentPage = Controller.MainPage
