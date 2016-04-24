@@ -207,7 +207,7 @@ QUrl QuickView::styleFileName() const
 {
     QFileInfo info(m_kernel->runtimeConfiguration().dataFileName());
     QDir dataDir = info.absoluteDir();
-    const QString customStyleFileName = dataDir.absoluteFilePath("Style.qml");
+    const QString customStyleFileName = dataDir.absoluteFilePath(QStringLiteral("Style.qml"));
 
     if (QFile::exists(customStyleFileName)) {
         // User can override the default style by creating a Style.qml file in /home/<user>/.local/share/KDAB/flow/, or in FLOW_DIR (env variable)

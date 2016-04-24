@@ -108,7 +108,7 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
         break;
 #if QT_VERSION >= QT_VERSION_CHECK(5,5,0)
     case QtInfoMsg:
-        level = "Info: ";
+        level = QStringLiteral("Info: ");
         break;
 #endif
     case QtFatalMsg:
