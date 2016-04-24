@@ -640,7 +640,8 @@ QString Task::priorityStr() const
 bool Task::isUrl() const
 {
     // We only want to open http urls, so don't use QUrl::scheme()
-    return m_summary.toLower().startsWith(QLatin1String("http://")) || m_summary.toLower().startsWith(QLatin1String("https://"));
+    return m_summary.startsWith(QLatin1String("http://"), Qt::CaseInsensitive) ||
+           m_summary.startsWith(QLatin1String("https://"), Qt::CaseInsensitive);
 }
 
 DueDate::PeriodType Task::periodType() const
