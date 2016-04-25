@@ -278,10 +278,77 @@ Page {
                         color: Qt.lighter(_style.queueBackgroundColor, 1.3)
                         radius: 5
                     }
-                    SmallText {
-                        id: countText
-                        anchors.left: parent.left
-                        text: qsTr("Task count: %1").arg(_storage.nonRecurringTaskCount)
+
+                    Rectangle {
+                        id: statsRect
+                        height: statsColumn.height
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                        }
+
+                        Column {
+                            id: statsColumn
+                            anchors {
+                                left: parent.left
+                                right: parent.right
+                            }
+
+                            Text {
+                                id: statsText
+                                text: qsTr("Stats") + ":"
+                                anchors {
+                                    left: parent.left
+                                    leftMargin: _style.marginMedium
+                                }
+
+                                font.bold: true
+                                renderType: _controller.textRenderType
+                                font.pixelSize: _style.regularTextSize
+                                color: _style.regularTextColor
+                            }
+
+                            Grid {
+                                rows: 4
+                                columns: 2
+                                anchors {
+                                    left: parent.left
+                                    leftMargin: _style.marginMedium
+                                }
+
+                                SmallText2 {
+                                    text: qsTr("Tasks: ")
+                                }
+
+                                SmallText2 {
+                                    text: _storage.taskCount
+                                }
+
+                                SmallText2 {
+                                    text: qsTr("Recurring: ")
+                                }
+
+                                SmallText2 {
+                                    text: _storage.taskCount - _storage.nonRecurringTaskCount
+                                }
+
+                                SmallText2 {
+                                    text: qsTr("Without date: ")
+                                }
+
+                                SmallText2 {
+                                    text: _storage.nonDatedTaskCount
+                                }
+
+                                SmallText2 {
+                                    text: qsTr("Average age: ")
+                                }
+
+                                SmallText2 {
+                                    text: qsTr("%1 days").arg(_storage.ageAverage)
+                                }
+                            }
+                        }
                     }
                 }
             }

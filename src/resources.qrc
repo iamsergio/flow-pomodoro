@@ -38,6 +38,7 @@
     <file>qml/NewTagDialog.qml</file>
     <file>qml/Page.qml</file>
     <file>qml/SmallText.qml</file>
+    <file>qml/SmallText2.qml</file>
     <file>qml/TagDelegate.qml</file>
     <file>qml/Task.qml</file>
     <file>qml/TaskContextMenu.qml</file>
