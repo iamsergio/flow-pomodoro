@@ -19,7 +19,7 @@ Rectangle {
         Text {
             id: tagText
             renderType: _controller.textRenderType
-            text: root.tagObj.name
+            text: root.tagObj ? root.tagObj.name : ""
             color: _style.tagTabTextColor
             font.bold: true
             font.pixelSize: _style.tagTabFontSize
@@ -27,7 +27,8 @@ Rectangle {
         Text {
             id: countText
             renderType: _controller.textRenderType
-            text: root.tagObj.taskModel.count > 0 ? " (" + root.tagObj.taskModel.count + ")" : ""
+            text: root.tagObj ? (root.tagObj.taskModel.count > 0 ? " (" + root.tagObj.taskModel.count + ")" : "")
+                              : ""
             color: _style.tagTabTextColor
             anchors.verticalCenter: tagText.verticalCenter
             anchors.verticalCenterOffset: -1
