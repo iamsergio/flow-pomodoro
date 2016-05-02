@@ -266,12 +266,20 @@ Page {
                                 onLinkActivated: {
                                     Qt.openUrlExternally(link)
                                 }
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                }
                             }
                             SmallText {
                                 id: licenseText
                                 text: "License: <html><a href=\"https://github.com/iamsergio/flow-pomodoro/blob/master/License.txt\">https://github.com/iamsergio/flow-pomodoro/blob/master/License.txt</a>"
                                 onLinkActivated: {
                                     Qt.openUrlExternally(link)
+                                }
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
                                 }
                             }
                         }
