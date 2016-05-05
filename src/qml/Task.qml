@@ -6,14 +6,14 @@ Rectangle {
     id: root
     signal deleteClicked()
 
-    property QtObject taskObj: null
-    property string taskSummary: taskObj !== null ? taskObj.summary : ""
-    property bool inlineEditMode: _controller.taskBeingEdited === taskObj && _controller.editMode === Controller.EditModeInline
-    property bool otherItemBeingEdited: _controller.taskBeingEdited !== taskObj && _controller.editMode !== Controller.EditModeNone
-    property bool buttonsVisible: true
-    property bool hasMouseOver: mouseArea.containsMouse
+    readonly property string taskSummary: taskObj !== null ? taskObj.summary : ""
+    readonly property bool inlineEditMode: _controller.taskBeingEdited === taskObj && _controller.editMode === Controller.EditModeInline
+    readonly property bool otherItemBeingEdited: _controller.taskBeingEdited !== taskObj && _controller.editMode !== Controller.EditModeNone
+    readonly property bool hasMouseOver: mouseArea.containsMouse
+    readonly property bool selected: _controller.selectedTask === taskObj && !inlineEditMode && taskObj !== null
     property int modelIndex: -1
-    property bool selected: _controller.selectedTask === taskObj && !inlineEditMode && taskObj !== null
+    property bool buttonsVisible: true
+    property QtObject taskObj: null
 
     color: _style.taskBackgroundColor
 
