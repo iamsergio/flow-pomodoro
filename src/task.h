@@ -4,7 +4,7 @@
   Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015 Sérgio Martins <iamsergio@gmail.com>
+  Copyright (C) 2015-2016 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -84,6 +84,7 @@ class Task : public QObject, public Syncable {
     Q_PROPERTY(bool recurs READ recurs NOTIFY dueDateDisplayTextChanged)
     Q_PROPERTY(uint frequency READ frequency WRITE setFrequency NOTIFY dueDateDisplayTextChanged)
     Q_PROPERTY(QString frequencyWord READ frequencyWord NOTIFY dueDateDisplayTextChanged)
+    Q_PROPERTY(int estimatedEffort READ estimatedEffort WRITE setEstimatedEffort NOTIFY estimatedEffortChanged)
 
 public:
     typedef QSharedPointer<Task> Ptr;
@@ -192,6 +193,9 @@ public:
     uint frequency() const;
     void setFrequency(uint);
 
+    int estimatedEffort() const;
+    void setEstimatedEffort(int);
+
 public Q_SLOTS:
     void toggleRecurrenceType(PeriodType type);
 
@@ -209,6 +213,7 @@ Q_SIGNALS:
     void tagToggled(const QString &tag);
     void dueDateChanged();
     void dueDateDisplayTextChanged();
+    void estimatedEffortChanged();
 
 protected:
     QVector<QString> supportedFields() const Q_DECL_OVERRIDE;
@@ -238,6 +243,7 @@ private:
     SortedTaskContextMenuModel *m_sortedContextMenuModel;
     Kernel *m_kernel;
     Priority m_priority;
+    int m_estimatedEffort;
 };
 
 inline QDebug operator<<(QDebug dbg, const Task::Ptr &task)

@@ -4,7 +4,7 @@
   Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015 Sérgio Martins <iamsergio@gmail.com>
+  Copyright (C) 2015-2016 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -68,6 +68,7 @@ Task::Task(Kernel *kernel, const QString &summary)
     , m_sortedContextMenuModel(0)
     , m_kernel(kernel)
     , m_priority(PriorityNone)
+    , m_estimatedEffort(0)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 
@@ -78,6 +79,7 @@ Task::Task(Kernel *kernel, const QString &summary)
     connect(this, &Task::stagedChanged, &Task::onEdited);
     connect(this, &Task::dueDateChanged, &Task::onEdited);
     connect(this, &Task::priorityChanged, &Task::onEdited);
+    connect(this, &Task::estimatedEffortChanged, &Task::onEdited);
 
     connect(this, &Task::dueDateChanged, &Task::dueDateDisplayTextChanged);
 
@@ -402,6 +404,9 @@ QVariantMap Task::toJson() const
     if (m_priority != PriorityNone)
         map.insert(QStringLiteral("priority"), QVariant(m_priority));
 
+    if (m_estimatedEffort > 0)
+        map.insert(QStringLiteral("estimatedEffort"), m_estimatedEffort);
+
     return map;
 }
 
@@ -421,7 +426,8 @@ QVector<QString> Task::supportedFields() const
                << QStringLiteral("dueDate")                 // Since 1.0
                << QStringLiteral("priority")                // Since 1.0
                << QStringLiteral("periodType")              // Since 1.1
-               << QStringLiteral("frequency");              // Since 1.1
+               << QStringLiteral("frequency")               // Since 1.1
+               << QStringLiteral("estimatedEffort");        // Since 1.2
     }
 
     return fields;
@@ -444,6 +450,9 @@ void Task::fromJson(const QVariantMap &map)
     setDescription(description);
     setStaged(map.value(QStringLiteral("staged"), false).toBool());
     setPriority(static_cast<Priority>(map.value(QStringLiteral("priority"), PriorityNone).toInt()));
+    int effort = map.value(QStringLiteral("estimatedEffort"), 0).toInt();
+    if (effort > 0)
+        setEstimatedEffort(effort);
 
     QDateTime creationDate = QDateTime::fromMSecsSinceEpoch(map.value(QStringLiteral("creationTimestamp"), QDateTime()).toLongLong());
     if (creationDate.isValid()) // If invalid it uses the ones set in CTOR
@@ -669,6 +678,19 @@ void Task::setFrequency(uint frequency)
     if (frequency != m_dueDate.frequency()) {
         m_dueDate.setFrequency(frequency);
         emit dueDateChanged();
+    }
+}
+
+int Task::estimatedEffort() const
+{
+   return m_estimatedEffort;
+}
+
+void Task::setEstimatedEffort(int effort)
+{
+    if (m_estimatedEffort != effort) {
+        m_estimatedEffort = effort;
+        emit estimatedEffortChanged();
     }
 }
 
