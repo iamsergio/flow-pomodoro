@@ -307,5 +307,22 @@ Item {
                 value: showSupportsDueDate.checked
             }
         }
+
+        Text {
+            visible: _controller.expertMode
+            text: qsTr("Estimated effort support")
+            font.pixelSize: 12 * _controller.dpiFactor
+        }
+
+        FlowCheckBox {
+            id: showSupportsEffort
+            visible: _controller.expertMode
+            checked: _settings.supportsEffort
+            Binding {
+                target: _settings
+                property: "supportsEffort"
+                value: showSupportsEffort.checked
+            }
+        }
     }
 }
