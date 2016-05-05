@@ -88,12 +88,14 @@ Page {
 
         Item {
             id: tabView
-            anchors.top: parent.top
-            anchors.topMargin: _style.marginMedium
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.margins: _style.marginSmall
-            anchors.bottom: okButton.top
+            anchors {
+                top: parent.top
+                topMargin: _style.marginMedium
+                left: parent.left
+                right: parent.right
+                margins: _style.marginSmall
+                bottom: okButton.top
+            }
 
             Loader {
                 anchors.fill: parent
@@ -106,9 +108,11 @@ Page {
             id: okButton
             objectName: "configurePageOKButton"
             text: qsTr("OK")
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: _style.marginMedium
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.bottom
+                bottomMargin: _style.marginMedium
+            }
 
             onClicked: {
                 _controller.currentPage = Controller.MainPage
