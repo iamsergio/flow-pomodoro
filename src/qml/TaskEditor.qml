@@ -435,6 +435,45 @@ Overlay {
                     height: Math.max(contentHeight, placeholderText.height * 1.5)
                     text: root.task.description
                 }
+
+                Item {
+                    visible: _settings.supportsEffort
+                    height: frequency.implicitHeight
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    //anchors.leftMargin: recIcon.width + recRow.anchors.leftMargin + recIcon.anchors.leftMargin
+                    Row {
+                        spacing: 10 * _controller.dpiFactor
+                        Text {
+                            text: qsTr("Effort:")
+                            font.pixelSize: 13 * _controller.dpiFactor
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        TextInput {
+                            text: root.task ? root.task.estimatedEffort : null
+                            width: 25 * _controller.dpiFactor
+                            horizontalAlignment: Text.AlignHCenter
+                            font.pixelSize: 14 * _controller.dpiFactor
+                            Rectangle {
+                                anchors.bottom: parent.bottom
+                                width: parent.width
+                                height: 1 * _controller.dpiFactor
+                                color: "black"
+                            }
+                            onTextChanged: {
+                                if (text)
+                                    root.task.estimatedEffort = parseInt(text)
+                            }
+                        }
+
+                        Text {
+                            text: "hours"
+                            font.pixelSize: 13 * _controller.dpiFactor
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
+                }
             }
         }
 

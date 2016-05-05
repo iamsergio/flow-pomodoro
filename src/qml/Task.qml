@@ -251,6 +251,21 @@ Rectangle {
     }
 
     Text {
+        id: estimatedEffort
+        color: _style.taskTagFontColor
+        text: root.taskObj ? ("~" + root.taskObj.estimatedEffort) : ""
+        visible: root.taskObj !== null && root.taskObj.estimatedEffort > 0 && _settings.supportsEffort
+        anchors {
+            bottom: parent.bottom
+            right: parent.right
+            rightMargin: _controller.dpiFactor * 3
+            bottomMargin: _controller.dpiFactor * 2
+        }
+
+        font.pixelSize: _controller.dpiFactor * 11
+    }
+
+    Text {
         function colorForPriority(priority)
         {
             if (priority === Task_.PriorityLow) {
