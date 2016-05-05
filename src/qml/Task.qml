@@ -16,11 +16,15 @@ Rectangle {
     property bool selected: _controller.selectedTask === taskObj && !inlineEditMode && taskObj !== null
 
     color: _style.taskBackgroundColor
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.leftMargin: selected ? selectionTaskRectangle.width + _style.marginSmall
-                                 : _style.marginSmall
-    anchors.rightMargin: _style.marginSmall
+
+    anchors {
+        left: parent.left
+        right: parent.right
+        leftMargin: selected ? selectionTaskRectangle.width + _style.marginSmall
+                             : _style.marginSmall
+        rightMargin: _style.marginSmall
+    }
+
     height: _style.taskHeight
     border.color: _style.taskBorderColor
     border.width: 1 * _controller.dpiFactor
@@ -39,24 +43,30 @@ Rectangle {
     Rectangle {
         id: selectionTaskRectangle
         width: _style.tagTabSelectionHeight
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.topMargin: 2 * _controller.dpiFactor
-        anchors.bottomMargin: 2 * _controller.dpiFactor
-        anchors.left: parent.left
-        anchors.leftMargin: -width - 2 * _controller.dpiFactor
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            topMargin: 2 * _controller.dpiFactor
+            bottomMargin: 2 * _controller.dpiFactor
+            left: parent.left
+            leftMargin: -width - 2 * _controller.dpiFactor
+        }
+
         color: "#43ACE8"
         visible: root.selected
     }
 
     Row {
         id: tagRow
-        anchors.left: parent.left
-        anchors.leftMargin: 22 * _controller.dpiFactor
-        anchors.right: parent.right
-        anchors.rightMargin: _style.tagRowRightMargin
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: _style.tagRowBottomMargin
+        anchors {
+            left: parent.left
+            leftMargin: 22 * _controller.dpiFactor
+            right: parent.right
+            rightMargin: _style.tagRowRightMargin
+            bottom: parent.bottom
+            bottomMargin: _style.tagRowBottomMargin
+        }
+
         clip: true
         visible: !root.inlineEditMode
 
@@ -110,11 +120,14 @@ Rectangle {
             elide: Text.ElideRight
             color: _style.taskFontColor
             font.bold: true
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: menuIndicator.right
-            anchors.leftMargin: 5 * _controller.dpiFactor
-            anchors.right: buttonRow.left
-            anchors.rightMargin: 2
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: menuIndicator.right
+                leftMargin: 5 * _controller.dpiFactor
+                right: buttonRow.left
+                rightMargin: 2
+            }
+
             font.pixelSize: _style.taskFontSize
             fontSizeMode: Text.HorizontalFit
             visible: !root.inlineEditMode
@@ -123,13 +136,16 @@ Rectangle {
         Loader {
             // Startup performance improvement, since QtQuick.Controls slows this down
             id: taskTextFieldLoader
-            anchors.left: textItem.left
-            anchors.top: parent.top
-            anchors.topMargin: _style.marginMedium
-            anchors.right: parent.right
-            anchors.rightMargin: _style.marginMedium
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: _style.marginMedium
+            anchors {
+                left: textItem.left
+                top: parent.top
+                topMargin: _style.marginMedium
+                right: parent.right
+                rightMargin: _style.marginMedium
+                bottom: parent.bottom
+                bottomMargin: _style.marginMedium
+            }
+
             sourceComponent: _loadManager.inlineEditorRequested ? taskTextFieldComponent : null
             objectName: "taskTextFieldLoader"
         }
@@ -149,13 +165,16 @@ Rectangle {
         Rectangle {
             id: menuIndicator
             objectName: "menuIndicator"
-            anchors.left: parent.left
-            anchors.leftMargin: 6 * _controller.dpiFactor
             width: 10 * _controller.dpiFactor
             color: taskOptionsMouseArea.pressed ? "gray" : "transparent"
             height: iconItem.contentHeight + 10 * _controller.dpiFactor
-            anchors.verticalCenter: parent.verticalCenter
             radius: 5 * _controller.dpiFactor
+
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+                leftMargin: 6 * _controller.dpiFactor
+            }
 
             Text {
                 id: iconItem
@@ -182,23 +201,16 @@ Rectangle {
 
         Row {
             id: buttonRow
-            anchors.right: parent.right
-            anchors.rightMargin: _style.buttonsRightMargin
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: (!root.taskObj || root.taskObj.priority === Task_.PriorityNone) ? 0
-                                                                                                          : -3 * _controller.dpiFactor
-            spacing: _style.buttonsSpacing
 
-            /*FontAwesomeIcon {
-                id: deleteIcon
-                toolTip: qsTr("Delete task")
-                size: 30
-                text: "\uf014"
-                visible: root.buttonsVisible
-                onClicked: {
-                    _controller.removeTask(taskObj)
-                }
-            }*/
+            anchors {
+                right: parent.right
+                rightMargin: _style.buttonsRightMargin
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: (!root.taskObj || root.taskObj.priority === Task_.PriorityNone) ? 0
+                                                                                                      : -3 * _controller.dpiFactor
+            }
+
+            spacing: _style.buttonsSpacing
 
             FontAwesomeIcon {
                 id: archiveIcon
@@ -228,10 +240,13 @@ Rectangle {
         color: _style.taskTagFontColor
         text: root.taskObj ? root.taskObj.daysSinceCreation : ""
         visible: root.taskObj !== null && _settings.showTaskAge && !root.taskObj.hasDueDate
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.rightMargin: _controller.dpiFactor * 3
-        anchors.topMargin: _controller.dpiFactor * 2
+        anchors {
+            top: parent.top
+            right: parent.right
+            rightMargin: _controller.dpiFactor * 3
+            topMargin: _controller.dpiFactor * 2
+        }
+
         font.pixelSize: _controller.dpiFactor * 11
     }
 
@@ -249,10 +264,13 @@ Rectangle {
         color: root.taskObj ? colorForPriority(root.taskObj.priority) : "white"
         text: root.taskObj ? root.taskObj.priorityStr : ""
         visible: root.taskObj !== null && root.taskObj.priority !== Controller.PriorityNone
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.rightMargin: _controller.dpiFactor * 3
-        anchors.bottomMargin: _controller.dpiFactor * 2
+        anchors {
+            bottom: parent.bottom
+            right: parent.right
+            rightMargin: _controller.dpiFactor * 3
+            bottomMargin: _controller.dpiFactor * 2
+        }
+
         font.pixelSize: _controller.dpiFactor * 10
     }
 
@@ -263,10 +281,13 @@ Rectangle {
                             : _style.taskTagFontColor
         text: root.taskObj ? root.taskObj.prettyDueDateRecurString : ""
         visible: root.taskObj !== null && _settings.supportsDueDate && root.taskObj.prettyDueDateString && !(_controller.editMode == Controller.EditModeInline && _controller.taskBeingEdited === root.taskObj)
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.leftMargin: _controller.dpiFactor * 20
-        anchors.bottomMargin: _controller.dpiFactor * 2
+        anchors {
+            top: parent.top
+            left: parent.left
+            leftMargin: _controller.dpiFactor * 20
+            bottomMargin: _controller.dpiFactor * 2
+        }
+
         font.pixelSize: _controller.dpiFactor * 11
     }
 }
