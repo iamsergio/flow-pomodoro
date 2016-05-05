@@ -27,6 +27,7 @@
 
 class Settings : public QSettings {
     Q_OBJECT
+    Q_PROPERTY(bool supportsEffort READ supportsEffort WRITE setSupportsEffort NOTIFY supportsEffortChanged)
     Q_PROPERTY(bool supportsDueDate READ supportsDueDate WRITE setSupportsDueDate NOTIFY supportsDueDateChanged)
     Q_PROPERTY(bool supportsPriority READ supportsPriority WRITE setSupportsPriority NOTIFY supportsPriorityChanged)
     Q_PROPERTY(bool showContextMenuAfterAdd READ showContextMenuAfterAdd WRITE setShowContextMenuAfterAdd NOTIFY showContextMenuAfterAddChanged)
@@ -105,6 +106,9 @@ public:
 
     QString fileName() const;
 
+    bool supportsEffort() const;
+    void setSupportsEffort(bool);
+
 private Q_SLOTS:
     void doSync();
 
@@ -123,6 +127,7 @@ Q_SIGNALS:
     void initialPositionChanged();
     void supportsDueDateChanged();
     void supportsPriorityChanged();
+    void supportsEffortChanged();
 
 private:
     void init();
@@ -144,6 +149,7 @@ private:
     bool m_showContextMenuAfterAdd;
     bool m_supportsDueDate;
     bool m_supportsPriority;
+    bool m_supportsEffort;
 };
 
 #endif

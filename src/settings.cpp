@@ -46,6 +46,7 @@ Settings::Settings(QObject *parent)
     , m_showContextMenuAfterAdd(true)
     , m_supportsDueDate(true)
     , m_supportsPriority(false)
+    , m_supportsEffort(false)
 {
     init();
 }
@@ -72,6 +73,7 @@ void Settings::init()
     m_showContextMenuAfterAdd = value(QStringLiteral("showContextMenuAfterAdd"), true).toBool();
     m_supportsDueDate = value(QStringLiteral("supportsDueDate"), false).toBool();
     m_supportsPriority = value(QStringLiteral("supportsPriority"), false).toBool();
+    m_supportsEffort = value(QStringLiteral("supportsEffort"), false).toBool();
 
     const Position defaultPosition = PositionTop;
     m_initialPosition = static_cast<Settings::Position>(value(QStringLiteral("windowInitialPosition"), defaultPosition).toInt());
@@ -318,4 +320,18 @@ void Settings::setSupportsPriority(bool supports)
 QString Settings::fileName() const
 {
     return QDir::toNativeSeparators(QSettings::fileName());
+}
+
+bool Settings::supportsEffort() const
+{
+    return m_supportsEffort;
+}
+
+void Settings::setSupportsEffort(bool supports)
+{
+    if (m_supportsEffort != supports) {
+        m_supportsEffort = supports;
+        setValue(QStringLiteral("supportsEffort"), supports);
+        emit supportsEffortChanged();
+    }
 }
