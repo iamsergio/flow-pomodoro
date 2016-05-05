@@ -22,19 +22,19 @@ Item {
         id: windowGeometryTypesModel
         ListElement { text: "Standard" }
         ListElement { text: "Thin" }
-        //ListElement { text: "Small Square" }
-        // ListElement { text: "Custom" }
     }
 
     Grid {
         id: grid1
         columns: 2
+        anchors {
+            top: parent.top
+            left: parent.left
+            topMargin: _style.marginBig
+            leftMargin: _style.marginMedium
+            rightMargin: 40 * _controller.dpiFactor
+        }
 
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.topMargin: _style.marginBig
-        anchors.leftMargin: _style.marginMedium
-        anchors.rightMargin: 40 * _controller.dpiFactor
         columnSpacing: _style.marginBig
         rowSpacing: 10 * _controller.dpiFactor
 
