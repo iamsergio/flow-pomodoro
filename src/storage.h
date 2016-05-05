@@ -47,6 +47,8 @@ class Storage : public QObject
     Q_PROPERTY(ExtendedTagsModel* extendedTagsModel READ extendedTagsModel CONSTANT)
     Q_PROPERTY(int ageAverage READ ageAverage NOTIFY taskCountChanged)
     Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged)
+    Q_PROPERTY(int totalNeededEffort READ totalNeededEffort NOTIFY totalNeededEffortChanged)
+    Q_PROPERTY(int numTasksWithEffort READ numTasksWithEffort NOTIFY totalNeededEffortChanged)
     Q_PROPERTY(int nonRecurringTaskCount READ nonRecurringTaskCount NOTIFY taskCountChanged)
     Q_PROPERTY(int nonDatedTaskCount READ nonDatedTaskCount NOTIFY taskCountChanged)
     Q_PROPERTY(QAbstractItemModel* nonEmptyTagsModel READ nonEmptyTagsModel CONSTANT)
@@ -163,6 +165,9 @@ public:
      */
     int ageAverage() const;
 
+    int totalNeededEffort() const;
+    int numTasksWithEffort() const;
+
 public Q_SLOTS:
     bool renameTag(const QString &oldName, const QString &newName);
     void dumpDebugInfo();
@@ -172,6 +177,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void taskCountChanged();
     void tagAboutToBeRemoved(const QString &name);
+    void totalNeededEffortChanged();
 
 private Q_SLOTS:
     void onTagAboutToBeRemoved(const QString &tagName);

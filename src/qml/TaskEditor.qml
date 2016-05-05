@@ -445,7 +445,7 @@ Overlay {
                     Row {
                         spacing: 10 * _controller.dpiFactor
                         Text {
-                            text: qsTr("Effort:")
+                            text: qsTr("Needed effort:")
                             font.pixelSize: 13 * _controller.dpiFactor
                             anchors.verticalCenter: parent.verticalCenter
                         }

@@ -96,6 +96,8 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     m_scheduleTimer.setInterval(0);
     connect(&m_scheduleTimer, &QTimer::timeout, this, &Storage::save);
 
+    connect(this, &Storage::taskCountChanged, this, &Storage::totalNeededEffortChanged);
+
     m_data.tags.setDataFunction(&tagsDataFunction);
     m_data.tags.insertRole("tag", Q_NULLPTR, TagRole);
     m_data.tags.insertRole("tagPtr", Q_NULLPTR, TagPtrRole);
@@ -561,6 +563,8 @@ void Storage::connectTask(const Task::Ptr &task)
             &TaskFilterProxyModel::invalidate, Qt::UniqueConnection);
     connect(task.data(), &Task::priorityChanged, m_archivedTasksModel,
             &TaskFilterProxyModel::invalidate, Qt::UniqueConnection);
+    connect(task.data(), &Task::estimatedEffortChanged, this,
+            &Storage::totalNeededEffortChanged);
 }
 
 void Storage::removeTask(const Task::Ptr &task)
@@ -651,6 +655,25 @@ int Storage::ageAverage() const
     }
 
     return numTasksWithoutDueDate == 0 ? 0 : totalAge / numTasksWithoutDueDate;
+}
+
+int Storage::totalNeededEffort() const
+{
+    int total = 0;
+    foreach (const Task::Ptr &task, m_data.tasks) {
+        if (task->estimatedEffort()) {
+            total += task->estimatedEffort();
+        }
+    }
+
+    return total;
+}
+
+int Storage::numTasksWithEffort() const
+{
+    return std::count_if(m_data.tasks.cbegin(), m_data.tasks.cend(), [](const Task::Ptr &t) {
+       return t->estimatedEffort() > 0;
+    });
 }
 
 ExtendedTagsModel* Storage::extendedTagsModel() const

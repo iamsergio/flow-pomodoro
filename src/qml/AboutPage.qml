@@ -341,19 +341,19 @@ Page {
                                 }
 
                                 SmallText2 {
-                                    text: qsTr("Without date: ")
-                                }
-
-                                SmallText2 {
-                                    text: _storage.nonDatedTaskCount
-                                }
-
-                                SmallText2 {
                                     text: qsTr("Average age: ")
                                 }
 
                                 SmallText2 {
                                     text: qsTr("%1 days").arg(_storage.ageAverage)
+                                }
+                                SmallText2 {
+                                    text: qsTr("Needed effort: ")
+                                }
+
+                                SmallText2 {
+                                    text: _settings.supportsEffort ? qsTr("%1 hours for %2 tasks").arg(_storage.totalNeededEffort).arg(_storage.numTasksWithEffort)
+                                                                   : qsTr("Effort feature disabled in settings")
                                 }
                             }
                         }
