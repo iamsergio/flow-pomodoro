@@ -317,7 +317,7 @@ Page {
                             }
 
                             Grid {
-                                rows: 4
+                                rows: 5
                                 columns: 2
                                 anchors {
                                     left: parent.left
@@ -338,6 +338,14 @@ Page {
 
                                 SmallText2 {
                                     text: _storage.taskCount - _storage.nonRecurringTaskCount
+                                }
+
+                                SmallText2 {
+                                    text: qsTr("Without-date: ")
+                                }
+
+                                SmallText2 {
+                                    text: _storage.nonDatedTaskCount
                                 }
 
                                 SmallText2 {
