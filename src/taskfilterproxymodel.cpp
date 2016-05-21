@@ -181,10 +181,24 @@ bool TaskFilterProxyModel::defaultLessThan(const Task::Ptr &leftTask, const Task
     const int rightPriority = rightTask->priority() == Task::PriorityNone ? 9 : rightTask->priority();
 
     if (leftPriority == rightPriority) {
-        if (leftTask->creationDate() == rightTask->creationDate()) {
-            return leftTask->summary() < rightTask->summary();
+        if (leftTask->hasDueDate() && rightTask->hasDueDate()) {
+            if (leftTask->dueDate() == rightTask->dueDate()) {
+                if (leftTask->creationDate() == rightTask->creationDate()) {
+                    return leftTask->summary() < rightTask->summary();
+                } else {
+                    return leftTask->creationDate() > rightTask->creationDate();
+                }
+            } else {
+                return leftTask->dueDate() < rightTask->dueDate();
+            }
+        } else if (leftTask->hasDueDate() ^ rightTask->hasDueDate()) {
+            return rightTask->hasDueDate();
         } else {
-            return leftTask->creationDate() > rightTask->creationDate();
+            if (leftTask->creationDate() == rightTask->creationDate()) {
+                return leftTask->summary() < rightTask->summary();
+            } else {
+                return leftTask->creationDate() > rightTask->creationDate();
+            }
         }
     } else {
         return leftPriority < rightPriority;
