@@ -175,6 +175,16 @@ void TaskFilterProxyModel::onSourceCountChanged()
     m_previousCount = rowCount();
 }
 
+// factored out into a separate method to avoid duplicated code
+static bool evenMoreDefaultLessThan(const Task::Ptr &leftTask, const Task::Ptr &rightTask)
+{
+    if (leftTask->creationDate() == rightTask->creationDate()) {
+        return leftTask->summary() < rightTask->summary();
+    } else {
+        return leftTask->creationDate() > rightTask->creationDate();
+    }
+}
+
 bool TaskFilterProxyModel::defaultLessThan(const Task::Ptr &leftTask, const Task::Ptr &rightTask) const
 {
     const int leftPriority = leftTask->priority() == Task::PriorityNone ? 9 : leftTask->priority();
@@ -183,22 +193,14 @@ bool TaskFilterProxyModel::defaultLessThan(const Task::Ptr &leftTask, const Task
     if (leftPriority == rightPriority) {
         if (leftTask->hasDueDate() && rightTask->hasDueDate()) {
             if (leftTask->dueDate() == rightTask->dueDate()) {
-                if (leftTask->creationDate() == rightTask->creationDate()) {
-                    return leftTask->summary() < rightTask->summary();
-                } else {
-                    return leftTask->creationDate() > rightTask->creationDate();
-                }
+                return evenMoreDefaultLessThan(leftTask, rightTask);
             } else {
                 return leftTask->dueDate() < rightTask->dueDate();
             }
         } else if (leftTask->hasDueDate() ^ rightTask->hasDueDate()) {
             return rightTask->hasDueDate();
         } else {
-            if (leftTask->creationDate() == rightTask->creationDate()) {
-                return leftTask->summary() < rightTask->summary();
-            } else {
-                return leftTask->creationDate() > rightTask->creationDate();
-            }
+            return evenMoreDefaultLessThan(leftTask, rightTask);
         }
     } else {
         return leftPriority < rightPriority;
