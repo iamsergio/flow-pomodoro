@@ -85,6 +85,7 @@ class Task : public QObject, public Syncable {
     Q_PROPERTY(uint frequency READ frequency WRITE setFrequency NOTIFY dueDateDisplayTextChanged)
     Q_PROPERTY(QString frequencyWord READ frequencyWord NOTIFY dueDateDisplayTextChanged)
     Q_PROPERTY(int estimatedEffort READ estimatedEffort WRITE setEstimatedEffort NOTIFY estimatedEffortChanged)
+    Q_PROPERTY(QString upperRightCornerText READ upperRightCornerText NOTIFY upperRightCornerTextChanged)
 
 public:
     typedef QSharedPointer<Task> Ptr;
@@ -196,6 +197,8 @@ public:
     int estimatedEffort() const;
     void setEstimatedEffort(int);
 
+    QString upperRightCornerText() const;
+
 public Q_SLOTS:
     void toggleRecurrenceType(PeriodType type);
 
@@ -214,6 +217,7 @@ Q_SIGNALS:
     void dueDateChanged();
     void dueDateDisplayTextChanged();
     void estimatedEffortChanged();
+    void upperRightCornerTextChanged();
 
 protected:
     QVector<QString> supportedFields() const Q_DECL_OVERRIDE;

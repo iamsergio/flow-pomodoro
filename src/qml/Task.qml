@@ -238,28 +238,14 @@ Rectangle {
     }
     Text {
         color: _style.taskTagFontColor
-        text: root.taskObj ? root.taskObj.daysSinceCreation : ""
-        visible: root.taskObj !== null && _settings.showTaskAge && !root.taskObj.hasDueDate
+
+        text: root.taskObj ? root.taskObj.upperRightCornerText : ""
+        visible: root.taskObj !== null
         anchors {
             top: parent.top
             right: parent.right
             rightMargin: _controller.dpiFactor * 3
             topMargin: _controller.dpiFactor * 2
-        }
-
-        font.pixelSize: _controller.dpiFactor * 11
-    }
-
-    Text {
-        id: estimatedEffort
-        color: _style.taskTagFontColor
-        text: root.taskObj ? ("~" + root.taskObj.estimatedEffort) : ""
-        visible: root.taskObj !== null && root.taskObj.estimatedEffort > 0 && _settings.supportsEffort
-        anchors {
-            bottom: parent.bottom
-            right: parent.right
-            rightMargin: _controller.dpiFactor * 3
-            bottomMargin: _controller.dpiFactor * 2
         }
 
         font.pixelSize: _controller.dpiFactor * 11

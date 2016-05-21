@@ -81,6 +81,8 @@ Task::Task(Kernel *kernel, const QString &summary)
     connect(this, &Task::priorityChanged, &Task::onEdited);
     connect(this, &Task::estimatedEffortChanged, &Task::onEdited);
 
+    connect(this, &Task::dueDateDisplayTextChanged, &Task::upperRightCornerTextChanged);
+    connect(this, &Task::estimatedEffortChanged, &Task::upperRightCornerTextChanged);
     connect(this, &Task::dueDateChanged, &Task::dueDateDisplayTextChanged);
 
     connect(kernel, &Kernel::dayChanged, this, &Task::onDayChanged);
@@ -692,6 +694,23 @@ void Task::setEstimatedEffort(int effort)
         m_estimatedEffort = effort;
         emit estimatedEffortChanged();
     }
+}
+
+QString Task::upperRightCornerText() const
+{
+    auto s = m_kernel->settings();
+    const bool hasEffort = s->supportsEffort() && m_estimatedEffort > 0;
+    const bool hasAge = s->showTaskAge() && !hasDueDate();
+
+    if (hasEffort && hasAge) {
+        return QStringLiteral("%1,~%2").arg(daysSinceCreation()).arg(m_estimatedEffort);
+    } else if (hasEffort) {
+        return QStringLiteral("~%1").arg(m_estimatedEffort);
+    } else if (hasAge) {
+        return QStringLiteral("%1").arg(daysSinceCreation());
+    }
+
+    return QString();
 }
 
 void Task::toggleRecurrenceType(PeriodType type)
