@@ -84,6 +84,8 @@ Task::Task(Kernel *kernel, const QString &summary)
     connect(this, &Task::dueDateDisplayTextChanged, &Task::upperRightCornerTextChanged);
     connect(this, &Task::estimatedEffortChanged, &Task::upperRightCornerTextChanged);
     connect(this, &Task::dueDateChanged, &Task::dueDateDisplayTextChanged);
+    connect(m_kernel->settings(), &Settings::showTaskAgeChanged, this, &Task::upperRightCornerTextChanged);
+    connect(m_kernel->settings(), &Settings::supportsEffortChanged, this, &Task::upperRightCornerTextChanged);
 
     connect(kernel, &Kernel::dayChanged, this, &Task::onDayChanged);
 
@@ -711,6 +713,34 @@ QString Task::upperRightCornerText() const
     }
 
     return QString();
+}
+
+void Task::incrementPriority()
+{
+    switch (m_priority) {
+    case PriorityNone:
+        setPriority(PriorityHigh);
+        break;
+    case PriorityHigh:
+        break;
+    case PriorityLow:
+        setPriority(PriorityNone);
+        break;
+    }
+}
+
+void Task::decrementPriority()
+{
+    switch (m_priority) {
+    case PriorityNone:
+        setPriority(PriorityLow);
+        break;
+    case PriorityHigh:
+        setPriority(PriorityNone);
+        break;
+    case PriorityLow:
+        break;
+    }
 }
 
 void Task::toggleRecurrenceType(PeriodType type)

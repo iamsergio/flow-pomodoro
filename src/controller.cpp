@@ -1044,6 +1044,20 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
            } else {
                return false;
            }
+       case Qt::Key_Plus:
+           if (m_selectedTask && qApp->keyboardModifiers() & Qt::ControlModifier) {
+               m_selectedTask->incrementPriority();
+               return true;
+           } else {
+               return false;
+           }
+       case Qt::Key_Minus:
+           if (m_selectedTask && qApp->keyboardModifiers() & Qt::ControlModifier) {
+               m_selectedTask->decrementPriority();
+               return true;
+           } else {
+               return false;
+           }
        }
 
        if (archiveVisible) {

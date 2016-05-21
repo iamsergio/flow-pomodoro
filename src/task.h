@@ -198,7 +198,8 @@ public:
     void setEstimatedEffort(int);
 
     QString upperRightCornerText() const;
-
+    void incrementPriority();
+    void decrementPriority();
 public Q_SLOTS:
     void toggleRecurrenceType(PeriodType type);
 
