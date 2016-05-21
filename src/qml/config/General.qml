@@ -331,6 +331,23 @@ Item {
                     value: showSupportsEffort.checked
                 }
             }
+
+            Text {
+                visible: _controller.expertMode
+                text: qsTr("Priority support")
+                font.pixelSize: 12 * _controller.dpiFactor
+            }
+
+            FlowCheckBox {
+                id: showSupportsPriority
+                visible: _controller.expertMode
+                checked: _settings.supportsPriority
+                Binding {
+                    target: _settings
+                    property: "supportsPriority"
+                    value: showSupportsPriority.checked
+                }
+            }
         }
     }
 }
