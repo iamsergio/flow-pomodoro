@@ -333,11 +333,11 @@ Page {
                                 }
 
                                 SmallText2 {
-                                    text: qsTr("Recurring: ")
+                                    text: qsTr("Non-recurring: ")
                                 }
 
                                 SmallText2 {
-                                    text: _storage.taskCount - _storage.nonRecurringTaskCount
+                                    text: _storage.nonRecurringTaskCount
                                 }
 
                                 SmallText2 {
