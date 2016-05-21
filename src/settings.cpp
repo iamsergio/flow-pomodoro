@@ -312,7 +312,7 @@ void Settings::setSupportsPriority(bool supports)
 {
     if (m_supportsPriority != supports) {
         m_supportsPriority = supports;
-        setValue(QStringLiteral("supportsDueDate"), supports);
+        setValue(QStringLiteral("supportsPriority"), supports);
         emit supportsPriorityChanged();
     }
 }
