@@ -1,6 +1,5 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.3
-import QtQuick.Controls.Styles 1.2
+import QtQuick.Controls 1.3 as QQControls
 import Controller 1.0
 import Task 1.0
 
@@ -201,105 +200,15 @@ Overlay {
 
                     Calendar {
                         id: calendar
-                        property bool doingHack: false
-
-                        function selectedDate_workaround()
-                        {
-                            return (root.task && root.task.dueDateString) ? root.task.dueDate
-                                                                          : _controller.currentDate
-                        }
-
-                        width: parent.width
                         height: 230 * _controller.dpiFactor
-                        minimumDate: new Date()
-                        selectedDate: selectedDate_workaround()
-                        onSelectedDateChanged: {
-                            if (!doingHack) {
-                                doingHack = true // prevent infinit loop
-
-                                // HACK: Due to QTBUG-45008, the binding breaks after we click the calendar, so rebind
-                                selectedDate = Qt.binding(function() { return selectedDate_workaround(); })
-
-                                doingHack = false
-                            }
+                        date: root.task.dueDate
+                        anchors {
+                            left: parent.left
+                            right: parent.right
                         }
 
-                        onClicked: {
+                        onDateChanged: {
                             root.task.dueDate = date
-                            calendar.focus = true
-                        }
-
-                        Keys.onEnterPressed: {
-                            root.task.dueDate = selectedDate
-                            root.accept()
-                        }
-                        Keys.onReturnPressed: {
-                            root.task.dueDate = selectedDate
-                            root.accept()
-                        }
-
-                        style: CalendarStyle {
-                            navigationBar: Rectangle {
-                                height: 25 * _controller.dpiFactor
-
-                                color: "#E9E9E9"
-                                FontAwesomeIcon {
-                                    id: iconLeft
-                                    text: "\uf0a8"
-                                    anchors.left: parent.left
-                                    anchors.leftMargin: 15 * _controller.dpiFactor
-                                    height: parent.height
-                                    z: 2
-                                    color: "black"
-                                    onClicked: {
-                                        control.showPreviousMonth()
-                                    }
-                                }
-                                Text {
-                                    height: 25 * _controller.dpiFactor
-                                    anchors.left: iconLeft.right
-                                    anchors.right: iconRight.left
-                                    text: styleData.title
-                                    font.bold: true
-                                    font.pixelSize: 20 * _controller.dpiFactor
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignBottom
-                                }
-                                FontAwesomeIcon {
-                                    id: iconRight
-                                    text: "\uf0a9"
-                                    anchors.right: parent.right
-                                    anchors.rightMargin: 15 * _controller.dpiFactor
-                                    height: parent.height
-                                    z: 2
-                                    color: "black"
-                                    onClicked: {
-                                        control.showNextMonth()
-                                    }
-                                }
-                            }
-
-                            dayDelegate:
-                                Rectangle {
-                                color: styleData.selected ? "#308CC6" : "white"
-                                Text {
-                                    anchors.centerIn: parent
-                                    color: styleData.selected ? "white" : "black"
-                                    font.pixelSize: (styleData.today ? 16 : 11) * _controller.dpiFactor
-                                    font.bold: styleData.today
-                                    text: styleData.today ? qsTr("T") : styleData.date.getDate()
-                                }
-                            }
-
-                            dayOfWeekDelegate: Rectangle {
-                                height: 25 * _controller.dpiFactor
-                                Text {
-                                    text: Qt.locale().dayName(styleData.dayOfWeek, control.dayOfWeekFormat)
-                                    horizontalAlignment: Text.AlignHCenter
-                                    anchors.fill: parent
-                                    font.pixelSize: 14 * _controller.dpiFactor
-                                }
-                            }
                         }
                     }
                 }
@@ -410,7 +319,7 @@ Overlay {
                     }
                 }
 
-                TextArea {
+                QQControls.TextArea {
                     id: descriptionArea
 
                     Text {
