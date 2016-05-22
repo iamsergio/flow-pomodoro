@@ -8,6 +8,7 @@
     <file>fonts/open-sans/OpenSans-Regular.ttf</file>
 
     <file>qml/AboutPage.qml</file>
+    <file>qml/Calendar.qml</file>
     <file>qml/Choice.qml</file>
     <file>qml/ChoicePopup.qml</file>
     <file>qml/ConfigurePage.qml</file>

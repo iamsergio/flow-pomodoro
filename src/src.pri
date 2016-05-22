@@ -1,6 +1,7 @@
 QT += quick
 
-SOURCES += $$PWD/checkabletagmodel.cpp \
+SOURCES += $$PWD/calendarcontroller.cpp \
+           $$PWD/checkabletagmodel.cpp \
            $$PWD/circularprogressindicator.cpp \
            $$PWD/checkbox.cpp \
            $$PWD/controller.cpp  \
@@ -26,7 +27,8 @@ SOURCES += $$PWD/checkabletagmodel.cpp \
            $$PWD/tooltipcontroller.cpp \
            $$PWD/utils.cpp
 
-HEADERS += $$PWD/checkabletagmodel.h \
+HEADERS += $$PWD/calendarcontroller.h \
+           $$PWD/checkabletagmodel.h \
            $$PWD/checkbox.h \
            $$PWD/circularprogressindicator.h \
            $$PWD/controller.h \

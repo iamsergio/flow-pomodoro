@@ -19,6 +19,7 @@
 
 #include "kernel.h"
 #include "controller.h"
+#include "calendarcontroller.h"
 #include "jsonstorage.h"
 #include "pluginmodel.h"
 #include "plugininterface.h"
@@ -111,6 +112,7 @@ static void registerQmlTypes()
 
     qmlRegisterType<CircularProgressIndicator>("com.kdab.flowpomodoro", 1, 0, "CircularProgressIndicator");
     qmlRegisterType<CheckBoxImpl>("com.kdab.flowpomodoro", 1, 0, "CheckBoxPrivate");
+    qmlRegisterType<CalendarController>("com.kdab.flowpomodoro", 1, 0, "CalendarController");
 }
 
 Kernel::~Kernel()
