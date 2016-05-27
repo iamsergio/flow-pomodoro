@@ -1,5 +1,6 @@
 
 set(flow_SRC
+    calendarcontroller.cpp
     checkabletagmodel.cpp
     circularprogressindicator.cpp
     checkbox.cpp
