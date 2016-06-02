@@ -77,12 +77,19 @@ QDate CalendarController::shownDayOne() const
 
 void CalendarController::addMonths(int n)
 {
-    setCurrentDate(m_currentDate.addMonths(n));
+    QDate dayOne = shownDayOne();
+    QDate newDate = dayOne.addMonths(n);
+    int day = qMin(m_currentDate.day(), newDate.daysInMonth());
+    newDate = QDate(newDate.year(), newDate.month(), day);
+
+    setCurrentDate(newDate);
+    updateDateList();
 }
 
 void CalendarController::addYears(int n)
 {
     setCurrentDate(m_currentDate.addYears(n));
+    updateDateList();
 }
 
 void CalendarController::updateDateList()
