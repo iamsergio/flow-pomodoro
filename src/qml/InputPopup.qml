@@ -31,6 +31,7 @@ Popup {
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: 10 * _controller.dpiFactor
             width: 0.70 * parent.width
+            selectByMouse: true
             onAccepted: {
                 root.accepted()
             }

@@ -65,6 +65,7 @@ Overlay {
                         focus: root.visible
                         inputMethodHints: Qt.ImhNoPredictiveText
                         font.pixelSize: 14 * _controller.dpiFactor
+                        selectByMouse: true
 
                         anchors {
                             left: parent.left
