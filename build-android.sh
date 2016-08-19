@@ -11,6 +11,6 @@ make install INSTALL_ROOT=android-build
 
 if [ $# = 1 ] ; then
     if [ $1 = "install" ] ; then
-        androiddeployqt --input src/android-libflow.so-deployment-settings.json --output src/android-build/ --deployment bundled --ant /usr/bin/ant --android-platform android-19 --jdk /usr/lib/jvm/java-7-openjdk --reinstall --device 058970b2f0df5762
+        androiddeployqt --input src/android-libflow.so-deployment-settings.json --output src/android-build/ --deployment bundled --ant /usr/bin/ant --android-platform android-19 --jdk /usr/lib/jvm/java-8-openjdk --reinstall --device 058970b2f0df5762
     fi
 fi
