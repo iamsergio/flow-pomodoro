@@ -97,7 +97,7 @@ public:
         PriorityHigh   = 1,
         PriorityLow    = 10,
     };
-    Q_ENUMS(Priority)
+    Q_ENUM(Priority)
 
     enum PeriodType { // Duplicated otherwise we can't use it in QML
         PeriodTypeNone = DueDate::PeriodTypeNone,
@@ -107,7 +107,7 @@ public:
         PeriodTypeYearly,
         PeriodTypeCount
     };
-    Q_ENUMS(PeriodType)
+    Q_ENUM(PeriodType)
 
     ~Task();
 

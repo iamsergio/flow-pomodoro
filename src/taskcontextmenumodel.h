@@ -46,7 +46,7 @@ public:
         OptionTypeQueue,
         OptionTypeCount
     };
-    Q_ENUMS(OptionType)
+    Q_ENUM(OptionType)
 
     struct Option {
         QString text;

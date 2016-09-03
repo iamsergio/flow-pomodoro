@@ -99,34 +99,34 @@ public:
         ConfigurePage,
         AboutPage
     };
-    Q_ENUMS(Page)
+    Q_ENUM(Page)
 
     enum ConfigureTab {
         GeneralTab = 0,
         TagsTab,
         PluginsTabs
     };
-    Q_ENUMS(ConfigureTab)
+    Q_ENUM(ConfigureTab)
 
     enum EditMode {
         EditModeNone = 0, // We're not editing a task
         EditModeInline, // We're editing inline
         EditModeEditor // We're using the task editor
     };
-    Q_ENUMS(EditMode)
+    Q_ENUM(EditMode)
 
     enum TagEditStatus {
         TagEditStatusNone = 0,
         TagEditStatusEdit, // Tag is being edited
         TagEditStatusNew // Tag is being created
     };
-    Q_ENUMS(TagEditStatus)
+    Q_ENUM(TagEditStatus)
 
     enum QueueType {
         QueueTypeToday = 0,
         QueueTypeArchive
     };
-    Q_ENUMS(QueueType)
+    Q_ENUM(QueueType)
 
     enum {
         NativeRendering = 0,

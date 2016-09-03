@@ -55,7 +55,7 @@ public:
         PositionBottomRight,
         MaxPositions
     };
-    Q_ENUMS(Position)
+    Q_ENUM(Position)
 
     enum GeometryType {
         GeometryStandard, // 400x40
@@ -64,7 +64,7 @@ public:
         GeometryCustom, // uses width and height from settings
         MaxGeometryTypes
     };
-    Q_ENUMS(GeometryType)
+    Q_ENUM(GeometryType)
 
     explicit Settings(QObject *parent = 0);
     explicit Settings(const QString &filename, QObject *parent = 0); // Overload for unit-tests
