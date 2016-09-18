@@ -81,7 +81,7 @@ void Settings::init()
         setInitialPosition(defaultPosition);
     }
 
-    const GeometryType defaultGeometry = GeometryStandard;
+    const GeometryType defaultGeometry = GeometryThin;
     m_geometryType = static_cast<GeometryType>(value(QStringLiteral("windowGeometryType"), defaultGeometry).toInt());
     if (m_geometryType < GeometryStandard || m_geometryType >= MaxGeometryTypes) {
         setGeometryType(defaultGeometry);
