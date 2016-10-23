@@ -1,7 +1,7 @@
-#ifndef FLOW_VERSION_H_
-#define FLOW_VERSION_H_
+#ifndef FLOW_VERSION_H
+#define FLOW_VERSION_H
 
-#define FLOW_VERSION v1.2.0
-#define FLOW_VERSION_DATE 15-03-2015
+#define FLOW_VERSION v1.3.0
+#define FLOW_VERSION_DATE 23-10-2016
 
 #endif

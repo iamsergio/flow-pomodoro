@@ -29,9 +29,9 @@ endif()
 add_subdirectory(src)
 add_subdirectory(plugins)
 
-set(CPACK_PACKAGE_VERSION "1.2.0")
+set(CPACK_PACKAGE_VERSION "1.3.0")
 set(CPACK_PACKAGE_VERSION_MAJOR "1")
-set(CPACK_PACKAGE_VERSION_MINOR "2")
+set(CPACK_PACKAGE_VERSION_MINOR "3")
 set(CPACK_PACKAGE_VERSION_PATCH "0")
 
 set(CPACK_PACKAGE_CONTACT "Sergio Martins <iamsergio@gmail.com>") # deb
