@@ -136,7 +136,7 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            impl.currentDate = modelData
+                            impl.setCurrentDate(modelData)
                         }
                     }
                 }

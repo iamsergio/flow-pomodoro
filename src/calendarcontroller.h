@@ -37,12 +37,12 @@ public:
 
     QDate currentDate() const;
     QDate today() const;
-    void setCurrentDate(QDate);
     QString dateText() const;
     QVariantList dateList() const;
     QDate shownDayOne() const;
 
 public Q_SLOTS:
+    void setCurrentDate(QDate); // SLOT called directly by QML, so binding doesn't break
     void addMonths(int n);
     void addYears(int n);
 
