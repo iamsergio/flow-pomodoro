@@ -6,7 +6,7 @@ import Task 1.0
 Overlay {
     id: root
     property QtObject task: null
-    property string prettyDueDateString: task ? task.prettyDueDateString : ""
+    readonly property string prettyDueDateString: task ? task.prettyDueDateString : ""
     objectName: "taskEditor"
 
     contentHeight: height - contentTopMargin - _style.pageMargin - _style.marginSmall
@@ -151,7 +151,7 @@ Overlay {
                         objectName: "dueDateExpanded"
                         anchors.top: titleText.top
                         anchors.topMargin: 2 * _controller.dpiFactor
-                        property bool expanded: root.prettyDueDateString !== ""
+                        readonly property bool expanded: root.prettyDueDateString !== ""
                         size: 20
                         text: expanded ? "\uf073" : "\uf133"
                         color: _style.regularTextColor
