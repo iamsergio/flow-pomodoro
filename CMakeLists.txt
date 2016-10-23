@@ -18,10 +18,10 @@ set(CMAKE_CXX_FLAGS "${Qt5Gui_EXECUTABLE_COMPILE_FLAGS}")
 add_subdirectory(src)
 add_subdirectory(plugins)
 
-set(CPACK_PACKAGE_VERSION "1.1.1")
+set(CPACK_PACKAGE_VERSION "1.1.2")
 set(CPACK_PACKAGE_VERSION_MAJOR "1")
 set(CPACK_PACKAGE_VERSION_MINOR "1")
-set(CPACK_PACKAGE_VERSION_PATCH "1")
+set(CPACK_PACKAGE_VERSION_PATCH "2")
 
 set(CPACK_PACKAGE_CONTACT "Sergio Martins <iamsergio@gmail.com>") # deb
 set(CPACK_GENERATOR "DEB;")
