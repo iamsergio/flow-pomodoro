@@ -29,3 +29,8 @@ v1.1.2
 * Minor fixes
 * Thin geometry is now default
 --------------------------------------------------------------------------------
+v1.2.0
+
+* Added way to create tasks faster. Middle mouse click on a contracted flow will
+  expand it and create a new task.
+--------------------------------------------------------------------------------
