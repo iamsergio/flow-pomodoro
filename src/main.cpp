@@ -67,7 +67,6 @@ void initDBus(Kernel *kernel)
 #endif
 }
 
-#ifdef Q_OS_WIN
 static QString logFile()
 {
     static QString filename;
@@ -78,7 +77,6 @@ static QString logFile()
 
     return filename;
 }
-#endif
 
 static bool acceptsWarning(const QString &warning)
 {

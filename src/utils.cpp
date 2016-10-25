@@ -26,6 +26,7 @@
 #include <QString>
 #include <QUrl>
 #include <QProcess>
+#include <QtMath>
 
 #ifdef Q_OS_ANDROID
 # include <QAndroidJniObject>
@@ -103,7 +104,7 @@ qreal Utils::dpiFactor()
 
             const qreal screenWidthInches = screen->geometry().width() / screenDpi;
             const qreal screenHeightInches = screen->geometry().height() / screenDpi;
-            const qreal screenDiagonalInches = sqrt(screenWidthInches * screenWidthInches + screenHeightInches * screenHeightInches);
+            const qreal screenDiagonalInches = qSqrt(screenWidthInches * screenWidthInches + screenHeightInches * screenHeightInches);
 
             qreal bigScreenCompensation = 1;
             const qreal myBigScreenDiagonalInches = 27;
