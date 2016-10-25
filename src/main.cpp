@@ -89,6 +89,22 @@ static bool acceptsWarning(const QString &warning)
     return true;
 }
 
+static bool logsDebugToFile()
+{
+    // Mobile and Windows send qDebug to a file
+
+#if defined(DEVELOPER_MODE)
+    // Here you're using qtcreator
+    return false;
+#endif
+
+#if defined(Q_OS_WIN)
+    return true;
+#endif
+
+    return Utils::isMobile();
+}
+
 void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     Q_UNUSED(context);
@@ -116,14 +132,15 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
         abort();
     }
 
-#if defined(Q_OS_WIN) && !defined(DEVELOPER_MODE)
-    QFile file(logFile());
-    file.open(QIODevice::Append | QIODevice::WriteOnly);
-    QTextStream out(&file);
-#else
-    QTextStream out(stderr);
-#endif
-    out << level << msg << "\r\n";
+    if (logsDebugToFile()) {
+        QFile file(logFile());
+        file.open(QIODevice::Append | QIODevice::WriteOnly);
+        QTextStream out(&file);
+        out << level << msg << "\r\n";
+    } else {
+        QTextStream out(stderr);
+        out << level << msg << "\r\n";
+    }
 }
 
 static QString defaultFlowDir()
