@@ -67,7 +67,6 @@ void initDBus(Kernel *kernel)
 #endif
 }
 
-#ifdef Q_OS_WIN
 static QString logFile()
 {
     static QString filename;
@@ -78,7 +77,6 @@ static QString logFile()
 
     return filename;
 }
-#endif
 
 static bool acceptsWarning(const QString &warning)
 {
@@ -87,6 +85,22 @@ static bool acceptsWarning(const QString &warning)
         return false;
 
     return true;
+}
+
+static bool logsDebugToFile()
+{
+    // Mobile and Windows send qDebug to a file
+
+#if defined(DEVELOPER_MODE)
+    // Here you're using qtcreator
+    return false;
+#endif
+
+#if defined(Q_OS_WIN)
+    return true;
+#endif
+
+    return Utils::isMobile();
 }
 
 void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -116,14 +130,15 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
         abort();
     }
 
-#if defined(Q_OS_WIN) && !defined(DEVELOPER_MODE)
-    QFile file(logFile());
-    file.open(QIODevice::Append | QIODevice::WriteOnly);
-    QTextStream out(&file);
-#else
-    QTextStream out(stderr);
-#endif
-    out << level << msg << "\r\n";
+    if (logsDebugToFile()) {
+        QFile file(logFile());
+        file.open(QIODevice::Append | QIODevice::WriteOnly);
+        QTextStream out(&file);
+        out << level << msg << "\r\n";
+    } else {
+        QTextStream out(stderr);
+        out << level << msg << "\r\n";
+    }
 }
 
 static QString defaultFlowDir()
@@ -198,7 +213,11 @@ int main(int argc, char *argv[])
 
     if (Utils::isMobile()) {
         window.showMaximized(); // Don't use fullscreen on android
+    } else {
+        window.show();
+    }
 
+    if (logsDebugToFile()) { // Logging to file, so lets be a bit more verbose
         QScreen *screen = QGuiApplication::primaryScreen();
         if (screen) {
             qDebug() << "Logical DPI=" << screen->logicalDotsPerInch()
@@ -207,8 +226,6 @@ int main(int argc, char *argv[])
         } else {
             qWarning() << "Null screen";
         }
-    } else {
-        window.show();
     }
 
     Utils::printTimeInfo(QStringLiteral("main: starting app.exec()"));

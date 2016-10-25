@@ -41,7 +41,7 @@ Rectangle {
             id: globalMouseArea
             anchors.fill: parent
             hoverEnabled: true
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
             onClicked: {
                 if (mouse.button === Qt.LeftButton) {
                     _controller.expanded = !_controller.expanded
@@ -50,6 +50,11 @@ Rectangle {
                     if (_controller.editMode === Controller.EditModeNone) {
                         _controller.requestContextMenu(null) // reset task
                         _window.showWidgetContextMenu(Qt.point(mouse.x, mouse.y))
+                    }
+                } else if (mouse.button === Qt.MiddleButton) {
+                    if (!_controller.expanded) {
+                        _controller.expanded = true;
+                        _controller.addTask(qsTr("New Task"), true);
                     }
                 }
             }
