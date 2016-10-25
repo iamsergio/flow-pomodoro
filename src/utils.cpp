@@ -91,8 +91,32 @@ qreal Utils::dpiFactor()
     if (factor == -1) {
         QScreen *screen = QGuiApplication::primaryScreen();
         Q_ASSERT(screen);
-        factor = isMobile() ? (screen->physicalDotsPerInch() / 72.0) / 2 // /2 because looks good on all devices
-                            : 1;
+        const qreal screenDpi = screen->physicalDotsPerInch();
+
+        if (isMobile()) {
+            // Return the dpi racio against the phone where flow was prototyped in, so it looks the same.
+            const qreal myOldPhoneDpi = 144.0;
+            factor = screenDpi / myOldPhoneDpi;
+        } else {
+            // Return the dpi racio against the monitor where flow was prototyped in, so it looks the same.
+            const qreal myOldMonitorDpi = 144.0;
+
+            const qreal screenWidthInches = screen->geometry().width() / screenDpi;
+            const qreal screenHeightInches = screen->geometry().height() / screenDpi;
+            const qreal screenDiagonalInches = sqrt(screenWidthInches * screenWidthInches + screenHeightInches * screenHeightInches);
+
+            qreal bigScreenCompensation = 1;
+            const qreal myBigScreenDiagonalInches = 27;
+            if (screenDiagonalInches > 25) {
+                // For big screens lets add some compensation, because usually you're a bit further away from them
+                bigScreenCompensation = 1.5 * (screenDiagonalInches / myBigScreenDiagonalInches);
+            } else {
+                // For regular screens a linear DPI factor works quite well
+                bigScreenCompensation = 1;
+            }
+
+            factor = bigScreenCompensation * screenDpi / myOldMonitorDpi;
+        }
     }
 
     return factor;
