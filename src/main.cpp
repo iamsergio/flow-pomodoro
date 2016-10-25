@@ -215,7 +215,11 @@ int main(int argc, char *argv[])
 
     if (Utils::isMobile()) {
         window.showMaximized(); // Don't use fullscreen on android
+    } else {
+        window.show();
+    }
 
+    if (logsDebugToFile()) { // Logging to file, so lets be a bit more verbose
         QScreen *screen = QGuiApplication::primaryScreen();
         if (screen) {
             qDebug() << "Logical DPI=" << screen->logicalDotsPerInch()
@@ -224,8 +228,6 @@ int main(int argc, char *argv[])
         } else {
             qWarning() << "Null screen";
         }
-    } else {
-        window.show();
     }
 
     Utils::printTimeInfo(QStringLiteral("main: starting app.exec()"));
