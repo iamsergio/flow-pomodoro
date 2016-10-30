@@ -9,7 +9,7 @@ Rectangle {
     property alias date: impl.currentDate
 
     border {
-        width: 1
+        width: 1 * _controller.dpiFactor
         color: "#D3D3D3"
     }
 
@@ -35,14 +35,14 @@ Rectangle {
             left: parent.left
             right: parent.right
             top: parent.top
-            margins:1
+            margins: 1 * _controller.dpiFactor
         }
         color: "#E9E9E9"
 
         Text {
             color: "black"
             anchors.centerIn: parent
-            font.pixelSize: 17
+            font.pixelSize: 17 * _controller.dpiFactor
             font.bold: true
             text: Qt.formatDate(impl.shownDayOne, "MMM yyyy")
         }
@@ -79,7 +79,7 @@ Rectangle {
 
     Row {
         id: weekDays
-        height: 25
+        height: 25 * _controller.dpiFactor
         anchors {
             left: parent.left
             right: parent.right
@@ -112,10 +112,10 @@ Rectangle {
             id: grid
             columns: 7
             rows: 6
-            spacing: 1
+            spacing: 1 * _controller.dpiFactor
 
             anchors.fill: parent
-            anchors.margins: 1
+            anchors.margins: 1 * _controller.dpiFactor
 
             Repeater {
                 model: impl.dateList
