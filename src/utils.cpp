@@ -106,11 +106,13 @@ qreal Utils::dpiFactor()
             const qreal screenHeightInches = screen->geometry().height() / screenDpi;
             const qreal screenDiagonalInches = qSqrt(screenWidthInches * screenWidthInches + screenHeightInches * screenHeightInches);
 
+            qDebug() << screenDiagonalInches;
+
             qreal bigScreenCompensation = 1;
             const qreal myBigScreenDiagonalInches = 27;
-            if (screenDiagonalInches > 25) {
+            if (screenDiagonalInches > 21) {
                 // For big screens lets add some compensation, because usually you're a bit further away from them
-                bigScreenCompensation = 1.5 * (screenDiagonalInches / myBigScreenDiagonalInches);
+                bigScreenCompensation = 1.8 * (screenDiagonalInches / myBigScreenDiagonalInches);
             } else {
                 // For regular screens a linear DPI factor works quite well
                 bigScreenCompensation = 1;
