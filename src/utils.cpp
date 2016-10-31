@@ -86,6 +86,22 @@ bool Utils::isOSX()
     return false;
 }
 
+static qreal osScaleFactor(QScreen *screen)
+{
+    // This function returns the scale factor which was set by the OS
+    // Not sure if this is portable, so only implemented for Windows.
+    // Not using the proper Qt API to retrieve this because it doesn't support fractionals yet and you
+    // can set 150% on Windows display settings.
+    if (!screen)
+        return 1.0;
+
+#ifdef Q_OS_WIN
+    return screen->logicalDotsPerInch() / 96.0;
+#endif
+
+    return 1.0;
+}
+
 qreal Utils::dpiFactor()
 {
     static qreal factor = -1;
@@ -100,25 +116,8 @@ qreal Utils::dpiFactor()
             factor = screenDpi / myOldPhoneDpi;
         } else {
             // Return the dpi racio against the monitor where flow was prototyped in, so it looks the same.
-            const qreal myOldMonitorDpi = 144.0;
-
-            const qreal screenWidthInches = screen->geometry().width() / screenDpi;
-            const qreal screenHeightInches = screen->geometry().height() / screenDpi;
-            const qreal screenDiagonalInches = qSqrt(screenWidthInches * screenWidthInches + screenHeightInches * screenHeightInches);
-
-            qDebug() << screenDiagonalInches;
-
-            qreal bigScreenCompensation = 1;
-            const qreal myBigScreenDiagonalInches = 27;
-            if (screenDiagonalInches > 21) {
-                // For big screens lets add some compensation, because usually you're a bit further away from them
-                bigScreenCompensation = 1.8 * (screenDiagonalInches / myBigScreenDiagonalInches);
-            } else {
-                // For regular screens a linear DPI factor works quite well
-                bigScreenCompensation = 1;
-            }
-
-            factor = bigScreenCompensation * screenDpi / myOldMonitorDpi;
+            const qreal myOldMonitorDpi = 110.0;
+            factor = (screenDpi / myOldMonitorDpi) * osScaleFactor(QGuiApplication::primaryScreen()); // TODO: Support moving between screens
         }
     }
 

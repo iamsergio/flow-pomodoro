@@ -189,6 +189,7 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(shellscriptplugin);
     Q_INIT_RESOURCE(hostsplugin);
 #endif
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     Application app(argc, argv);
     Utils::printTimeInfo(QStringLiteral("main: created QApplication"));
     app.setOrganizationName(QStringLiteral("KDAB"));
