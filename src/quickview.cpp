@@ -76,18 +76,8 @@ QuickView::QuickView(Kernel *kernel)
     }
     Utils::printTimeInfo(QStringLiteral("QuickView: Set Source END"));
 
-#ifdef Q_OS_WIN
-
-# if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
-        // Qt 5.1 does not support frameless and translucent windows on Windows
-        setColor(Qt::transparent);
-        setDefaultAlphaBuffer(true);
-# endif
-
-#else
     setColor(Qt::transparent);
     setDefaultAlphaBuffer(true); // Because some drivers don't request it. QTBUG-41074
-#endif
 
     if (Utils::isMobile()) {
         setResizeMode(QQuickView::SizeRootObjectToView);

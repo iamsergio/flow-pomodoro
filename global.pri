@@ -3,7 +3,7 @@
     error("QtQuickControls module was not found")
 }
 
-lessThan(QT_MAJOR_VERSION, 5) | lessThan(QT_MINOR_VERSION, 4) {
+lessThan(QT_MAJOR_VERSION, 5) | lessThan(QT_MINOR_VERSION, 6) {
     error("You need at least Qt 5.4.")
 }
 
