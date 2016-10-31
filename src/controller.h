@@ -273,6 +273,8 @@ public Q_SLOTS:
 
     void openUrl(const QString &url);
 
+    void setTaskDueDate(Task *task, QDate);
+
 private Q_SLOTS:
     void onTimerTick();
     void onCurrentTagDestroyed();

@@ -144,7 +144,7 @@ public:
     QDateTime modificationDate() const;
     QDateTime lastPomodoroDate() const;
     QDate dueDate() const;
-    void setDueDate(DueDate );
+    void setDueDate(QDate);
     bool hasDueDate() const;
     void setLastPomodoroDate(const QDateTime &);
 
@@ -232,6 +232,7 @@ private:
     void modelSetup();
     void setModificationDate(const QDateTime &);
     void setCreationDate(const QDateTime &);
+    void setDueDate(DueDate);
 
     QString m_summary;
     QString m_description;

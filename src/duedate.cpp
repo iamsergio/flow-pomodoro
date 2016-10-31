@@ -69,6 +69,11 @@ QDate DueDate::date() const
     return m_date;
 }
 
+void DueDate::setDate(QDate date)
+{
+    m_date = date;
+}
+
 qint64 DueDate::toJulianDay() const
 {
     return m_date.toJulianDay();
