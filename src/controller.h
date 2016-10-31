@@ -35,6 +35,7 @@ class Storage;
 class Kernel;
 class Settings;
 class QQmlContext;
+class QWindow;
 
 class Controller : public QObject {
     Q_OBJECT
@@ -71,7 +72,7 @@ class Controller : public QObject {
     // Editing Tag properties
     Q_PROPERTY(TagEditStatus tagEditStatus READ tagEditStatus NOTIFY tagEditStatusChanged)
     // Other properties
-    Q_PROPERTY(qreal dpiFactor READ dpiFactor CONSTANT)
+    Q_PROPERTY(qreal dpiFactor READ dpiFactor NOTIFY screenChanged)
     Q_PROPERTY(bool isMobile READ isMobile CONSTANT)
     Q_PROPERTY(bool isIOS READ isIOS CONSTANT)
     Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT)
@@ -230,6 +231,7 @@ public:
     int selectedTaskIndex() const;
     QDate currentDate() const;
 
+    void setWindow(QWindow *);
 public Q_SLOTS:
     void dismissTaskMenuDelayed();
     void dismissTaskMenu();
@@ -287,6 +289,7 @@ private Q_SLOTS:
     void setStartupFinished();
 
 Q_SIGNALS:
+    void screenChanged();
     void currentDateChanged();
     void selectedTaskIndexChanged();
     void tagsModelChanged();
@@ -332,6 +335,7 @@ Q_SIGNALS:
     void pathChanged();
 
 private:
+    void handleScreenChanged();
     Tag::Ptr tagForSummary(QString &summary_inout) const; // Transforms "books: Foo" into "Foo" and returns tag books
     void setSelectedTaskIndex(int);
     void validateSelectedTask();
@@ -399,6 +403,7 @@ private:
     Tag::Ptr m_untaggedTasksTag;
     Tag::Ptr m_dueDateTasksTag;
     int m_selectedTaskIndex;
+    QWindow *m_window = nullptr;
 };
 
 #endif

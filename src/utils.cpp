@@ -86,41 +86,30 @@ bool Utils::isOSX()
     return false;
 }
 
-static qreal osScaleFactor(QScreen *screen)
+qreal Utils::dpiFactor(QScreen *screen)
 {
-    // This function returns the scale factor which was set by the OS
-    // Not sure if this is portable, so only implemented for Windows.
-    // Not using the proper Qt API to retrieve this because it doesn't support fractionals yet and you
-    // can set 150% on Windows display settings.
+    static QHash<QScreen*, qreal> s_dpiFactors;
+    auto it = s_dpiFactors.constFind(screen);
+    const bool found = it != s_dpiFactors.cend();
+    if (found)
+        return it.value();
+
     if (!screen)
         return 1.0;
 
-#ifdef Q_OS_WIN
-    return screen->logicalDotsPerInch() / 96.0;
-#endif
-
-    return 1.0;
-}
-
-qreal Utils::dpiFactor()
-{
-    static qreal factor = -1;
-    if (factor == -1) {
-        QScreen *screen = QGuiApplication::primaryScreen();
-        Q_ASSERT(screen);
-        const qreal screenDpi = screen->physicalDotsPerInch();
-
-        if (isMobile()) {
+    const qreal screenDpi = screen->physicalDotsPerInch();
+    qreal factor;
+    if (isMobile()) {
             // Return the dpi racio against the phone where flow was prototyped in, so it looks the same.
-            const qreal myOldPhoneDpi = 144.0;
-            factor = screenDpi / myOldPhoneDpi;
-        } else {
-            // Return the dpi racio against the monitor where flow was prototyped in, so it looks the same.
-            const qreal myOldMonitorDpi = 110.0;
-            factor = (screenDpi / myOldMonitorDpi) * osScaleFactor(QGuiApplication::primaryScreen()); // TODO: Support moving between screens
-        }
+        const qreal myOldPhoneDpi = 144.0;
+        factor = screenDpi / myOldPhoneDpi;
+    } else {
+        // Return the dpi racio against the monitor where flow was prototyped in, so it looks the same.
+        const qreal myOldMonitorDpi = 110.0;
+        factor = screenDpi / myOldMonitorDpi;
     }
 
+    s_dpiFactors.insert(screen, factor);
     return factor;
 }
 

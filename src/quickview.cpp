@@ -91,6 +91,10 @@ QuickView::QuickView(Kernel *kernel)
     Utils::printTimeInfo(QStringLiteral("QuickView: CTOR END"));
 
     connect(kernel, &Kernel::systrayLeftClicked, this, &QuickView::toggleVisible);
+    m_controller->setWindow(this);
+
+    if (!Utils::isMobile())
+        connect(this, &QWindow::screenChanged, this, &QuickView::setupSize);
 }
 
 QuickView::~QuickView()
@@ -119,34 +123,12 @@ void QuickView::setupGeometry()
     if (Utils::isMobile())
         return;
 
-    QSize screenSize = qApp->primaryScreen()->size();
+    setupSize();
 
     int x = 0;
     int y = 0;
-    int width = 0;
-    int height = 0;
-
-    switch (m_kernel->settings()->geometryType()) {
-    case Settings::GeometryStandard:
-    case Settings::GeometryCustom:
-        width = 400;
-        height = 50;
-        break;
-    case Settings::GeometryThin:
-        width = 400;
-        height = 20;
-        break;
-    case Settings::GeometrySmallSquare:
-        width = 40;
-        height = 40;
-        break;
-    case Settings::MaxGeometryTypes:
-        Q_ASSERT(false);
-        return;
-    }
-
-    setContractedWidth(width * Utils::dpiFactor());
-    setContractedHeight(height * Utils::dpiFactor());
+    QScreen *s = screen() ? screen() : qApp->primaryScreen();
+    QSize screenSize = s->size();
 
     const int maxX = screenSize.width() - m_contractedWidth;
     const int maxY = screenSize.height() - m_contractedHeight;
@@ -191,6 +173,34 @@ void QuickView::setupGeometry()
     if (this->x() != x || this->y() != y)
         setPosition(x, y);
     // width and height isn't set because we use SizeViewToRoot (so we can animate expand/collapse from QML)
+}
+
+void QuickView::setupSize()
+{
+    int width = 0;
+    int height = 0;
+
+    switch (m_kernel->settings()->geometryType()) {
+    case Settings::GeometryStandard:
+    case Settings::GeometryCustom:
+        width = 400;
+        height = 50;
+        break;
+    case Settings::GeometryThin:
+        width = 400;
+        height = 20;
+        break;
+    case Settings::GeometrySmallSquare:
+        width = 40;
+        height = 40;
+        break;
+    case Settings::MaxGeometryTypes:
+        Q_ASSERT(false);
+        return;
+    }
+
+    setContractedWidth(width * Utils::dpiFactor(screen()));
+    setContractedHeight(height * Utils::dpiFactor(screen()));
 }
 
 QUrl QuickView::styleFileName() const

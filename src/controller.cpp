@@ -35,6 +35,7 @@
 
 #include <QTimer>
 #include <QScreen>
+#include <QWindow>
 #include <QGuiApplication>
 #include <QQmlExpression>
 #include <QQmlContext>
@@ -408,7 +409,8 @@ void Controller::setTaskStatus(TaskStatus status)
 
 qreal Controller::dpiFactor() const
 {
-    return Utils::dpiFactor();
+    QScreen *screen = m_window ? m_window->screen() : nullptr;
+    return Utils::dpiFactor(screen);
 }
 
 bool Controller::popupVisible() const
@@ -742,6 +744,11 @@ void Controller::setStartupFinished()
 {
     m_startupFinished = true;
     emit startupFinishedChanged();
+}
+
+void Controller::handleScreenChanged()
+{
+    emit screenChanged();
 }
 
 void Controller::forceFocusOnTaskBeingEdited()
@@ -1422,6 +1429,17 @@ int Controller::selectedTaskIndex() const
 QDate Controller::currentDate() const
 {
     return m_kernel->currentDate();
+}
+
+void Controller::setWindow(QWindow *window)
+{
+    if (!m_window && window) {
+        m_window = window;
+        connect(m_window, &QWindow::screenChanged, this, &Controller::handleScreenChanged);
+        handleScreenChanged();
+    } else {
+        Q_ASSERT(false);
+    }
 }
 
 void Controller::dismissTaskMenu()

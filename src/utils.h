@@ -24,6 +24,7 @@
 
 class QUrl;
 class QString;
+class QScreen;
 
 namespace Utils {
     void openUrl(const QUrl &);
@@ -31,7 +32,7 @@ namespace Utils {
     void keepScreenOn(bool);
     bool isMobile();
     bool isOSX();
-    qreal dpiFactor();
+    qreal dpiFactor(QScreen *screen);
 }
 
 #endif

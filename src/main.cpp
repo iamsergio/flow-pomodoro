@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(shellscriptplugin);
     Q_INIT_RESOURCE(hostsplugin);
 #endif
-    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QGuiApplication::setAttribute(Qt::AA_DisableHighDpiScaling); // because Qt only supports integer factors.
     Application app(argc, argv);
     Utils::printTimeInfo(QStringLiteral("main: created QApplication"));
     app.setOrganizationName(QStringLiteral("KDAB"));
@@ -217,13 +217,16 @@ int main(int argc, char *argv[])
     }
 
     if (logsDebugToFile()) { // Logging to file, so lets be a bit more verbose
-        QScreen *screen = QGuiApplication::primaryScreen();
-        if (screen) {
-            qDebug() << "Logical DPI=" << screen->logicalDotsPerInch()
-                     << "; Physical DPI=" << screen->physicalDotsPerInch()
-                     << "; Resolution=" << screen->size();
-        } else {
-            qWarning() << "Null screen";
+        for (auto screen : QGuiApplication::screens()) {
+            if (screen) {
+                qDebug() << "Logical DPI=" << screen->logicalDotsPerInch()
+                         << "; Physical DPI=" << screen->physicalDotsPerInch()
+                         << "; Physical DPI X=" << screen->physicalDotsPerInchX()
+                         << "; Resolution=" << screen->size()
+                         << "; Name=" << screen->name();
+            } else {
+                qWarning() << "Null screen";
+            }
         }
     }
 
