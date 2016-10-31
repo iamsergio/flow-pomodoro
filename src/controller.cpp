@@ -755,6 +755,21 @@ void Controller::openUrl(const QString &url)
     Utils::openUrl(QUrl(url));
 }
 
+void Controller::setTaskDueDate(Task *task, QDate dueDate)
+{
+    if (!task)
+        return;
+
+    if (dueDate.isValid() && task->hasDueDate() && !task->recurs()) {
+        // Handle special case: If a task for "today" has a date, and we're postponing the date
+        // Then also move it to "later". And vice-versa.
+        task->setDueDate(dueDate);
+        task->setStaged(dueDate <= QDate::currentDate());
+    } else {
+        task->setDueDate(dueDate);
+    }
+}
+
 void Controller::updateExtendedTagModel()
 {
     Tag::List extraTags;
