@@ -20,8 +20,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _CONTROLLER_H_
-#define _CONTROLLER_H_
+#ifndef FLOW_CONTROLLER_H
+#define FLOW_CONTROLLER_H
 
 #include "task.h"
 

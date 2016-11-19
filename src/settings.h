@@ -20,8 +20,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SETTINGS_H_
-#define _SETTINGS_H_
+#ifndef FLOW_SETTINGS_H
+#define FLOW_SETTINGS_H
 
 #include <QSettings>
 

@@ -18,8 +18,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PLUGININTERFACE_H_
-#define _PLUGININTERFACE_H_
+#ifndef FLOW_PLUGININTERFACE_H
+#define FLOW_PLUGININTERFACE_H
 
 #include "task.h"
 

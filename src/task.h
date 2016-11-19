@@ -20,8 +20,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _TASK_H_
-#define _TASK_H_
+#ifndef FLOW_TASK_H
+#define FLOW_TASK_H
 
 #include "tag.h"
 #include "tagref.h"
