@@ -7,6 +7,7 @@
 #include "testtaskfiltermodel.h"
 #include "teststagedtasksmodel.h"
 #include "testarchivedtasksmodel.h"
+#include "testgitutils.h"
 #include "quick/testui.h"
 
 #ifndef NO_WEBDAV
@@ -81,6 +82,13 @@ int main(int argc, char *argv[])
     {
         TestDueDate test10;
         success &= QTest::qExec(&test10, argc, argv) == 0;
+        Q_ASSERT(success);
+    }
+
+
+    {
+        TestGitUtils test11;
+        success &= QTest::qExec(&test11, argc, argv) == 0;
         Q_ASSERT(success);
     }
 

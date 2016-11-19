@@ -24,7 +24,8 @@ SOURCES += assertingproxymodel.cpp \
            testtaskfiltermodel.cpp \
            testtag.cpp \
            testtask.cpp \
-           testtagmodel.cpp
+           testtagmodel.cpp \
+           testgitutils.cpp
 
 !contains(DEFINES, NO_WEBDAV) {
     SOURCES += testwebdav.cpp
@@ -47,4 +48,5 @@ HEADERS += assertingproxymodel.h \
            teststagedtasksmodel.h \
            testtag.h \
            testtask.h \
-           testtagmodel.h
+           testtagmodel.h \
+           testgitutils.h
