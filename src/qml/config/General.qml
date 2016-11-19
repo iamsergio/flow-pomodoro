@@ -307,6 +307,7 @@ Item {
 
             FlowCheckBox {
                 id: showSupportsDueDate
+                width: _style.checkBoxIconSize
                 checked: _settings.supportsDueDate
                 Binding {
                     target: _settings
@@ -325,6 +326,7 @@ Item {
                 id: showSupportsEffort
                 visible: _controller.expertMode
                 checked: _settings.supportsEffort
+                width: _style.checkBoxIconSize
                 Binding {
                     target: _settings
                     property: "supportsEffort"
@@ -342,6 +344,7 @@ Item {
                 id: showSupportsPriority
                 visible: _controller.expertMode
                 checked: _settings.supportsPriority
+                width: _style.checkBoxIconSize
                 Binding {
                     target: _settings
                     property: "supportsPriority"
