@@ -86,6 +86,23 @@ bool Utils::isOSX()
     return false;
 }
 
+static qreal userScaleFactor()
+{
+    static qreal factor = -1;
+    if (factor == -1) {
+        factor = 1.0;
+        QByteArray env = qgetenv("FLOW_SCALE_FACTOR");
+        if (!env.isEmpty()) {
+            bool ok = false;
+            factor = env.toDouble(&ok);
+            if (!ok || factor <= 0.0)
+                factor = 1.0;
+        }
+    }
+
+    return factor;
+}
+
 qreal Utils::dpiFactor(QScreen *screen)
 {
     static QHash<QScreen*, qreal> s_dpiFactors;
@@ -95,12 +112,12 @@ qreal Utils::dpiFactor(QScreen *screen)
         return it.value();
 
     if (!screen)
-        return 1.0;
+        return 1.0 * userScaleFactor();
 
     const qreal screenDpi = screen->physicalDotsPerInch();
     qreal factor;
     if (isMobile()) {
-            // Return the dpi racio against the phone where flow was prototyped in, so it looks the same.
+        // Return the dpi racio against the phone where flow was prototyped in, so it looks the same.
         const qreal myOldPhoneDpi = 144.0;
         factor = screenDpi / myOldPhoneDpi;
     } else {
@@ -108,6 +125,8 @@ qreal Utils::dpiFactor(QScreen *screen)
         const qreal myOldMonitorDpi = 110.0;
         factor = screenDpi / myOldMonitorDpi;
     }
+
+    factor *= userScaleFactor();
 
     s_dpiFactors.insert(screen, factor);
     return factor;
