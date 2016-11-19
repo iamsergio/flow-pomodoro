@@ -44,6 +44,7 @@ typedef QGuiApplication Application;
 #include <QTranslator>
 #include <QScreen>
 #include <QDir>
+#include <QSettings>
 
 void initDBus(Kernel *kernel)
 {
@@ -141,12 +142,26 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
 
 static QString defaultFlowDir()
 {
-#if defined(Q_OS_ANDROID) && defined(DEVELOPER_MODE)
-    return QStringLiteral("/storage/sdcard0/");
-#endif
+    // Env variable takes priority
     const QByteArray env_path = qgetenv("FLOW_DIR");
-    return env_path.isEmpty() ? QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-                              : QString::fromLatin1(env_path);
+    if (!env_path.isEmpty())
+        return QString::fromLatin1(env_path);
+
+#if defined(Q_OS_ANDROID)
+    // The usual settings are in flow's directory, which the user can't easily edit.
+    // Allow the user to create an override settings file in the sdcard so he can edit when connecting to a computer.
+    // Only changing "defaultFlowDir" is supported for now.
+
+    const QString filename = QStringLiteral("/sdcard/flow/settings.ini");
+    if (QFileInfo::exists(filename)) {
+        QSettings settingsInSDCard(filename, QSettings::IniFormat);
+        QString flowDir = settingsInSDCard.value(QStringLiteral("flowDefaultDir")).toString();
+        if (!flowDir.isEmpty())
+            return flowDir;
+    }
+#endif
+
+    return QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 }
 
 static QString defaultDataFileName()
