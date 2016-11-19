@@ -71,7 +71,7 @@ void Settings::init()
     m_showTaskAge = value(QStringLiteral("showTaskAge"), /*default=*/ false).toBool();
     m_showAllTasksView = value(QStringLiteral("showAllTasksView"), /*default=*/ false).toBool();
     m_showContextMenuAfterAdd = value(QStringLiteral("showContextMenuAfterAdd"), true).toBool();
-    m_supportsDueDate = value(QStringLiteral("supportsDueDate"), false).toBool();
+    m_supportsDueDate = value(QStringLiteral("supportsDueDate"), true).toBool();
     m_supportsPriority = value(QStringLiteral("supportsPriority"), false).toBool();
     m_supportsEffort = value(QStringLiteral("supportsEffort"), false).toBool();
 
