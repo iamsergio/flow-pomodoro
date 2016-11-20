@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=flow
+Icon=kmines
+Exec=flow
+Type=Application
+GenericName=flow pomodoro
+Categories=Qt;KDE;Office;
+Terminal=false
