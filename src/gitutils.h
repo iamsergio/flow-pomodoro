@@ -18,10 +18,23 @@
 */
 
 #include <QObject>
-
-class QString;
+#include <QString>
 
 namespace GitUtils
 {
-    bool isInsideGit(const QString &filename);
+
+bool isInsideGit(const QString &filename);
+
+class GitRepo
+{
+public:
+    explicit GitRepo(const QString &repoPath);
+    bool hasModifications(const QString &filename, bool &errorOcurred);
+    bool commit(const QString &message);
+    bool stage(const QString &filename);
+    bool push();
+private:
+    const QString m_repoPath;
+};
+
 }

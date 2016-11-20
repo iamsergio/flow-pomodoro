@@ -23,8 +23,14 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QDebug>
+#include <QProcess>
 
 using namespace GitUtils;
+
+static int runGit(const QStringList &args)
+{
+    return QProcess::execute(QStringLiteral("git"), args);
+}
 
 bool GitUtils::isInsideGit(const QString &filename)
 {
@@ -33,6 +39,8 @@ bool GitUtils::isInsideGit(const QString &filename)
         return false;
 
     QDir parentDir = info.absoluteDir();
+    if (parentDir.absolutePath() == filename)
+        return false;
 
     const QString gitPath = parentDir.absolutePath() + QStringLiteral("/.git");
     QFileInfo gitInfo(gitPath);
@@ -41,3 +49,61 @@ bool GitUtils::isInsideGit(const QString &filename)
 
     return isInsideGit(parentDir.absolutePath());
 }
+
+GitUtils::GitRepo::GitRepo(const QString &repoPath)
+    : m_repoPath(repoPath)
+{
+}
+
+bool GitUtils::GitRepo::hasModifications(const QString &filename, bool &errorOcurred)
+{
+    if (!isInsideGit(filename) || filename.isEmpty())
+        return false;
+
+    int result = runGit({ QStringLiteral("-C"),
+                          m_repoPath,
+                          QStringLiteral("diff-index"),
+                          QStringLiteral("--quiet"),
+                          QStringLiteral("HEAD"),
+                          filename });
+
+    const bool hasModifications = result == 1;
+    errorOcurred = result != 0 && result != 1;
+
+    return hasModifications;
+}
+
+bool GitUtils::GitRepo::commit(const QString &message)
+{
+    if (message.isEmpty())
+        return false;
+
+    int result = runGit({ QStringLiteral("-C"),
+                          m_repoPath,
+                          QStringLiteral("commit"),
+                          QStringLiteral("-m"),
+                          message });
+    return result == 0;
+}
+
+bool GitUtils::GitRepo::stage(const QString &filename)
+{
+    if (filename.isEmpty())
+        return false;
+
+    int result = runGit({ QStringLiteral("-C"),
+                          m_repoPath,
+                          QStringLiteral("add"),
+                          filename });
+    return result == 0;
+}
+
+bool GitUtils::GitRepo::push()
+{
+    int result = runGit({ QStringLiteral("-C"),
+                          m_repoPath,
+                          QStringLiteral("push") });
+    return result == 0;
+}
+
+

@@ -35,6 +35,7 @@ HEADERS += $$PWD/calendarcontroller.h \
            $$PWD/controller.h \
            $$PWD/duedate.h \
            $$PWD/extendedtagsmodel.h \
+           $$PWD/gitupdater.h \
            $$PWD/gitutils.h \
            $$PWD/jsonstorage.h      \
            $$PWD/kernel.h \
