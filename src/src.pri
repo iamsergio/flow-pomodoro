@@ -7,6 +7,7 @@ SOURCES += $$PWD/calendarcontroller.cpp \
            $$PWD/controller.cpp  \
            $$PWD/duedate.cpp \
            $$PWD/extendedtagsmodel.cpp \
+           $$PWD/gitupdater.cpp \
            $$PWD/gitutils.cpp \
            $$PWD/jsonstorage.cpp \
            $$PWD/kernel.cpp \
