@@ -35,6 +35,7 @@ class QQmlEngine;
 class QQmlContext;
 class QMenu;
 class QUrl;
+class GitUpdater;
 
 #ifdef QT_WIDGETS_LIB
 #include <QSystemTrayIcon>
@@ -71,6 +72,7 @@ private Q_SLOTS:
     void onTaskStatusChanged();
     void checkDayChanged();
     void maybeLoadPlugins();
+    void maybeScheduleGitSync();
 #if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
     void onSystrayActivated(QSystemTrayIcon::ActivationReason reason);
 #endif
@@ -94,6 +96,7 @@ private:
 #endif
     QTimer m_dayChangedTimer;
     QDate m_currentDate;
+    GitUpdater *const m_gitUpdater;
 
     static QPointer<Kernel> s_kernel; // QPointer, so unit-tests can delete and recreate
 };
