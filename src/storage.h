@@ -178,6 +178,7 @@ Q_SIGNALS:
     void taskCountChanged();
     void tagAboutToBeRemoved(const QString &name);
     void totalNeededEffortChanged();
+    void saveFinished();
 
 private Q_SLOTS:
     void onTagAboutToBeRemoved(const QString &tagName);

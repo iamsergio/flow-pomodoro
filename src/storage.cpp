@@ -263,6 +263,8 @@ void Storage::save()
     save_impl();
     m_savingDisabled--;
     m_savingInProgress = false;
+
+    emit saveFinished();
 }
 
 int Storage::serializerVersion() const
