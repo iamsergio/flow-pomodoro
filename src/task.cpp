@@ -337,6 +337,14 @@ QDate Task::dueDate() const
     return m_dueDate.date();
 }
 
+void Task::setDueDate(QDate date)
+{
+    if (date != m_dueDate.date()) {
+        m_dueDate.setDate(date);
+        emit dueDateChanged();
+    }
+}
+
 void Task::setDueDate(DueDate date)
 {
     if (date != m_dueDate) {

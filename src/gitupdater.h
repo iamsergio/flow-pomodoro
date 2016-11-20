@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2014 Sérgio Martins <iamsergio@gmail.com>
+  Copyright (C) 2016 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -17,22 +17,25 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FLOW_UTILS_H
-#define FLOW_UTILS_H
+#ifndef FLOW_GIT_UPDATER_H
+#define FLOW_GIT_UPDATER_H
 
-#include <qglobal.h>
+#include <QObject>
+#include <QTimer>
 
-class QUrl;
-class QString;
-class QScreen;
+class Kernel;
 
-namespace Utils {
-    void openUrl(const QUrl &);
-    void printTimeInfo(const QString &location);
-    void keepScreenOn(bool);
-    bool isMobile();
-    bool isOSX();
-    qreal dpiFactor(QScreen *screen);
-}
+class GitUpdater : public QObject
+{
+    Q_OBJECT
+public:
+    explicit GitUpdater(Kernel *kernel, QObject *parent = nullptr);
+    void schedulePush();
+    void push();
+private:
+    QTimer m_timer;
+    bool m_currenltyPushing = false;
+    Kernel *const m_kernel;
+};
 
 #endif

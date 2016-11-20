@@ -138,7 +138,7 @@ Item {
 
     property int choiceDelegateHeight: 35 * _controller.dpiFactor
 
-    property string slackingText: qsTr("You're slacking")
+    property string slackingText: qsTr("flow")
 
     property int checkBoxIconSize: 22 * _controller.dpiFactor
 }

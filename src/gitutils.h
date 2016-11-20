@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2014 Sérgio Martins <iamsergio@gmail.com>
+  Copyright (C) 2016 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -17,22 +17,24 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FLOW_UTILS_H
-#define FLOW_UTILS_H
+#include <QObject>
+#include <QString>
 
-#include <qglobal.h>
+namespace GitUtils
+{
 
-class QUrl;
-class QString;
-class QScreen;
+bool isInsideGit(const QString &filename);
 
-namespace Utils {
-    void openUrl(const QUrl &);
-    void printTimeInfo(const QString &location);
-    void keepScreenOn(bool);
-    bool isMobile();
-    bool isOSX();
-    qreal dpiFactor(QScreen *screen);
+class GitRepo
+{
+public:
+    explicit GitRepo(const QString &repoPath);
+    bool hasModifications(const QString &filename, bool &errorOcurred);
+    bool commit(const QString &message);
+    bool stage(const QString &filename);
+    bool push();
+private:
+    const QString m_repoPath;
+};
+
 }
-
-#endif

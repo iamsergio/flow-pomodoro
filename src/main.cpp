@@ -4,6 +4,8 @@
   Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
+  Copyright (C) 2016 Sérgio Martins <iamsergio@gmail.com>
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 2 of the License, or
@@ -44,6 +46,7 @@ typedef QGuiApplication Application;
 #include <QTranslator>
 #include <QScreen>
 #include <QDir>
+#include <QSettings>
 
 void initDBus(Kernel *kernel)
 {
@@ -120,11 +123,9 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
     case QtCriticalMsg:
         level = QStringLiteral("Critical: ");
         break;
-#if QT_VERSION >= QT_VERSION_CHECK(5,5,0)
     case QtInfoMsg:
         level = QStringLiteral("Info: ");
         break;
-#endif
     case QtFatalMsg:
         level = QStringLiteral("Fatal: ");
         abort();
@@ -143,12 +144,26 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
 
 static QString defaultFlowDir()
 {
-#if defined(Q_OS_ANDROID) && defined(DEVELOPER_MODE)
-    return QStringLiteral("/storage/sdcard0/");
-#endif
+    // Env variable takes priority
     const QByteArray env_path = qgetenv("FLOW_DIR");
-    return env_path.isEmpty() ? QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-                              : QString::fromLatin1(env_path);
+    if (!env_path.isEmpty())
+        return QString::fromLatin1(env_path);
+
+#if defined(Q_OS_ANDROID)
+    // The usual settings are in flow's directory, which the user can't easily edit.
+    // Allow the user to create an override settings file in the sdcard so he can edit when connecting to a computer.
+    // Only changing "defaultFlowDir" is supported for now.
+
+    const QString filename = QStringLiteral("/sdcard/flow/settings.ini");
+    if (QFileInfo::exists(filename)) {
+        QSettings settingsInSDCard(filename, QSettings::IniFormat);
+        QString flowDir = settingsInSDCard.value(QStringLiteral("flowDefaultDir")).toString();
+        if (!flowDir.isEmpty())
+            return flowDir;
+    }
+#endif
+
+    return QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 }
 
 static QString defaultDataFileName()
@@ -189,6 +204,7 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(shellscriptplugin);
     Q_INIT_RESOURCE(hostsplugin);
 #endif
+    QGuiApplication::setAttribute(Qt::AA_DisableHighDpiScaling); // because Qt only supports integer factors.
     Application app(argc, argv);
     Utils::printTimeInfo(QStringLiteral("main: created QApplication"));
     app.setOrganizationName(QStringLiteral("KDAB"));
@@ -218,13 +234,16 @@ int main(int argc, char *argv[])
     }
 
     if (logsDebugToFile()) { // Logging to file, so lets be a bit more verbose
-        QScreen *screen = QGuiApplication::primaryScreen();
-        if (screen) {
-            qDebug() << "Logical DPI=" << screen->logicalDotsPerInch()
-                     << "; Physical DPI=" << screen->physicalDotsPerInch()
-                     << "; Resolution=" << screen->size();
-        } else {
-            qWarning() << "Null screen";
+        for (auto screen : QGuiApplication::screens()) {
+            if (screen) {
+                qDebug() << "Logical DPI=" << screen->logicalDotsPerInch()
+                         << "; Physical DPI=" << screen->physicalDotsPerInch()
+                         << "; Physical DPI X=" << screen->physicalDotsPerInchX()
+                         << "; Resolution=" << screen->size()
+                         << "; Name=" << screen->name();
+            } else {
+                qWarning() << "Null screen";
+            }
         }
     }
 

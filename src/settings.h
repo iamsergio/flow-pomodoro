@@ -20,13 +20,14 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SETTINGS_H_
-#define _SETTINGS_H_
+#ifndef FLOW_SETTINGS_H
+#define FLOW_SETTINGS_H
 
 #include <QSettings>
 
 class Settings : public QSettings {
     Q_OBJECT
+    Q_PROPERTY(bool supportsGitSync READ supportsGitSync WRITE setSupportsGitSync NOTIFY supportsGitSyncChanged)
     Q_PROPERTY(bool supportsEffort READ supportsEffort WRITE setSupportsEffort NOTIFY supportsEffortChanged)
     Q_PROPERTY(bool supportsDueDate READ supportsDueDate WRITE setSupportsDueDate NOTIFY supportsDueDateChanged)
     Q_PROPERTY(bool supportsPriority READ supportsPriority WRITE setSupportsPriority NOTIFY supportsPriorityChanged)
@@ -109,6 +110,9 @@ public:
     bool supportsEffort() const;
     void setSupportsEffort(bool);
 
+    bool supportsGitSync() const;
+    void setSupportsGitSync(bool);
+
 private Q_SLOTS:
     void doSync();
 
@@ -128,6 +132,7 @@ Q_SIGNALS:
     void supportsDueDateChanged();
     void supportsPriorityChanged();
     void supportsEffortChanged();
+    void supportsGitSyncChanged();
 
 private:
     void init();
@@ -150,6 +155,7 @@ private:
     bool m_supportsDueDate;
     bool m_supportsPriority;
     bool m_supportsEffort;
+    bool m_supportsGitSync;
 };
 
 #endif

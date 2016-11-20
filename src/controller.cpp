@@ -35,6 +35,7 @@
 
 #include <QTimer>
 #include <QScreen>
+#include <QWindow>
 #include <QGuiApplication>
 #include <QQmlExpression>
 #include <QQmlContext>
@@ -408,7 +409,8 @@ void Controller::setTaskStatus(TaskStatus status)
 
 qreal Controller::dpiFactor() const
 {
-    return Utils::dpiFactor();
+    QScreen *screen = m_window ? m_window->screen() : nullptr;
+    return Utils::dpiFactor(screen);
 }
 
 bool Controller::popupVisible() const
@@ -744,6 +746,11 @@ void Controller::setStartupFinished()
     emit startupFinishedChanged();
 }
 
+void Controller::handleScreenChanged()
+{
+    emit screenChanged();
+}
+
 void Controller::forceFocusOnTaskBeingEdited()
 {
     if (m_editMode == EditModeInline && m_taskBeingEdited)
@@ -753,6 +760,21 @@ void Controller::forceFocusOnTaskBeingEdited()
 void Controller::openUrl(const QString &url)
 {
     Utils::openUrl(QUrl(url));
+}
+
+void Controller::setTaskDueDate(Task *task, QDate dueDate)
+{
+    if (!task)
+        return;
+
+    if (dueDate.isValid() && task->hasDueDate() && !task->recurs()) {
+        // Handle special case: If a task for "today" has a date, and we're postponing the date
+        // Then also move it to "later". And vice-versa.
+        task->setDueDate(dueDate);
+        task->setStaged(dueDate <= QDate::currentDate());
+    } else {
+        task->setDueDate(dueDate);
+    }
 }
 
 void Controller::updateExtendedTagModel()
@@ -1407,6 +1429,17 @@ int Controller::selectedTaskIndex() const
 QDate Controller::currentDate() const
 {
     return m_kernel->currentDate();
+}
+
+void Controller::setWindow(QWindow *window)
+{
+    if (!m_window && window) {
+        m_window = window;
+        connect(m_window, &QWindow::screenChanged, this, &Controller::handleScreenChanged);
+        handleScreenChanged();
+    } else {
+        Q_ASSERT(false);
+    }
 }
 
 void Controller::dismissTaskMenu()

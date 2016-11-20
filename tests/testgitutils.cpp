@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2014 Sérgio Martins <iamsergio@gmail.com>
+  Copyright (C) 2016 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -17,22 +17,14 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FLOW_UTILS_H
-#define FLOW_UTILS_H
+#include "testgitutils.h"
+#include "gitutils.h"
 
-#include <qglobal.h>
-
-class QUrl;
-class QString;
-class QScreen;
-
-namespace Utils {
-    void openUrl(const QUrl &);
-    void printTimeInfo(const QString &location);
-    void keepScreenOn(bool);
-    bool isMobile();
-    bool isOSX();
-    qreal dpiFactor(QScreen *screen);
+TestGitUtils::TestGitUtils() : QObject()
+{
 }
 
-#endif
+void TestGitUtils::testIsInsideGit()
+{
+    QVERIFY(GitUtils::isInsideGit("testgitutils.h"));
+}

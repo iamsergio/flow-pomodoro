@@ -47,6 +47,7 @@ public:
     void setFrequency(uint);
 
     QDate date() const;
+    void setDate(QDate);
     qint64 toJulianDay() const;
 
     bool recurs() const;

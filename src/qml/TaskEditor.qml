@@ -209,7 +209,7 @@ Overlay {
                         }
 
                         onDateChanged: {
-                            root.task.dueDate = date
+                            _controller.setTaskDueDate(root.task, date)
                         }
                     }
                 }

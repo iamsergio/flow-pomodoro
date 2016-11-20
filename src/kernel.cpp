@@ -37,6 +37,7 @@
 #include "taskcontextmenumodel.h"
 #include "extendedtagsmodel.h"
 #include "sortedtaskcontextmenumodel.h"
+#include "gitupdater.h"
 
 #include <QAbstractListModel>
 #include <QAbstractItemModel>
@@ -136,6 +137,7 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     , m_systrayIcon(0)
     , m_trayMenu(0)
 #endif
+    , m_gitUpdater(new GitUpdater(this, this))
 {
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/fontawesome-webfont.ttf"));
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/open-sans/OpenSans-Regular.ttf"));
@@ -168,6 +170,7 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
 
     // Startup counts as dayChanged, so handlers are run
     QMetaObject::invokeMethod(this, "dayChanged", Qt::QueuedConnection);
+    connect(m_storage, &Storage::saveFinished, this, &Kernel::maybeScheduleGitSync);
 }
 
 Storage *Kernel::storage() const
@@ -355,6 +358,12 @@ void Kernel::maybeLoadPlugins()
 {
     if (!Utils::isMobile() && m_runtimeConfiguration.pluginsSupported())
         loadPlugins();
+}
+
+void Kernel::maybeScheduleGitSync()
+{
+    if (m_settings->supportsGitSync())
+        m_gitUpdater->schedulePush();
 }
 
 #if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)

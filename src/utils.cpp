@@ -86,40 +86,49 @@ bool Utils::isOSX()
     return false;
 }
 
-qreal Utils::dpiFactor()
+static qreal userScaleFactor()
 {
     static qreal factor = -1;
     if (factor == -1) {
-        QScreen *screen = QGuiApplication::primaryScreen();
-        Q_ASSERT(screen);
-        const qreal screenDpi = screen->physicalDotsPerInch();
-
-        if (isMobile()) {
-            // Return the dpi racio against the phone where flow was prototyped in, so it looks the same.
-            const qreal myOldPhoneDpi = 144.0;
-            factor = screenDpi / myOldPhoneDpi;
-        } else {
-            // Return the dpi racio against the monitor where flow was prototyped in, so it looks the same.
-            const qreal myOldMonitorDpi = 144.0;
-
-            const qreal screenWidthInches = screen->geometry().width() / screenDpi;
-            const qreal screenHeightInches = screen->geometry().height() / screenDpi;
-            const qreal screenDiagonalInches = qSqrt(screenWidthInches * screenWidthInches + screenHeightInches * screenHeightInches);
-
-            qreal bigScreenCompensation = 1;
-            const qreal myBigScreenDiagonalInches = 27;
-            if (screenDiagonalInches > 25) {
-                // For big screens lets add some compensation, because usually you're a bit further away from them
-                bigScreenCompensation = 1.5 * (screenDiagonalInches / myBigScreenDiagonalInches);
-            } else {
-                // For regular screens a linear DPI factor works quite well
-                bigScreenCompensation = 1;
-            }
-
-            factor = bigScreenCompensation * screenDpi / myOldMonitorDpi;
+        factor = 1.0;
+        QByteArray env = qgetenv("FLOW_SCALE_FACTOR");
+        if (!env.isEmpty()) {
+            bool ok = false;
+            factor = env.toDouble(&ok);
+            if (!ok || factor <= 0.0)
+                factor = 1.0;
         }
     }
 
+    return factor;
+}
+
+qreal Utils::dpiFactor(QScreen *screen)
+{
+    static QHash<QScreen*, qreal> s_dpiFactors;
+    auto it = s_dpiFactors.constFind(screen);
+    const bool found = it != s_dpiFactors.cend();
+    if (found)
+        return it.value();
+
+    if (!screen)
+        return 1.0 * userScaleFactor();
+
+    const qreal screenDpi = screen->physicalDotsPerInch();
+    qreal factor;
+    if (isMobile()) {
+        // Return the dpi racio against the phone where flow was prototyped in, so it looks the same.
+        const qreal myOldPhoneDpi = 144.0;
+        factor = screenDpi / myOldPhoneDpi;
+    } else {
+        // Return the dpi racio against the monitor where flow was prototyped in, so it looks the same.
+        const qreal myOldMonitorDpi = 110.0;
+        factor = screenDpi / myOldMonitorDpi;
+    }
+
+    factor *= userScaleFactor();
+
+    s_dpiFactors.insert(screen, factor);
     return factor;
 }
 

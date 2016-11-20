@@ -7,6 +7,8 @@ SOURCES += $$PWD/calendarcontroller.cpp \
            $$PWD/controller.cpp  \
            $$PWD/duedate.cpp \
            $$PWD/extendedtagsmodel.cpp \
+           $$PWD/gitupdater.cpp \
+           $$PWD/gitutils.cpp \
            $$PWD/jsonstorage.cpp \
            $$PWD/kernel.cpp \
            $$PWD/loadmanager.cpp \
@@ -34,6 +36,8 @@ HEADERS += $$PWD/calendarcontroller.h \
            $$PWD/controller.h \
            $$PWD/duedate.h \
            $$PWD/extendedtagsmodel.h \
+           $$PWD/gitupdater.h \
+           $$PWD/gitutils.h \
            $$PWD/jsonstorage.h      \
            $$PWD/kernel.h \
            $$PWD/loadmanager.h \

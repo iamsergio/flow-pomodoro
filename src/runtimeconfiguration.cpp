@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2014-2015 Sérgio Martins <iamsergio@gmail.com>
+  Copyright (C) 2014-2016 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -19,6 +19,9 @@
 
 #include "runtimeconfiguration.h"
 
+#include <QFileInfo>
+#include <QDebug>
+
 RuntimeConfiguration::RuntimeConfiguration()
     : m_pluginsSupported(true)
     , m_settings(0)
@@ -31,11 +34,22 @@ RuntimeConfiguration::RuntimeConfiguration()
 void RuntimeConfiguration::setDataFileName(const QString &dataFileName)
 {
     m_dataFileName = dataFileName;
+    QFileInfo info(dataFileName);
+    m_flowDir = info.absolutePath();
+
+    QFileInfo dirInfo(m_flowDir);
+    if (dirInfo.isSymLink())
+        m_flowDir = dirInfo.symLinkTarget();
 }
 
 QString RuntimeConfiguration::dataFileName() const
 {
     return m_dataFileName;
+}
+
+QString RuntimeConfiguration::flowDir() const
+{
+    return m_flowDir;
 }
 
 void RuntimeConfiguration::setPluginsSupported(bool supported)

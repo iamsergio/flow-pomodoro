@@ -47,6 +47,7 @@ Settings::Settings(QObject *parent)
     , m_supportsDueDate(true)
     , m_supportsPriority(false)
     , m_supportsEffort(false)
+    , m_supportsGitSync(false)
 {
     init();
 }
@@ -71,9 +72,10 @@ void Settings::init()
     m_showTaskAge = value(QStringLiteral("showTaskAge"), /*default=*/ false).toBool();
     m_showAllTasksView = value(QStringLiteral("showAllTasksView"), /*default=*/ false).toBool();
     m_showContextMenuAfterAdd = value(QStringLiteral("showContextMenuAfterAdd"), true).toBool();
-    m_supportsDueDate = value(QStringLiteral("supportsDueDate"), false).toBool();
+    m_supportsDueDate = value(QStringLiteral("supportsDueDate"), true).toBool();
     m_supportsPriority = value(QStringLiteral("supportsPriority"), false).toBool();
     m_supportsEffort = value(QStringLiteral("supportsEffort"), false).toBool();
+    m_supportsGitSync = value(QStringLiteral("supportsGitSync"), false).toBool();
 
     const Position defaultPosition = PositionTop;
     m_initialPosition = static_cast<Settings::Position>(value(QStringLiteral("windowInitialPosition"), defaultPosition).toInt());
@@ -335,5 +337,19 @@ void Settings::setSupportsEffort(bool supports)
         m_supportsEffort = supports;
         setValue(QStringLiteral("supportsEffort"), supports);
         emit supportsEffortChanged();
+    }
+}
+
+bool Settings::supportsGitSync() const
+{
+    return m_supportsGitSync;
+}
+
+void Settings::setSupportsGitSync(bool supports)
+{
+    if (m_supportsGitSync != supports) {
+        m_supportsGitSync = supports;
+        setValue(QStringLiteral("supportsGitSync"), supports);
+        emit supportsGitSync();
     }
 }

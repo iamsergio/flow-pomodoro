@@ -20,8 +20,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DBUS_FLOW_H_
-#define _DBUS_FLOW_H_
+#ifndef DBUS_FLOW_H
+#define DBUS_FLOW_H
 
 #include <QObject>
 #include <QPointer>

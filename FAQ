@@ -11,12 +11,12 @@ FAQ:
         import "qrc:/qml/"
 
         DefaultStyle {
-            slackingText: "Flow" // Override "You're slacking" text
+            slackingText: "You're slacking" // Override "flow" text
         }
 
     For mobile you'll want to inherit from MobileStyle instead of DefaultStyle.
 
-2. How do I change the default title ("You're slacking") to something else ?
+2. How do I change the default title ("flow") to something else ?
    Use the example file from question 1.
 
 3. Where does flow look for plugins ?

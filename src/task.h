@@ -20,8 +20,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _TASK_H_
-#define _TASK_H_
+#ifndef FLOW_TASK_H
+#define FLOW_TASK_H
 
 #include "tag.h"
 #include "tagref.h"
@@ -144,7 +144,7 @@ public:
     QDateTime modificationDate() const;
     QDateTime lastPomodoroDate() const;
     QDate dueDate() const;
-    void setDueDate(DueDate );
+    void setDueDate(QDate);
     bool hasDueDate() const;
     void setLastPomodoroDate(const QDateTime &);
 
@@ -232,6 +232,7 @@ private:
     void modelSetup();
     void setModificationDate(const QDateTime &);
     void setCreationDate(const QDateTime &);
+    void setDueDate(DueDate);
 
     QString m_summary;
     QString m_description;

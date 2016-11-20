@@ -18,8 +18,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _QUICK_WINDOW_H_
-#define _QUICK_WINDOW_H_
+#ifndef FLOW_QUICK_WINDOW_H
+#define FLOW_QUICK_WINDOW_H
 
 #include <QQuickView>
 #include <QUrl>
@@ -62,6 +62,7 @@ private Q_SLOTS:
     void toggleVisible();
     void setupWindowFlags();
     void onWindowGeometryTypeChanged();
+    void setupSize();
 
 Q_SIGNALS:
     void contractedHeightChanged();

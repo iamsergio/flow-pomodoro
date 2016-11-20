@@ -8,6 +8,8 @@ set(flow_SRC
     duedate.cpp
     extendedtagsmodel.cpp
     genericlistmodel.h
+    gitupdater.cpp
+    gitutils.cpp
     jsonstorage.cpp
     kernel.cpp
     loadmanager.cpp
