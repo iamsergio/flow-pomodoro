@@ -11,8 +11,9 @@ DefaultStyle {
     tagTabWidth: 80 * _controller.dpiFactor
     choiceDelegateHeight: 45 * _controller.dpiFactor
     tagExtraWidth: 20 * _controller.dpiFactor
-    addTagIconSize: 50
+    addTagIconSize: 30
     deleteTagIconSize: 30
     addTagItemHeight: 48 * _controller.dpiFactor
     checkBoxIconSize: 48 * _controller.dpiFactor
+    tagHeight: 50 * _controller.dpiFactor
 }
