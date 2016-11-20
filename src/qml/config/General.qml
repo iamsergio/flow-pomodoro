@@ -351,6 +351,24 @@ Item {
                     value: showSupportsPriority.checked
                 }
             }
+
+            Text {
+                visible: _controller.expertMode
+                text: qsTr("Git sync support")
+                font.pixelSize: 12 * _controller.dpiFactor
+            }
+
+            FlowCheckBox {
+                id: showSupportsGitSync
+                visible: _controller.expertMode
+                checked: _settings.supportsGitSync
+                width: _style.checkBoxIconSize
+                Binding {
+                    target: _settings
+                    property: "supportsGitSync"
+                    value: showSupportsGitSync.checked
+                }
+            }
         }
     }
 }

@@ -38,4 +38,6 @@ v1.2.0
 
 * Task gets moved to "Later" when postponing the due-date, or moved to "today"
 when moving the date before today.
+
+* Git Sync support
 --------------------------------------------------------------------------------
