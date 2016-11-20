@@ -32,6 +32,8 @@ public:
     void setDataFileName(const QString &);
     QString dataFileName() const;
 
+    QString flowDir() const;
+
     void setPluginsSupported(bool); // default true
     bool pluginsSupported() const;
 
@@ -49,6 +51,7 @@ public:
 
 private:
     QString m_dataFileName;
+    QString m_flowDir;
     bool m_pluginsSupported;
     Settings *m_settings;
     bool m_saveEnabled;
