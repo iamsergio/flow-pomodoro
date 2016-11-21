@@ -136,10 +136,10 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
         file.open(QIODevice::Append | QIODevice::WriteOnly);
         QTextStream out(&file);
         out << level << msg << "\r\n";
-    } else {
-        QTextStream out(stderr);
-        out << level << msg << "\r\n";
     }
+
+    QTextStream out(stderr);
+    out << level << msg << "\r\n";
 }
 
 static QString defaultFlowDir()
