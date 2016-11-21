@@ -1,11 +1,25 @@
 import QtQuick 2.0
 
 import Controller 1.0
-import QtQuick.Controls 1.1
 
 Page {
     id: root
     page: Controller.ConfigurePage
+
+    property list<QtObject> model: [
+        TabBarItem {
+            title: qsTr("General")
+            source: "config/General.qml"
+        },
+        TabBarItem {
+            title: qsTr("Tags")
+            source: "config/Tags.qml"
+        },
+        TabBarItem {
+            title: qsTr("Plugins")
+            source: "config/Plugins.qml"
+        }
+    ]
 
     MouseArea {
         anchors.fill: parent
@@ -17,77 +31,9 @@ Page {
             mouse.accepted = false
         }
 
-        Component {
-            id: mobileTabBarComponent
-            Item {
-                anchors.fill: parent
-                MobileTabView {
-                    anchors.fill: parent
-                    selectedIndex: 1
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    model: ListModel { // TODO: ListElement doesn't accept qsTr
-                        ListElement { text: "General" ; source: "config/General.qml"}
-                        ListElement { text: "Tags"    ; source: "config/Tags.qml" }
-                        ListElement { text: "WebDAV"  ; source: "config/WebDavSync.qml";}
-                        ListElement { text: "Hacking" ; source: "config/Hacking.qml";}
-
-                        Component.onCompleted: {
-                            if (!_controller.hackingMenuSupported) {
-                                remove(3)
-                            }
-
-                            if (!_storage.webDAVSyncSupported) {
-                                remove(2)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        Component {
-            id: desktopTabBarComponent
-            TabView {
-                frameVisible: false
-                currentIndex: _controller.configureTabIndex
-                anchors.fill: parent
-
-                Tab {
-                    title: qsTr("General")
-                    source: "config/General.qml"
-                }
-
-                Tab {
-                    title: qsTr("Tags")
-                    source: "config/Tags.qml"
-                }
-
-                Tab {
-                    title: qsTr("Plugins")
-                    source: "config/Plugins.qml"
-                }
-
-                Repeater {
-                    // Apparently the only way to hide a tab is through a repeater hack
-                    model: _storage.webDAVSyncSupported ? 1 : 0
-                    Tab {
-                        title: qsTr("WebDAV")
-                        source: "config/WebDavSync.qml"
-                    }
-                }
-
-                Repeater {
-                    model: _controller.hackingMenuSupported ? 1 : 0
-                    Tab {
-                        title: qsTr("Hacking")
-                        source: "config/Hacking.qml"
-                    }
-                }
-            }
-        }
-
-        Item {
+        TabView {
             id: tabView
+            model: root.model
             anchors {
                 top: parent.top
                 topMargin: _style.marginMedium
@@ -95,12 +41,6 @@ Page {
                 right: parent.right
                 margins: _style.marginSmall
                 bottom: okButton.top
-            }
-
-            Loader {
-                anchors.fill: parent
-                sourceComponent: _controller.isMobile ? mobileTabBarComponent
-                                                      : desktopTabBarComponent
             }
         }
 
