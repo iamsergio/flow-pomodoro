@@ -33,6 +33,8 @@ public:
     bool commit(const QString &message);
     bool stage(const QString &filename);
     bool push();
+    bool pull(bool rebase);
+    bool fetch(const QString &remote = QString());
 private:
     const QString m_repoPath;
 };
