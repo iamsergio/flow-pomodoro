@@ -33,7 +33,7 @@ public:
     void schedulePush();
     void push();
 private:
-    QTimer m_timer;
+    QTimer m_pushTimer;
     bool m_currenltyPushing = false;
     Kernel *const m_kernel;
 };

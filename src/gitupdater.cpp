@@ -79,8 +79,8 @@ GitUpdater::GitUpdater(Kernel *kernel, QObject *parent)
     : QObject(parent)
     , m_kernel(kernel)
 {
-    m_timer.connect(&m_timer, &QTimer::timeout, this, &GitUpdater::push);
-    m_timer.setSingleShot(true);
+    m_pushTimer.connect(&m_pushTimer, &QTimer::timeout, this, &GitUpdater::push);
+    m_pushTimer.setSingleShot(true);
 }
 
 void GitUpdater::schedulePush()
@@ -89,7 +89,7 @@ void GitUpdater::schedulePush()
         // Schedule later, we're already busy pushing
         QTimer::singleShot(RetryInterval, this, &GitUpdater::schedulePush);
     } else {
-        m_timer.start(PushInterval);
+        m_pushTimer.start(PushInterval);
     }
 }
 
