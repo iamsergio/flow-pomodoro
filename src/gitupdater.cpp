@@ -85,7 +85,7 @@ GitUpdater::GitUpdater(Kernel *kernel, QObject *parent)
 
 void GitUpdater::schedulePush()
 {
-    if (m_currenltyPushing) {
+    if (m_isPushing) {
         // Schedule later, we're already busy pushing
         QTimer::singleShot(RetryInterval, this, &GitUpdater::schedulePush);
     } else {
@@ -95,7 +95,7 @@ void GitUpdater::schedulePush()
 
 void GitUpdater::push()
 {
-    m_currenltyPushing = true;
+    setIsPushing(true);
     auto workerThread = new WorkerThread(m_kernel->runtimeConfiguration().flowDir());
     connect(workerThread, &QThread::finished, [this, workerThread] {
         const QString errorMsg = workerThread->errorMsg();
@@ -103,8 +103,21 @@ void GitUpdater::push()
             qWarning() << errorMsg;
 
         workerThread->deleteLater();
-        m_currenltyPushing = false;
+        setIsPushing(false);
     });
 
     workerThread->start();
+}
+
+bool GitUpdater::isPushing() const
+{
+    return m_isPushing;
+}
+
+void GitUpdater::setIsPushing(bool pushing)
+{
+    if (pushing != m_isPushing) {
+        m_isPushing = pushing;
+        emit pushingChanged();
+    }
 }

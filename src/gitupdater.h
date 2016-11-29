@@ -28,13 +28,18 @@ class Kernel;
 class GitUpdater : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool isPushing READ isPushing NOTIFY pushingChanged)
 public:
     explicit GitUpdater(Kernel *kernel, QObject *parent = nullptr);
     void schedulePush();
     void push();
+    bool isPushing() const;
+signals:
+    void pushingChanged();
 private:
+    void setIsPushing(bool);
     QTimer m_pushTimer;
-    bool m_currenltyPushing = false;
+    bool m_isPushing = false;
     Kernel *const m_kernel;
 };
 
