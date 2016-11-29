@@ -198,6 +198,11 @@ Settings *Kernel::settings() const
     return m_settings;
 }
 
+GitUpdater *Kernel::gitUpdater() const
+{
+    return m_gitUpdater;
+}
+
 RuntimeConfiguration Kernel::runtimeConfiguration() const
 {
     return m_runtimeConfiguration;

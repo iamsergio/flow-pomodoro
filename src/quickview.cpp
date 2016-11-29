@@ -29,6 +29,7 @@
 #include "kernel.h"
 #include "utils.h"
 #include "settings.h"
+#include "gitupdater.h"
 
 #include <QQmlContext>
 #include <QString>
@@ -56,6 +57,7 @@ QuickView::QuickView(Kernel *kernel)
     , m_contractedHeight(0)
 {
     rootContext()->setContextProperty(QStringLiteral("_window"), this);
+    rootContext()->setContextProperty(QStringLiteral("_gitUpdater"), kernel->gitUpdater());
     rootContext()->setContextProperty(QStringLiteral("_toolTipController"), new ToolTipController(this));
     createStyleComponent();
 

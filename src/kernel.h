@@ -52,6 +52,7 @@ public:
     QQmlContext *qmlContext() const;
     QQmlEngine *qmlEngine() const;
     Settings *settings() const;
+    GitUpdater *gitUpdater() const;
     RuntimeConfiguration runtimeConfiguration() const;
     QDate currentDate() const;
 
