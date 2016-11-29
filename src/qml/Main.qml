@@ -61,9 +61,12 @@ Rectangle {
 
             Item {
                 id: topBar
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: parent.top
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    top: parent.top
+                }
+
                 height: _style.menuBarHeight
                 z: 4
             }
@@ -71,18 +74,23 @@ Rectangle {
             MainPage {
                 z: 2
                 id: mainPage
-                anchors.top: topBar.bottom
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: _style.marginMedium
+                anchors {
+                    top: topBar.bottom
+                    bottom: parent.bottom
+                    bottomMargin: _style.marginMedium
+                }
             }
 
             Loader {
-                // Loader for startup performance optimization on mobile
-                anchors.top: topBar.bottom
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottomMargin: _style.marginMedium
+                // Loader for startup performance optimization on mobile                
+                anchors {
+                    top: topBar.bottom
+                    bottom: parent.bottom
+                    left: parent.left
+                    right: parent.right
+                    bottomMargin: _style.marginMedium
+                }
+
                 sourceComponent: _loadManager.configurePageRequested ? Qt.createComponent("ConfigurePage.qml") : null
                 z: 2
                 objectName: "loader2"
@@ -92,11 +100,15 @@ Rectangle {
                 z: 2
                 id: aboutPage
                 // Loader for startup performance optimization on mobile
-                anchors.top: topBar.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: _style.marginMedium
+
+                anchors {
+                    top: topBar.bottom
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                    bottomMargin: _style.marginMedium
+                }
+
                 sourceComponent: _loadManager.aboutPageRequested ? Qt.createComponent("AboutPage.qml") : null
                 objectName: "loader3"
             }
@@ -104,12 +116,15 @@ Rectangle {
 
         FontAwesomeIcon {
             id: spinnerIcon
-            anchors.left: parent.left
-            anchors.verticalCenter: undefined
             height: contentHeight
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: _style.marginMedium + 2 * _controller.dpiFactor
-            anchors.leftMargin: _style.pageMargin + 2 * _controller.dpiFactor
+            anchors {
+                left: parent.left
+                verticalCenter: undefined
+                bottom: parent.bottom
+                bottomMargin: _style.marginMedium + 2 * _controller.dpiFactor
+                leftMargin: _style.pageMargin + 2 * _controller.dpiFactor
+            }
+
             text: "\uf110"
             z: 3
             color: "black"
