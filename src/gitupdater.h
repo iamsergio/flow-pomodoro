@@ -29,17 +29,22 @@ class GitUpdater : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool isPushing READ isPushing NOTIFY pushingChanged)
+    Q_PROPERTY(bool isPulling READ isPulling NOTIFY pullingChanged)
 public:
     explicit GitUpdater(Kernel *kernel, QObject *parent = nullptr);
     void schedulePush();
     void push();
     bool isPushing() const;
+    bool isPulling() const;
 signals:
     void pushingChanged();
+    void pullingChanged();
 private:
     void setIsPushing(bool);
+    void setIsPulling(bool);
     QTimer m_pushTimer;
     bool m_isPushing = false;
+    bool m_isPulling = false;
     Kernel *const m_kernel;
 };
 

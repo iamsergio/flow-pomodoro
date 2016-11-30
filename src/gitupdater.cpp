@@ -114,10 +114,23 @@ bool GitUpdater::isPushing() const
     return m_isPushing;
 }
 
+bool GitUpdater::isPulling() const
+{
+    return m_isPulling;
+}
+
 void GitUpdater::setIsPushing(bool pushing)
 {
     if (pushing != m_isPushing) {
         m_isPushing = pushing;
         emit pushingChanged();
+    }
+}
+
+void GitUpdater::setIsPulling(bool pulling)
+{
+    if (pulling != m_isPulling) {
+        m_isPulling = pulling;
+        emit pullingChanged();
     }
 }
