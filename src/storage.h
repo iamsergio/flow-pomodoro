@@ -94,8 +94,6 @@ public:
 
     bool saveScheduled() const;
     void scheduleSave();
-    // Temporary disable saving. For performance purposes
-    void setDisableSaving(bool);
 
     bool savingInProgress() const;
     bool loadingInProgress() const;
@@ -197,7 +195,6 @@ private:
     QTimer m_scheduleTimer;
     SortedTagsModel *m_sortedTagModel;
     QString m_deletedTagName;
-    int m_savingDisabled;
     TaskFilterProxyModel *m_taskFilterModel;
     TaskFilterProxyModel *m_untaggedTasksModel;
     TaskFilterProxyModel *m_dueDateTasksModel;

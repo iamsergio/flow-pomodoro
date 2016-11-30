@@ -81,7 +81,6 @@ static QVariant tasksDataFunction(const TaskList &list, int index, int role)
 Storage::Storage(Kernel *kernel, QObject *parent)
     : QObject(parent)
     , m_kernel(kernel)
-    , m_savingDisabled(0)
     , m_taskFilterModel(new TaskFilterProxyModel(this))
     , m_untaggedTasksModel(new TaskFilterProxyModel(this))
     , m_dueDateTasksModel(new TaskFilterProxyModel(this))
@@ -215,9 +214,7 @@ void Storage::setData(Storage::Data &data)
 void Storage::load()
 {
     m_loadingInProgress = true;
-    m_savingDisabled += 1;
     load_impl();
-    m_savingDisabled += -1;
 
     if (m_data.tags.isEmpty()) {
         // Create default tags. We always use the same uuids for these so we don't get
@@ -259,9 +256,7 @@ void Storage::save()
         return;
 
     m_savingInProgress = true;
-    m_savingDisabled++;
     save_impl();
-    m_savingDisabled--;
     m_savingInProgress = false;
 
     emit saveFinished();
@@ -279,9 +274,7 @@ bool Storage::saveScheduled() const
 
 void Storage::scheduleSave()
 {
-    if (m_savingDisabled == 0) {
-        m_scheduleTimer.start();
-    }
+    m_scheduleTimer.start();
 }
 
 bool Storage::removeTag(const QString &tagName)
@@ -480,15 +473,6 @@ void Storage::clearTasks()
             removeTask(task);
         }
         emit taskCountChanged();
-    }
-}
-
-void Storage::setDisableSaving(bool disable)
-{
-    m_savingDisabled += (disable ? 1 : -1);
-    if (m_savingDisabled < 0) {
-        qWarning() << "invalid value for m_savingDisabled" << m_savingDisabled;
-        Q_ASSERT(false);
     }
 }
 
