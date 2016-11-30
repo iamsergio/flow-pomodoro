@@ -121,15 +121,15 @@ void JsonStorage::load_impl()
     m_data.instanceId = data.instanceId;
 
     m_data.tasks.clear();
-    for (int i = 0; i < data.tasks.count(); ++i) {
-        addTask(data.tasks.at(i)); // don't add to m_tasks directly. addTask() does some connects
+    for (const auto &task : data.tasks) {
+        addTask(task); // don't add to m_tasks directly. addTask() does some connects
     }
 }
 
 void JsonStorage::save_impl()
 {
     QByteArray serializedData = serializeToJsonData(m_data);
-    QString tmpDataFileName = m_runtimeConfiguration.dataFileName() + "~";;
+    const QString tmpDataFileName = m_runtimeConfiguration.dataFileName() + "~";
 
     QFile temporaryFile(tmpDataFileName); // not using QTemporaryFile so the backup stays next to the main one
     if (!temporaryFile.open(QIODevice::WriteOnly)) {
@@ -158,16 +158,15 @@ QVariantMap JsonStorage::toJsonVariantMap(const Data &data)
     QVariantMap map;
     QVariantList tasksVariant;
     QVariantList tagsVariant;
-    const int numTags = data.tags.count();
-    tagsVariant.reserve(numTags);
-    for (int i = 0; i < numTags; ++i) {
-        tagsVariant << data.tags.at(i)->toJson();
+
+    tagsVariant.reserve(data.tags.count());
+    for (const auto &tag : data.tags) {
+        tagsVariant << tag->toJson();
     }
 
-    const int numTasks = data.tasks.count();
-    tasksVariant.reserve(numTasks);
-    for (int i = 0; i < numTasks; ++i) {
-        tasksVariant << data.tasks.at(i)->toJson();
+    tasksVariant.reserve(data.tasks.count());
+    for (const auto &task : data.tasks) {
+        tasksVariant << task->toJson();
     }
 
     map.insert(QStringLiteral("instanceId"), data.instanceId);
