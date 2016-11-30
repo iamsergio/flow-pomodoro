@@ -61,9 +61,3 @@ HEADERS += $$PWD/calendarcontroller.h \
            $$PWD/utils.h
 
 RESOURCES += $$PWD/resources.qrc
-
-!contains(DEFINES, NO_WEBDAV) {
-    include("$$PWD/../3rdparty/qwebdav/qwebdav.pri")
-    SOURCES += $$PWD/webdavsyncer.cpp
-    HEADERS += $$PWD/webdavsyncer.h
-}

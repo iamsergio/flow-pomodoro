@@ -23,7 +23,6 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 CONFIG += c++11
 
 # Features:
-DEFINES += NO_WEBDAV # Will uncomment when UI is ready
 # DEFINES += DEVELOPER_MODE
 # DEFINES += FLOW_DEBUG_TIMESTAMPS
 

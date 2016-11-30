@@ -27,14 +27,6 @@ SOURCES += assertingproxymodel.cpp \
            testtagmodel.cpp \
            testgitutils.cpp
 
-!contains(DEFINES, NO_WEBDAV) {
-    SOURCES += testwebdav.cpp
-}
-
-!contains(DEFINES, NO_WEBDAV) {
-    HEADERS += testwebdav.h
-}
-
 HEADERS += assertingproxymodel.h \
            modelsignalspy.h \
            quick/testui.h \

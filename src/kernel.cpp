@@ -32,7 +32,6 @@
 #include "utils.h"
 #include "checkbox.h"
 #include "loadmanager.h"
-#include "webdavsyncer.h"
 #include "quickview.h"
 #include "taskcontextmenumodel.h"
 #include "extendedtagsmodel.h"
@@ -130,9 +129,6 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     , m_settings(config.settings() ? config.settings() : new Settings(this))
     , m_controller(new Controller(m_qmlEngine->rootContext(), this, m_storage, m_settings, this))
     , m_pluginModel(new PluginModel(this))
-#ifndef NO_WEBDAV
-    , m_webDavSyncer(new WebDAVSyncer(this))
-#endif
 #if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
     , m_systrayIcon(0)
     , m_trayMenu(0)
@@ -150,15 +146,11 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     qmlContext()->setContextProperty(QStringLiteral("_pluginModel"), m_pluginModel);
     qmlContext()->setContextProperty(QStringLiteral("_loadManager"), m_controller->loadManager());
     qmlContext()->setContextProperty(QStringLiteral("_settings"), m_settings);
-#ifndef NO_WEBDAV
-    qmlContext()->setContextProperty("_webdavSync", m_webDavSyncer);
-#endif
 
     connect(m_controller, &Controller::currentTaskChanged, this, &Kernel::onTaskStatusChanged);
     connect(m_qmlEngine, &QQmlEngine::quit, qGuiApp, &QGuiApplication::quit);
     QMetaObject::invokeMethod(m_storage, "load", Qt::QueuedConnection); // Schedule a load. Don't do it directly, it will deadlock in instance()
     QMetaObject::invokeMethod(this, "maybeLoadPlugins", Qt::QueuedConnection);
-    QMetaObject::invokeMethod(m_controller, "updateWebDavCredentials", Qt::QueuedConnection);
 
     if (m_runtimeConfiguration.useSystray() && m_settings->useSystray())
         setupSystray();
@@ -212,13 +204,6 @@ QDate Kernel::currentDate() const
 {
     return m_currentDate;
 }
-
-#ifndef NO_WEBDAV
-WebDAVSyncer *Kernel::webdavSyncer() const
-{
-    return m_webDavSyncer;
-}
-#endif
 
 void Kernel::notifyPlugins(TaskStatus newStatus)
 {

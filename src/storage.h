@@ -58,7 +58,6 @@ class Storage : public QObject
     Q_PROPERTY(TaskFilterProxyModel* taskFilterModel READ taskFilterModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* untaggedTasksModel READ untaggedTasksModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* dueDateTasksModel READ dueDateTasksModel CONSTANT)
-    Q_PROPERTY(bool webDAVSyncSupported READ webDAVSyncSupported CONSTANT)
 
 public:
     enum TagModelRole {
@@ -77,7 +76,6 @@ public:
         Data() : serializerVersion(JsonSerializerVersion1) {}
         TaskList tasks;
         TagList tags;
-        QStringList deletedItemUids; // so we can sync to server
         int serializerVersion;
         QByteArray instanceId;
     };
@@ -97,8 +95,6 @@ public:
 
     bool savingInProgress() const;
     bool loadingInProgress() const;
-
-    bool webDAVSyncSupported() const;
 
     QByteArray instanceId();
 #ifdef DEVELOPER_MODE

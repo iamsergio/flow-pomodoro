@@ -28,7 +28,6 @@
 #include "sortedtaskcontextmenumodel.h"
 #include "storage.h"
 #include "kernel.h"
-#include "webdavsyncer.h"
 #include "utils.h"
 #include "loadmanager.h"
 #include "flow_version.h"
@@ -66,8 +65,6 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_storage(storage)
     , m_qmlContext(context)
     , m_settings(settings)
-    , m_port(80)
-    , m_isHttps(false)
     , m_optionsContextMenuVisible(false)
     , m_startupFinished(false)
     , m_newTagDialogVisible(false)
@@ -96,13 +93,6 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     connect(m_settings, &Settings::supportsDueDateChanged, this, &Controller::onSupportsDueDateChanged);
 
     connect(m_kernel, &Kernel::dayChanged, this, &Controller::currentDateChanged);
-
-    m_host = m_settings->value(QStringLiteral("webdavHost")).toString();
-    m_user = m_settings->value(QStringLiteral("webdavUser")).toString();
-    m_path = m_settings->value(QStringLiteral("webdavPath")).toString();
-    m_password = m_settings->value(QStringLiteral("webdavPassword")).toString();
-    m_isHttps = m_settings->value(QStringLiteral("webdavIsHttps"), false).toBool();
-    m_port = m_settings->value(QStringLiteral("webdavPort"), 80).toInt();
 
     m_expertMode = qApp->arguments().contains(QStringLiteral("--expert"));
 
@@ -545,96 +535,6 @@ return true;
 return false;
 }
 
-bool Controller::isHttps() const
-{
-    return m_isHttps;
-}
-
-void Controller::setIsHttps(bool is)
-{
-    if (is != m_isHttps) {
-        m_isHttps = is;
-        m_settings->setValue(QStringLiteral("webdavIsHttps"), m_isHttps);
-        emit isHttpsChanged();
-        updateWebDavCredentials();
-    }
-}
-
-QString Controller::host() const
-{
-    return m_host;
-}
-
-void Controller::setHost(const QString &host)
-{
-    if (host != m_host) {
-        m_host = host;
-        m_settings->setValue(QStringLiteral("webdavHost"), m_host);
-        updateWebDavCredentials();
-        emit hostChanged();
-    }
-}
-
-QString Controller::path() const
-{
-    return m_path.startsWith(QLatin1String("/")) ? m_path : ("/" + m_path);
-}
-
-void Controller::setPath(const QString &path)
-{
-    if (path != m_path) {
-        m_path = path;
-        m_settings->setValue(QStringLiteral("webdavPath"), m_path);
-        emit pathChanged();
-        updateWebDavCredentials();
-    }
-}
-
-QString Controller::user() const
-{
-    return m_user;
-}
-
-void Controller::setUser(const QString &user)
-{
-    if (user != m_user) {
-        m_user = user;
-        m_settings->setValue(QStringLiteral("webdavUser"), m_user);
-        emit userChanged();
-        updateWebDavCredentials();
-    }
-}
-
-QString Controller::password() const
-{
-    return m_password;
-}
-
-void Controller::setPassword(const QString &pass)
-{
-    if (pass != m_password) {
-        m_password = pass;
-        m_settings->setValue(QStringLiteral("webdavPassword"), m_password);
-        emit passwordChanged();
-        updateWebDavCredentials();
-    }
-}
-
-int Controller::port() const
-{
-    return m_port;
-}
-
-void Controller::setPort(int port)
-{
-    if (port != m_port) {
-        m_port = port;
-        m_settings->setValue(QStringLiteral("webdavPort"), m_port);
-        emit portChanged();
-        updateWebDavCredentials();
-    }
-}
-
 QString Controller::currentTitleText() const
 {
     if (m_page == ConfigurePage && m_expanded) {
@@ -868,17 +768,6 @@ void Controller::onHideEmptyTagsChanged()
         setCurrentTag(m_untaggedTasksTag.data());
     }
     emit tagsModelChanged();
-}
-
-void Controller::updateWebDavCredentials()
-{
-#ifndef NO_WEBDAV
-    WebDAVSyncer *webdav = m_kernel->webdavSyncer();
-    webdav->setConnectionSettings(m_isHttps, m_port, m_host, m_path, m_user, m_password);
-    if (m_syncAtStartup && !webdav->syncedAtStartup()) {
-        webdav->sync();
-    }
-#endif
 }
 
 int Controller::indexOfTaskInCurrentTab(const Task::Ptr &task)
@@ -1307,15 +1196,6 @@ void Controller::removeTask(Task *task)
     m_storage->removeTask(task->toStrongRef());
 }
 
-void Controller::webDavSync()
-{
-#ifndef NO_WEBDAV
-    m_kernel->webdavSyncer()->sync();
-#else
-    qDebug() << "WebDAV sync not supported";
-#endif
-}
-
 void Controller::setTextRenderType(int textRenderType)
 {
     if (textRenderType != m_textRenderType) {
@@ -1366,13 +1246,6 @@ QString Controller::buildOptionsText() const
 {
     QStringList options;
     options << (isMobile() ? QStringLiteral("mobile") : QStringLiteral("desktop"));
-
-    if (m_storage->webDAVSyncSupported()) {
-        options << QStringLiteral("webdav");
-        options << (openSSLSupported() ? QStringLiteral("openssl") : QStringLiteral("no-openssl"));
-    } else {
-        options << QStringLiteral("no-webdav");
-    }
 
     if (hackingMenuSupported())
         options << QStringLiteral("hacking");

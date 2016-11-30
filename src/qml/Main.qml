@@ -128,7 +128,7 @@ Rectangle {
             text: "\uf110"
             z: 3
             color: "black"
-            visible: _storage.webDAVSyncSupported && _webdavSync.syncInProgress
+            visible: false
             NumberAnimation on rotation {
                 loops: Animation.Infinite
                 from: 0

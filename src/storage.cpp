@@ -25,7 +25,6 @@
 #include "jsonstorage.h"
 #include "sortedtagsmodel.h"
 #include "taskfilterproxymodel.h"
-#include "webdavsyncer.h"
 #include "runtimeconfiguration.h"
 #include "nonemptytagfilterproxy.h"
 
@@ -287,8 +286,6 @@ bool Storage::removeTag(const QString &tagName)
 
     emit tagAboutToBeRemoved(tagName);
 
-    if (webDAVSyncSupported())
-        m_data.deletedItemUids << m_data.tags.at(index)->uuid(); // TODO: Make this persistent
     m_data.tags.removeAt(index);
     m_deletedTagName = tagName;
     return true;
@@ -439,12 +436,6 @@ void Storage::dumpDebugInfo()
     qDebug() << "task count:" << m_data.tasks.count();
     for (int i = 0; i < m_data.tasks.count(); ++i)
         qDebug() << i << m_data.tasks.at(i)->summary();
-
-    if (!m_data.deletedItemUids.isEmpty()) {
-        qDebug() << "Items pending deletion on webdav:";
-        foreach (const QString &uid, m_data.deletedItemUids)
-            qDebug() << uid;
-    }
 }
 
 int Storage::proxyRowToSource(int proxyRow) const
@@ -484,14 +475,6 @@ bool Storage::savingInProgress() const
 bool Storage::loadingInProgress() const
 {
     return m_loadingInProgress;
-}
-
-bool Storage::webDAVSyncSupported() const
-{
-#ifndef NO_WEBDAV
-    return true;
-#endif
-    return false;
 }
 
 QByteArray Storage::instanceId()
@@ -557,8 +540,6 @@ void Storage::removeTask(const Task::Ptr &task)
 {
     m_data.tasks.removeAll(task);
     task->setTagList(TagRef::List()); // So Tag::taskCount() decreases in case Task::Ptr is left hanging somewhere
-    if (webDAVSyncSupported())
-        m_data.deletedItemUids << task->uuid(); // TODO: Make this persistent
     emit taskCountChanged();
 }
 

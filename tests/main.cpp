@@ -10,10 +10,6 @@
 #include "testgitutils.h"
 #include "quick/testui.h"
 
-#ifndef NO_WEBDAV
-# include "testwebdav.h"
-#endif
-
 #include <QtTest/QtTest>
 #include <QApplication>
 
@@ -70,14 +66,6 @@ int main(int argc, char *argv[])
         success &= QTest::qExec(&test8, argc, argv) == 0;
         Q_ASSERT(success);
     }
-
-#ifndef NO_WEBDAV
-    {
-        TestWebDav test9;
-        success &= QTest::qExec(&test9, argc, argv) == 0;
-        Q_ASSERT(success);
-    }
-#endif
 
     {
         TestDueDate test10;
