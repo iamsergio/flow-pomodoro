@@ -97,8 +97,8 @@ QVariantMap Syncable::toJson() const
     map.insert(QStringLiteral("revision"), m_revision);
     map.insert(QStringLiteral("uuid"), uuid());
 
-    QVariantMap::const_iterator it = m_unknownFieldsMap.cbegin();
-    QVariantMap::const_iterator end = m_unknownFieldsMap.cend();
+    auto it = m_unknownFieldsMap.cbegin();
+    auto end = m_unknownFieldsMap.cend();
     for (; it != end; ++it)
         map.insert(it.key(), it.value());
 
