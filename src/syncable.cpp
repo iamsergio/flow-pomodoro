@@ -49,8 +49,8 @@ void Syncable::parseUnknownFields(const QVariantMap &map)
 {
     m_unknownFieldsMap.clear();
     QVector<QString> goodFields = supportedFields();
-    QVariantMap::const_iterator it = map.cbegin();
-    QVariantMap::const_iterator end = map.cend();
+    auto it = map.cbegin();
+    auto end = map.cend();
 
     const QStringList deprecatedFields = { "revisionOnWebDAVServer" };
 
