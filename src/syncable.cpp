@@ -51,8 +51,12 @@ void Syncable::parseUnknownFields(const QVariantMap &map)
     QVector<QString> goodFields = supportedFields();
     QVariantMap::const_iterator it = map.cbegin();
     QVariantMap::const_iterator end = map.cend();
+
+    const QStringList deprecatedFields = { "revisionOnWebDAVServer" };
+
     for (; it != end; ++it) {
-        if (!goodFields.contains(it.key())) {
+        // Lets not warn about deprecated fields, they will just be silently discarded
+        if (!goodFields.contains(it.key()) && !deprecatedFields.contains(it.key())) {
             m_unknownFieldsMap.insert(it.key(), it.value());
             qWarning() << "Syncable::parseUnknownFields() Unknown field:" << it.key() << "; will be read-only";
         }
