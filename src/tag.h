@@ -32,8 +32,8 @@ class Kernel;
 class Tag : public QObject, public Syncable
 {
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged STORED false)
-    Q_PROPERTY(bool beingEdited READ beingEdited NOTIFY beingEditedChanged STORED false)
+    Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged)
+    Q_PROPERTY(bool beingEdited READ beingEdited NOTIFY beingEditedChanged)
     Q_PROPERTY(QAbstractItemModel* taskModel READ taskModel CONSTANT)
     Q_OBJECT
 public:
@@ -71,7 +71,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void nameChanged();
-    void taskCountChanged(int oldValue, int newValue);
+    void taskCountChanged();
     void beingEditedChanged();
 
 protected:
