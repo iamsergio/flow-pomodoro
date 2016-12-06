@@ -128,7 +128,6 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
         break;
     case QtFatalMsg:
         level = QStringLiteral("Fatal: ");
-        abort();
     }
 
     if (logsDebugToFile()) {
@@ -138,8 +137,14 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
         out << level << msg << "\r\n";
     }
 
-    QTextStream out(stderr);
-    out << level << msg << "\r\n";
+    {
+        QTextStream out(stderr);
+        out << level << msg << "\r\n";
+    }
+
+    if (type == QtFatalMsg)
+        abort();
+
 }
 
 static QString defaultFlowDir()
