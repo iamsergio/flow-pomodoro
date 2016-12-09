@@ -21,6 +21,7 @@
 #define CHECKABLETAGMODEL_H
 
 #include "storage.h"
+#include "tagmanager.h"
 #include <QIdentityProxyModel>
 
 class Task;
@@ -31,7 +32,7 @@ class CheckableTagModel : public QIdentityProxyModel
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     enum {
-        ItemTextRole = Storage::LastRole + 1,
+        ItemTextRole = TagManager::LastRole + 1,
         CheckableRole
     };
 

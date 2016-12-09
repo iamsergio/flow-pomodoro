@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QTimer>
 
+class TagManager;
 class Settings;
 class Storage;
 class Controller;
@@ -48,6 +49,7 @@ public:
     ~Kernel();
     Storage* storage() const;
     Controller *controller() const;
+    TagManager *tagManager() const;
     QQmlContext *qmlContext() const;
     QQmlEngine *qmlEngine() const;
     Settings *settings() const;
@@ -78,6 +80,7 @@ private:
     void notifyPlugins(TaskStatus newStatus);
 
     RuntimeConfiguration m_runtimeConfiguration;
+    TagManager *const m_tagManager;
     Storage *m_storage;
     QQmlEngine *m_qmlEngine;
     Settings *m_settings;

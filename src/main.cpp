@@ -25,6 +25,7 @@
 # include <QDBusError>
 #endif
 
+#include "storage.h"
 #include "quickview.h"
 #include "controller.h"
 #include "kernel.h"
@@ -223,6 +224,7 @@ int main(int argc, char *argv[])
     RuntimeConfiguration defaultConfig;
     defaultConfig.setDataFileName(defaultDataFileName());
     Kernel kernel(defaultConfig);
+    kernel.storage()->load();
 
     // app.connect(&app, &Application::focusObjectChanged, &onFocusObjectChanged);
 

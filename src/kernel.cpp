@@ -37,6 +37,7 @@
 #include "extendedtagsmodel.h"
 #include "sortedtaskcontextmenumodel.h"
 #include "gitupdater.h"
+#include "tagmanager.h"
 
 #include <QAbstractListModel>
 #include <QAbstractItemModel>
@@ -124,6 +125,7 @@ Kernel::~Kernel()
 Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     : QObject(parent)
     , m_runtimeConfiguration(config)
+    , m_tagManager(new TagManager(this))
     , m_storage(new JsonStorage(this, this))
     , m_qmlEngine(new QQmlEngine(0)) // leak the engine, no point in wasting shutdown time. Also we get a qmldebug server crash if it's parented to qApp, which Kernel is
     , m_settings(config.settings() ? config.settings() : new Settings(this))
@@ -149,7 +151,6 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
 
     connect(m_controller, &Controller::currentTaskChanged, this, &Kernel::onTaskStatusChanged);
     connect(m_qmlEngine, &QQmlEngine::quit, qGuiApp, &QGuiApplication::quit);
-    QMetaObject::invokeMethod(m_storage, "load", Qt::QueuedConnection); // Schedule a load. Don't do it directly, it will deadlock in instance()
     QMetaObject::invokeMethod(this, "maybeLoadPlugins", Qt::QueuedConnection);
 
     if (m_runtimeConfiguration.useSystray() && m_settings->useSystray())
@@ -173,6 +174,11 @@ Storage *Kernel::storage() const
 Controller *Kernel::controller() const
 {
     return m_controller;
+}
+
+TagManager *Kernel::tagManager() const
+{
+    return m_tagManager;
 }
 
 QQmlContext *Kernel::qmlContext() const

@@ -24,6 +24,7 @@ set(flow_SRC
     storage.cpp
     syncable.cpp
     tag.cpp
+    tagmanager.cpp
     tagref.cpp
     task.cpp
     taskcontextmenumodel.cpp

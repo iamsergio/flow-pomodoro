@@ -34,14 +34,14 @@ public:
 
     static Data deserializeJsonData(const QByteArray &serializedData, QString &error,
                                     Kernel *kernel);
-    static QByteArray serializeToJsonData(const Storage::Data &);
+    static QByteArray serializeToJsonData(const Storage::Data &, const TagList &tags);
 
 protected:
     void load_impl() Q_DECL_OVERRIDE;
     void save_impl() Q_DECL_OVERRIDE;
 
 private:
-    static QVariantMap toJsonVariantMap(const Storage::Data &);
+    static QVariantMap toJsonVariantMap(const Storage::Data &, const TagList &tags);
     const RuntimeConfiguration m_runtimeConfiguration;
 };
 

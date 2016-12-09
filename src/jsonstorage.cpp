@@ -62,19 +62,8 @@ Storage::Data JsonStorage::deserializeJsonData(const QByteArray &serializedData,
         return result;
     }
 
-    foreach (const QVariant &t, tagList) {
-        Tag::Ptr tag = Tag::Ptr(new Tag(kernel, QString()));
-        tag->fromJson(t.toMap());
-        if (!tag->name().isEmpty() && !Storage::itemListContains<Tag::Ptr>(result.tags, tag)) {
-            if (kernel) { // Reuse tags from given storage
-                if (Tag::Ptr tag2 = kernel->storage()->tag(tag->name(), /*create=*/ false)) {
-                    tag = tag2;
-                }
-            }
-
-            result.tags << tag;
-        }
-    }
+    foreach (const QVariant &t, tagList)
+        kernel->tagManager()->createTag(t.toMap());
 
     foreach (const QVariant &t, taskList) {
         Task::Ptr task = Task::createTask(kernel);
@@ -128,7 +117,7 @@ void JsonStorage::load_impl()
 
 void JsonStorage::save_impl()
 {
-    QByteArray serializedData = serializeToJsonData(m_data);
+    QByteArray serializedData = serializeToJsonData(m_data, m_kernel->tagManager()->tags());
     const QString tmpDataFileName = m_runtimeConfiguration.dataFileName() + "~";
 
     QFile temporaryFile(tmpDataFileName); // not using QTemporaryFile so the backup stays next to the main one
@@ -153,14 +142,14 @@ void JsonStorage::save_impl()
     }
 }
 
-QVariantMap JsonStorage::toJsonVariantMap(const Data &data)
+QVariantMap JsonStorage::toJsonVariantMap(const Data &data, const TagList &tags)
 {
     QVariantMap map;
     QVariantList tasksVariant;
     QVariantList tagsVariant;
 
-    tagsVariant.reserve(data.tags.count());
-    for (const auto &tag : data.tags) {
+    tagsVariant.reserve(tags.count());
+    for (const auto &tag : tags) {
         tagsVariant << tag->toJson();
     }
 
@@ -177,8 +166,8 @@ QVariantMap JsonStorage::toJsonVariantMap(const Data &data)
     return map;
 }
 
-QByteArray JsonStorage::serializeToJsonData(const Data &data)
+QByteArray JsonStorage::serializeToJsonData(const Data &data, const TagList &tags)
 {
-    QJsonDocument document = QJsonDocument::fromVariant(toJsonVariantMap(data));
+    QJsonDocument document = QJsonDocument::fromVariant(toJsonVariantMap(data, tags));
     return document.toJson();
 }

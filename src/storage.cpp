@@ -34,18 +34,6 @@
   int Storage::saveCallCount = 0;
 #endif
 
-static QVariant tagsDataFunction(const TagList &list, int index, int role)
-{
-    switch (role) {
-    case Storage::TagRole:
-        return QVariant::fromValue<Tag*>(list.at(index).data());
-    case Storage::TagPtrRole:
-        return QVariant::fromValue<Tag::Ptr>(list.at(index));
-    default:
-        return QVariant();
-    }
-}
-
 static QVariant tasksDataFunction(const TaskList &list, int index, int role)
 {
     Task::Ptr task = list.at(index);
@@ -96,20 +84,17 @@ Storage::Storage(Kernel *kernel, QObject *parent)
 
     connect(this, &Storage::taskCountChanged, this, &Storage::totalNeededEffortChanged);
 
-    m_data.tags.setDataFunction(&tagsDataFunction);
-    m_data.tags.insertRole("tag", Q_NULLPTR, TagRole);
-    m_data.tags.insertRole("tagPtr", Q_NULLPTR, TagPtrRole);
-    QAbstractItemModel *tagsModel = m_data.tags; // android doesn't build if you use m_data.tags directly in the connect statement
+    QAbstractItemModel *tagsModel = kernel->tagManager()->tags();
     connect(tagsModel, &QAbstractListModel::dataChanged, this, &Storage::scheduleSave);
     connect(tagsModel, &QAbstractListModel::rowsInserted, this, &Storage::scheduleSave);
     connect(tagsModel, &QAbstractListModel::rowsRemoved, this, &Storage::scheduleSave);
     connect(tagsModel, &QAbstractListModel::modelReset, this, &Storage::scheduleSave);
     qRegisterMetaType<Tag::Ptr>("Tag::Ptr");
-    m_sortedTagModel = new SortedTagsModel(m_data.tags, this);
+    m_sortedTagModel = new SortedTagsModel(kernel->tagManager()->tags(), this);
     m_extendedTagsModel->setSourceModel(m_sortedTagModel);
     m_nonEmptyTagsModel->setSourceModel(m_extendedTagsModel);
 
-    connect(this, &Storage::tagAboutToBeRemoved,
+    connect(kernel->tagManager(), &TagManager::tagAboutToBeRemoved,
             this, &Storage::onTagAboutToBeRemoved);
 
     m_taskFilterModel->setSourceModel(m_data.tasks);
@@ -172,7 +157,7 @@ Storage::~Storage()
 
 const TagList& Storage::tags() const
 {
-    return m_data.tags;
+    return m_kernel->tagManager()->tags();
 }
 
 TaskList Storage::tasks() const
@@ -187,15 +172,7 @@ Storage::Data Storage::data() const
 
 void Storage::setData(Storage::Data &data)
 {
-    Tag::List newTags;
-    foreach (const Tag::Ptr &tag, data.tags) {
-        if (tag->kernel())
-            newTags << tag;
-        else
-            newTags << createTag(tag->name(), tag->uuid());
-    }
-
-    data.tags = newTags;
+    m_kernel->tagManager()->setTags(data.tags);
 
     foreach (const Task::Ptr &task, data.tasks) {
         if (!task->kernel())
@@ -215,16 +192,7 @@ void Storage::load()
     m_loadingInProgress = true;
     load_impl();
 
-    if (m_data.tags.isEmpty()) {
-        // Create default tags. We always use the same uuids for these so we don't get
-        // duplicates when synching with other devices
-        createTag(tr("work"), QStringLiteral("{bb2ab284-8bb7-4aec-a452-084d64e85697}"));
-        createTag(tr("personal"), QStringLiteral("{73533168-9a57-4fc0-ba9a-9120bbadcb6c}"));
-        createTag(tr("family"), QStringLiteral("{4e81dd75-84c4-4359-912c-f3ead717f694}"));
-        createTag(tr("bills"), QStringLiteral("{4b4ae5fb-f35d-4389-9417-96b7ddcb3b8f}"));
-        createTag(tr("books"), QStringLiteral("{b2697470-f457-461c-9310-7d4b56aea395}"));
-        createTag(tr("movies"), QStringLiteral("{387be44a-1eb7-4895-954a-cf5bc82d8f03}"));
-    }
+    m_kernel->tagManager()->maybeCreateDefaultTags();
 
     m_loadingInProgress = false;
 
@@ -235,7 +203,7 @@ void Storage::load()
 
 void Storage::verifyLoadedData()
 {
-    foreach (const Tag::Ptr &tag, m_data.tags) {
+    foreach (const Tag::Ptr &tag, tags()) {
         if (tag->uuid(/*createIfEmpty=*/false).isEmpty()) {
             qWarning() << Q_FUNC_INFO << "No uuid for tag" << tag;
 #ifdef UNIT_TEST_RUN
@@ -278,56 +246,22 @@ void Storage::scheduleSave()
 
 bool Storage::removeTag(const QString &tagName)
 {
-    int index = indexOfTag(tagName);
-    if (index == -1) {
-        qWarning() << Q_FUNC_INFO << "Non existant tag" << tagName;
-        return false;
-    }
-
-    emit tagAboutToBeRemoved(tagName);
-
-    m_data.tags.removeAt(index);
-    m_deletedTagName = tagName;
-    return true;
+    return m_kernel->tagManager()->removeTag(tagName);
 }
 
 Tag::Ptr Storage::tag(const QString &name, bool create)
 {
-    Tag::Ptr tag = m_data.tags.value(indexOfTag(name));
-    return (tag || !create) ? tag : createTag(name);
+    return m_kernel->tagManager()->tag(name, create);
 }
 
 Tag::Ptr Storage::createTag(const QString &tagName, const QString &uid)
 {
-    QString trimmedName = tagName.trimmed();
-    if (trimmedName.isEmpty()) {
-        qWarning() << Q_FUNC_INFO << "Will not add empty tag";
-        return Tag::Ptr();
-    }
-
-    const int index = indexOfTag(trimmedName);
-    if (index != -1) {
-        qDebug() << Q_FUNC_INFO << "Refusing to add duplicate tag " << tagName;
-        return m_data.tags.at(index);
-    }
-
-    Tag::Ptr tag = Tag::Ptr(new Tag(m_kernel, trimmedName));
-    if (!uid.isEmpty())
-        tag->setUuid(uid);
-
-    m_data.tags << tag;
-    return tag;
+    return m_kernel->tagManager()->createTag(tagName, uid);
 }
 
 int Storage::indexOfTag(const QString &name) const
 {
-    QString normalizedName = name.toLower().trimmed();
-    for (int i = 0; i < m_data.tags.count(); ++i) {
-        if (m_data.tags.at(i)->name().toLower() == normalizedName)
-            return i;
-    }
-
-    return -1;
+    return m_kernel->tagManager()->indexOfTag(name);
 }
 
 QString Storage::dataFile() const
@@ -340,28 +274,15 @@ QAbstractItemModel *Storage::tagsModel() const
     return m_sortedTagModel;
 }
 
-QString Storage::deletedTagName() const
-{
-    return m_deletedTagName;
-}
-
 bool Storage::containsTag(const QString &name) const
 {
-    QString normalizedName = name.toLower().trimmed();
-    foreach (const Tag::Ptr &tag, m_data.tags) {
-        if (tag->name().toLower() == normalizedName)
-            return true;
-    }
-
-    return false;
+    return m_kernel->tagManager()->containsTag(name);
 }
 
 void Storage::clearTags()
 {
     // Don't use clear here
-    foreach (const Tag::Ptr &tag, m_data.tags) {
-        removeTag(tag->name());
-    }
+    m_kernel->tagManager()->clearTags();
 }
 
 bool Storage::renameTag(const QString &oldName, const QString &newName)
@@ -542,50 +463,6 @@ void Storage::removeTask(const Task::Ptr &task)
     task->setTagList(TagRef::List()); // So Tag::taskCount() decreases in case Task::Ptr is left hanging somewhere
     emit taskCountChanged();
 }
-
-#ifdef DEVELOPER_MODE
-void Storage::removeDuplicateData()
-{
-    Data newData;
-    foreach (const Task::Ptr &task, m_data.tasks) {
-        bool found = false;
-        foreach (const Task::Ptr &task2, newData.tasks) {
-            if (task->uuid() != task2->uuid())
-                continue;
-
-            found = true;
-            break;
-        }
-
-        if (found) {
-            qDebug() << "Task " << task->summary() << task->uuid() << "is a duplicate";
-        } else {
-            newData.tasks << task;
-        }
-    }
-
-    foreach (const Tag::Ptr &tag, m_data.tags) {
-        bool found = false;
-        foreach (const Tag::Ptr &tag2, newData.tags) {
-            if (tag->name() != tag2->name())
-                continue;
-
-            found = true;
-            break;
-        }
-
-        if (found) {
-            qDebug() << "Tag " << tag->name() << "is a duplicate";
-        } else {
-            newData.tags << tag;
-        }
-    }
-
-    setData(newData);
-    qDebug() << Q_FUNC_INFO << "done";
-}
-
-#endif
 
 QAbstractItemModel* Storage::nonEmptyTagsModel() const
 {

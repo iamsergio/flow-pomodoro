@@ -28,6 +28,8 @@
 
 class TaskFilterProxyModel;
 class Kernel;
+class TagManager;
+class TestTag;
 
 class Tag : public QObject, public Syncable
 {
@@ -40,7 +42,6 @@ public:
     typedef QSharedPointer<Tag> Ptr;
     typedef GenericListModel<Tag::Ptr> List;
 
-    explicit Tag(Kernel *kernel, const QString &name);
     explicit Tag(const QString &name, QAbstractItemModel *taskModel); // For fake tags ("All" and "Untagged")
     ~Tag();
 
@@ -53,7 +54,6 @@ public:
 
     QAbstractItemModel* taskModel();
     QVariantMap toJson() const Q_DECL_OVERRIDE;
-    void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
 
     bool operator==(const Tag &other) const;
     Kernel *kernel() const;
@@ -78,8 +78,12 @@ protected:
     QVector<QString> supportedFields() const Q_DECL_OVERRIDE;
 
 private:
+    friend class TagManager;
+    friend class TestTag;
     Tag();
+    explicit Tag(Kernel *kernel, const QString &name);
     Tag(const Tag &other);
+    void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
     QString m_name;
     int m_taskCount;
     bool m_beingEdited;

@@ -22,6 +22,7 @@ SOURCES += $$PWD/calendarcontroller.cpp \
            $$PWD/storage.cpp \
            $$PWD/syncable.cpp \
            $$PWD/tag.cpp \
+           $$PWD/tagmanager.cpp \
            $$PWD/tagref.cpp \
            $$PWD/task.cpp \
            $$PWD/taskcontextmenumodel.cpp \
@@ -53,6 +54,7 @@ HEADERS += $$PWD/calendarcontroller.h \
            $$PWD/storage.h \
            $$PWD/syncable.h \
            $$PWD/tag.h \
+           $$PWD/tagmanager.h \
            $$PWD/tagref.h \
            $$PWD/task.h \
            $$PWD/taskcontextmenumodel.h \

@@ -19,6 +19,19 @@
 
 #include "teststorage.h"
 #include "storage.h"
+#include "tagmanager.h"
+#include "kernel.h"
+
+template <typename T>
+static inline int indexOfItem(const GenericListModel<T> &list, const T &item)
+{
+    const int count = list.count();
+    for (int i = 0; i < count; i++)
+        if (*list.at(i).data() == *item.data())
+            return i;
+
+    return -1;
+}
 
 TestStorage::TestStorage() : TestBase()
 {
@@ -26,7 +39,8 @@ TestStorage::TestStorage() : TestBase()
 
 void TestStorage::initTestCase()
 {
-    m_storageSpy.listenTo(m_storage, &Storage::tagAboutToBeRemoved);
+    m_storageSpy.listenTo(m_kernel->tagManager(), &TagManager::tagAboutToBeRemoved);
+    m_storage->clearTags();
 }
 
 void TestStorage::cleanupTestCase()
@@ -35,7 +49,6 @@ void TestStorage::cleanupTestCase()
 
 void TestStorage::testCreateTag()
 {
-
     TagList tags = m_storage->tags();
     QVERIFY(tags.isEmpty());
 
@@ -196,9 +209,9 @@ void TestStorage::testPrependTask()
     QCOMPARE(task1, tasks.at(1));
     QCOMPARE(task2, tasks.at(0));
 
-    QCOMPARE(2, m_storage->indexOfItem(m_storage->tasks(), task0));
-    QCOMPARE(1, m_storage->indexOfItem(m_storage->tasks(), task1));
-    QCOMPARE(0, m_storage->indexOfItem(m_storage->tasks(), task2));
+    QCOMPARE(2, indexOfItem(m_storage->tasks(), task0));
+    QCOMPARE(1, indexOfItem(m_storage->tasks(), task1));
+    QCOMPARE(0, indexOfItem(m_storage->tasks(), task2));
 }
 
 void TestStorage::testPreserveInstanceId()

@@ -19,6 +19,7 @@
 
 #include "nonemptytagfilterproxy.h"
 #include "storage.h"
+#include "tagmanager.h"
 #include "taskfilterproxymodel.h"
 #include <QDebug>
 
@@ -56,7 +57,7 @@ bool NonEmptyTagFilterProxy::filterAcceptsRow(int source_row, const QModelIndex 
     if (!index.isValid())
         return false;
 
-    Tag::Ptr tag = index.data(Storage::TagPtrRole).value<Tag::Ptr>();
+    Tag::Ptr tag = index.data(TagManager::TagPtrRole).value<Tag::Ptr>();
     if (!tag) {
         Q_ASSERT(false);
         return false;

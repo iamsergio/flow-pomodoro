@@ -263,7 +263,7 @@ static int indexOfTag(QAbstractItemModel *model, Tag *tag)
 {
     int count = model->rowCount();
     for (int i = 0; i < count; ++i) {
-        Tag *t = model->data(model->index(i, 0), Storage::TagRole).value<Tag*>();
+        Tag *t = model->data(model->index(i, 0), TagManager::TagRole).value<Tag*>();
         if (t == tag)
             return i;
     }
@@ -275,7 +275,7 @@ void Controller::cycleTagSelectionLeft()
     QAbstractItemModel *m = tagsModel();
     int currentIndex = indexOfTag(m, m_currentTag);
     if (currentIndex > 0)
-        setCurrentTag(m->data(m->index(currentIndex - 1, 0), Storage::TagRole).value<Tag*>());
+        setCurrentTag(m->data(m->index(currentIndex - 1, 0), TagManager::TagRole).value<Tag*>());
 }
 
 void Controller::cycleTagSelectionRight()
@@ -283,14 +283,14 @@ void Controller::cycleTagSelectionRight()
     QAbstractItemModel *m = tagsModel();
     int currentIndex = indexOfTag(m, m_currentTag);
     if (currentIndex < m->rowCount() - 1)
-        setCurrentTag(m->data(m->index(currentIndex + 1, 0), Storage::TagRole).value<Tag*>());
+        setCurrentTag(m->data(m->index(currentIndex + 1, 0), TagManager::TagRole).value<Tag*>());
 }
 
 void Controller::selectTagByFirstLetter(QChar c)
 {
     int count = tagsModel()->rowCount();
     for (int i = 0; i < count; ++i) {
-        Tag *t = tagsModel()->data(tagsModel()->index(i, 0), Storage::TagRole).value<Tag*>();
+        Tag *t = tagsModel()->data(tagsModel()->index(i, 0), TagManager::TagRole).value<Tag*>();
         if (t->name().toLower().startsWith(c.toLower()))
             setCurrentTag(t);
     }
