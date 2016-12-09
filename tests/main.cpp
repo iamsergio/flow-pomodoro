@@ -16,6 +16,7 @@
 int main(int argc, char *argv[])
 { 
     QApplication app(argc, argv);
+    const bool testUi = app.arguments().contains(QStringLiteral("--testUi"));
     app.setAttribute(Qt::AA_Use96Dpi, true);
     bool success = true;
 
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
         Q_ASSERT(success);
     }
 
-    {
+    if (testUi) {
         TestUI uiTest;
         success &= QTest::qExec(&uiTest, argc, argv) == 0;
         Q_ASSERT(success);
