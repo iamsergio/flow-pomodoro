@@ -55,6 +55,7 @@ Item {
         }
 
         Text {
+            id: tagText
             anchors {
                 verticalCenter: parent.verticalCenter
                 left: parent.left
@@ -62,10 +63,21 @@ Item {
             }
 
             visible: !root.beingEdited
-            text: tagObj === null ? "" : (tagObj.name/*  + " (" + root.tagObj.taskCount + ")"*/)
+            text: tagObj === null ? "" : tagObj.name
             font {
                 bold: true
                 pixelSize: 20 * _controller.dpiFactor
+            }
+        }
+
+        Text {
+            text: tagObj === null ? "" : (" (" + tagObj.taskCount + ")")
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: tagText.right
+            }
+            font {
+                pixelSize: 15 * _controller.dpiFactor
             }
         }
 
