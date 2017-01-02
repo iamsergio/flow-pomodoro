@@ -708,9 +708,9 @@ void Task::setEstimatedEffort(int effort)
 
 QString Task::upperRightCornerText() const
 {
-    auto s = m_kernel->settings();
-    const bool hasEffort = s->supportsEffort() && m_estimatedEffort > 0;
-    const bool hasAge = s->showTaskAge() && !hasDueDate();
+    auto settings = m_kernel->settings();
+    const bool hasEffort = settings->supportsEffort() && m_estimatedEffort > 0;
+    const bool hasAge = settings->showTaskAge() && !hasDueDate();
 
     if (hasEffort && hasAge) {
         return QStringLiteral("%1,~%2").arg(daysSinceCreation()).arg(m_estimatedEffort);
