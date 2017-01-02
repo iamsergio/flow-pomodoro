@@ -710,7 +710,7 @@ QString Task::upperRightCornerText() const
 {
     auto settings = m_kernel->settings();
     const bool hasEffort = settings->supportsEffort() && m_estimatedEffort > 0;
-    const bool hasAge = settings->showTaskAge() && !hasDueDate();
+    const bool hasAge = settings->showTaskAge() && !hasDueDate() && !recurs();
 
     if (hasEffort && hasAge) {
         return QStringLiteral("%1,~%2").arg(daysSinceCreation()).arg(m_estimatedEffort);
