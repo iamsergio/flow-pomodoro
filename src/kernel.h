@@ -65,6 +65,7 @@ public:
 Q_SIGNALS:
     void systrayLeftClicked();
     void dayChanged();
+    void dumpDebugInfoRequested();
 
 private Q_SLOTS:
     void onTaskStatusChanged();
@@ -76,6 +77,7 @@ private Q_SLOTS:
 #endif
 
 private:
+    void dumpDebug();
     void loadPlugins();
     void notifyPlugins(TaskStatus newStatus);
 

@@ -96,6 +96,8 @@ QuickView::QuickView(Kernel *kernel)
 
     if (!Utils::isMobile())
         connect(this, &QWindow::screenChanged, this, &QuickView::setupSize);
+
+    connect(kernel, &Kernel::dumpDebugInfoRequested, this, &QuickView::dumpDebug);
 }
 
 QuickView::~QuickView()
@@ -441,3 +443,9 @@ void QuickView::moveMouseTo(QQuickItem *item)
 }
 
 #endif
+
+void QuickView::dumpDebug()
+{
+    qDebug() << "QQuickView:";
+    qDebug() << "    geo=" << geometry() << "; isVisible=" << isVisible();
+}

@@ -228,6 +228,11 @@ void Kernel::setupSystray()
     QAction *quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, &QAction::triggered, qApp, &QGuiApplication::quit);
     m_trayMenu = new QMenu();
+    if (qEnvironmentVariableIsSet("FLOW_DEBUGGING")) {
+        QAction *dumpDebug = new QAction(tr("&Dump debug"), this);
+        connect(dumpDebug, &QAction::triggered, this, &Kernel::dumpDebug);
+        m_trayMenu->addAction(dumpDebug);
+    }
     m_trayMenu->addAction(quitAction);
     m_systrayIcon->setContextMenu(m_trayMenu);
 # endif
@@ -374,5 +379,10 @@ void Kernel::onSystrayActivated(QSystemTrayIcon::ActivationReason reason)
 
         emit systrayLeftClicked();
     }
+}
+
+void Kernel::dumpDebug()
+{
+    emit dumpDebugInfoRequested();
 }
 #endif

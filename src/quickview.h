@@ -63,6 +63,7 @@ private Q_SLOTS:
     void setupWindowFlags();
     void onWindowGeometryTypeChanged();
     void setupSize();
+    void dumpDebug();
 
 Q_SIGNALS:
     void contractedHeightChanged();
