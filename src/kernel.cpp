@@ -32,12 +32,12 @@
 #include "utils.h"
 #include "checkbox.h"
 #include "loadmanager.h"
-#include "webdavsyncer.h"
 #include "quickview.h"
 #include "taskcontextmenumodel.h"
 #include "extendedtagsmodel.h"
 #include "sortedtaskcontextmenumodel.h"
 #include "gitupdater.h"
+#include "tagmanager.h"
 
 #include <QAbstractListModel>
 #include <QAbstractItemModel>
@@ -125,14 +125,12 @@ Kernel::~Kernel()
 Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     : QObject(parent)
     , m_runtimeConfiguration(config)
+    , m_tagManager(new TagManager(this))
     , m_storage(new JsonStorage(this, this))
     , m_qmlEngine(new QQmlEngine(0)) // leak the engine, no point in wasting shutdown time. Also we get a qmldebug server crash if it's parented to qApp, which Kernel is
     , m_settings(config.settings() ? config.settings() : new Settings(this))
     , m_controller(new Controller(m_qmlEngine->rootContext(), this, m_storage, m_settings, this))
     , m_pluginModel(new PluginModel(this))
-#ifndef NO_WEBDAV
-    , m_webDavSyncer(new WebDAVSyncer(this))
-#endif
 #if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
     , m_systrayIcon(0)
     , m_trayMenu(0)
@@ -150,15 +148,10 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     qmlContext()->setContextProperty(QStringLiteral("_pluginModel"), m_pluginModel);
     qmlContext()->setContextProperty(QStringLiteral("_loadManager"), m_controller->loadManager());
     qmlContext()->setContextProperty(QStringLiteral("_settings"), m_settings);
-#ifndef NO_WEBDAV
-    qmlContext()->setContextProperty("_webdavSync", m_webDavSyncer);
-#endif
 
     connect(m_controller, &Controller::currentTaskChanged, this, &Kernel::onTaskStatusChanged);
     connect(m_qmlEngine, &QQmlEngine::quit, qGuiApp, &QGuiApplication::quit);
-    QMetaObject::invokeMethod(m_storage, "load", Qt::QueuedConnection); // Schedule a load. Don't do it directly, it will deadlock in instance()
     QMetaObject::invokeMethod(this, "maybeLoadPlugins", Qt::QueuedConnection);
-    QMetaObject::invokeMethod(m_controller, "updateWebDavCredentials", Qt::QueuedConnection);
 
     if (m_runtimeConfiguration.useSystray() && m_settings->useSystray())
         setupSystray();
@@ -183,6 +176,11 @@ Controller *Kernel::controller() const
     return m_controller;
 }
 
+TagManager *Kernel::tagManager() const
+{
+    return m_tagManager;
+}
+
 QQmlContext *Kernel::qmlContext() const
 {
     return m_qmlEngine->rootContext();
@@ -198,6 +196,11 @@ Settings *Kernel::settings() const
     return m_settings;
 }
 
+GitUpdater *Kernel::gitUpdater() const
+{
+    return m_gitUpdater;
+}
+
 RuntimeConfiguration Kernel::runtimeConfiguration() const
 {
     return m_runtimeConfiguration;
@@ -207,13 +210,6 @@ QDate Kernel::currentDate() const
 {
     return m_currentDate;
 }
-
-#ifndef NO_WEBDAV
-WebDAVSyncer *Kernel::webdavSyncer() const
-{
-    return m_webDavSyncer;
-}
-#endif
 
 void Kernel::notifyPlugins(TaskStatus newStatus)
 {
@@ -232,6 +228,11 @@ void Kernel::setupSystray()
     QAction *quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, &QAction::triggered, qApp, &QGuiApplication::quit);
     m_trayMenu = new QMenu();
+    if (qEnvironmentVariableIsSet("FLOW_DEBUGGING")) {
+        QAction *dumpDebug = new QAction(tr("&Dump debug"), this);
+        connect(dumpDebug, &QAction::triggered, this, &Kernel::dumpDebug);
+        m_trayMenu->addAction(dumpDebug);
+    }
     m_trayMenu->addAction(quitAction);
     m_systrayIcon->setContextMenu(m_trayMenu);
 # endif
@@ -378,5 +379,10 @@ void Kernel::onSystrayActivated(QSystemTrayIcon::ActivationReason reason)
 
         emit systrayLeftClicked();
     }
+}
+
+void Kernel::dumpDebug()
+{
+    emit dumpDebugInfoRequested();
 }
 #endif

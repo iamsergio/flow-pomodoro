@@ -22,6 +22,7 @@
 
 #include "task.h"
 #include "tag.h"
+#include "tagmanager.h"
 #include "genericlistmodel.h"
 
 #include <QTimer>
@@ -34,7 +35,6 @@ class TaskFilterProxyModel;
 class NonEmptyTagFilterProxy;
 class ExtendedTagsModel;
 
-typedef GenericListModel<Tag::Ptr> TagList;
 typedef GenericListModel<Task::Ptr> TaskList;
 
 enum {
@@ -58,15 +58,8 @@ class Storage : public QObject
     Q_PROPERTY(TaskFilterProxyModel* taskFilterModel READ taskFilterModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* untaggedTasksModel READ untaggedTasksModel CONSTANT)
     Q_PROPERTY(TaskFilterProxyModel* dueDateTasksModel READ dueDateTasksModel CONSTANT)
-    Q_PROPERTY(bool webDAVSyncSupported READ webDAVSyncSupported CONSTANT)
 
 public:
-    enum TagModelRole {
-        TagRole = Qt::UserRole + 1,
-        TagPtrRole,
-        LastRole
-    };
-
     enum TaskModelRole {
         TaskRole = Qt::UserRole + 1,
         TaskPtrRole,
@@ -76,8 +69,7 @@ public:
     struct Data {
         Data() : serializerVersion(JsonSerializerVersion1) {}
         TaskList tasks;
-        TagList tags;
-        QStringList deletedItemUids; // so we can sync to server
+        QStringList tags;
         int serializerVersion;
         QByteArray instanceId;
     };
@@ -94,34 +86,12 @@ public:
 
     bool saveScheduled() const;
     void scheduleSave();
-    // Temporary disable saving. For performance purposes
-    void setDisableSaving(bool);
 
     bool savingInProgress() const;
     bool loadingInProgress() const;
 
-    bool webDAVSyncSupported() const;
-
     QByteArray instanceId();
-#ifdef DEVELOPER_MODE
-    Q_INVOKABLE void removeDuplicateData();
-#endif
 
-    template <typename T>
-    static inline bool itemListContains(const GenericListModel<T> &list, const T &item)
-    {
-        return Storage::indexOfItem(list, item) != -1;
-    }
-
-    template <typename T>
-    static inline int indexOfItem(const GenericListModel<T> &list, const T &item)
-    {
-        for (int i = 0; i < list.count(); i++)
-            if (*list.at(i).data() == *item.data())
-                return i;
-
-        return -1;
-    }
 //------------------------------------------------------------------------------
 // Stuff for tasks
     TaskFilterProxyModel* taskFilterModel() const;
@@ -176,7 +146,6 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void taskCountChanged();
-    void tagAboutToBeRemoved(const QString &name);
     void totalNeededEffortChanged();
     void saveFinished();
 
@@ -196,8 +165,6 @@ private:
     int proxyRowToSource(int proxyIndex) const;
     QTimer m_scheduleTimer;
     SortedTagsModel *m_sortedTagModel;
-    QString m_deletedTagName;
-    int m_savingDisabled;
     TaskFilterProxyModel *m_taskFilterModel;
     TaskFilterProxyModel *m_untaggedTasksModel;
     TaskFilterProxyModel *m_dueDateTasksModel;

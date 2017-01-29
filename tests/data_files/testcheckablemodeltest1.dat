@@ -5,13 +5,11 @@
         {
             "name": "test",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{939af352-4aa7-4a6b-be5b-c31be50ae21f}"
         },
         {
             "name": "test2",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{9d1ee557-9276-4e0d-82ba-9f79f4bba1e7}"
         }
     ],
@@ -21,7 +19,6 @@
             "description": "",
             "modificationTimestamp": 1410012789392,
             "revision": 1,
-            "revisionOnWebDAVServer": -1,
             "staged": true,
             "summary": "New Task",
             "tags": [
@@ -33,7 +30,6 @@
             "description": "",
             "modificationTimestamp": 1410011053838,
             "revision": 1,
-            "revisionOnWebDAVServer": -1,
             "staged": true,
             "summary": "New Task",
             "tags": [

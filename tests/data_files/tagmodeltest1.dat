@@ -5,79 +5,66 @@
         {
             "name": "Flow",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{36925d96-612a-4c57-a1e9-fe9a08d708fa}"
         },
         {
             "name": "PPP",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{339d9764-fb60-4f07-976f-359ca8bf66ea}"
         },
         {
             "name": "ABC",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{05c74c90-5496-4b2e-aa53-801e6edfa7d8}"
         },
         {
             "name": "Qt",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{6e313fa0-a7a4-406f-be17-6b43ec9704ea}"
         },
         {
             "name": "Tomar",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{2d55dc72-2fb5-46df-af19-c2def12a6bd8}"
         },
         {
             "name": "kdab",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{ea1bd3bb-a809-4dc8-84e6-2256fa2de91b}"
         },
         {
             "name": "contas",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{d5b0509d-2a37-4cc9-869b-14d231bdad42}"
         },
         {
             "name": "kde",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{79e148a6-70d9-43ce-b8bb-003f583d296b}"
         },
         {
             "name": "compras",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{5d48dca7-474d-4838-9fd6-785e9c2687a5}"
         },
         {
             "name": "bender",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{816503c7-df5b-474b-ab14-eb05a8b4503b}"
         },
         {
             "name": "Blog",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{274d8476-a03e-42f8-bf7b-d6e3bcc9410a}"
         },
         {
             "name": "music",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{07df906f-865f-44a0-ae4c-3618153c291b}"
         },
         {
             "name": "casa",
             "revision": 0,
-            "revisionOnWebDAVServer": -1,
             "uuid": "{c46f745b-b6a2-43a6-8ded-6171dcc22023}"
         }
     ]

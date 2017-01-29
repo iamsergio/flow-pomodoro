@@ -1,7 +1,7 @@
 /*
   This file is part of Flow.
 
-  Copyright (C) 2014-2015 Sérgio Martins <iamsergio@gmail.com>
+  Copyright (C) 2014-2016 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 #include "runtimeconfiguration.h"
 #include "tag.h"
 #include "task.h"
-#include "webdavsyncer.h"
 #include "controller.h"
 #include "tagref.h"
 #include "settings.h"
@@ -36,15 +35,17 @@
 
 TestBase::TestBase() : m_view(nullptr)
 {
+    Tag::tagCount = 0;
+    Task::taskCount = 0;
     RuntimeConfiguration config;
     config.setDataFileName("data.dat");
     config.setPluginsSupported(false);
     config.setSettings(new Settings("unit-test-settings.ini"));
     config.setSaveEnabled(false);
-    config.setWebDAVFileName("unit-test-flow.dat");
     config.setUseSystray(false);
     m_kernel = new Kernel(config, this);
     m_storage = m_kernel->storage();
+    m_storage->load();
     m_controller = m_kernel->controller();
     m_settings = m_kernel->settings();
 
@@ -116,10 +117,10 @@ void TestBase::createNewKernel(const QString &dataFilename, bool load)
     config.setSettings(new Settings("unit-test-settings.ini"));
     config.setSaveEnabled(false);
     config.setUseSystray(false);
-    config.setWebDAVFileName("unit-test-flow.dat");
 
     m_kernel = new Kernel(config);
     m_storage = m_kernel->storage();
+    m_storage->load();
     m_controller = m_kernel->controller();
     m_settings = m_kernel->settings();
     if (load)

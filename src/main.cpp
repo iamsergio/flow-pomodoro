@@ -25,6 +25,7 @@
 # include <QDBusError>
 #endif
 
+#include "storage.h"
 #include "quickview.h"
 #include "controller.h"
 #include "kernel.h"
@@ -128,7 +129,6 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
         break;
     case QtFatalMsg:
         level = QStringLiteral("Fatal: ");
-        abort();
     }
 
     if (logsDebugToFile()) {
@@ -136,10 +136,16 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
         file.open(QIODevice::Append | QIODevice::WriteOnly);
         QTextStream out(&file);
         out << level << msg << "\r\n";
-    } else {
+    }
+
+    {
         QTextStream out(stderr);
         out << level << msg << "\r\n";
     }
+
+    if (type == QtFatalMsg)
+        abort();
+
 }
 
 static QString defaultFlowDir()
@@ -218,6 +224,7 @@ int main(int argc, char *argv[])
     RuntimeConfiguration defaultConfig;
     defaultConfig.setDataFileName(defaultDataFileName());
     Kernel kernel(defaultConfig);
+    kernel.storage()->load();
 
     // app.connect(&app, &Application::focusObjectChanged, &onFocusObjectChanged);
 

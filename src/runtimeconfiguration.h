@@ -43,9 +43,6 @@ public:
     bool saveEnabled() const;
     void setSaveEnabled(bool);
 
-    QString webDAVFileName() const;
-    void setWebDAVFileName(const QString &);
-
     bool useSystray() const;
     void setUseSystray(bool);
 
@@ -55,7 +52,6 @@ private:
     bool m_pluginsSupported;
     Settings *m_settings;
     bool m_saveEnabled;
-    QString m_webDAVFileName;
     bool m_useSystray;
 };
 

@@ -5,25 +5,21 @@
         {
             "name": "Tag1",
             "revision": 0,
-            "revisionOnWebDAVServer": 0,
             "uuid": "{f5a8e407-2363-4643-ab0e-376ddccf3da0}"
         },
         {
             "name": "Tag2",
             "revision": 0,
-            "revisionOnWebDAVServer": 0,
             "uuid": "{ec93efa9-db27-40b9-8866-d30c3e2658e7}"
         },
         {
             "name": "Tag3",
             "revision": 0,
-            "revisionOnWebDAVServer": 0,
             "uuid": "{9c9d4d03-f0cc-4b2a-a6ba-f8edffd1f71d}"
         },
         {
             "name": "Tag4",
             "revision": 0,
-            "revisionOnWebDAVServer": 0,
             "uuid": "{23683e4c-d36a-49dd-ae53-d218a99614a7}"
         }
     ],
@@ -33,7 +29,6 @@
             "description": "",
             "modificationTimestamp": 1412266598672,
             "revision": 1,
-            "revisionOnWebDAVServer": 1,
             "staged": false,
             "summary": "Task1",
             "tags": [
@@ -46,7 +41,6 @@
             "description": "",
             "modificationTimestamp": 1412266597486,
             "revision": 0,
-            "revisionOnWebDAVServer": 0,
             "staged": false,
             "summary": "Task2",
             "tags": [
@@ -58,7 +52,6 @@
             "description": "",
             "modificationTimestamp": 1412266597489,
             "revision": 0,
-            "revisionOnWebDAVServer": 0,
             "staged": false,
             "summary": "Task3",
             "tags": [
@@ -71,7 +64,6 @@
             "description": "",
             "modificationTimestamp": 1412266598672,
             "revision": 1,
-            "revisionOnWebDAVServer": 1,
             "staged": false,
             "summary": "Task4",
             "tags": [

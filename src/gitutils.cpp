@@ -106,4 +106,26 @@ bool GitUtils::GitRepo::push()
     return result == 0;
 }
 
+bool GitRepo::pull(bool rebase)
+{
+    QStringList args;
+    args.reserve(4);
+    args << QStringLiteral("-C") << m_repoPath << QStringLiteral("pull");
+    if (rebase)
+        args << QStringLiteral("--rebase");
 
+    int result = runGit(args);
+    return result == 0;
+}
+
+bool GitRepo::fetch(const QString &remote)
+{
+    QStringList args;
+    args.reserve(4);
+    args << QStringLiteral("-C") << m_repoPath << QStringLiteral("fetch");
+    if (!remote.isEmpty())
+        args << remote;
+
+    int result = runGit(args);
+    return result == 0;
+}

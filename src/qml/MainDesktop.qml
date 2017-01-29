@@ -4,7 +4,7 @@ import com.kdab.flowpomodoro 1.0
 
 Main {
     id: root
-    property bool smallMode: !(_controller.expanded || _settings.geometryType === Settings.GeometryStandard)
+    readonly property bool smallMode: !(_controller.expanded || _settings.geometryType === Settings.GeometryStandard)
 
     topBarItem:
         Item {

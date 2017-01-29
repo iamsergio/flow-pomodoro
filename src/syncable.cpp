@@ -25,7 +25,6 @@
 
 Syncable::Syncable()
     : m_revision(0)
-    , m_revisionOnWebDAVServer(-1)
 {
 }
 
@@ -36,16 +35,6 @@ Syncable::~Syncable()
 int Syncable::revision() const
 {
     return m_revision;
-}
-
-int Syncable::revisionOnWebDAVServer() const
-{
-    return m_revisionOnWebDAVServer;
-}
-
-void Syncable::setRevisionOnWebDAVServer(int revision)
-{
-    m_revisionOnWebDAVServer = revision;
 }
 
 QString Syncable::uuid(bool createIfEmpty) const
@@ -60,10 +49,14 @@ void Syncable::parseUnknownFields(const QVariantMap &map)
 {
     m_unknownFieldsMap.clear();
     QVector<QString> goodFields = supportedFields();
-    QVariantMap::const_iterator it = map.cbegin();
-    QVariantMap::const_iterator end = map.cend();
+    auto it = map.cbegin();
+    auto end = map.cend();
+
+    const QStringList deprecatedFields = { "revisionOnWebDAVServer" };
+
     for (; it != end; ++it) {
-        if (!goodFields.contains(it.key())) {
+        // Lets not warn about deprecated fields, they will just be silently discarded
+        if (!goodFields.contains(it.key()) && !deprecatedFields.contains(it.key())) {
             m_unknownFieldsMap.insert(it.key(), it.value());
             qWarning() << "Syncable::parseUnknownFields() Unknown field:" << it.key() << "; will be read-only";
         }
@@ -81,7 +74,6 @@ void Syncable::fromJson(const QVariantMap &map)
     }
     setUuid(uuid);
     setRevision(map.value(QStringLiteral("revision"), 0).toInt());
-    setRevisionOnWebDAVServer(map.value(QStringLiteral("revisionOnWebDAVServer"), -1).toInt());
 }
 
 void Syncable::setUuid(const QString &uuid)
@@ -103,11 +95,10 @@ QVariantMap Syncable::toJson() const
 {
     QVariantMap map;
     map.insert(QStringLiteral("revision"), m_revision);
-    map.insert(QStringLiteral("revisionOnWebDAVServer"), m_revisionOnWebDAVServer);
     map.insert(QStringLiteral("uuid"), uuid());
 
-    QVariantMap::const_iterator it = m_unknownFieldsMap.cbegin();
-    QVariantMap::const_iterator end = m_unknownFieldsMap.cend();
+    auto it = m_unknownFieldsMap.cbegin();
+    auto end = m_unknownFieldsMap.cend();
     for (; it != end; ++it)
         map.insert(it.key(), it.value());
 
@@ -119,8 +110,7 @@ QVector<QString> Syncable::supportedFields() const
     static QVector<QString> fields;
     if (fields.isEmpty()) {
         fields << QStringLiteral("uuid")                     // since 0.9
-               << QStringLiteral("revision")                 // since 0.9
-               << QStringLiteral("revisionOnWebDAVServer");  // since 0.9
+               << QStringLiteral("revision");                 // since 0.9
     }
 
     return fields;

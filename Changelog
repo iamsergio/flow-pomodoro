@@ -40,4 +40,6 @@ v1.2.0
 when moving the date before today.
 
 * Git Sync support
+
+* Reworked UI for editing tags. Now mobile friendly.
 --------------------------------------------------------------------------------

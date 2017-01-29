@@ -5,7 +5,6 @@
         {
             "name": "Tag1",
             "revision": 0,
-            "revisionOnWebDAVServer": 0,
             "uuid": "{6636d886-aadb-4f64-b15a-fdeae17291fe}"
         }
     ],
@@ -15,7 +14,6 @@
             "description": "",
             "modificationTimestamp": 1411942608406,
             "revision": 1,
-            "revisionOnWebDAVServer": 1,
             "staged": false,
             "summary": "Task1",
             "tags": [

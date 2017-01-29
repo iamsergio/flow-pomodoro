@@ -10,16 +10,13 @@
 #include "testgitutils.h"
 #include "quick/testui.h"
 
-#ifndef NO_WEBDAV
-# include "testwebdav.h"
-#endif
-
 #include <QtTest/QtTest>
 #include <QApplication>
 
 int main(int argc, char *argv[])
 { 
     QApplication app(argc, argv);
+    const bool testUi = app.arguments().contains(QStringLiteral("--testUi"));
     app.setAttribute(Qt::AA_Use96Dpi, true);
     bool success = true;
 
@@ -71,14 +68,6 @@ int main(int argc, char *argv[])
         Q_ASSERT(success);
     }
 
-#ifndef NO_WEBDAV
-    {
-        TestWebDav test9;
-        success &= QTest::qExec(&test9, argc, argv) == 0;
-        Q_ASSERT(success);
-    }
-#endif
-
     {
         TestDueDate test10;
         success &= QTest::qExec(&test10, argc, argv) == 0;
@@ -92,7 +81,7 @@ int main(int argc, char *argv[])
         Q_ASSERT(success);
     }
 
-    {
+    if (testUi) {
         TestUI uiTest;
         success &= QTest::qExec(&uiTest, argc, argv) == 0;
         Q_ASSERT(success);

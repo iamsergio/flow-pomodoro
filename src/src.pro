@@ -31,7 +31,6 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/config/Plugins.qml \
                qml/config/Tag.qml     \
                qml/config/Tags.qml    \
-               qml/config/WebDavSync.qml \
                qml/ConfigurePage.qml  \
                qml/DecentTabView.qml  \
                qml/DefaultStyle.qml   \
@@ -60,6 +59,9 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/PomodoroOverlay.qml \
                qml/QuestionPopup.qml  \
                qml/SmallText.qml      \
+               qml/TabBar.qml \
+               qml/TabBarItem.qml \
+               qml/TabView.qml \
                qml/TagDelegate.qml \
                qml/Task.qml           \
                qml/TaskContextMenu.qml \

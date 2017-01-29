@@ -98,8 +98,9 @@ Item {
     property int marginMedium: Math.ceil(10 * _controller.dpiFactor)
     property int marginBig: Math.ceil(20 * _controller.dpiFactor)
     property int addTagIconSize: 23
-    property int deleteTagIconSize: 14
+    property int deleteTagIconSize: 23
     property int addTagItemHeight: 23 * _controller.dpiFactor
+    property int tagHeight: 40 * _controller.dpiFactor
 
     // Mobile Menu Bar
     property color menuBarFontColor: fontColor
@@ -128,7 +129,7 @@ Item {
     property bool configTabBarEnableGradient: true
     property color configTabBarLightGradientColor: "#454C54"
     property color configTabBarDarkerGradientColor: "#222222"
-    property int configTabBarWidth: (250 + (_storage.webDAVSyncSupported ? 50 : 0)) * _controller.dpiFactor
+    property int configTabBarWidth: 250 * _controller.dpiFactor
 
     // Circular Progress Indicator
     property int circularIndicatorBorderWidth: 3 * _controller.dpiFactor

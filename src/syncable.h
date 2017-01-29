@@ -30,8 +30,7 @@ public:
     virtual ~Syncable();
 
     int revision() const;
-    int revisionOnWebDAVServer() const;
-    void setRevisionOnWebDAVServer(int);
+
     QString uuid(bool createIfEmpty = true) const;
     void setUuid(const QString &uuid);
 
@@ -44,7 +43,6 @@ protected:
     virtual QVariantMap toJson() const;
     QVariantMap m_unknownFieldsMap;
     int m_revision;
-    int m_revisionOnWebDAVServer;
     mutable QString m_uuid;
 
 private:

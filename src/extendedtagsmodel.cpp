@@ -20,6 +20,7 @@
 
 #include "extendedtagsmodel.h"
 #include "storage.h"
+#include "tagmanager.h"
 
 ExtendedTagsModel::ExtendedTagsModel(Storage *storage, QObject *parent)
     : QAbstractListModel(parent)
@@ -73,12 +74,12 @@ QVariant ExtendedTagsModel::data(const QModelIndex &index, int role) const
 
     const bool isExtraRow = row < numExtraRows();
     Tag::Ptr tag = isExtraRow ? m_extraTags.at(row)
-                              : m_sourceModel->data(mapToSource(index), Storage::TagPtrRole).value<Tag::Ptr>();
+                              : m_sourceModel->data(mapToSource(index), TagManager::TagPtrRole).value<Tag::Ptr>();
 
     switch (role) {
-    case Storage::TagRole:
+    case TagManager::TagRole:
         return QVariant::fromValue<QObject*>(tag.data());
-    case Storage::TagPtrRole:
+    case TagManager::TagPtrRole:
         return QVariant::fromValue<Tag::Ptr>(tag);
     };
 
@@ -106,7 +107,7 @@ int ExtendedTagsModel::indexOf(const Tag *tag) const
 {
     const int count = rowCount(QModelIndex());
     for (int i = 0; i < count; ++i) {
-        Tag *t = data(index(i, 0), Storage::TagRole).value<Tag*>();
+        Tag *t = data(index(i, 0), TagManager::TagRole).value<Tag*>();
         if (t == tag)
             return i;
     }
@@ -115,7 +116,7 @@ int ExtendedTagsModel::indexOf(const Tag *tag) const
 
 Tag::Ptr ExtendedTagsModel::at(int idx) const
 {
-    return data(index(idx, 0), Storage::TagPtrRole).value<Tag::Ptr>();
+    return data(index(idx, 0), TagManager::TagPtrRole).value<Tag::Ptr>();
 }
 
 int ExtendedTagsModel::numExtraRows() const

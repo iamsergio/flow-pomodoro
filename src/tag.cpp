@@ -82,7 +82,7 @@ void Tag::incrementTaskCount(int increment)
     Q_ASSERT(!m_isFake);
     if (m_taskCount + increment >= 0) {
         m_taskCount += increment;
-        emit taskCountChanged(m_taskCount - increment, m_taskCount);
+        emit taskCountChanged();
     } else {
         Q_ASSERT(false);
     }

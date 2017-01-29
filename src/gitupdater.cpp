@@ -79,23 +79,23 @@ GitUpdater::GitUpdater(Kernel *kernel, QObject *parent)
     : QObject(parent)
     , m_kernel(kernel)
 {
-    m_timer.connect(&m_timer, &QTimer::timeout, this, &GitUpdater::push);
-    m_timer.setSingleShot(true);
+    m_pushTimer.connect(&m_pushTimer, &QTimer::timeout, this, &GitUpdater::push);
+    m_pushTimer.setSingleShot(true);
 }
 
 void GitUpdater::schedulePush()
 {
-    if (m_currenltyPushing) {
+    if (m_isPushing) {
         // Schedule later, we're already busy pushing
         QTimer::singleShot(RetryInterval, this, &GitUpdater::schedulePush);
     } else {
-        m_timer.start(PushInterval);
+        m_pushTimer.start(PushInterval);
     }
 }
 
 void GitUpdater::push()
 {
-    m_currenltyPushing = true;
+    setIsPushing(true);
     auto workerThread = new WorkerThread(m_kernel->runtimeConfiguration().flowDir());
     connect(workerThread, &QThread::finished, [this, workerThread] {
         const QString errorMsg = workerThread->errorMsg();
@@ -103,8 +103,34 @@ void GitUpdater::push()
             qWarning() << errorMsg;
 
         workerThread->deleteLater();
-        m_currenltyPushing = false;
+        setIsPushing(false);
     });
 
     workerThread->start();
+}
+
+bool GitUpdater::isPushing() const
+{
+    return m_isPushing;
+}
+
+bool GitUpdater::isPulling() const
+{
+    return m_isPulling;
+}
+
+void GitUpdater::setIsPushing(bool pushing)
+{
+    if (pushing != m_isPushing) {
+        m_isPushing = pushing;
+        emit pushingChanged();
+    }
+}
+
+void GitUpdater::setIsPulling(bool pulling)
+{
+    if (pulling != m_isPulling) {
+        m_isPulling = pulling;
+        emit pullingChanged();
+    }
 }

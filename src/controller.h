@@ -80,12 +80,6 @@ class Controller : public QObject {
     Q_PROPERTY(bool hackingMenuSupported READ hackingMenuSupported CONSTANT)
     Q_PROPERTY(bool showPomodoroOverlay READ showPomodoroOverlay WRITE setShowPomodoroOverlay NOTIFY showPomodoroOverlayChanged)
 
-    Q_PROPERTY(bool isHttps READ isHttps WRITE setIsHttps NOTIFY isHttpsChanged)
-    Q_PROPERTY(int port READ port WRITE setPort NOTIFY portChanged)
-    Q_PROPERTY(QString host READ host WRITE setHost NOTIFY hostChanged)
-    Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
-    Q_PROPERTY(QString user READ user WRITE setUser NOTIFY userChanged)
-    Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
     Q_PROPERTY(QString currentTitleText READ currentTitleText NOTIFY currentTitleTextChanged)
     Q_PROPERTY(QString version READ version CONSTANT)
     Q_PROPERTY(bool newTagDialogVisible READ newTagDialogVisible WRITE setNewTagDialogVisible NOTIFY newTagDialogVisibleChanged)
@@ -185,20 +179,6 @@ public:
     bool openSSLSupported() const;
     bool hackingMenuSupported() const;
 
-    // Webdav
-    bool isHttps() const;
-    void setIsHttps(bool);
-    QString host() const;
-    void setHost(const QString &);
-    QString path() const;
-    void setPath(const QString &);
-    QString user() const;
-    void setUser(const QString &);
-    QString password() const;
-    void setPassword(const QString &);
-    int port() const;
-    void setPort(int);
-
     QString currentTitleText() const;
     QString version() const;
 
@@ -236,7 +216,6 @@ public Q_SLOTS:
     void dismissTaskMenuDelayed();
     void dismissTaskMenu();
 
-    void updateWebDavCredentials();
     void setCurrentTag(Tag *);
     void addTask(const QString &text, bool startEditMode);
     void removeTask(Task *);
@@ -268,7 +247,6 @@ public Q_SLOTS:
 
     void requestContextMenu(Task *, bool tagOnlyMenu = false);
 
-    void webDavSync();
     void setRightClickedTask(Task *, bool tagOnlyMenu = false);
     void toggleConfigurePage();
     void forceFocusOnTaskBeingEdited();
@@ -326,14 +304,6 @@ Q_SIGNALS:
     void showPomodoroOverlayChanged();
     void taskEditorDismissed();
 
-    // webdav stuff
-    void hostChanged();
-    void userChanged();
-    void passwordChanged();
-    void isHttpsChanged();
-    void portChanged();
-    void pathChanged();
-
 private:
     void handleScreenChanged();
     Tag::Ptr tagForSummary(QString &summary_inout) const; // Transforms "books: Foo" into "Foo" and returns tag books
@@ -378,14 +348,6 @@ private:
     Storage *m_storage;
     QQmlContext *m_qmlContext;
     Settings *m_settings;
-
-    // webdav stuff:
-    int m_port;
-    bool m_isHttps;
-    QString m_host;
-    QString m_path;
-    QString m_user;
-    QString m_password;
 
     bool m_optionsContextMenuVisible;
     bool m_startupFinished;

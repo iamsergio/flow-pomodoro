@@ -22,6 +22,8 @@
 #include "tag.h"
 #include "storage.h"
 #include "kernel.h"
+#include "tagmanager.h"
+
 #include <QtTest/QtTest>
 
 TestTagModel::TestTagModel()
@@ -55,14 +57,11 @@ void TestTagModel::testFromFile_data()
     QStringList expectedSignals;
     QStringList expectedSignalsInUnsortedModel;
     for (int i = 0; i < expectedNumTags; ++i) {
-        // expectedSignals << "rowsAboutToBeInserted" << "rowsInserted";
-        // expectedSignalsInUnsortedModel << "rowsAboutToBeInserted" << "rowsInserted";
+        expectedSignals << "rowsAboutToBeInserted" << "rowsInserted";
+        expectedSignalsInUnsortedModel << "rowsAboutToBeInserted" << "rowsInserted";
     }
 
-    expectedSignals << "modelAboutToBeReset" << "modelReset" // Because of final assignment when loading
-                    << "layoutAboutToBeChanged" << "layoutChanged";
-
-    expectedSignalsInUnsortedModel << "modelAboutToBeReset" << "modelReset";
+    //expectedSignalsInUnsortedModel << "modelAboutToBeReset" << "modelReset";
 
     QTest::newRow("some tags") << "tagmodeltest1.dat" << expectedNumTags
                                << tags << expectedSignals << expectedSignalsInUnsortedModel;
@@ -77,12 +76,13 @@ void TestTagModel::testFromFile()
     QFETCH(QStringList, expectedSignalsInUnsortedModel);
 
     createNewKernel(filename, /*load=*/ false);
+    m_storage->clearTags();
 
     ModelSignalSpy *tagsModelSpy = new ModelSignalSpy(m_storage->tagsModel());
     const TagList &unsortedTags = m_storage->tags();
     QAbstractListModel *unsortedTagsModel = unsortedTags;
     ModelSignalSpy *unsortedTagsModelSpy = new ModelSignalSpy(unsortedTagsModel);
-    QVERIFY(m_storage->tags().isEmpty());
+    QCOMPARE(m_storage->tags().size(), 0);
     QCOMPARE(unsortedTagsModel->rowCount(), 0);
     m_storage->load();
 
@@ -103,7 +103,7 @@ void TestTagModel::testFromFile()
 
     for (int i = 0; i < expectedNumTags; i++) {
         QModelIndex index = model->index(i, 0);
-        QVariant variant = model->data(index, Storage::TagRole);
+        QVariant variant = model->data(index, TagManager::TagRole);
         Tag *tag = variant.value<Tag*>();
         QVERIFY(tag);
         QCOMPARE(tag->name(), expectedTags.at(i));

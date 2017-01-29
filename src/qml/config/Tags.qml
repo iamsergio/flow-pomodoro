@@ -20,52 +20,46 @@ MouseArea {
         horizontalAlignment: Text.AlignHCenter
     }
 
-    Flow {
-        anchors.top: parent.top
-        anchors.topMargin: _style.marginBig
-        anchors.bottom: parent.bottom
-        anchors.leftMargin: _style.marginMedium
-        anchors.rightMargin:_style.tagsRightMargin
-        anchors.left: parent.left
-        anchors.right: parent.right
-        spacing: _style.tagSpacing
-
-        move: Transition {
-            NumberAnimation { properties: "x"; duration: _style.tagMoveAnimationDuration }
+    FontAwesomeIcon {
+        id: addImage
+        toolTip: qsTr("Add new tag")
+        text: "\uf067"
+        color: enabled ? "black" : "gray"
+        size: _style.addTagIconSize
+        anchors {
+            top: parent.top
+            topMargin: 10 * _controller.dpiFactor
+            rightMargin: 10 * _controller.dpiFactor
+            right: parent.right
+            verticalCenter: undefined
         }
 
-        FontAwesomeIcon {
-            id: addImage
-            toolTip: qsTr("Add new tag")
-            text: "\uf067"
-            color: enabled ? "black" : "gray"
-            size: _style.addTagIconSize
-            anchors.verticalCenter: undefined
-            enabled: _controller.tagEditStatus !== Controller.TagEditStatusNew
-            onClicked: {
-                _controller.newTagDialogVisible = true
-            }
+        enabled: _controller.tagEditStatus !== Controller.TagEditStatusNew
+        onClicked: {
+            _controller.newTagDialogVisible = true
+        }
+    }
+
+    ListView {
+        id: tagView
+        clip: true
+        anchors {
+            topMargin: 10 * _controller.dpiFactor
+            bottomMargin: 5 * _controller.dpiFactor
+            top: addImage.bottom
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
         }
 
-        Tag {
-            id: newTag
-            visible: _controller.tagEditStatus === Controller.TagEditStatusNew
-            beingEdited: true
+        model: _storage.tagsModel
+        delegate: Tag {
+            tagObj: tag
+            beingEdited: tagObj !== null && tagObj.beingEdited
+            isLast: index === _storage.tagsModel.count - 1
+            width: parent.width
             onEdited: {
-                _controller.endAddingNewTag(newTagName)
-            }
-        }
-
-        Repeater {
-            model: _storage.tagsModel
-            delegate:
-            Tag {
-                tagObj: tag
-                beingEdited: tagObj.beingEdited
-                tagName: tagObj.name
-                onEdited: {
-                    _controller.renameTag(tag.name, newTagName)
-                }
+                _controller.renameTag(tag.name, newTagName)
             }
         }
     }

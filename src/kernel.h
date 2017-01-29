@@ -26,10 +26,10 @@
 #include <QObject>
 #include <QTimer>
 
+class TagManager;
 class Settings;
 class Storage;
 class Controller;
-class WebDAVSyncer;
 class PluginModel;
 class QQmlEngine;
 class QQmlContext;
@@ -49,15 +49,13 @@ public:
     ~Kernel();
     Storage* storage() const;
     Controller *controller() const;
+    TagManager *tagManager() const;
     QQmlContext *qmlContext() const;
     QQmlEngine *qmlEngine() const;
     Settings *settings() const;
+    GitUpdater *gitUpdater() const;
     RuntimeConfiguration runtimeConfiguration() const;
     QDate currentDate() const;
-
-#ifndef NO_WEBDAV
-    WebDAVSyncer *webdavSyncer() const;
-#endif
 
     void setupSystray();
     void destroySystray();
@@ -67,6 +65,7 @@ public:
 Q_SIGNALS:
     void systrayLeftClicked();
     void dayChanged();
+    void dumpDebugInfoRequested();
 
 private Q_SLOTS:
     void onTaskStatusChanged();
@@ -78,18 +77,17 @@ private Q_SLOTS:
 #endif
 
 private:
+    void dumpDebug();
     void loadPlugins();
     void notifyPlugins(TaskStatus newStatus);
 
     RuntimeConfiguration m_runtimeConfiguration;
+    TagManager *const m_tagManager;
     Storage *m_storage;
     QQmlEngine *m_qmlEngine;
     Settings *m_settings;
     Controller *m_controller;
     PluginModel *m_pluginModel;
-#ifndef NO_WEBDAV
-    WebDAVSyncer *m_webDavSyncer;
-#endif
 #if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
     QSystemTrayIcon *m_systrayIcon;
     QMenu *m_trayMenu;

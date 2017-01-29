@@ -45,7 +45,7 @@ QVariant CheckableTagModel::data(const QModelIndex &proxyIndex, int role) const
         return QVariant();
 
     if (role == Qt::CheckStateRole) {
-        Tag::Ptr tag = sourceIndex.data(Storage::TagPtrRole).value<Tag::Ptr>();
+        Tag::Ptr tag = sourceIndex.data(TagManager::TagPtrRole).value<Tag::Ptr>();
         if (!tag) {
             qWarning() << Q_FUNC_INFO <<"Unexpected null tag";
             return false;
@@ -55,7 +55,7 @@ QVariant CheckableTagModel::data(const QModelIndex &proxyIndex, int role) const
     } else if (role == CheckableRole) {
         return true;
     } else if (role == ItemTextRole)  {
-        Tag::Ptr tag = sourceIndex.data(Storage::TagPtrRole).value<Tag::Ptr>();
+        Tag::Ptr tag = sourceIndex.data(TagManager::TagPtrRole).value<Tag::Ptr>();
         if (!tag) {
             qWarning() << Q_FUNC_INFO <<"Unexpected null tag";
             return QString();
@@ -88,7 +88,7 @@ void CheckableTagModel::emitDataChanged(const QString &tagName)
         return;
 
     for (int i = 0; i < count; ++i) {
-        if (index(i, 0).data(Storage::TagPtrRole).value<Tag::Ptr>()->name() == tagName)
+        if (index(i, 0).data(TagManager::TagPtrRole).value<Tag::Ptr>()->name() == tagName)
             emit dataChanged(index(i, 0), index(i, 0));
     }
 }

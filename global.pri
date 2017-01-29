@@ -4,7 +4,7 @@
 }
 
 lessThan(QT_MAJOR_VERSION, 5) | lessThan(QT_MINOR_VERSION, 6) {
-    error("You need at least Qt 5.4.")
+    error("You need at least Qt 5.6.")
 }
 
 android {
@@ -23,7 +23,6 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 CONFIG += c++11
 
 # Features:
-DEFINES += NO_WEBDAV # Will uncomment when UI is ready
 # DEFINES += DEVELOPER_MODE
 # DEFINES += FLOW_DEBUG_TIMESTAMPS
 
