@@ -344,9 +344,8 @@ void Controller::setExpanded(bool expanded)
         m_expanded = expanded;
         if (expanded) {
             emit requestActivateWindow();
-        } else {
-            editTask(Q_NULLPTR, EditModeNone);
         }
+
         setSelectedTask(Task::Ptr());
         emit expandedChanged();
         emit currentTitleTextChanged();
