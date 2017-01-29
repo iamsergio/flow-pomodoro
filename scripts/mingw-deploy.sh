@@ -1,4 +1,4 @@
-QT=/data/installation/qt/x86_64-mingw-5.5/
+QT=/data/installation/qt/x86_64-mingw-5.6/
 
 rm -rf flow &> /dev/null
 mkdir flow
@@ -29,4 +29,4 @@ cp ../plugins/*.dll plugins
 
 cd ..
 
-zip -r flow-Windows-v1.1.X.zip flow/
+zip -r flow-Windows-v1.2.X.zip flow/
