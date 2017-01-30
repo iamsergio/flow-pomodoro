@@ -1,8 +1,7 @@
 #!/bin/sh
 
 # Source android env, change this to your script:
-# source /data/qt5-android-armv5.source 5.6
-# source /data/qt5-android.source 5.6
+# use qt-android 5.6
 
 mkdir build_dir-android &> /dev/null
 cd build_dir-android
