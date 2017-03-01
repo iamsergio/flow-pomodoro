@@ -1,4 +1,4 @@
-source /data/qt5-x86_64-mingw.source 5.5
+use qt-mingw 5.6
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $DIR/..
 mkdir build-mingw
