@@ -26,6 +26,10 @@ CONFIG += c++11
 # DEFINES += DEVELOPER_MODE
 # DEFINES += FLOW_DEBUG_TIMESTAMPS
 
+*-g++* {
+    QMAKE_CXXFLAGS += -Wno-expansion-to-defined
+}
+
 contains(DEFINES, DEVELOPER_MODE) {
     CONFIG += debug
     *-g++*|*clang* {
