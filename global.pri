@@ -27,6 +27,10 @@ DEFINES += NO_WEBDAV # Will uncomment when UI is ready
 # DEFINES += DEVELOPER_MODE
 # DEFINES += FLOW_DEBUG_TIMESTAMPS
 
+*-g++* {
+    QMAKE_CXXFLAGS += -Wno-expansion-to-defined
+}
+
 contains(DEFINES, DEVELOPER_MODE) {
     CONFIG += debug
     *-g++*|*clang* {
