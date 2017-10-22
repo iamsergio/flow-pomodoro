@@ -17,6 +17,9 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef SORTED_TASK_CONTEXT_MENU_MODEL
+#define SORTED_TASK_CONTEXT_MENU_MODEL
+
 #include <QSortFilterProxyModel>
 
 class SortedTaskContextMenuModel : public QSortFilterProxyModel
@@ -34,3 +37,5 @@ public:
 Q_SIGNALS:
     void countChanged();
 };
+
+#endif

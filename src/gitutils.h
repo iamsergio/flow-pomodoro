@@ -17,6 +17,9 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef GIT_UTILS
+#define GIT_UTILS
+
 #include <QObject>
 #include <QString>
 
@@ -40,3 +43,5 @@ private:
 };
 
 }
+
+#endif
