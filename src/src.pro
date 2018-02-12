@@ -3,7 +3,7 @@ include ("../global.pri")
 TEMPLATE = app
 TARGET = flow
 
-qtHaveModule(widgets):!android:!ios {
+qtHaveModule(widgets):!android:!ios:!qnx {
     QT += widgets
 }
 
