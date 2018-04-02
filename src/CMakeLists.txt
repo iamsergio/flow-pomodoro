@@ -37,6 +37,6 @@ qt5_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/resources.qrc)
 
 add_executable(flow ${flow_SRC} ${RESOURCES})
 
-qt5_use_modules(flow Gui Quick DBus Widgets)
+target_link_libraries(flow Qt5::Gui Qt5::Quick Qt5::DBus Qt5::Widgets)
 
 install (TARGETS flow DESTINATION bin)

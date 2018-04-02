@@ -10,7 +10,7 @@ macro(add_flow_plugin _name _has_resources)
     else()
         add_library(${_name} SHARED ${_name}.cpp)
     endif()
-    qt5_use_modules(${_name} Gui Quick DBus)
+    target_link_libraries(${_name} Qt5::Gui Qt5::Quick Qt5::DBus)
     install(TARGETS ${_name} DESTINATION lib${LIB_SUFFIX}/flow-pomodoro/plugins/distractions/)
 endmacro()
 
