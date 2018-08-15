@@ -85,12 +85,12 @@ private:
     Tag(const Tag &other);
     void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
     QString m_name;
-    int m_taskCount;
-    bool m_beingEdited;
-    QAbstractItemModel *m_taskModel; // All unstaged tasks with this tag
-    Kernel *m_kernel;
-    bool m_isFake;
-    bool m_dontUpdateRevision;
+    int m_taskCount = 0;
+    bool m_beingEdited = false;
+    QAbstractItemModel *m_taskModel = nullptr; // All unstaged tasks with this tag
+    Kernel *m_kernel = nullptr;
+    bool m_isFake = false;
+    bool m_dontUpdateRevision = false;
 };
 
 bool operator==(const Tag::Ptr &, const Tag::Ptr &);

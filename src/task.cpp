@@ -59,16 +59,10 @@ Task::Task(Kernel *kernel, const QString &summary)
     : QObject()
     , Syncable()
     , m_summary(summary.isEmpty() ? tr("New Task") : summary)
-    , m_checkableTagModel(0)
-    , m_status(TaskStopped)
-    , m_staged(false)
     , m_creationDate(QDateTime::currentDateTimeUtc())
     , m_modificationDate(m_creationDate)
-    , m_contextMenuModel(0)
-    , m_sortedContextMenuModel(0)
     , m_kernel(kernel)
-    , m_priority(PriorityNone)
-    , m_estimatedEffort(0)
+
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 

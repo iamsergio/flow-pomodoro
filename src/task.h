@@ -237,19 +237,19 @@ private:
     QString m_summary;
     QString m_description;
     TagRef::List m_tags;
-    CheckableTagModel *m_checkableTagModel;
-    TaskStatus m_status;
-    bool m_staged;
+    CheckableTagModel *m_checkableTagModel = nullptr;
+    TaskStatus m_status = TaskStopped;
+    bool m_staged = false;
     QWeakPointer<Task> m_this;
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
     QDateTime m_lastPomodoroDate;
     DueDate m_dueDate;
-    TaskContextMenuModel *m_contextMenuModel;
-    SortedTaskContextMenuModel *m_sortedContextMenuModel;
-    Kernel *m_kernel;
-    Priority m_priority;
-    int m_estimatedEffort;
+    TaskContextMenuModel *m_contextMenuModel = nullptr;
+    SortedTaskContextMenuModel *m_sortedContextMenuModel = nullptr;
+    Kernel *m_kernel = nullptr;
+    Priority m_priority = PriorityNone;
+    int m_estimatedEffort = 0;
 };
 
 inline QDebug operator<<(QDebug dbg, const Task::Ptr &task)
