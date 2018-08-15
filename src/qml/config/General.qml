@@ -336,7 +336,7 @@ Item {
 
             Text {
                 visible: _controller.expertMode
-                text: qsTr("Priority support")
+                text: qsTr("Relevance support")
                 font.pixelSize: 12 * _controller.dpiFactor
             }
 

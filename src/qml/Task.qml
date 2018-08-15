@@ -255,9 +255,9 @@ Rectangle {
         function colorForPriority(priority)
         {
             if (priority === Task_.PriorityLow) {
-                return "green"
+                return "cyan"
             } else if (priority === Task_.PriorityHigh) {
-                return "red"
+                return "orange"
             }
             return "white" // or whatever color
         }

@@ -14,9 +14,9 @@ Overlay {
 
     ListModel {
         id: priorityModel
-        ListElement { label: "low"; priorityValue: 10; priorityColor: "green" }
-        ListElement { label: "none"; priorityValue: 0; priorityColor: "black" }
-        ListElement { label: "high"; priorityValue: 1; priorityColor: "red" }
+        ListElement { label: "cold"; priorityValue: 10; priorityColor: "cyan" }
+        ListElement { label: "neutral"; priorityValue: 0; priorityColor: "black" }
+        ListElement { label: "hot"; priorityValue: 1; priorityColor: "#ff6b15" }
     }
 
     ListModel {
@@ -100,7 +100,7 @@ Overlay {
                     width: parent.width
                     Text {
                         id: priorityText
-                        text: qsTr("Priority") + ":"
+                        text: qsTr("Relevance") + ":"
                         anchors.left: parent.left
                         font.pixelSize: 13 * _controller.dpiFactor
                     }
@@ -117,12 +117,13 @@ Overlay {
                                 Text {
                                     id: priText
                                     text: label
-                                    color: "black"
+                                    color: highlightRect.visible ? highlightRect.color : "black"
                                     font.pixelSize: 14 * _controller.dpiFactor
                                     anchors.verticalCenter: parent.verticalCenter
                                     anchors.horizontalCenter: parent.horizontalCenter
                                 }
                                 Rectangle {
+                                    id: highlightRect
                                     height: 3 * _controller.dpiFactor
                                     color: priorityColor
                                     anchors.bottom: parent.bottom

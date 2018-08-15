@@ -644,9 +644,9 @@ Task::Priority Task::priority() const
 QString Task::priorityStr() const
 {
     if (m_priority == PriorityHigh) {
-        return tr("high");
+        return tr("hot");
     } else if (m_priority == PriorityLow) {
-        return tr("low");
+        return tr("cold");
     } else {
         return QString();
     }
