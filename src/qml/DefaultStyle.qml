@@ -142,4 +142,6 @@ Item {
     property string slackingText: qsTr("flow")
 
     property int checkBoxIconSize: 22 * _controller.dpiFactor
+    property color coldColor: "cyan"
+    property color hotColor: "orange"
 }

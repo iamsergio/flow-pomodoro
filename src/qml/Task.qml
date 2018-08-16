@@ -14,6 +14,7 @@ Rectangle {
     property int modelIndex: -1
     property bool buttonsVisible: true
     property QtObject taskObj: null
+    property bool taskIsHot: taskObj && taskObj.priority === Task_.PriorityHigh
 
     color: _style.taskBackgroundColor
 
@@ -77,7 +78,7 @@ Rectangle {
                 // For some reason when removing a tag QML prints a warning about tag being undefined.
                 // The underlying model signals are correct, so this looks like a Qt bug.
                 text: typeof tag != 'undefined' ? (tag.name + (last ? "" : ", ")) : ""
-                color: _style.taskTagFontColor
+                color: root.taskIsHot ? _style.hotColor : _style.taskTagFontColor
                 elide: Text.ElideRight
                 renderType: _controller.textRenderType
                 font.pixelSize: 12 * _controller.dpiFactor
@@ -118,7 +119,7 @@ Rectangle {
             renderType: _controller.textRenderType
             text: root.taskSummary
             elide: Text.ElideRight
-            color: _style.taskFontColor
+            color: (root.taskObj && root.taskObj.priority === Task_.PriorityHigh) ? _style.hotColor : _style.taskFontColor
             font.bold: true
             anchors {
                 verticalCenter: parent.verticalCenter
@@ -180,7 +181,7 @@ Rectangle {
                 id: iconItem
                 renderType: _controller.textRenderType
                 anchors.fill: parent
-                color: "white"
+                color: root.taskIsHot ? _style.hotColor : "white"
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: 23 * _controller.dpiFactor
@@ -255,9 +256,9 @@ Rectangle {
         function colorForPriority(priority)
         {
             if (priority === Task_.PriorityLow) {
-                return "cyan"
+                return _style.coldColor
             } else if (priority === Task_.PriorityHigh) {
-                return "orange"
+                return _style.hotColor
             }
             return "white" // or whatever color
         }

@@ -8,6 +8,8 @@ Rectangle {
     property bool isLastIndex:  true
     property bool isSelected: false
     property QtObject tagObj: null
+    property bool hasTasks: tagObj && root.tagObj.taskModel.count > 0
+    property bool isHotTag: tagObj && tagObj.name === "Hot"
 
     height: _style.tagTabHeight
     color: "black"
@@ -20,7 +22,7 @@ Rectangle {
             id: tagText
             renderType: _controller.textRenderType
             text: root.tagObj ? root.tagObj.name : ""
-            color: _style.tagTabTextColor
+            color: (root.hasTasks && root.isHotTag) ? _style.hotColor : _style.tagTabTextColor
             font.bold: true
             font.pixelSize: _style.tagTabFontSize
         }
@@ -29,7 +31,7 @@ Rectangle {
             renderType: _controller.textRenderType
             text: root.tagObj ? (root.tagObj.taskModel.count > 0 ? " (" + root.tagObj.taskModel.count + ")" : "")
                               : ""
-            color: _style.tagTabTextColor
+            color: (root.hasTasks && root.isHotTag) ? _style.hotColor : _style.tagTabTextColor
             anchors.verticalCenter: tagText.verticalCenter
             anchors.verticalCenterOffset: -1
             font.pixelSize: tagText.font.pixelSize - 1
@@ -45,7 +47,7 @@ Rectangle {
         anchors.rightMargin: separator.visible ? -separator.anchors.leftMargin - 1 : 0
         height: _style.tagTabSelectionHeight
         visible: isSelected
-        color: "#43ACE8"
+        color: root.isHotTag ? _style.hotColor : "#43ACE8"
     }
 
     Rectangle {
