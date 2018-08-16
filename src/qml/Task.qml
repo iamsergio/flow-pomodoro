@@ -265,7 +265,7 @@ Rectangle {
 
         color: root.taskObj ? colorForPriority(root.taskObj.priority) : "white"
         text: root.taskObj ? root.taskObj.priorityStr : ""
-        visible: root.taskObj !== null && root.taskObj.priority !== Controller.PriorityNone
+        visible: root.taskObj && root.taskObj.priority === Controller.PriorityLow // Hot is already displayed via a different color
         anchors {
             bottom: parent.bottom
             right: parent.right
