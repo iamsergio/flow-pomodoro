@@ -60,6 +60,8 @@ static QVariant tasksDataFunction(const TaskList &list, int index, int role)
             }
         }
         break;
+    case Storage::TagsStrSectionRole:
+        return task ? task->tagsStr() : QString();
     }
 
     return QVariant();
@@ -110,6 +112,7 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     m_data.tasks.insertRole("task", Q_NULLPTR, TaskRole);
     m_data.tasks.insertRole("taskPtr", Q_NULLPTR, TaskPtrRole);
     m_data.tasks.insertRole("dueDateSection", Q_NULLPTR, DueDateSectionRole);
+    m_data.tasks.insertRole("tagsStrSection", Q_NULLPTR, TagsStrSectionRole);
     m_stagedTasksModel->setSourceModel(m_data.tasks);
     m_stagedTasksModel->setFilterStaged(true);
 

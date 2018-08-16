@@ -4,7 +4,7 @@
   Copyright (C) 2013-2014 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
-  Copyright (C) 2015-2016 Sérgio Martins <iamsergio@gmail.com>
+  Copyright (C) 2015-2016,2018 Sérgio Martins <iamsergio@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -527,7 +527,7 @@ void Task::setKernel(Kernel *kernel)
 
 Storage *Task::storage() const
 {
-    return m_kernel ? m_kernel->storage() : 0;
+    return m_kernel ? m_kernel->storage() : nullptr;
 }
 
 bool Task::equals(Task *other) const
@@ -747,13 +747,13 @@ void Task::decrementPriority()
 
 QString Task::tagsStr() const
 {
-    QString result;
+    QStringList result;
     const TagRef::List &tags = this->tags();
     for (TagRef tagRef : tags) {
-        result += tagRef.tag()->name();
+        result << tagRef.tag()->name();
     }
 
-    return result;
+    return result.join(',');
 }
 
 void Task::toggleRecurrenceType(PeriodType type)
