@@ -28,7 +28,7 @@ class TaskFilterProxyModel : public QSortFilterProxyModel
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    explicit TaskFilterProxyModel(QObject *parent = 0);
+    explicit TaskFilterProxyModel(QObject *parent = nullptr);
 
     int count() const;
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const Q_DECL_OVERRIDE;
@@ -49,11 +49,11 @@ private Q_SLOTS:
 private:
     bool defaultLessThan(const Task::Ptr &leftTask, const Task::Ptr &rightTask) const;
     QString m_tagText;
-    bool m_filterUntagged;
-    int m_previousCount;
-    bool m_filterDueDated;
-    bool m_filterArchived;
-    bool m_filterStaged;
+    bool m_filterUntagged = false;
+    int m_previousCount = 0;
+    bool m_filterDueDated = false;
+    bool m_filterArchived = false;
+    bool m_filterStaged = false;
 };
 
 #endif

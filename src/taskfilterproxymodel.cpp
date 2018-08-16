@@ -24,11 +24,7 @@
 
 TaskFilterProxyModel::TaskFilterProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
-    , m_filterUntagged(false)
-    , m_previousCount(0)
-    , m_filterDueDated(false)
-    , m_filterArchived(false)
-    , m_filterStaged(false)
+
 {
     connect(this, &TaskFilterProxyModel::rowsInserted,
             this, &TaskFilterProxyModel::onSourceCountChanged);
