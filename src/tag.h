@@ -37,6 +37,7 @@ class Tag : public QObject, public Syncable
     Q_PROPERTY(int taskCount READ taskCount NOTIFY taskCountChanged)
     Q_PROPERTY(bool beingEdited READ beingEdited NOTIFY beingEditedChanged)
     Q_PROPERTY(QAbstractItemModel* taskModel READ taskModel CONSTANT)
+    Q_PROPERTY(QString sectionName READ sectionName CONSTANT)
     Q_OBJECT
 public:
     typedef QSharedPointer<Tag> Ptr;
@@ -59,6 +60,9 @@ public:
     Kernel *kernel() const;
     void setKernel(Kernel *kernel);
     bool isFake() const;
+
+    QString sectionName() const;
+    void setSectionName(const QString &);
 
 #if defined(QT_TESTLIB_LIB)
     static int tagCount;
@@ -85,6 +89,7 @@ private:
     Tag(const Tag &other);
     void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
     QString m_name;
+    QString m_sectionName;
     int m_taskCount = 0;
     bool m_beingEdited = false;
     QAbstractItemModel *m_taskModel = nullptr; // All unstaged tasks with this tag

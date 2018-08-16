@@ -175,6 +175,16 @@ bool Tag::isFake() const
     return m_isFake;
 }
 
+QString Tag::sectionName() const
+{
+    return m_sectionName;
+}
+
+void Tag::setSectionName(const QString &name)
+{
+    m_sectionName = name;
+}
+
 bool Tag::equals(Tag *other) const
 {
     return Syncable::equals(other) && m_name.trimmed().toLower() == other->name().trimmed().toLower();

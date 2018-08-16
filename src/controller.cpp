@@ -107,6 +107,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     m_allTasksTag = Tag::Ptr(new Tag(tr("All"), m_storage->archivedTasksModel()));
     m_hotTasksTag = Tag::Ptr(new Tag(tr("Hot"), m_storage->archivedHotTasksModel()));
     m_dueDateTasksTag = Tag::Ptr(new Tag(tr("with date"), m_storage->dueDateTasksModel()));
+    m_dueDateTasksTag->setSectionName(QStringLiteral("dueDateSection"));
     m_currentTag = m_untaggedTasksTag.data();
     updateExtendedTagModel();
 }
