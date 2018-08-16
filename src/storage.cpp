@@ -457,6 +457,11 @@ void Storage::connectTask(const Task::Ptr &task)
     connect(task.data(), &Task::statusChanged, m_stagedTasksModel,
             &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
 
+    connect(task.data(), &Task::priorityChanged, m_archivedHotTasksModel,
+            &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
+    connect(task.data(), &Task::stagedChanged, m_archivedHotTasksModel,
+            &TaskFilterProxyModel::invalidateFilter, Qt::UniqueConnection);
+
     connect(task.data(), &Task::priorityChanged, m_stagedTasksModel,
             &TaskFilterProxyModel::invalidate, Qt::UniqueConnection);
     connect(task.data(), &Task::priorityChanged, m_archivedTasksModel,
