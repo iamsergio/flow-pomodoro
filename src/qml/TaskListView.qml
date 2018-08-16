@@ -76,7 +76,7 @@ ListView {
         }
     }
 
-    section.property: _controller.currentTag ? _controller.currentTag.sectionName : ""
+    section.property: (_controller.currentTag && _controller.queueType === Controller.QueueTypeArchive) ? _controller.currentTag.sectionName : ""
     section.criteria: ViewSection.FullString
     section.delegate: sectionComponent
 
