@@ -78,6 +78,9 @@ bool TaskFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &s
     if (m_filterUntagged)
         return task->tags().isEmpty();
 
+    if (m_filterHot && task->priority() != Task::PriorityHigh)
+        return false;
+
     if (m_filterDueDated)
         return task->dueDate().isValid();
 
@@ -149,6 +152,14 @@ void TaskFilterProxyModel::setFilterStaged(bool filter)
         m_filterStaged = filter;
         if (filter)
             setFilterArchived(false);
+        invalidateFilter();
+    }
+}
+
+void TaskFilterProxyModel::setFilterHot(bool filter)
+{
+    if (filter != m_filterHot) {
+        m_filterHot = filter;
         invalidateFilter();
     }
 }
