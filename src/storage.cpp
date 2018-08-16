@@ -73,6 +73,7 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     , m_dueDateTasksModel(new TaskFilterProxyModel(this))
     , m_stagedTasksModel(new TaskFilterProxyModel(this))
     , m_archivedTasksModel(new TaskFilterProxyModel(this))
+    , m_archivedHotTasksModel(new TaskFilterProxyModel(this))
     , m_nonEmptyTagsModel(new NonEmptyTagFilterProxy(this))
     , m_extendedTagsModel(new ExtendedTagsModel(this))
     , m_savingInProgress(false)
@@ -121,6 +122,10 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     m_dueDateTasksModel->setFilterDueDated(true);
     m_dueDateTasksModel->setObjectName(QStringLiteral("Archived tasks with due date"));
     m_dueDateTasksModel->sort(0, Qt::AscendingOrder);
+
+    m_archivedHotTasksModel->setSourceModel(m_data.tasks);
+    m_archivedHotTasksModel->setFilterArchived(true);
+    m_archivedHotTasksModel->setFilterHot(true);
 
 #if defined(UNIT_TEST_RUN)
     AssertingProxyModel *assert = new AssertingProxyModel(this);
@@ -349,6 +354,11 @@ TaskFilterProxyModel *Storage::stagedTasksModel() const
 TaskFilterProxyModel *Storage::archivedTasksModel() const
 {
     return m_archivedTasksModel;
+}
+
+TaskFilterProxyModel *Storage::archivedHotTasksModel() const
+{
+    return m_archivedHotTasksModel;
 }
 
 void Storage::dumpDebugInfo()

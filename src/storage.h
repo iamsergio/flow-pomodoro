@@ -99,6 +99,7 @@ public:
     TaskFilterProxyModel* dueDateTasksModel() const;
     TaskFilterProxyModel* stagedTasksModel() const;
     TaskFilterProxyModel* archivedTasksModel() const;
+    TaskFilterProxyModel* archivedHotTasksModel() const;
     Task::Ptr taskAt(int index) const;
     Task::Ptr addTask(const QString &taskText, const QString &uid = QString());
     Task::Ptr prependTask(const QString &taskText);
@@ -170,6 +171,7 @@ private:
     TaskFilterProxyModel *m_dueDateTasksModel;
     TaskFilterProxyModel *m_stagedTasksModel;
     TaskFilterProxyModel *m_archivedTasksModel;
+    TaskFilterProxyModel *const m_archivedHotTasksModel;
     NonEmptyTagFilterProxy* m_nonEmptyTagsModel;
     ExtendedTagsModel *m_extendedTagsModel;
     bool m_savingInProgress;
