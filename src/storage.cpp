@@ -122,6 +122,7 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     m_dueDateTasksModel->sort(0, Qt::AscendingOrder);
 
     m_archivedHotTasksModel->setSourceModel(m_data.tasks);
+    m_archivedHotTasksModel->setSortByTagsFirst(true);
     m_archivedHotTasksModel->setFilterArchived(true);
     m_archivedHotTasksModel->setFilterHot(true);
 

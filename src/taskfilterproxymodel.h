@@ -41,6 +41,7 @@ public:
     void setFilterHot(bool filter);
     void invalidateFilter();
     void setSourceModel(QAbstractItemModel *sourceModel) Q_DECL_OVERRIDE;
+    void setSortByTagsFirst(bool);
 
 Q_SIGNALS:
     void countChanged(int count, int previousCount);
@@ -56,6 +57,7 @@ private:
     bool m_filterArchived = false;
     bool m_filterStaged = false;
     bool m_filterHot = false;
+    bool m_sortByTagsFirst = false;
 };
 
 #endif

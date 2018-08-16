@@ -745,6 +745,17 @@ void Task::decrementPriority()
     }
 }
 
+QString Task::tagsStr() const
+{
+    QString result;
+    const TagRef::List &tags = this->tags();
+    for (TagRef tagRef : tags) {
+        result += tagRef.tag()->name();
+    }
+
+    return result;
+}
+
 void Task::toggleRecurrenceType(PeriodType type)
 {
     if (!m_dueDate.isValid())

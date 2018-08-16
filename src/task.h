@@ -200,6 +200,9 @@ public:
     QString upperRightCornerText() const;
     void incrementPriority();
     void decrementPriority();
+
+    QString tagsStr() const;
+
 public Q_SLOTS:
     void toggleRecurrenceType(PeriodType type);
 

@@ -101,6 +101,15 @@ bool TaskFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &
 {
     Task::Ptr leftTask = left.data(Storage::TaskPtrRole).value<Task::Ptr>();
     Task::Ptr rightTask = right.data(Storage::TaskPtrRole).value<Task::Ptr>();
+
+    if (m_sortByTagsFirst) {
+        int comparison = leftTask->tagsStr().compare(rightTask->tagsStr(), Qt::CaseInsensitive);
+        if (comparison < 0)
+            return true;
+        if (comparison > 0)
+            return false;
+    }
+
     if (m_filterDueDated) {
         if (leftTask->dueDate() == rightTask->dueDate()) {
             return defaultLessThan(leftTask, rightTask);
@@ -174,6 +183,14 @@ void TaskFilterProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
 {
     QSortFilterProxyModel::setSourceModel(sourceModel);
     m_previousCount = rowCount();
+}
+
+void TaskFilterProxyModel::setSortByTagsFirst(bool first)
+{
+    if (m_sortByTagsFirst != first) {
+        m_sortByTagsFirst = first;
+        invalidate();
+    }
 }
 
 void TaskFilterProxyModel::onSourceCountChanged()
