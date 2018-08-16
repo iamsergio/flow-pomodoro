@@ -74,7 +74,7 @@ bool Utils::isMobile()
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WINRT)
     return true;
 #else
-    return false;
+    return qApp->platformName() == QLatin1String("webgl");
 #endif
 }
 
