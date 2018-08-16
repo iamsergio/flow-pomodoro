@@ -76,8 +76,6 @@ Storage::Storage(Kernel *kernel, QObject *parent)
     , m_archivedHotTasksModel(new TaskFilterProxyModel(this))
     , m_nonEmptyTagsModel(new NonEmptyTagFilterProxy(this))
     , m_extendedTagsModel(new ExtendedTagsModel(this))
-    , m_savingInProgress(false)
-    , m_loadingInProgress(false)
 {
     m_scheduleTimer.setSingleShot(true);
     m_scheduleTimer.setInterval(0);

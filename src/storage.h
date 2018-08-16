@@ -74,7 +74,7 @@ public:
         QByteArray instanceId;
     };
 
-    explicit Storage(Kernel *kernel, QObject *parent = 0);
+    explicit Storage(Kernel *kernel, QObject *parent = nullptr);
     ~Storage();
 
     const TagList& tags() const;
@@ -165,17 +165,17 @@ private:
     void connectTask(const Task::Ptr &);
     int proxyRowToSource(int proxyIndex) const;
     QTimer m_scheduleTimer;
-    SortedTagsModel *m_sortedTagModel;
-    TaskFilterProxyModel *m_taskFilterModel;
-    TaskFilterProxyModel *m_untaggedTasksModel;
-    TaskFilterProxyModel *m_dueDateTasksModel;
-    TaskFilterProxyModel *m_stagedTasksModel;
-    TaskFilterProxyModel *m_archivedTasksModel;
+    SortedTagsModel *m_sortedTagModel = nullptr;
+    TaskFilterProxyModel *const m_taskFilterModel;
+    TaskFilterProxyModel *const m_untaggedTasksModel;
+    TaskFilterProxyModel *const m_dueDateTasksModel;
+    TaskFilterProxyModel *const m_stagedTasksModel;
+    TaskFilterProxyModel *const m_archivedTasksModel;
     TaskFilterProxyModel *const m_archivedHotTasksModel;
-    NonEmptyTagFilterProxy* m_nonEmptyTagsModel;
-    ExtendedTagsModel *m_extendedTagsModel;
-    bool m_savingInProgress;
-    bool m_loadingInProgress;
+    NonEmptyTagFilterProxy *const m_nonEmptyTagsModel;
+    ExtendedTagsModel *const m_extendedTagsModel;
+    bool m_savingInProgress = false;
+    bool m_loadingInProgress = false;
 };
 
 #endif
