@@ -105,6 +105,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
 
     m_untaggedTasksTag = Tag::Ptr(new Tag(tr("Untagged"), m_storage->untaggedTasksModel()));
     m_allTasksTag = Tag::Ptr(new Tag(tr("All"), m_storage->archivedTasksModel()));
+    m_hotTasksTag = Tag::Ptr(new Tag(tr("Hot"), m_storage->archivedHotTasksModel()));
     m_dueDateTasksTag = Tag::Ptr(new Tag(tr("with date"), m_storage->dueDateTasksModel()));
     m_currentTag = m_untaggedTasksTag.data();
     updateExtendedTagModel();
@@ -682,6 +683,8 @@ void Controller::updateExtendedTagModel()
     if (m_settings->showAllTasksView()) {
         extraTags << m_allTasksTag;
     }
+
+    extraTags << m_hotTasksTag;
 
     if (m_settings->supportsDueDate()) {
         extraTags << m_dueDateTasksTag;
@@ -1267,6 +1270,11 @@ bool Controller::expertMode() const
 Tag* Controller::allTasksTag() const
 {
     return m_allTasksTag.data();
+}
+
+Tag *Controller::hotTasksTag() const
+{
+    return m_hotTasksTag.data();
 }
 
 Tag* Controller::untaggedTasksTag() const

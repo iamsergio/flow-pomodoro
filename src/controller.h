@@ -203,6 +203,7 @@ public:
     bool expertMode() const;
 
     Tag* allTasksTag() const;
+    Tag* hotTasksTag() const;
     Tag* untaggedTasksTag() const;
     Tag* dueDateTasksTag() const;
 
@@ -362,6 +363,7 @@ private:
     int m_currentMenuIndex;
     bool m_expertMode;
     Tag::Ptr m_allTasksTag;
+    Tag::Ptr m_hotTasksTag;
     Tag::Ptr m_untaggedTasksTag;
     Tag::Ptr m_dueDateTasksTag;
     int m_selectedTaskIndex;

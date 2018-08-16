@@ -38,6 +38,7 @@ public:
     void setFilterDueDated(bool filter);
     void setFilterArchived(bool filter);
     void setFilterStaged(bool filter);
+    void setFilterHot(bool filter);
     void invalidateFilter();
     void setSourceModel(QAbstractItemModel *sourceModel) Q_DECL_OVERRIDE;
 
@@ -54,6 +55,7 @@ private:
     bool m_filterDueDated = false;
     bool m_filterArchived = false;
     bool m_filterStaged = false;
+    bool m_filterHot = false;
 };
 
 #endif

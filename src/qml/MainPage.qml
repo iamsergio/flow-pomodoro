@@ -58,6 +58,8 @@ Page {
 
                     if (_controller.currentTag === _controller.allTasksTag) {
                         return qsTr("No archived tasks found.")
+                    } else if (_controller.currentTag === _controller.hotTasksTag) {
+                        return qsTr("No hot tasks found.")
                     } else if (_controller.currentTag === _controller.untaggedTasksTag) {
                         return qsTr("No archived untagged tasks found.")
                     } else if (_controller.currentTag === _controller.dueDateTasksTag) {
