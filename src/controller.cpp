@@ -1177,8 +1177,11 @@ void Controller::addTask(const QString &text, bool startEditMode)
     if (m_currentTag && queueType() == QueueTypeArchive) {
         if (!m_currentTag->isFake())
             task->addTag(m_currentTag->name());
-        else if (m_currentTag.data() == m_dueDateTasksTag && !task->dueDate().isValid())
+        else if (m_currentTag.data() == m_dueDateTasksTag && !task->dueDate().isValid()) {
             task->setDueDate(QDate::currentDate());
+        } else if (m_currentTag.data() == m_hotTasksTag) {
+            task->setPriority(Task::PriorityHigh);
+        }
     }
 
     task->setStaged(m_queueType == QueueTypeToday);
