@@ -127,16 +127,19 @@ Kernel::Kernel(const RuntimeConfiguration &config, QObject *parent)
     , m_runtimeConfiguration(config)
     , m_tagManager(new TagManager(this))
     , m_storage(new JsonStorage(this, this))
-    , m_qmlEngine(new QQmlEngine(0)) // leak the engine, no point in wasting shutdown time. Also we get a qmldebug server crash if it's parented to qApp, which Kernel is
+    , m_qmlEngine(new QQmlEngine(nullptr)) // leak the engine, no point in wasting shutdown time. Also we get a qmldebug server crash if it's parented to qApp, which Kernel is
     , m_settings(config.settings() ? config.settings() : new Settings(this))
     , m_controller(new Controller(m_qmlEngine->rootContext(), this, m_storage, m_settings, this))
     , m_pluginModel(new PluginModel(this))
 #if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
-    , m_systrayIcon(0)
-    , m_trayMenu(0)
+    , m_systrayIcon(nullptr)
+    , m_trayMenu(nullptr)
 #endif
     , m_gitUpdater(new GitUpdater(this, this))
 {
+    if (!config.saveEnabled())
+        qDebug() << "Running in read only mode";
+
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/fontawesome-webfont.ttf"));
     QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/open-sans/OpenSans-Regular.ttf"));
     qApp->setFont(QFont(QStringLiteral("Open Sans")));

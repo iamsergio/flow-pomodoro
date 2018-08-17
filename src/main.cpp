@@ -223,6 +223,8 @@ int main(int argc, char *argv[])
 
     RuntimeConfiguration defaultConfig;
     defaultConfig.setDataFileName(defaultDataFileName());
+    defaultConfig.setSaveEnabled(!qApp->arguments().contains("--read-only"));
+
     Kernel kernel(defaultConfig);
     kernel.storage()->load();
 

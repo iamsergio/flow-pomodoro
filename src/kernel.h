@@ -45,7 +45,7 @@ class Kernel : public QObject
 {
     Q_OBJECT
 public:
-    explicit Kernel(const RuntimeConfiguration &, QObject *parent = 0);
+    explicit Kernel(const RuntimeConfiguration &, QObject *parent = nullptr);
     ~Kernel();
     Storage* storage() const;
     Controller *controller() const;
@@ -81,7 +81,7 @@ private:
     void loadPlugins();
     void notifyPlugins(TaskStatus newStatus);
 
-    RuntimeConfiguration m_runtimeConfiguration;
+    const RuntimeConfiguration m_runtimeConfiguration;
     TagManager *const m_tagManager;
     Storage *m_storage;
     QQmlEngine *m_qmlEngine;
