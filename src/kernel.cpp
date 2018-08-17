@@ -222,6 +222,9 @@ void Kernel::notifyPlugins(TaskStatus newStatus)
 void Kernel::setupSystray()
 {
 #if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
+    if (!Utils::platformSupportsWidgets())
+        return;
+
     m_systrayIcon = new QSystemTrayIcon(QIcon(":/img/icon.png"), this);
 
 # if !defined(Q_OS_MAC)
@@ -253,7 +256,7 @@ void Kernel::destroySystray()
 
 void Kernel::saveOrOpenUrl(const QUrl &url)
 {
-    if (url.isEmpty())
+    if (url.isEmpty() || !Utils::platformSupportsWidgets())
         return;
 
 #if defined(QT_WIDGETS_LIB)

@@ -318,6 +318,9 @@ void QuickView::showWidgetContextMenu(QPoint pos)
 {
 #ifdef QT_WIDGETS_LIB
 
+    if (!Utils::platformSupportsWidgets())
+        return;
+
     // Widget context menu because the QML one has OpenGL artifacts on many cards I've tested
 
     static QMenu *contextMenu = 0;

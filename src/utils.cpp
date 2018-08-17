@@ -74,7 +74,7 @@ bool Utils::isMobile()
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WINRT)
     return true;
 #else
-    return qApp->platformName() == QLatin1String("webgl");
+    return isWebGL();
 #endif
 }
 
@@ -151,4 +151,27 @@ void Utils::openUrl(const QUrl &url)
 
     if (!QProcess::startDetached(command, QStringList() << url.url()))
         qWarning() << "Failed to start command " << command << url.url();
+}
+
+bool Utils::platformSupportsTooltips()
+{
+#ifdef QT_WIDGETS_LIB
+    return !isWebGL();
+#else
+    return false;
+#endif
+}
+
+bool Utils::isWebGL()
+{
+    return qApp->platformName() == QLatin1String("webgl");
+}
+
+bool Utils::platformSupportsWidgets()
+{
+#ifdef QT_WIDGETS_LIB
+    return !isWebGL();
+#else
+    return false;
+#endif
 }

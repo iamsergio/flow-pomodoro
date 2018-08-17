@@ -32,6 +32,9 @@ namespace Utils {
     void keepScreenOn(bool);
     bool isMobile();
     bool isOSX();
+    bool isWebGL();
+    bool platformSupportsTooltips();
+    bool platformSupportsWidgets();
     qreal dpiFactor(QScreen *screen);
 }
 
