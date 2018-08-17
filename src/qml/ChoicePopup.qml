@@ -92,7 +92,7 @@ Item {
                 radius: 2 * _controller.dpiFactor
 
                 Column {
-                    id: column
+                    id: column1
                     anchors.fill: parent
 
                     Rectangle {
@@ -136,8 +136,8 @@ Item {
                         model: root.model
                         Choice {
                             objectName: "taskMenuChoice"
-                            anchors.left: column.left
-                            anchors.right: column.right
+                            anchors.left: column1.left
+                            anchors.right: column1.right
                             topLineVisible: index > 0
                             height: root.delegateHeight
                             fontAwesomeIconCode: iconRole
