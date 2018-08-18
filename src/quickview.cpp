@@ -332,11 +332,11 @@ void QuickView::showWidgetContextMenu(QPoint pos)
     }
 
     contextMenu = new QMenu();
-    QAction *pauseAction = m_controller->currentTask()->running() ? new QAction(tr("Pause"), contextMenu)
-                                                                  : new QAction(tr("Resume"), contextMenu);
-    QAction *stopAction = new QAction(tr("Stop"), contextMenu);
-    QAction *aboutAction = new QAction(tr("About"), contextMenu);
-    QAction *quitAction = new QAction(tr("Quit"), contextMenu);
+    auto pauseAction = m_controller->currentTask()->running() ? new QAction(tr("Pause"), contextMenu)
+                                                              : new QAction(tr("Resume"), contextMenu);
+    auto stopAction = new QAction(tr("Stop"), contextMenu);
+    auto aboutAction = new QAction(tr("About"), contextMenu);
+    auto quitAction = new QAction(tr("Quit"), contextMenu);
 
     if (!m_controller->rightClickedTask() && !m_controller->currentTask()->stopped()) {
         contextMenu->addAction(pauseAction);
