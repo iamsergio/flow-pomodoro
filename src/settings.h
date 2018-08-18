@@ -67,8 +67,8 @@ public:
     };
     Q_ENUM(GeometryType)
 
-    explicit Settings(QObject *parent = 0);
-    explicit Settings(const QString &filename, QObject *parent = 0); // Overload for unit-tests
+    explicit Settings(QObject *parent = nullptr);
+    explicit Settings(const QString &filename, QObject *parent = nullptr); // Overload for unit-tests
     ~Settings();
     void setValue(const QString &key, const QVariant &value);
     void scheduleSync();

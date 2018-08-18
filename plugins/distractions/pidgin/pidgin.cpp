@@ -84,7 +84,7 @@ void PidginPlugin::setQmlEngine(QQmlEngine *)
 
 QQuickItem *PidginPlugin::configureItem() const
 {
-    return 0;
+    return nullptr;
 }
 
 void PidginPlugin::setSettings(QSettings *)

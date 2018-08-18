@@ -40,7 +40,7 @@ public:
         ConfigItemRole
     };
 
-    explicit PluginModel(Kernel *kernel, QObject *parent = 0);
+    explicit PluginModel(Kernel *kernel, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QHash<int,QByteArray> roleNames() const override;

@@ -31,7 +31,7 @@ class Kernel;
 class Flow : public QObject {
     Q_OBJECT
 public:
-    explicit Flow(Kernel *kernel, QObject *parent = 0);
+    explicit Flow(Kernel *kernel, QObject *parent = nullptr);
 
 public Q_SLOTS:
     Q_SCRIPTABLE void saveOrOpenUrl(const QString &url);

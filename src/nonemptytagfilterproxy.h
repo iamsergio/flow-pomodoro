@@ -27,7 +27,7 @@ class NonEmptyTagFilterProxy : public QSortFilterProxyModel
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    explicit NonEmptyTagFilterProxy(QObject *parent = 0);
+    explicit NonEmptyTagFilterProxy(QObject *parent = nullptr);
 
     int count() const;
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;

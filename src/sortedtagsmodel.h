@@ -28,7 +28,7 @@ class SortedTagsModel : public QSortFilterProxyModel
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    explicit SortedTagsModel(QAbstractItemModel *source, QObject *parent = 0);
+    explicit SortedTagsModel(QAbstractItemModel *source, QObject *parent = nullptr);
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
     int count() const;
     Q_INVOKABLE Tag* at(int index) const; // qml convinience

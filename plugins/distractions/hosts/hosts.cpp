@@ -65,9 +65,9 @@ static QString hostsFileName()
 
 HostsPlugin::HostsPlugin() : QObject(), PluginInterface()
   , m_enabled(false)
-  , m_qmlEngine(0)
-  , m_configItem(0)
-  , m_settings(0)
+  , m_qmlEngine(nullptr)
+  , m_configItem(nullptr)
+  , m_settings(nullptr)
 {
     // Fixes crash in static mode, because qqmlimport calls QPluginLoader::staticPlugins() before us.
     moveToThread(qApp->thread());

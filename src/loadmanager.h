@@ -34,7 +34,7 @@ class LoadManager : public QObject
     Q_PROPERTY(bool aboutPageRequested READ aboutPageRequested WRITE setAboutPageRequested NOTIFY aboutPageRequestedChanged)
     Q_PROPERTY(bool taskContextMenuRequested READ taskContextMenuRequested WRITE setTaskContextMenuRequested NOTIFY taskContextMenuRequestedChanged)
 public:
-    explicit LoadManager(QObject *parent = 0);
+    explicit LoadManager(QObject *parent = nullptr);
 
     void setTaskContextMenuRequested(bool);
     bool taskContextMenuRequested() const;

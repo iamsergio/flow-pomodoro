@@ -27,7 +27,7 @@ class CheckBoxImpl : public QObject
     Q_OBJECT
     Q_PROPERTY(bool checked READ checked WRITE setChecked NOTIFY checkedChanged)
 public:
-    explicit CheckBoxImpl(QObject *parent = 0);
+    explicit CheckBoxImpl(QObject *parent = nullptr);
 
     bool checked() const;
     void setChecked(bool);

@@ -103,7 +103,7 @@ void KMailPlugin::setQmlEngine(QQmlEngine *)
 
 QQuickItem *KMailPlugin::configureItem() const
 {
-    return 0;
+    return nullptr;
 }
 
 void KMailPlugin::setSettings(QSettings *)

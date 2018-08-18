@@ -99,7 +99,7 @@ class _InternalModelBase : public QAbstractListModel
     Q_PROPERTY(int count READ count NOTIFY countChanged)
     Q_OBJECT
 public:
-    explicit _InternalModelBase(QObject *parent = 0) : QAbstractListModel(parent) {}
+    explicit _InternalModelBase(QObject *parent = nullptr) : QAbstractListModel(parent) {}
 
     int count() const
     {

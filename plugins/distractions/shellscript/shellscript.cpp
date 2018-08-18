@@ -79,8 +79,8 @@ private:
 ShellScriptPlugin::ShellScriptPlugin() : QObject(), PluginInterface()
   , m_enabled(false)
   , m_allowingDistractions(true)
-  , m_qmlEngine(0)
-  , m_configItem(0)
+  , m_qmlEngine(nullptr)
+  , m_configItem(nullptr)
 {
     m_scriptName = QStringLiteral("shell_script_plugin");
     const QString suffix =

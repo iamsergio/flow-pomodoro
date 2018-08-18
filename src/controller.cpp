@@ -703,7 +703,7 @@ bool Controller::anyOverlayVisible() const
 
 bool Controller::taskMenuVisible() const
 {
-    return m_rightClickedTask != 0;
+    return m_rightClickedTask != nullptr;
 }
 
 void Controller::toggleQueueType()
@@ -853,7 +853,7 @@ bool Controller::eventFilter(QObject *object, QEvent *event)
         } else if (newTagDialogVisible()) {
             setNewTagDialogVisible(false);
         } else if (m_rightClickedTask) {
-            setRightClickedTask(0);
+            setRightClickedTask(nullptr);
         } else if (m_tagBeingEdited) {
             setTagEditStatus(TagEditStatusNone);
         } else if (m_page != MainPage) {

@@ -24,7 +24,7 @@
 
 ExtendedTagsModel::ExtendedTagsModel(Storage *storage, QObject *parent)
     : QAbstractListModel(parent)
-    , m_sourceModel(0)
+    , m_sourceModel(nullptr)
     , m_storage(storage)
 {
     connect(this, &ExtendedTagsModel::rowsInserted, this, &ExtendedTagsModel::countChanged);
@@ -41,7 +41,7 @@ void ExtendedTagsModel::setSourceModel(QAbstractItemModel *model)
 {
     beginResetModel();
     if (m_sourceModel) {
-        disconnect(m_sourceModel, 0, this, 0);
+        disconnect(m_sourceModel, nullptr, this, nullptr);
     }
     m_sourceModel = model;
     if (model) {

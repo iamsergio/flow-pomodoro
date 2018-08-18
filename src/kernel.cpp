@@ -252,8 +252,8 @@ void Kernel::destroySystray()
 #if defined(QT_WIDGETS_LIB) && !defined(QT_NO_SYSTRAY)
     delete m_systrayIcon;
     delete m_trayMenu;
-    m_systrayIcon = 0;
-    m_trayMenu = 0;
+    m_systrayIcon = nullptr;
+    m_trayMenu = nullptr;
 #endif
 }
 

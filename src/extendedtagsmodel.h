@@ -34,7 +34,7 @@ class ExtendedTagsModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    explicit ExtendedTagsModel(Storage *, QObject *parent = 0);
+    explicit ExtendedTagsModel(Storage *, QObject *parent = nullptr);
     ~ExtendedTagsModel();
     void setSourceModel(QAbstractItemModel *);
 

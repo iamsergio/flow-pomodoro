@@ -39,7 +39,7 @@ class CircularProgressIndicator : public QQuickPaintedItem
     Q_PROPERTY(int innerBorderWidth READ innerBorderWidth WRITE setInnerBorderWidth NOTIFY innerBorderWidthChanged)
     Q_PROPERTY(int innerSpacing READ innerSpacing WRITE setInnerSpacing NOTIFY innerSpacingChanged)
 public:
-    explicit CircularProgressIndicator(QQuickItem *parent = 0);
+    explicit CircularProgressIndicator(QQuickItem *parent = nullptr);
     void paint(QPainter *painter) override;
 
     int dpiFactor() const;

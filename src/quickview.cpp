@@ -44,7 +44,7 @@
 #include <QDir>
 
 QuickView::QuickView(Kernel *kernel)
-    : QQuickView(kernel->qmlEngine(), 0)
+    : QQuickView(kernel->qmlEngine(), nullptr)
     , m_controller(kernel->controller())
 #ifdef DEVELOPER_MODE
     , m_useqresources(!Utils::isMobile())
@@ -323,11 +323,11 @@ void QuickView::showWidgetContextMenu(QPoint pos)
 
     // Widget context menu because the QML one has OpenGL artifacts on many cards I've tested
 
-    static QMenu *contextMenu = 0;
+    static QMenu *contextMenu = nullptr;
     if (contextMenu) {
         // Protect against re-entrancy
         contextMenu->deleteLater();
-        contextMenu = 0;
+        contextMenu = nullptr;
         return;
     }
 
@@ -350,7 +350,7 @@ void QuickView::showWidgetContextMenu(QPoint pos)
 
     QAction *action = contextMenu->exec(mapToGlobal(pos));
     contextMenu->deleteLater();
-    contextMenu = 0;
+    contextMenu = nullptr;
 
     if (action == aboutAction) {
         m_controller->setExpanded(true);
