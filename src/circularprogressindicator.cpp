@@ -22,18 +22,8 @@
 
 CircularProgressIndicator::CircularProgressIndicator(QQuickItem *parent)
     : QQuickPaintedItem(parent)
-    , m_dpiFactor(1)
     , m_backgroundColor(Qt::black)
     , m_foregroundColor(Qt::white)
-    , m_drawOutterBorder(true)
-    , m_value(0)
-    , m_minimumValue(0)
-    , m_maximumValue(100)
-    , m_outterBorderWidth(3)
-    , m_showStopIcon(false)
-    , m_fontPixelSize(12)
-    , m_innerBorderWidth(4)
-    , m_innerSpacing(4)
 {
 }
 

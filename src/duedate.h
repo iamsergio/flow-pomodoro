@@ -63,8 +63,8 @@ public:
 
 private:
     QDate m_date;
-    PeriodType m_periodType;
-    uint m_frequency;
+    PeriodType m_periodType = PeriodTypeNone;
+    uint m_frequency = 1;
 };
 
 #endif

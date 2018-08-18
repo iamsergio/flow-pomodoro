@@ -55,7 +55,7 @@ Q_SIGNALS:
 private:
     void setLastError(const QString &);
     void update(bool enable);
-    bool m_enabled;
+    bool m_enabled = false;
     QString m_lastError;
 };
 

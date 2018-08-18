@@ -68,10 +68,10 @@ public:
     };
 
     struct Data {
-        Data() : serializerVersion(JsonSerializerVersion1) {}
+        Data() {}
         TaskList tasks;
         QStringList tags;
-        int serializerVersion;
+        int serializerVersion = JsonSerializerVersion1;
         QByteArray instanceId;
     };
 

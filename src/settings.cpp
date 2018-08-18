@@ -26,28 +26,8 @@
 #include <QMetaType>
 #include <QDir>
 
-enum {
-    DefaultPomodoroDuration = 25
-};
-
 Settings::Settings(QObject *parent)
     : QSettings(QSettings::IniFormat, QSettings::UserScope, QStringLiteral("KDAB"), QStringLiteral("flow-pomodoro"), parent)
-    , m_syncScheduled(false)
-    , m_needsSync(false)
-    , m_defaultPomodoroDuration(DefaultPomodoroDuration)
-    , m_pomodoroFunctionalityDisabled(false)
-    , m_keepScreenOnDuringPomodoro(false)
-    , m_syncAtStartup(true)
-    , m_hideEmptyTags(false)
-    , m_showAllTasksView(false)
-    , m_useSystray(false)
-    , m_showTaskAge(false)
-    , m_stickyWindow(true)
-    , m_showContextMenuAfterAdd(true)
-    , m_supportsDueDate(true)
-    , m_supportsPriority(false)
-    , m_supportsEffort(false)
-    , m_supportsGitSync(false)
 {
     init();
 }

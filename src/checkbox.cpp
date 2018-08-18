@@ -21,7 +21,6 @@
 
 CheckBoxImpl::CheckBoxImpl(QObject *parent)
     : QObject(parent)
-    , m_checked(false)
 {
 
 }

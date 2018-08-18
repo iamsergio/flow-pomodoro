@@ -23,10 +23,6 @@
 #include <QDebug>
 
 RuntimeConfiguration::RuntimeConfiguration()
-    : m_pluginsSupported(true)
-    , m_settings(nullptr)
-    , m_saveEnabled(true)
-    , m_useSystray(true)
 {
 }
 

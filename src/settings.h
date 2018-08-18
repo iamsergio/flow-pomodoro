@@ -25,6 +25,10 @@
 
 #include <QSettings>
 
+enum {
+    DefaultPomodoroDuration = 25
+};
+
 class Settings : public QSettings {
     Q_OBJECT
     Q_PROPERTY(bool supportsGitSync READ supportsGitSync WRITE setSupportsGitSync NOTIFY supportsGitSyncChanged)
@@ -139,25 +143,25 @@ Q_SIGNALS:
 private:
     void init();
     void sync();
-    bool m_syncScheduled;
-    bool m_needsSync;
+    bool m_syncScheduled = false;
+    bool m_needsSync = false;
 
-    int m_defaultPomodoroDuration;
-    bool m_pomodoroFunctionalityDisabled;
-    bool m_keepScreenOnDuringPomodoro;
-    bool m_syncAtStartup;
-    bool m_hideEmptyTags;
-    bool m_showAllTasksView;
-    bool m_useSystray;
-    bool m_showTaskAge;
-    bool m_stickyWindow;
+    int m_defaultPomodoroDuration = DefaultPomodoroDuration;
+    bool m_pomodoroFunctionalityDisabled = false;
+    bool m_keepScreenOnDuringPomodoro = false;
+    bool m_syncAtStartup = true;
+    bool m_hideEmptyTags = false;
+    bool m_showAllTasksView = false;
+    bool m_useSystray = false;
+    bool m_showTaskAge = false;
+    bool m_stickyWindow = true;
     Position m_initialPosition;
     GeometryType m_geometryType;
-    bool m_showContextMenuAfterAdd;
-    bool m_supportsDueDate;
-    bool m_supportsPriority;
-    bool m_supportsEffort;
-    bool m_supportsGitSync;
+    bool m_showContextMenuAfterAdd = true;
+    bool m_supportsDueDate = true;
+    bool m_supportsPriority = false;
+    bool m_supportsEffort = false;
+    bool m_supportsGitSync = false;
     bool m_supportsToolTips = true;
 };
 

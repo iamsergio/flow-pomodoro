@@ -24,7 +24,6 @@
 #include <QDebug>
 
 Syncable::Syncable()
-    : m_revision(0)
 {
 }
 

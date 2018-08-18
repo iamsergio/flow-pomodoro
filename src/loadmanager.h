@@ -79,7 +79,7 @@ private:
     bool m_configurePageRequested;
     bool m_configurePopupRequested;
     bool m_archiveRequested;
-    bool m_taskListRequested;
+    bool m_taskListRequested = true;
     bool m_questionPopupRequested;
     bool m_inlineEditorRequested;
 };

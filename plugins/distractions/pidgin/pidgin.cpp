@@ -25,7 +25,6 @@
 #include <QDebug>
 
 PidginPlugin::PidginPlugin() : QObject(), PluginInterface()
-  , m_enabled(false)
 {
 }
 

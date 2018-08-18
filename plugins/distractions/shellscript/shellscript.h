@@ -61,13 +61,13 @@ private:
     void setLastError(const QString &);
     void update(bool blockDistractions);
     void startProcess(const QString &filename, const QStringList &arguments);
-    bool m_enabled;
+    bool m_enabled = false;
     QMutex m_mutex;
-    bool m_allowingDistractions;
+    bool m_allowingDistractions = true;
     QString m_scriptName;
     QString m_lastError;
-    QQmlEngine *m_qmlEngine;
-    QQuickItem *m_configItem;
+    QQmlEngine *m_qmlEngine = nullptr;
+    QQuickItem *m_configItem = nullptr;
 };
 
 #endif

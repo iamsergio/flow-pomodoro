@@ -27,7 +27,6 @@ LoadManager::LoadManager(QObject *parent)
     , m_configurePageRequested(!useDelayedLoading())
     , m_configurePopupRequested(!useDelayedLoading())
     , m_archiveRequested(!useDelayedLoading())
-    , m_taskListRequested(true)
     , m_questionPopupRequested(!useDelayedLoading())
     , m_inlineEditorRequested(!useDelayedLoading())
 {

@@ -49,10 +49,10 @@ public:
 private:
     QString m_dataFileName;
     QString m_flowDir;
-    bool m_pluginsSupported;
-    Settings *m_settings;
-    bool m_saveEnabled;
-    bool m_useSystray;
+    bool m_pluginsSupported = true;
+    Settings *m_settings = nullptr;
+    bool m_saveEnabled = true;
+    bool m_useSystray = true;
 };
 
 #endif

@@ -32,8 +32,6 @@ static uint capFrequency(uint frequency)
 }
 
 DueDate::DueDate()
-    : m_periodType(PeriodTypeNone)
-    , m_frequency(1)
 {
 }
 

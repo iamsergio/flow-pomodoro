@@ -42,7 +42,7 @@ protected:
     void setRevision(int);
     virtual QVariantMap toJson() const;
     QVariantMap m_unknownFieldsMap;
-    int m_revision;
+    int m_revision = 0;
     mutable QString m_uuid;
 
 private:

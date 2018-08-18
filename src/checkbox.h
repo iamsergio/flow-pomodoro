@@ -39,7 +39,7 @@ Q_SIGNALS:
     void checkedChanged();
 
 private:
-    bool m_checked;
+    bool m_checked = false;
 };
 
 #endif

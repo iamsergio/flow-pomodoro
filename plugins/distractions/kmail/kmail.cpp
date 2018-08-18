@@ -25,7 +25,6 @@
 #include <QDebug>
 
 KMailPlugin::KMailPlugin() : QObject(), PluginInterface()
-  , m_enabled(false)
 {
 }
 

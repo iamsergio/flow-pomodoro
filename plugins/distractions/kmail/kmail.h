@@ -58,7 +58,7 @@ private:
     void setSystrayIconsNotificationsEnabled(bool enabled);
     void setNewMailAgentEnabled(bool enabled);
     void update(bool enable);
-    bool m_enabled;
+    bool m_enabled = false;
     QString m_lastError;
 };
 

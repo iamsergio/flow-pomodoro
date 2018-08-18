@@ -91,18 +91,18 @@ Q_SIGNALS:
     void innerSpacingChanged();
 
 private:
-    int m_dpiFactor;
+    int m_dpiFactor = 1;
     QColor m_backgroundColor;
     QColor m_foregroundColor;
-    bool m_drawOutterBorder;
-    int m_value;
-    int m_minimumValue;
-    int m_maximumValue;
-    int m_outterBorderWidth;
-    bool m_showStopIcon;
-    int m_fontPixelSize;
-    int m_innerBorderWidth;
-    int m_innerSpacing;
+    bool m_drawOutterBorder = true;
+    int m_value = 0;
+    int m_minimumValue = 0;
+    int m_maximumValue = 100;
+    int m_outterBorderWidth = 3;
+    bool m_showStopIcon = false;
+    int m_fontPixelSize = 12;
+    int m_innerBorderWidth = 4;
+    int m_innerSpacing = 4;
 };
 
 #endif
