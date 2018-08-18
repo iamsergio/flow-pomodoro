@@ -1112,8 +1112,9 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
         if (m_addingTask && previousTask) {
             m_addingTask = false;
             QString summary = previousTask->summary();
-            if (m_queueType == QueueTypeToday) {
-                Tag::Ptr tag = tagForSummary(/*by-ref*/summary); // transforms "books: foo" into "foo" + tag books
+            // transforms "books: foo" into "foo" + tag books:
+            if (!(m_queueType == QueueTypeArchive && m_currentTag && !m_currentTag->isFake())) { // We don't do this if inside a view of a specific tag, only for "Today", or "Later/all", "Later/Hot"
+                Tag::Ptr tag = tagForSummary(/*by-ref*/summary);
                 if (tag) {
                     previousTask->addTag(tag->name());
                     previousTask->setSummary(summary);
