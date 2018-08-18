@@ -107,7 +107,7 @@ int ExtendedTagsModel::indexOf(const Tag *tag) const
 {
     const int count = rowCount(QModelIndex());
     for (int i = 0; i < count; ++i) {
-        Tag *t = data(index(i, 0), TagManager::TagRole).value<Tag*>();
+        auto t = data(index(i, 0), TagManager::TagRole).value<Tag*>();
         if (t == tag)
             return i;
     }

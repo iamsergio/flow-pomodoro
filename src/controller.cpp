@@ -266,7 +266,7 @@ static int indexOfTag(QAbstractItemModel *model, Tag *tag)
 {
     int count = model->rowCount();
     for (int i = 0; i < count; ++i) {
-        Tag *t = model->data(model->index(i, 0), TagManager::TagRole).value<Tag*>();
+        auto t = model->data(model->index(i, 0), TagManager::TagRole).value<Tag*>();
         if (t == tag)
             return i;
     }
@@ -293,7 +293,7 @@ void Controller::selectTagByFirstLetter(QChar c)
 {
     int count = tagsModel()->rowCount();
     for (int i = 0; i < count; ++i) {
-        Tag *t = tagsModel()->data(tagsModel()->index(i, 0), TagManager::TagRole).value<Tag*>();
+        auto t = tagsModel()->data(tagsModel()->index(i, 0), TagManager::TagRole).value<Tag*>();
         if (t->name().toLower().startsWith(c.toLower()))
             setCurrentTag(t);
     }

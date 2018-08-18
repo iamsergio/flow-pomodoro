@@ -65,7 +65,7 @@ private:
     void run()
     {
         QMutexLocker locker(m_mutex);
-        QProcess *process = new QProcess();
+        auto process = new QProcess();
         process->start(m_filename, m_args);
         process->waitForFinished();
         delete process;
@@ -137,7 +137,7 @@ void ShellScriptPlugin::update(bool allowDistractions)
     QStringList args;
     args << (allowDistractions ? QStringLiteral("allow") : QStringLiteral("disallow"));
 
-    RunScriptTask *task = new RunScriptTask(m_scriptName, args, &m_mutex);
+    auto task = new RunScriptTask(m_scriptName, args, &m_mutex);
     QThreadPool::globalInstance()->start(task);
 }
 
@@ -182,7 +182,7 @@ void ShellScriptPlugin::setQmlEngine(QQmlEngine *engine)
         return;
     }
 
-    QQmlContext *subContext = new QQmlContext(engine->rootContext());
+    auto subContext = new QQmlContext(engine->rootContext());
     m_configItem = qobject_cast<QQuickItem*>(component->create(subContext));
     subContext->setContextProperty(QStringLiteral("_plugin"), this);
 
