@@ -74,7 +74,7 @@ Overlay {
 
                         anchors.verticalCenter: parent.verticalCenter
                         width: 0.90 * parent.width
-                        height: 20
+                        height: parent.height
                         clip: true
                         wrapMode: TextInput.WordWrap
                         text: root.task ? root.task.summary : ""
