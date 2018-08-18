@@ -548,7 +548,7 @@ QString Controller::currentTitleText() const
             return currentTask()->summary();
         if (!m_expanded)
             return QString();
-        return m_queueType == QueueTypeToday ? tr("Today's queue") : tr("Later queue");
+        return inTodayView() ? tr("Today's queue") : tr("Later queue");
     }
 
 }
@@ -801,7 +801,7 @@ Task::Ptr Controller::taskAtCurrentTab(int taskIndex) const
 
 QAbstractItemModel *Controller::currentTabTaskModel() const
 {
-    if (m_queueType == QueueTypeToday)
+    if (inTodayView())
         return m_storage->stagedTasksModel();
 
     return m_currentTag ? m_currentTag->taskModel() : Q_NULLPTR;
@@ -1113,7 +1113,7 @@ void Controller::editTask(Task *t, Controller::EditMode editMode)
             m_addingTask = false;
             QString summary = previousTask->summary();
             // transforms "books: foo" into "foo" + tag books:
-            if (!(m_queueType == QueueTypeArchive && m_currentTag && !m_currentTag->isFake())) { // We don't do this if inside a view of a specific tag, only for "Today", or "Later/all", "Later/Hot"
+            if (!inSpecificTagView()) { // We don't do this if inside a view of a specific tag, only for "Today", or "Later/all", "Later/Hot"
                 Tag::Ptr tag = tagForSummary(/*by-ref*/summary);
                 if (tag) {
                     previousTask->addTag(tag->name());
@@ -1185,7 +1185,7 @@ void Controller::addTask(const QString &text, bool startEditMode)
         }
     }
 
-    task->setStaged(m_queueType == QueueTypeToday);
+    task->setStaged(inTodayView());
     editTask(Q_NULLPTR, EditModeNone);
 
     if (startEditMode) {
@@ -1328,9 +1328,19 @@ void Controller::setWindow(QWindow *window)
     }
 }
 
+bool Controller::inSpecificTagView() const
+{
+    return m_queueType == QueueTypeArchive && m_currentTag && !m_currentTag->isFake();
+}
+
+bool Controller::inTodayView() const
+{
+    return m_queueType == QueueTypeToday;
+}
+
 void Controller::dismissTaskMenu()
 {
-    setRightClickedTask(0);
+    setRightClickedTask(nullptr);
 }
 
 void Controller::dismissTaskMenuDelayed()

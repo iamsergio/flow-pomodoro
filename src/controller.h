@@ -213,6 +213,10 @@ public:
     QDate currentDate() const;
 
     void setWindow(QWindow *);
+
+    bool inSpecificTagView() const;
+    bool inTodayView() const;
+
 public Q_SLOTS:
     void dismissTaskMenuDelayed();
     void dismissTaskMenu();
