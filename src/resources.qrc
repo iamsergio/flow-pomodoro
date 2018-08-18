@@ -17,7 +17,6 @@
         <file>qml/FlowCheckBox.qml</file>
         <file>qml/FlowScrollBar.qml</file>
         <file>qml/FlowSwitch.qml</file>
-        <file>qml/GlobalContextMenu.qml</file>
         <file>qml/InputPopup.qml</file>
         <file>qml/Overlay.qml</file>
         <file>qml/Popup.qml</file>
