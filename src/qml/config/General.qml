@@ -369,6 +369,26 @@ Item {
                     value: showSupportsGitSync.checked
                 }
             }
+
+            Text {
+                visible: _controller.expertMode
+                text: qsTr("Remote URL")
+                font.pixelSize: 12 * _controller.dpiFactor
+            }
+
+            TextInput {
+                id: remoteUrlInput
+                visible: _controller.expertMode
+                width: windowPositionsCombo.width
+                height: 20 * _controller.dpiFactor
+                inputMethodHints: Qt.ImhNoPredictiveText
+                text: _settings.remoteUrl.toString()
+                Binding {
+                    target: _settings
+                    property: "remoteUrl"
+                    value: remoteUrlInput.text
+                }
+            }
         }
     }
 }
