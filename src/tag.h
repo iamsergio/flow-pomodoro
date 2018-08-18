@@ -54,7 +54,7 @@ public:
     void setBeingEdited(bool);
 
     QAbstractItemModel* taskModel();
-    QVariantMap toJson() const Q_DECL_OVERRIDE;
+    QVariantMap toJson() const override;
 
     bool operator==(const Tag &other) const;
     Kernel *kernel() const;
@@ -79,7 +79,7 @@ Q_SIGNALS:
     void beingEditedChanged();
 
 protected:
-    QVector<QString> supportedFields() const Q_DECL_OVERRIDE;
+    QVector<QString> supportedFields() const override;
 
 private:
     friend class TagManager;
@@ -87,7 +87,7 @@ private:
     Tag();
     explicit Tag(Kernel *kernel, const QString &name);
     Tag(const Tag &other);
-    void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
+    void fromJson(const QVariantMap &) override;
     QString m_name;
     QString m_sectionName;
     int m_taskCount = 0;

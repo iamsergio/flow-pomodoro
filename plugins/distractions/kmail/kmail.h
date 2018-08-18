@@ -36,17 +36,17 @@ class KMailPlugin : public QObject, public PluginInterface
 public:
     KMailPlugin();
 
-    void setEnabled(bool enabled) Q_DECL_OVERRIDE;
-    bool enabled() const Q_DECL_OVERRIDE;
+    void setEnabled(bool enabled) override;
+    bool enabled() const override;
 
-    void setTaskStatus(TaskStatus status) Q_DECL_OVERRIDE;
-    QString text() const Q_DECL_OVERRIDE;
-    QString helpText() const Q_DECL_OVERRIDE;
-    QObject *controller() Q_DECL_OVERRIDE;
-    void setQmlEngine(QQmlEngine *) Q_DECL_OVERRIDE;
-    QQuickItem* configureItem() const Q_DECL_OVERRIDE;
-    void setSettings(QSettings *) Q_DECL_OVERRIDE;
-    bool enabledByDefault() const Q_DECL_OVERRIDE;
+    void setTaskStatus(TaskStatus status) override;
+    QString text() const override;
+    QString helpText() const override;
+    QObject *controller() override;
+    void setQmlEngine(QQmlEngine *) override;
+    QQuickItem* configureItem() const override;
+    void setSettings(QSettings *) override;
+    bool enabledByDefault() const override;
 
     QString lastError() const;
 

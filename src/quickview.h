@@ -56,7 +56,7 @@ public Q_SLOTS:
     void showWidgetContextMenu(QPoint pos);
 
 protected:
-    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent *event) override;
 
 private Q_SLOTS:
     void toggleVisible();

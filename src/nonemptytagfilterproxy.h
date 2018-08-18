@@ -30,7 +30,7 @@ public:
     explicit NonEmptyTagFilterProxy(QObject *parent = 0);
 
     int count() const;
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const Q_DECL_OVERRIDE;
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
 
 private Q_SLOTS:
     void onSourceCountChanged(int count, int previousCount);

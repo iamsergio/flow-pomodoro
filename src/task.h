@@ -155,8 +155,8 @@ public:
     Task::Ptr toStrongRef() const;
     void setWeakPointer(const QWeakPointer<Task> &);
 
-    QVariantMap toJson() const Q_DECL_OVERRIDE;
-    void fromJson(const QVariantMap &) Q_DECL_OVERRIDE;
+    QVariantMap toJson() const override;
+    void fromJson(const QVariantMap &) override;
 
     TaskContextMenuModel *contextMenuModel() const;
     SortedTaskContextMenuModel *sortedContextMenuModel() const;
@@ -224,7 +224,7 @@ Q_SIGNALS:
     void upperRightCornerTextChanged();
 
 protected:
-    QVector<QString> supportedFields() const Q_DECL_OVERRIDE;
+    QVector<QString> supportedFields() const override;
 
 private Q_SLOTS:
     void onEdited();

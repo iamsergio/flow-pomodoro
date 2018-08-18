@@ -30,7 +30,7 @@ public:
 
     explicit SortedTaskContextMenuModel(QObject *parent = 0);
     ~SortedTaskContextMenuModel();
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const Q_DECL_OVERRIDE;
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
     int count() const;
     void toggleTag(int index);
 

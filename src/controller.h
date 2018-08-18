@@ -326,7 +326,7 @@ private:
     QAbstractItemModel *currentTabTaskModel() const;
     void setTaskStatus(TaskStatus status);
     void setTagEditStatus(TagEditStatus);
-    bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *, QEvent *) override;
 
     Kernel *m_kernel;
     int m_currentTaskDuration;

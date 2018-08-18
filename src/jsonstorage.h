@@ -37,8 +37,8 @@ public:
     static QByteArray serializeToJsonData(const Storage::Data &, const TagList &tags);
 
 protected:
-    void load_impl() Q_DECL_OVERRIDE;
-    void save_impl() Q_DECL_OVERRIDE;
+    void load_impl() override;
+    void save_impl() override;
 
 private:
     static QVariantMap toJsonVariantMap(const Storage::Data &, const TagList &tags);
