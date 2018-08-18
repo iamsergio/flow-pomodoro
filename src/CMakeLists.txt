@@ -7,6 +7,7 @@ set(flow_SRC
     controller.cpp
     duedate.cpp
     extendedtagsmodel.cpp
+    filedownloader.cpp
     genericlistmodel.h
     gitupdater.cpp
     gitutils.cpp

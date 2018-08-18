@@ -7,6 +7,7 @@ SOURCES += $$PWD/calendarcontroller.cpp \
            $$PWD/controller.cpp  \
            $$PWD/duedate.cpp \
            $$PWD/extendedtagsmodel.cpp \
+           $$PWD/filedownloader.cpp \
            $$PWD/gitupdater.cpp \
            $$PWD/gitutils.cpp \
            $$PWD/jsonstorage.cpp \
@@ -28,7 +29,7 @@ SOURCES += $$PWD/calendarcontroller.cpp \
            $$PWD/taskcontextmenumodel.cpp \
            $$PWD/taskfilterproxymodel.cpp \
            $$PWD/tooltipcontroller.cpp \
-           $$PWD/utils.cpp
+           $$PWD/utils.cpp \
 
 HEADERS += $$PWD/calendarcontroller.h \
            $$PWD/checkabletagmodel.h \
@@ -37,6 +38,7 @@ HEADERS += $$PWD/calendarcontroller.h \
            $$PWD/controller.h \
            $$PWD/duedate.h \
            $$PWD/extendedtagsmodel.h \
+           $$PWD/filedownloader.h \
            $$PWD/gitupdater.h \
            $$PWD/gitutils.h \
            $$PWD/jsonstorage.h      \
