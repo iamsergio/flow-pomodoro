@@ -76,6 +76,7 @@ void Settings::init()
     m_supportsPriority = value(QStringLiteral("supportsPriority"), false).toBool();
     m_supportsEffort = value(QStringLiteral("supportsEffort"), false).toBool();
     m_supportsGitSync = value(QStringLiteral("supportsGitSync"), false).toBool();
+    m_supportsToolTips = value(QStringLiteral("supportsToolTips"), true).toBool();
 
     const Position defaultPosition = PositionTop;
     m_initialPosition = static_cast<Settings::Position>(value(QStringLiteral("windowInitialPosition"), defaultPosition).toInt());
@@ -352,4 +353,9 @@ void Settings::setSupportsGitSync(bool supports)
         setValue(QStringLiteral("supportsGitSync"), supports);
         emit supportsGitSync();
     }
+}
+
+bool Settings::supportsToolTips() const
+{
+    return m_supportsToolTips;
 }

@@ -113,6 +113,8 @@ public:
     bool supportsGitSync() const;
     void setSupportsGitSync(bool);
 
+    bool supportsToolTips() const;
+
 private Q_SLOTS:
     void doSync();
 
@@ -156,6 +158,7 @@ private:
     bool m_supportsPriority;
     bool m_supportsEffort;
     bool m_supportsGitSync;
+    bool m_supportsToolTips = true;
 };
 
 #endif

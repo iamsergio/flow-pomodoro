@@ -19,6 +19,8 @@
 
 #include "tooltipcontroller.h"
 #include "utils.h"
+#include "kernel.h"
+#include "settings.h"
 
 #ifdef QT_WIDGETS_LIB
 # include <QToolTip>
@@ -27,8 +29,9 @@
 #include <QQuickItem>
 #include <QQuickWindow>
 
-ToolTipController::ToolTipController(QObject *parent)
+ToolTipController::ToolTipController(Kernel *kernel, QObject *parent)
     : QObject(parent)
+    , m_kernel(kernel)
 {
 }
 
@@ -37,6 +40,10 @@ void ToolTipController::showToolTip(QQuickItem *item, const QString &text)
 #ifdef QT_WIDGETS_LIB
     if (!Utils::platformSupportsTooltips())
         return;
+
+    if (!m_kernel->settings()->supportsToolTips())
+        return;
+
     QToolTip::showText(item->mapToScene(item->position()).toPoint() +
                                         item->window()->position(), text);
 #else

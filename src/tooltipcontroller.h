@@ -23,16 +23,19 @@
 #include <QObject>
 
 class QQuickItem;
+class Kernel;
 
 class ToolTipController : public QObject
 {
     Q_OBJECT
 public:
-    explicit ToolTipController(QObject *parent = 0);
+    explicit ToolTipController(Kernel *kernel, QObject *parent = nullptr);
 
 public Q_SLOTS:
     void showToolTip(QQuickItem *item, const QString &text);
     void hideToolTip();
+private:
+    Kernel *const m_kernel;
 };
 
 #endif

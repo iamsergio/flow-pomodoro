@@ -57,7 +57,7 @@ QuickView::QuickView(Kernel *kernel)
 {
     rootContext()->setContextProperty(QStringLiteral("_window"), this);
     rootContext()->setContextProperty(QStringLiteral("_gitUpdater"), kernel->gitUpdater());
-    rootContext()->setContextProperty(QStringLiteral("_toolTipController"), new ToolTipController(this));
+    rootContext()->setContextProperty(QStringLiteral("_toolTipController"), new ToolTipController(kernel, this));
     createStyleComponent();
 
     setIcon(QIcon(":/img/icon.png"));
