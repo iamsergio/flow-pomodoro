@@ -24,6 +24,7 @@
 #define FLOW_SETTINGS_H
 
 #include <QSettings>
+#include <QUrl>
 
 enum {
     DefaultPomodoroDuration = 25
@@ -48,6 +49,9 @@ class Settings : public QSettings {
     Q_PROPERTY(GeometryType geometryType READ geometryType WRITE setGeometryType NOTIFY geometryTypeChanged)
     Q_PROPERTY(Position initialPosition READ initialPosition WRITE setInitialPosition NOTIFY initialPositionChanged)
     Q_PROPERTY(QString fileName READ fileName CONSTANT)
+
+    Q_PROPERTY(QUrl remoteUrl READ remoteUrl WRITE setRemoteUrl NOTIFY remoteUrlChanged)
+    Q_PROPERTY(bool hasRemoteUrl READ hasRemoteUrl NOTIFY hasRemoteUrlChanged)
 public:
     enum Position {
         PositionNone = 0, // Window will appear where WM puts it
@@ -119,6 +123,10 @@ public:
 
     bool supportsToolTips() const;
 
+    QUrl remoteUrl() const;
+    void setRemoteUrl(const QUrl &);
+    bool hasRemoteUrl() const;
+
 private Q_SLOTS:
     void doSync();
 
@@ -139,6 +147,8 @@ Q_SIGNALS:
     void supportsPriorityChanged();
     void supportsEffortChanged();
     void supportsGitSyncChanged();
+    void remoteUrlChanged(const QUrl &);
+    void hasRemoteUrlChanged(bool);
 
 private:
     void init();
@@ -163,6 +173,7 @@ private:
     bool m_supportsEffort = false;
     bool m_supportsGitSync = false;
     bool m_supportsToolTips = true;
+    QUrl m_remoteUrl;
 };
 
 #endif

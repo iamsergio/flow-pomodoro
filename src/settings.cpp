@@ -57,6 +57,7 @@ void Settings::init()
     m_supportsEffort = value(QStringLiteral("supportsEffort"), false).toBool();
     m_supportsGitSync = value(QStringLiteral("supportsGitSync"), false).toBool();
     m_supportsToolTips = value(QStringLiteral("supportsToolTips"), true).toBool();
+    m_remoteUrl = value(QStringLiteral("remoteUrl")).toUrl();
 
     const Position defaultPosition = PositionTop;
     m_initialPosition = static_cast<Settings::Position>(value(QStringLiteral("windowInitialPosition"), defaultPosition).toInt());
@@ -338,4 +339,29 @@ void Settings::setSupportsGitSync(bool supports)
 bool Settings::supportsToolTips() const
 {
     return m_supportsToolTips;
+}
+
+QUrl Settings::remoteUrl() const
+{
+    return m_remoteUrl;
+}
+
+void Settings::setRemoteUrl(const QUrl &url)
+{
+    if (url != m_remoteUrl) {
+        const bool hadRemoteUrl = hasRemoteUrl();
+        m_remoteUrl = url;
+        setValue(QStringLiteral("remoteUrl"), url);
+
+        if (hadRemoteUrl != hasRemoteUrl()) {
+            emit hasRemoteUrlChanged(hasRemoteUrl());
+        }
+
+        emit remoteUrlChanged(url);
+    }
+}
+
+bool Settings::hasRemoteUrl() const
+{
+    return m_remoteUrl.isValid();
 }
