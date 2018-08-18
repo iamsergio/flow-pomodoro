@@ -382,7 +382,7 @@ Item {
                 width: windowPositionsCombo.width
                 height: 20 * _controller.dpiFactor
                 inputMethodHints: Qt.ImhNoPredictiveText
-                text: _settings.remoteUrl.toString()
+                text: _settings.remoteUrl
                 Binding {
                     target: _settings
                     property: "remoteUrl"
