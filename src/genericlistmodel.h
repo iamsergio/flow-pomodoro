@@ -117,7 +117,7 @@ public:
     _InternalModel(GenericListModel<T> &list)
         : _InternalModelBase(qApp) // So it has cpp ownership
         , m_list(list)
-        , m_dataFunction(Q_NULLPTR)
+        , m_dataFunction(nullptr)
     {
         connect(this, &_InternalModel::rowsInserted,
                 this, &_InternalModel::countChanged);
