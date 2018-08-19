@@ -36,7 +36,8 @@ public:
         TextRole = Qt::UserRole + 1,
         IconRole,
         CheckableRole,
-        DismissRole
+        DismissRole,
+        ActionRole // unused
     };
 
     enum OptionType {
