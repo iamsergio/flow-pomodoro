@@ -668,6 +668,7 @@ void Controller::setStartupFinished()
 
 void Controller::onRemoteFileDownloaded(const QByteArray &data)
 {
+    setOptionsContextMenuVisible(false);
     QFile f(m_storage->remoteDataFile());
     if (f.open(QIODevice::WriteOnly)) {
         f.write(data.constData(), data.size());
