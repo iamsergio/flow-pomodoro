@@ -33,7 +33,7 @@ Item {
         }
 
         Component.onCompleted: {
-            if (!_settings.hasRemoteUrl) {
+            if (!_settings.hasRemoteUrl || !_controller.isReadOnly) {
                 optionsModel.remove(1); // Remove "Download from remote"
             }
         }

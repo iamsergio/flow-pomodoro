@@ -87,6 +87,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool optionsContextMenuVisible READ optionsContextMenuVisible WRITE setOptionsContextMenuVisible NOTIFY optionsContextMenuVisibleChanged)
     Q_PROPERTY(bool startupFinished READ startupFinished NOTIFY startupFinishedChanged)
     Q_PROPERTY(QDate currentDate READ currentDate NOTIFY currentDateChanged)
+    Q_PROPERTY(bool isReadOnly READ isReadOnly CONSTANT)
 
 public:
     enum Page {
@@ -217,6 +218,8 @@ public:
 
     bool inSpecificTagView() const;
     bool inTodayView() const;
+
+    bool isReadOnly() const;
 
 public Q_SLOTS:
     void dismissTaskMenuDelayed();

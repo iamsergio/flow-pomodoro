@@ -699,7 +699,7 @@ void Controller::setTaskDueDate(Task *task, QDate dueDate)
 
 void Controller::downloadFromRemote()
 {
-    if (!m_settings->hasRemoteUrl() || m_fileDownloader.downloadInProgress())
+    if (!m_settings->hasRemoteUrl() || m_fileDownloader.downloadInProgress() || !isReadOnly())
         return;
 
     QUrl url = m_settings->remoteUrl();
@@ -1373,6 +1373,11 @@ bool Controller::inSpecificTagView() const
 bool Controller::inTodayView() const
 {
     return m_queueType == QueueTypeToday;
+}
+
+bool Controller::isReadOnly() const
+{
+    return !m_kernel->runtimeConfiguration().saveEnabled();
 }
 
 void Controller::dismissTaskMenu()

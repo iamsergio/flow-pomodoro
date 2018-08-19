@@ -371,14 +371,14 @@ Item {
             }
 
             Text {
-                visible: _controller.expertMode
+                visible: _controller.isReadOnly
                 text: qsTr("Remote URL")
                 font.pixelSize: 12 * _controller.dpiFactor
             }
 
             TextInput {
                 id: remoteUrlInput
-                visible: _controller.expertMode
+                visible: _controller.isReadOnly
                 width: windowPositionsCombo.width
                 height: 20 * _controller.dpiFactor
                 inputMethodHints: Qt.ImhNoPredictiveText

@@ -336,7 +336,7 @@ void QuickView::showWidgetContextMenu(QPoint pos)
     auto pauseAction = m_controller->currentTask()->running() ? new QAction(tr("Pause"), contextMenu)
                                                               : new QAction(tr("Resume"), contextMenu);
     auto stopAction = new QAction(tr("Stop"), contextMenu);
-    auto downloadRemoteAction = new QAction(tr("Download from Remote"), contextMenu);
+    auto downloadRemoteAction = new QAction(tr("Download from remote"), contextMenu);
     downloadRemoteAction->setEnabled(!m_controller->fileDownloader()->downloadInProgress());
     connect(m_controller->fileDownloader(), &FileDownloader::downloadInProgressChanged,
             downloadRemoteAction, [downloadRemoteAction, this] {
@@ -351,7 +351,7 @@ void QuickView::showWidgetContextMenu(QPoint pos)
         contextMenu->addAction(stopAction);
     }
 
-    if (m_kernel->settings()->hasRemoteUrl())
+    if (m_kernel->settings()->hasRemoteUrl() && m_controller->isReadOnly())
         contextMenu->addAction(downloadRemoteAction);
 
     if (m_controller->currentPage() != Controller::AboutPage)
