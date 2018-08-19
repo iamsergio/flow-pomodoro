@@ -657,12 +657,12 @@ void Controller::setStartupFinished()
 
 void Controller::onRemoteFileDownloaded(const QByteArray &data)
 {
-    QFile f(m_storage->remoteFileDownloadLocation());
+    QFile f(m_storage->remoteDataFile());
     if (f.open(QIODevice::WriteOnly)) {
         f.write(data.constData(), data.size());
-        qDebug() << "Downloaded to" << m_storage->remoteFileDownloadLocation();
+        qDebug() << "Downloaded to" << m_storage->remoteDataFile();
     } else {
-        emit showErrorPopup(QStringLiteral("Error opening file %1, %2").arg(m_storage->remoteFileDownloadLocation(), f.errorString()));
+        emit showErrorPopup(QStringLiteral("Error opening file %1, %2").arg(m_storage->remoteDataFile(), f.errorString()));
     }
 }
 

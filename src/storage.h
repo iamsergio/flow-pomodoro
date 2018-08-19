@@ -121,7 +121,7 @@ public:
 //------------------------------------------------------------------------------
 
     Q_INVOKABLE QString dataFile() const;
-    QString remoteFileDownloadLocation() const;
+    QString remoteDataFile() const;
 
 #if defined(UNIT_TEST_RUN)
     static int storageCount;

@@ -276,7 +276,7 @@ QString Storage::dataFile() const
     return m_kernel->runtimeConfiguration().dataFileName();
 }
 
-QString Storage::remoteFileDownloadLocation() const
+QString Storage::remoteDataFile() const
 {
     return dataFile() + QStringLiteral(".remote");
 }
