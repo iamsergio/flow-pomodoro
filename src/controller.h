@@ -88,6 +88,7 @@ class Controller : public QObject {
     Q_PROPERTY(bool startupFinished READ startupFinished NOTIFY startupFinishedChanged)
     Q_PROPERTY(QDate currentDate READ currentDate NOTIFY currentDateChanged)
     Q_PROPERTY(bool isReadOnly READ isReadOnly CONSTANT)
+    Q_PROPERTY(FileDownloader* fileDownloader READ fileDownloader CONSTANT)
 
 public:
     enum Page {

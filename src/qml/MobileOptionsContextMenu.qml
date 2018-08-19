@@ -13,6 +13,8 @@ Item {
         MobileOptionsContextMenuItem {
             textRole: "Download from remote"
             actionRole: "downloadRemote"
+            showBusyIndicatorRole: _controller.fileDownloader.downloadInProgress
+            dismissRole: false
         },
         MobileOptionsContextMenuItem {
             textRole: "About..."
@@ -29,7 +31,6 @@ Item {
         anchors.fill: parent
         model: optionsModel
         onChoiceClicked: {
-            _controller.optionsContextMenuVisible = false
             if (action === "configure") {
                 _controller.currentPage = Controller.ConfigurePage
             } else if (action === "about") {
