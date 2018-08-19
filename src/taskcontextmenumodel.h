@@ -54,6 +54,7 @@ public:
         QString text;
         QString icon;
         bool dismiss;
+        bool showBusyIndicator = false;
     };
 
     explicit TaskContextMenuModel(Task *task, QObject *parent = nullptr);

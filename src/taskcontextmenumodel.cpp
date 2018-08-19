@@ -94,7 +94,8 @@ QVariant TaskContextMenuModel::staticData(OptionType optionType, int role) const
         return option.icon;
     else if (role == DismissRole)
         return option.dismiss;
-
+    else if (role == ShowBusyIndicatorRole)
+        return option.showBusyIndicator;
     return QVariant();
 }
 
