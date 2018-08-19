@@ -335,7 +335,6 @@ void Controller::showPopup(const QString &text, PopupMessageType type)
 void Controller::onPopupButtonClicked(bool okClicked)
 {
     if (!m_popupCallbackOwner) {
-        qWarning() << "Null callback owner." << m_popupOkCallback;
         setPopupVisible(false);
         setNewTagDialogVisible(false);
         return;
