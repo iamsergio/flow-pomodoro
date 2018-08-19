@@ -14,7 +14,7 @@ Item {
             textRole: "Download from remote"
             actionRole: "downloadRemote"
             showBusyIndicatorRole: _controller.fileDownloader.downloadInProgress
-            enabledRole: !showBusyIndicatorRole
+            enabledRole: !showBusyIndicatorRole && _settings.hasRemoteUrl
             dismissRole: false
         },
         MobileOptionsContextMenuItem {
