@@ -7,6 +7,7 @@ Item {
     ListModel {
         id: optionsModel
         ListElement { textRole: "Configure ..."; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true; actionRole: "configure" }
+        ListElement { textRole: "Download from remote"; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true; actionRole: "downloadRemote" }
         ListElement { textRole: "About ..."; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true; actionRole: "about" }
         ListElement { textRole: "Quit"; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true; actionRole: "quit" }
     }
@@ -16,17 +17,25 @@ Item {
         model: optionsModel
         onChoiceClicked: {
             _controller.optionsContextMenuVisible = false
-            if (action === "quit") {
+            if (action === "configure") {
                 _controller.currentPage = Controller.ConfigurePage
             } else if (action === "about") {
                 _controller.currentPage = Controller.AboutPage
-            } else if (action === "configure") {
+            } else if (action === "quit") {
                 Qt.quit()
+            } else if (action === "downloadRemote") {
+                _controller.downloadFromRemote()
             }
         }
 
         onDismissPopup: {
             _controller.optionsContextMenuVisible = false
+        }
+
+        Component.onCompleted: {
+            if (!_settings.hasRemoteUrl) {
+                optionsModel.remove(1); // Remove "Download from remote"
+            }
         }
     }
 }
