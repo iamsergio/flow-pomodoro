@@ -25,7 +25,7 @@
 #include <QDebug>
 
 enum {
-    PushInterval = 1000 * 60, // 1 minute
+    PushInterval = 1000 * 60 * 30, // 30 minutes
     RetryInterval = 1000 * 5 // 5 seconds
 };
 
