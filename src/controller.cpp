@@ -672,6 +672,8 @@ void Controller::onRemoteFileDownloaded(const QByteArray &data)
     QFile f(m_storage->remoteDataFile());
     if (f.open(QIODevice::WriteOnly)) {
         f.write(data.constData(), data.size());
+        f.close();
+        m_storage->load();
         showPopup(QStringLiteral("Remote downloaded"), PopupMessageType_Info);
         qDebug() << "Downloaded to" << m_storage->remoteDataFile();
     } else {
