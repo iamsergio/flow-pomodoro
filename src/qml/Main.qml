@@ -24,7 +24,7 @@ Rectangle {
 
     Loader {
         // Delayed loading for startup performance on mobile
-        sourceComponent: _loadManager.questionPopupRequested ? Qt.createComponent("QuestionPopup.qml") : null
+        sourceComponent: _loadManager.questionPopupRequested ? Qt.createComponent("MessagePopup.qml") : null
         anchors.fill: parent
         z: main.z + 1
         objectName: "loader1"

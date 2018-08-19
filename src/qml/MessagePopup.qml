@@ -1,9 +1,13 @@
 import QtQuick 2.0
+import Controller 1.0
 
 Popup {
     id: root
     visible: _controller.popupVisible
-    icon: "\uf059"
+    icon: _controller.popupMessageType === Controller.PopupMessageType_Question ? "\uf059"
+                                                                                : ((_controller.popupMessageType === Controller.PopupMessageType_Warning) ? "\uf071"
+                                                                                                                                                          : "\uf05a")
+    showCancelButton: _controller.popupMessageType === Controller.PopupMessageType_Question
 
     contentItem:
     Item {

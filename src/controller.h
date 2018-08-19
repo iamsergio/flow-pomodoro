@@ -70,6 +70,7 @@ class Controller : public QObject {
     // Popup properties
     Q_PROPERTY(QString popupText READ popupText NOTIFY popupTextChanged)
     Q_PROPERTY(bool popupVisible READ popupVisible NOTIFY popupVisibleChanged)
+    Q_PROPERTY(PopupMessageType popupMessageType READ popupMessageType NOTIFY popupMessageTypeChanged)
     // Editing Tag properties
     Q_PROPERTY(TagEditStatus tagEditStatus READ tagEditStatus NOTIFY tagEditStatusChanged)
     // Other properties
@@ -125,6 +126,13 @@ public:
         QueueTypeArchive
     };
     Q_ENUM(QueueType)
+
+    enum PopupMessageType {
+        PopupMessageType_Question,
+        PopupMessageType_Warning,
+        PopupMessageType_Info
+    };
+    Q_ENUM(PopupMessageType)
 
     enum {
         NativeRendering = 0,
@@ -245,6 +253,7 @@ public Q_SLOTS:
     void selectTagByFirstLetter(QChar);
 
     void showQuestionPopup(QObject *obj, const QString &text, const QString &callback);
+    void showPopup(const QString &text, PopupMessageType);
     void onPopupButtonClicked(bool okClicked);
 
     void editTag(const QString &tagName);
@@ -267,6 +276,9 @@ public Q_SLOTS:
 
     void downloadFromRemote();
     FileDownloader* fileDownloader();
+
+    PopupMessageType popupMessageType() const;
+    void setPopupMessageType(PopupMessageType);
 
 private Q_SLOTS:
     void onTimerTick();
@@ -316,7 +328,7 @@ Q_SIGNALS:
     void newTagDialogVisibleChanged();
     void showPomodoroOverlayChanged();
     void taskEditorDismissed();
-    void showErrorPopup(const QString &text);
+    void popupMessageTypeChanged(PopupMessageType);
 
 private:
     void onRemoteFileDownloaded(const QByteArray &data);
@@ -383,6 +395,7 @@ private:
     int m_selectedTaskIndex;
     QWindow *m_window = nullptr;
     FileDownloader m_fileDownloader;
+    PopupMessageType m_popupMessageType = PopupMessageType_Question;
 };
 
 #endif

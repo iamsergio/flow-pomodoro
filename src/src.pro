@@ -46,7 +46,8 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/Main.qml \
                qml/MainDesktop.qml \
                qml/MainMobile.qml \
-               qml/MainPage.qml       \
+               qml/MainPage.qml \
+               qml/MessagePopup.qml \
                qml/MobileButton.qml \
                qml/MobileMenuBar.qml \
                qml/MobileOptionsContextMenu.qml \
@@ -57,7 +58,6 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/Overlay.qml \
                qml/Page.qml \
                qml/PomodoroOverlay.qml \
-               qml/QuestionPopup.qml  \
                qml/SmallText.qml      \
                qml/TabBar.qml \
                qml/TabBarItem.qml \

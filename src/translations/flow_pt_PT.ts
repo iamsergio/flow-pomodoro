@@ -216,14 +216,14 @@ Click the tag bar above to see tagged tasks.</source>
     </message>
 </context>
 <context>
-    <name>QuestionPopup</name>
+    <name>MessagePopup</name>
     <message>
-        <location filename="../qml/QuestionPopup.qml" line="32"/>
+        <location filename="../qml/MessagePopup.qml" line="32"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/QuestionPopup.qml" line="40"/>
+        <location filename="../qml/MessagePopup.qml" line="40"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>

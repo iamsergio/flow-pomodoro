@@ -113,7 +113,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     updateExtendedTagModel();
 
     connect(&m_fileDownloader, &FileDownloader::downloadError, this, [this] (const QString &errorText) {
-        emit showErrorPopup(QStringLiteral("Could not download from %1").arg(errorText));
+        showPopup(QStringLiteral("Could not download from %1").arg(errorText), PopupMessageType_Warning);
     });
 
     connect(&m_fileDownloader, &FileDownloader::fileDownloaded,
@@ -316,9 +316,21 @@ void Controller::showQuestionPopup(QObject *obj, const QString &text, const QStr
     m_popupCallbackOwner = obj;
     m_popupOkCallback = callback;
 
+    showPopup(text, PopupMessageType_Question);
+}
+
+void Controller::showPopup(const QString &text, PopupMessageType type)
+{
+    if (text.isEmpty()) {
+        Q_ASSERT(false);
+        return;
+    }
+
     setPopupText(text);
+    setPopupMessageType(type);
     setPopupVisible(true);
 }
+
 
 void Controller::onPopupButtonClicked(bool okClicked)
 {
@@ -660,9 +672,10 @@ void Controller::onRemoteFileDownloaded(const QByteArray &data)
     QFile f(m_storage->remoteDataFile());
     if (f.open(QIODevice::WriteOnly)) {
         f.write(data.constData(), data.size());
+        showPopup(QStringLiteral("Remote downloaded"), PopupMessageType_Info);
         qDebug() << "Downloaded to" << m_storage->remoteDataFile();
     } else {
-        emit showErrorPopup(QStringLiteral("Error opening file %1, %2").arg(m_storage->remoteDataFile(), f.errorString()));
+        showPopup(QStringLiteral("Error opening file %1, %2").arg(m_storage->remoteDataFile(), f.errorString()), PopupMessageType_Warning);
     }
 }
 
@@ -714,6 +727,19 @@ void Controller::downloadFromRemote()
 FileDownloader *Controller::fileDownloader()
 {
     return &m_fileDownloader;
+}
+
+Controller::PopupMessageType Controller::popupMessageType() const
+{
+    return m_popupMessageType;
+}
+
+void Controller::setPopupMessageType(Controller::PopupMessageType type)
+{
+    if (type != m_popupMessageType) {
+        m_popupMessageType = type;
+        emit popupMessageTypeChanged(type);
+    }
 }
 
 void Controller::updateExtendedTagModel()

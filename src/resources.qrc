@@ -22,12 +22,12 @@
         <file>qml/Popup.qml</file>
         <file>qml/PomodoroOverlay.qml</file>
         <file>qml/PushButton.qml</file>
-        <file>qml/QuestionPopup.qml</file>
         <file>qml/LoadingScreen.qml</file>
         <file>qml/Main.qml</file>
         <file>qml/MainDesktop.qml</file>
         <file>qml/MainMobile.qml</file>
         <file>qml/MainPage.qml</file>
+        <file>qml/MessagePopup.qml</file>
         <file>qml/MobileButton.qml</file>
         <file>qml/MobileStyle.qml</file>
         <file>qml/MobileMenuBar.qml</file>
