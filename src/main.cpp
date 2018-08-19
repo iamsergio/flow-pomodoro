@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
 
     RuntimeConfiguration runtimeConfig;
     runtimeConfig.setDataFileName(defaultDataFileName());
-    runtimeConfig.setMobileUI(Utils::platformRequiresMobileUI());
+    runtimeConfig.setMobileUI(Utils::platformRequiresMobileUI() || qApp->arguments().contains("--mobile"));
     runtimeConfig.setSaveEnabled(!qApp->arguments().contains("--read-only"));
 
     Kernel kernel(runtimeConfig);
