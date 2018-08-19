@@ -9,4 +9,5 @@ QtObject {
     property bool checkedRole: false
     property bool dismissRole: true
     property bool showBusyIndicatorRole: false
+    property bool enabledRole: true
 }

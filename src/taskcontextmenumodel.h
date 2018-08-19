@@ -38,7 +38,8 @@ public:
         CheckableRole,
         DismissRole,
         ActionRole, // unused
-        ShowBusyIndicatorRole
+        ShowBusyIndicatorRole,
+        EnabledRole
     };
 
     enum OptionType {
@@ -55,6 +56,7 @@ public:
         QString icon;
         bool dismiss;
         bool showBusyIndicator = false;
+        bool enabled = true;
     };
 
     explicit TaskContextMenuModel(Task *task, QObject *parent = nullptr);

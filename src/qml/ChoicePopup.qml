@@ -142,6 +142,7 @@ Item {
                         id: repeater
                         model: root.model
                         Choice {
+                            enabled: enabledRole
                             objectName: "taskMenuChoice"
                             anchors.left: column1.left
                             anchors.right: column1.right

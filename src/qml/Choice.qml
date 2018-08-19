@@ -35,7 +35,7 @@ Rectangle {
     }
 
     Text {
-        color: "black"
+        color: enabledRole ? "black" : "gray"
         renderType: _controller.textRenderType
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: icon.visible ? icon.right : parent.left

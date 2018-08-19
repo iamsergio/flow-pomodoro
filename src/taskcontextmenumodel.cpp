@@ -96,6 +96,8 @@ QVariant TaskContextMenuModel::staticData(OptionType optionType, int role) const
         return option.dismiss;
     else if (role == ShowBusyIndicatorRole)
         return option.showBusyIndicator;
+    else if (role == EnabledRole)
+        return option.enabled;
     return QVariant();
 }
 
@@ -129,6 +131,8 @@ QVariant TaskContextMenuModel::data(const QModelIndex &index, int role) const
         return QString();
     case ShowBusyIndicatorRole:
         return false;
+    case EnabledRole:
+        return true;
     case Qt::CheckStateRole:
         return tagIndex.data(Qt::CheckStateRole);
     }
@@ -145,6 +149,7 @@ QHash<int, QByteArray> TaskContextMenuModel::roleNames() const
     roles.insert(DismissRole, "dismissRole");
     roles.insert(ActionRole, "actionRole");
     roles.insert(ShowBusyIndicatorRole, "showBusyIndicatorRole");
+    roles.insert(EnabledRole, "enabledRole");
     roles.insert(Qt::CheckStateRole, "checkedRole");
 
     return roles;
