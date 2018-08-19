@@ -36,6 +36,7 @@ namespace Utils {
     bool platformSupportsTooltips();
     bool platformSupportsWidgets();
     qreal dpiFactor(QScreen *screen);
+    bool isValidJsonFile(const QString &path);
 }
 
 #endif

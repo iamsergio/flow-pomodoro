@@ -61,6 +61,7 @@ public:
     void destroySystray();
 
     void saveOrOpenUrl(const QUrl &url);
+    bool isReadOnly() const;
 
 Q_SIGNALS:
     void systrayLeftClicked();

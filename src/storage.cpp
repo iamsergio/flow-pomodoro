@@ -27,6 +27,7 @@
 #include "taskfilterproxymodel.h"
 #include "runtimeconfiguration.h"
 #include "nonemptytagfilterproxy.h"
+#include "utils.h"
 
 #if defined(UNIT_TEST_RUN)
 # include "assertingproxymodel.h"
@@ -273,12 +274,21 @@ int Storage::indexOfTag(const QString &name) const
 
 QString Storage::dataFile() const
 {
-    return m_kernel->runtimeConfiguration().dataFileName();
+    if (m_kernel->isReadOnly() && QFile::exists(remoteDataFile())) {
+        if (Utils::isValidJsonFile(remoteDataFile())) {
+            return remoteDataFile();
+        } else {
+            qWarning() << "Invalid json file" << remoteDataFile();
+            return m_kernel->runtimeConfiguration().dataFileName();
+        }
+    } else {
+        return m_kernel->runtimeConfiguration().dataFileName();
+    }
 }
 
 QString Storage::remoteDataFile() const
 {
-    return dataFile() + QStringLiteral(".remote");
+    return m_kernel->runtimeConfiguration().dataFileName() + QStringLiteral(".remote");
 }
 
 QAbstractItemModel *Storage::tagsModel() const

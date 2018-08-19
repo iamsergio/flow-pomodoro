@@ -27,6 +27,8 @@
 #include <QUrl>
 #include <QProcess>
 #include <QtMath>
+#include <QFile>
+#include <QJsonDocument>
 
 #ifdef Q_OS_ANDROID
 # include <QAndroidJniObject>
@@ -174,4 +176,18 @@ bool Utils::platformSupportsWidgets()
 #else
     return false;
 #endif
+}
+
+bool Utils::isValidJsonFile(const QString &path)
+{
+    QFile f(path);
+    if (!f.open(QFile::ReadOnly))
+        return false;
+
+    QByteArray contents = f.readAll();
+    if (contents.isEmpty())
+        return false;
+
+    auto document = QJsonDocument::fromJson(contents);
+    return !document.isNull();
 }

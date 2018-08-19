@@ -280,6 +280,11 @@ void Kernel::saveOrOpenUrl(const QUrl &url)
 #endif
 }
 
+bool Kernel::isReadOnly() const
+{
+    return !m_runtimeConfiguration.saveEnabled();
+}
+
 void Kernel::loadPlugins()
 {
     if (Utils::isMobile())
