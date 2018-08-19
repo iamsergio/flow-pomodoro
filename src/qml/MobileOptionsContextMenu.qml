@@ -6,9 +6,9 @@ Item {
     visible: _controller.optionsContextMenuVisible
     ListModel {
         id: optionsModel
-        ListElement { textRole: "Configure ..."; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true }
-        ListElement { textRole: "About ..."; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true }
-        ListElement { textRole: "Quit"; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true }
+        ListElement { textRole: "Configure ..."; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true; actionRole: "configure" }
+        ListElement { textRole: "About ..."; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true; actionRole: "about" }
+        ListElement { textRole: "Quit"; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true; actionRole: "quit" }
     }
 
     ChoicePopup {
@@ -16,11 +16,11 @@ Item {
         model: optionsModel
         onChoiceClicked: {
             _controller.optionsContextMenuVisible = false
-            if (index === 0) {
+            if (action === "quit") {
                 _controller.currentPage = Controller.ConfigurePage
-            } else if (index === 1) {
+            } else if (action === "about") {
                 _controller.currentPage = Controller.AboutPage
-            } else if (index === 2) {
+            } else if (action === "configure") {
                 Qt.quit()
             }
         }

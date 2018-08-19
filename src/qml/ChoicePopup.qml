@@ -5,7 +5,7 @@ Item {
     property alias model: repeater.model
     property int delegateHeight: _style.choiceDelegateHeight
     property string title: ""
-    signal choiceClicked(var index)
+    signal choiceClicked(var action)
     signal choiceToggled(bool checkState, string itemText)
     signal dismissPopup()
 
@@ -54,9 +54,9 @@ Item {
             root.dismissPopup()
         }
 
-        function choiceClicked(index, dismiss)
+        function choiceClicked(index, dismiss, action)
         {
-            root.choiceClicked(index)
+            root.choiceClicked(action)
             if (dismiss)
                 root.dismissPopup()
         }
@@ -147,7 +147,7 @@ Item {
                                 if (checkableRole) {
                                     root.choiceToggled(index)
                                 } else {
-                                    mouseArea.choiceClicked(index, dismiss)
+                                    mouseArea.choiceClicked(index, dismiss, actionRole)
                                 }
                             }
                             onToggled: {
