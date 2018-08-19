@@ -30,12 +30,12 @@ namespace Utils {
     void openUrl(const QUrl &);
     void printTimeInfo(const QString &location);
     void keepScreenOn(bool);
-    bool isMobile();
     bool isOSX();
     bool isWebGL();
     bool platformSupportsTooltips();
     bool platformSupportsWidgets();
-    qreal dpiFactor(QScreen *screen);
+    bool platformRequiresMobileUI();
+    qreal dpiFactor(QScreen *screen, bool isMobile);
     bool isValidJsonFile(const QString &path);
 }
 

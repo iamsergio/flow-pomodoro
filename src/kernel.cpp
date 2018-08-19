@@ -285,9 +285,14 @@ bool Kernel::isReadOnly() const
     return !m_runtimeConfiguration.saveEnabled();
 }
 
+bool Kernel::isMobileUI() const
+{
+    return m_runtimeConfiguration.isMobileUI();
+}
+
 void Kernel::loadPlugins()
 {
-    if (Utils::isMobile())
+    if (isMobileUI())
         return;
 
     static const QStringList pluginTypes = QStringList() << QStringLiteral("distractions");
@@ -368,7 +373,7 @@ void Kernel::checkDayChanged()
 
 void Kernel::maybeLoadPlugins()
 {
-    if (!Utils::isMobile() && m_runtimeConfiguration.pluginsSupported())
+    if (!isMobileUI() && m_runtimeConfiguration.pluginsSupported())
         loadPlugins();
 }
 

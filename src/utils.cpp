@@ -71,7 +71,7 @@ void Utils::keepScreenOn(bool keep)
 }
 
 
-bool Utils::isMobile()
+bool Utils::platformRequiresMobileUI()
 {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WINRT)
     return true;
@@ -105,7 +105,7 @@ static qreal userScaleFactor()
     return factor;
 }
 
-qreal Utils::dpiFactor(QScreen *screen)
+qreal Utils::dpiFactor(QScreen *screen, bool isMobile)
 {
     static QHash<QScreen*, qreal> s_dpiFactors;
     auto it = s_dpiFactors.constFind(screen);
@@ -118,7 +118,7 @@ qreal Utils::dpiFactor(QScreen *screen)
 
     const qreal screenDpi = screen->physicalDotsPerInch();
     qreal factor;
-    if (isMobile()) {
+    if (isMobile) {
         // Return the dpi racio against the phone where flow was prototyped in, so it looks the same.
         const qreal myOldPhoneDpi = 144.0;
         factor = screenDpi / myOldPhoneDpi;

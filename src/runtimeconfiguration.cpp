@@ -86,3 +86,13 @@ void RuntimeConfiguration::setUseSystray(bool use)
 {
     m_useSystray = use;
 }
+
+bool RuntimeConfiguration::isMobileUI() const
+{
+    return m_isMobileUI;
+}
+
+void RuntimeConfiguration::setMobileUI(bool is)
+{
+    m_isMobileUI = is;
+}

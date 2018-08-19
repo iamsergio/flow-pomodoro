@@ -104,7 +104,7 @@ static bool logsDebugToFile()
     return true;
 #endif
 
-    return Utils::isMobile();
+    return Utils::platformRequiresMobileUI();
 }
 
 void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -220,11 +220,12 @@ int main(int argc, char *argv[])
     app.installTranslator(&translator);
     Utils::printTimeInfo(QStringLiteral("main: installed QTranslator"));
 
-    RuntimeConfiguration defaultConfig;
-    defaultConfig.setDataFileName(defaultDataFileName());
-    defaultConfig.setSaveEnabled(!qApp->arguments().contains("--read-only"));
+    RuntimeConfiguration runtimeConfig;
+    runtimeConfig.setDataFileName(defaultDataFileName());
+    runtimeConfig.setMobileUI(Utils::platformRequiresMobileUI());
+    runtimeConfig.setSaveEnabled(!qApp->arguments().contains("--read-only"));
 
-    Kernel kernel(defaultConfig);
+    Kernel kernel(runtimeConfig);
     kernel.storage()->load();
 
     // app.connect(&app, &Application::focusObjectChanged, &onFocusObjectChanged);
@@ -235,7 +236,7 @@ int main(int argc, char *argv[])
     initDBus(&kernel);
     Utils::printTimeInfo(QStringLiteral("main: initialized dbus"));
 
-    if (Utils::isMobile()) {
+    if (runtimeConfig.isMobileUI()) {
         window.showMaximized(); // Don't use fullscreen on android
     } else {
         window.show();

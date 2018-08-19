@@ -46,6 +46,10 @@ public:
     bool useSystray() const;
     void setUseSystray(bool);
 
+    bool isMobileUI() const;
+    void setMobileUI(bool);
+
+
 private:
     QString m_dataFileName;
     QString m_flowDir;
@@ -53,6 +57,7 @@ private:
     Settings *m_settings = nullptr;
     bool m_saveEnabled = true;
     bool m_useSystray = true;
+    bool m_isMobileUI = false;
 };
 
 #endif

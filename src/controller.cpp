@@ -71,7 +71,7 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     , m_showPomodoroOverlay(false)
     , m_pomodoroStartTimeStamp(0)
     , m_textRenderType(NativeRendering)
-    , m_loadManager(new LoadManager(this))
+    , m_loadManager(new LoadManager(m_kernel, this))
     , m_addingTask(false)
     , m_currentMenuIndex(-1)
     , m_expertMode(false)
@@ -409,7 +409,7 @@ void Controller::setTaskStatus(TaskStatus status)
 qreal Controller::dpiFactor() const
 {
     QScreen *screen = m_window ? m_window->screen() : nullptr;
-    return Utils::dpiFactor(screen);
+    return Utils::dpiFactor(screen, m_kernel->isMobileUI());
 }
 
 bool Controller::popupVisible() const
@@ -507,7 +507,7 @@ void Controller::setQueueType(QueueType type)
 
 bool Controller::isMobile() const
 {
-    return Utils::isMobile();
+    return m_kernel->isMobileUI();
 }
 
 bool Controller::isIOS() const

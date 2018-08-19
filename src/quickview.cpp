@@ -66,8 +66,8 @@ QuickView::QuickView(Kernel *kernel)
     connect(m_kernel->settings(), &Settings::geometryTypeChanged, this, &QuickView::onWindowGeometryTypeChanged);
     connect(m_kernel->settings(), &Settings::stickyWindowChanged, this, &QuickView::setupWindowFlags);
 
-    QString main = Utils::isMobile() ? QStringLiteral("LoadingScreen.qml")
-                                     : QStringLiteral("MainDesktop.qml");
+    QString main = m_kernel->isMobileUI() ? QStringLiteral("LoadingScreen.qml")
+                                          : QStringLiteral("MainDesktop.qml");
 
     Utils::printTimeInfo(QStringLiteral("QuickView: Set Source START"));
     if (m_useqresources) {
@@ -81,7 +81,7 @@ QuickView::QuickView(Kernel *kernel)
     setColor(Qt::transparent);
     setDefaultAlphaBuffer(true); // Because some drivers don't request it. QTBUG-41074
 
-    if (Utils::isMobile()) {
+    if (m_kernel->isMobileUI()) {
         setResizeMode(QQuickView::SizeRootObjectToView);
     } else {
         setupWindowFlags();
@@ -95,7 +95,7 @@ QuickView::QuickView(Kernel *kernel)
     connect(kernel, &Kernel::systrayLeftClicked, this, &QuickView::toggleVisible);
     m_controller->setWindow(this);
 
-    if (!Utils::isMobile())
+    if (!m_kernel->isMobileUI())
         connect(this, &QWindow::screenChanged, this, &QuickView::setupSize);
 
     connect(kernel, &Kernel::dumpDebugInfoRequested, this, &QuickView::dumpDebug);
@@ -124,7 +124,7 @@ void QuickView::reloadQML()
 
 void QuickView::setupGeometry()
 {
-    if (Utils::isMobile())
+    if (m_kernel->isMobileUI())
         return;
 
     setupSize();
@@ -203,8 +203,8 @@ void QuickView::setupSize()
         return;
     }
 
-    setContractedWidth(width * Utils::dpiFactor(screen()));
-    setContractedHeight(height * Utils::dpiFactor(screen()));
+    setContractedWidth(width * Utils::dpiFactor(screen(), m_kernel->isMobileUI()));
+    setContractedHeight(height * Utils::dpiFactor(screen(), m_kernel->isMobileUI()));
 }
 
 QUrl QuickView::styleFileName() const
@@ -217,8 +217,8 @@ QUrl QuickView::styleFileName() const
         // User can override the default style by creating a Style.qml file in /home/<user>/.local/share/KDAB/flow/, or in FLOW_DIR (env variable)
         return QUrl::fromLocalFile(customStyleFileName);
     } else {
-        const QString filename = Utils::isMobile() ? QStringLiteral("MobileStyle.qml")
-                                                   : QStringLiteral("DefaultStyle.qml");
+        const QString filename = m_kernel->isMobileUI() ? QStringLiteral("MobileStyle.qml")
+                                                        : QStringLiteral("DefaultStyle.qml");
         // Developer mode doesn't use qrc:, so we can reload with F5
         return m_useqresources ? QUrl::fromLocalFile(qApp->applicationDirPath() + "/src/qml/" + filename)
                                : QUrl("qrc:/qml/" + filename);

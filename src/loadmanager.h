@@ -21,6 +21,7 @@
 #define LOADMANAGER_H
 
 #include <QObject>
+class Kernel;
 
 class LoadManager : public QObject
 {
@@ -34,7 +35,7 @@ class LoadManager : public QObject
     Q_PROPERTY(bool aboutPageRequested READ aboutPageRequested WRITE setAboutPageRequested NOTIFY aboutPageRequestedChanged)
     Q_PROPERTY(bool taskContextMenuRequested READ taskContextMenuRequested WRITE setTaskContextMenuRequested NOTIFY taskContextMenuRequestedChanged)
 public:
-    explicit LoadManager(QObject *parent = nullptr);
+    explicit LoadManager(Kernel *kernel, QObject *parent = nullptr);
 
     void setTaskContextMenuRequested(bool);
     bool taskContextMenuRequested() const;
@@ -73,7 +74,7 @@ Q_SIGNALS:
     void taskContextMenuRequestedChanged();
 
 private:
-
+    Kernel *const m_kernel;
     bool m_taskContextMenuRequested;
     bool m_aboutPageRequested;
     bool m_configurePageRequested;

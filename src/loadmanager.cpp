@@ -18,10 +18,11 @@
 */
 
 #include "loadmanager.h"
-#include "utils.h"
+#include "kernel.h"
 
-LoadManager::LoadManager(QObject *parent)
+LoadManager::LoadManager(Kernel *kernel, QObject *parent)
     : QObject(parent)
+    , m_kernel(kernel)
     , m_taskContextMenuRequested(!useDelayedLoading())
     , m_aboutPageRequested(!useDelayedLoading())
     , m_configurePageRequested(!useDelayedLoading())
@@ -47,7 +48,7 @@ bool LoadManager::taskContextMenuRequested() const
 
 bool LoadManager::useDelayedLoading() const
 {
-    return Utils::isMobile();
+    return m_kernel->isMobileUI();
 }
 
 void LoadManager::setAboutPageRequested(bool aboutPageRequested)

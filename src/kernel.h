@@ -62,6 +62,7 @@ public:
 
     void saveOrOpenUrl(const QUrl &url);
     bool isReadOnly() const;
+    bool isMobileUI() const;
 
 Q_SIGNALS:
     void systrayLeftClicked();
