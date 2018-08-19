@@ -24,6 +24,7 @@
 #define FLOW_CONTROLLER_H
 
 #include "task.h"
+#include "filedownloader.h"
 
 #include <QObject>
 #include <QString>
@@ -260,6 +261,9 @@ public Q_SLOTS:
 
     void setTaskDueDate(Task *task, QDate);
 
+    void downloadFromRemote();
+    FileDownloader* fileDownloader();
+
 private Q_SLOTS:
     void onTimerTick();
     void onCurrentTagDestroyed();
@@ -308,8 +312,10 @@ Q_SIGNALS:
     void newTagDialogVisibleChanged();
     void showPomodoroOverlayChanged();
     void taskEditorDismissed();
+    void showErrorPopup(const QString &text);
 
 private:
+    void onRemoteFileDownloaded(const QByteArray &data);
     void handleScreenChanged();
     Tag::Ptr tagForSummary(QString &summary_inout) const; // Transforms "books: Foo" into "Foo" and returns tag books
     void setSelectedTaskIndex(int);
@@ -372,6 +378,7 @@ private:
     Tag::Ptr m_dueDateTasksTag;
     int m_selectedTaskIndex;
     QWindow *m_window = nullptr;
+    FileDownloader m_fileDownloader;
 };
 
 #endif

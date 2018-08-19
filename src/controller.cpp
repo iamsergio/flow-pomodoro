@@ -111,6 +111,13 @@ Controller::Controller(QQmlContext *context, Kernel *kernel, Storage *storage,
     m_dueDateTasksTag->setSectionName(QStringLiteral("dueDateSection"));
     m_currentTag = m_untaggedTasksTag.data();
     updateExtendedTagModel();
+
+    connect(&m_fileDownloader, &FileDownloader::downloadError, this, [this] (const QString &errorText) {
+        emit showErrorPopup(QStringLiteral("Could not download from %1").arg(errorText));
+    });
+
+    connect(&m_fileDownloader, &FileDownloader::fileDownloaded,
+            this, &Controller::onRemoteFileDownloaded);
 }
 
 Controller::~Controller()
@@ -648,6 +655,17 @@ void Controller::setStartupFinished()
     emit startupFinishedChanged();
 }
 
+void Controller::onRemoteFileDownloaded(const QByteArray &data)
+{
+    QFile f(m_storage->remoteFileDownloadLocation());
+    if (f.open(QIODevice::WriteOnly)) {
+        f.write(data.constData(), data.size());
+        qDebug() << "Downloaded to" << m_storage->remoteFileDownloadLocation();
+    } else {
+        emit showErrorPopup(QStringLiteral("Error opening file %1, %2").arg(m_storage->remoteFileDownloadLocation(), f.errorString()));
+    }
+}
+
 void Controller::handleScreenChanged()
 {
     emit screenChanged();
@@ -677,6 +695,25 @@ void Controller::setTaskDueDate(Task *task, QDate dueDate)
     } else {
         task->setDueDate(dueDate);
     }
+}
+
+void Controller::downloadFromRemote()
+{
+    if (!m_settings->hasRemoteUrl() || m_fileDownloader.downloadInProgress())
+        return;
+
+    QUrl url = m_settings->remoteUrl();
+    if (url.scheme() != "http") {
+        qWarning() << "Only http is supported"; // for now?
+        return;
+    }
+
+    m_fileDownloader.downloadFile(url);
+}
+
+FileDownloader *Controller::fileDownloader()
+{
+    return &m_fileDownloader;
 }
 
 void Controller::updateExtendedTagModel()

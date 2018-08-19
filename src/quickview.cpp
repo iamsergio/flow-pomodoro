@@ -29,6 +29,7 @@
 #include "utils.h"
 #include "settings.h"
 #include "gitupdater.h"
+#include "filedownloader.h"
 
 #include <QQmlContext>
 #include <QString>
@@ -335,6 +336,13 @@ void QuickView::showWidgetContextMenu(QPoint pos)
     auto pauseAction = m_controller->currentTask()->running() ? new QAction(tr("Pause"), contextMenu)
                                                               : new QAction(tr("Resume"), contextMenu);
     auto stopAction = new QAction(tr("Stop"), contextMenu);
+    auto downloadRemoteAction = new QAction(tr("Download from Remote"), contextMenu);
+    downloadRemoteAction->setEnabled(!m_controller->fileDownloader()->downloadInProgress());
+    connect(m_controller->fileDownloader(), &FileDownloader::downloadInProgressChanged,
+            downloadRemoteAction, [downloadRemoteAction, this] {
+        downloadRemoteAction->setEnabled(!m_controller->fileDownloader()->downloadInProgress());
+    });
+
     auto aboutAction = new QAction(tr("About"), contextMenu);
     auto quitAction = new QAction(tr("Quit"), contextMenu);
 
@@ -342,6 +350,9 @@ void QuickView::showWidgetContextMenu(QPoint pos)
         contextMenu->addAction(pauseAction);
         contextMenu->addAction(stopAction);
     }
+
+    if (m_kernel->settings()->hasRemoteUrl())
+        contextMenu->addAction(downloadRemoteAction);
 
     if (m_controller->currentPage() != Controller::AboutPage)
         contextMenu->addAction(aboutAction);
@@ -361,6 +372,8 @@ void QuickView::showWidgetContextMenu(QPoint pos)
         m_controller->pausePomodoro();
     } else if (action == stopAction) {
         m_controller->stopPomodoro();
+    } else if (action == downloadRemoteAction) {
+        m_controller->downloadFromRemote();
     }
 
 #else

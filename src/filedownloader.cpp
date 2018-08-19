@@ -59,10 +59,8 @@ void FileDownloader::onFileDownloaded(QNetworkReply *reply)
     QByteArray contents = reply->readAll();
     reply->deleteLater();
 
-    if (!contents.isEmpty()) {
-        qDebug() << "File downloaded" << reply->url() << "; bytes=" << contents.size();
+    if (!contents.isEmpty())
         emit fileDownloaded(contents);
-    }
 
     emit downloadInProgressChanged(m_downloadInProgress);
 }
