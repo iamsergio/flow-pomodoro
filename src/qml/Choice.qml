@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.4
 
 Rectangle {
     id: root
@@ -76,5 +77,14 @@ Rectangle {
         onToggled: {
             root.toggled(!checkedRole, textRole)
         }
+    }
+
+    BusyIndicator {
+        visible: showBusyIndicatorRole
+        anchors.right: parent.right
+        anchors.rightMargin: 5 * _controller.dpiFactor
+        anchors.verticalCenter: parent.verticalCenter
+        height: parent.height
+        width: parent.height
     }
 }

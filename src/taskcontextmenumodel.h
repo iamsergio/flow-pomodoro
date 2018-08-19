@@ -37,7 +37,8 @@ public:
         IconRole,
         CheckableRole,
         DismissRole,
-        ActionRole // unused
+        ActionRole, // unused
+        ShowBusyIndicatorRole
     };
 
     enum OptionType {
