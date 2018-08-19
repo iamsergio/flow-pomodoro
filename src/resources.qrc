@@ -32,6 +32,7 @@
         <file>qml/MobileStyle.qml</file>
         <file>qml/MobileMenuBar.qml</file>
         <file>qml/MobileOptionsContextMenu.qml</file>
+        <file>qml/MobileOptionsContextMenuItem.qml</file>
         <file>qml/MobileTabView.qml</file>
         <file>qml/NewTagDialog.qml</file>
         <file>qml/Page.qml</file>

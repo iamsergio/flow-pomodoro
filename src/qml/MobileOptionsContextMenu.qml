@@ -4,15 +4,28 @@ import Controller 1.0
 Item {
     anchors.fill: parent
     visible: _controller.optionsContextMenuVisible
-    ListModel {
-        id: optionsModel
-        ListElement { textRole: "Configure ..."; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true; actionRole: "configure" }
-        ListElement { textRole: "Download from remote"; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true; actionRole: "downloadRemote" }
-        ListElement { textRole: "About ..."; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true; actionRole: "about" }
-        ListElement { textRole: "Quit"; checkableRole: false; iconRole: ""; checkedRole: false; dismissRole: true; actionRole: "quit" }
-    }
+
+    property list<QtObject> optionsModel: [
+        MobileOptionsContextMenuItem {
+            textRole: "Configure ..."
+            actionRole: "configure"
+        },
+        MobileOptionsContextMenuItem {
+            textRole: "Download from remote"
+            actionRole: "downloadRemote"
+        },
+        MobileOptionsContextMenuItem {
+            textRole: "About..."
+            actionRole: "about"
+        },
+        MobileOptionsContextMenuItem {
+            textRole: "Quit"
+            actionRole: "quit"
+        }
+    ]
 
     ChoicePopup {
+        objectName: "ChoicePopup"
         anchors.fill: parent
         model: optionsModel
         onChoiceClicked: {

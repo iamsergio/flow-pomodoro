@@ -145,7 +145,6 @@ void flowMessageHandler(QtMsgType type, const QMessageLogContext &context, const
 
     if (type == QtFatalMsg)
         abort();
-
 }
 
 static QString defaultFlowDir()

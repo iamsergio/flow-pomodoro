@@ -11,8 +11,15 @@ Item {
 
     function modelCount()
     {
-        if (model !== null && typeof model !== "undefined")
-            return model.count
+        if (model !== null && typeof model !== "undefined") {
+            if (typeof model.count === "undefined") {
+                // property list <QtObject>
+                return model.length
+            } else {
+                // C++ model
+                return model.count
+            }
+        }
 
         return 0
     }

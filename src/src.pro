@@ -50,6 +50,7 @@ OTHER_FILES += qml/AboutPage.qml      \
                qml/MobileButton.qml \
                qml/MobileMenuBar.qml \
                qml/MobileOptionsContextMenu.qml \
+               qml/MobileOptionsContextMenuItem.qml \
                qml/MobileStyle.qml \
                qml/MobileTabView.qml \
                qml/NewTagDialog.qml \
