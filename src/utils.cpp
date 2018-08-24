@@ -151,8 +151,10 @@ void Utils::openUrl(const QUrl &url)
     command = "firefox";
 #endif
 
+#if !defined(Q_OS_IOS) // No QProcesss
     if (!QProcess::startDetached(command, QStringList() << url.url()))
         qWarning() << "Failed to start command " << command << url.url();
+#endif
 }
 
 bool Utils::platformSupportsTooltips()

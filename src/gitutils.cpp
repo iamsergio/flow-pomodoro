@@ -29,7 +29,11 @@ using namespace GitUtils;
 
 static int runGit(const QStringList &args)
 {
+#if !defined(Q_OS_IOS)
     return QProcess::execute(QStringLiteral("git"), args);
+#else
+    return 0;
+#endif
 }
 
 bool GitUtils::isInsideGit(const QString &filename)
