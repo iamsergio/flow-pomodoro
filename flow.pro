@@ -1,5 +1,10 @@
 TEMPLATE = subdirs
-SUBDIRS += plugins src
+
+!ios:!android {
+    SUBDIRS += plugins
+}
+
+SUBDIRS += src
 
 static {
     CONFIG += ordered
