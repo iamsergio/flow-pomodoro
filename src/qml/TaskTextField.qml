@@ -35,7 +35,6 @@ TextField {
         }
     }
 
-    color: "white"
     font.pixelSize: 13 * _controller.dpiFactor
 
     function save()
