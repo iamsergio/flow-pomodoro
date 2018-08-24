@@ -14,7 +14,7 @@ qtHaveModule(widgets):!android:!ios:!qnx {
     DEFINES += FLOW_DBUS
 }
 
-static {
+static:!ios {
     DEFINES += FLOW_STATIC_BUILD
     LIBS += -lshellscript -lhosts
     LIBPATH += ../plugins/distractions/
