@@ -48,6 +48,7 @@ typedef QGuiApplication Application;
 #include <QScreen>
 #include <QDir>
 #include <QSettings>
+#include <QtQuickControls2/QQuickStyle>
 
 void initDBus(Kernel *kernel)
 {
@@ -194,6 +195,15 @@ static void onFocusObjectChanged(QObject *obj)
 }
 */
 
+static void initQQC2Style()
+{
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+    QQuickStyle::setStyle("Material");
+#else
+    QQuickStyle::setStyle("Fusion");
+#endif
+}
+
 int main(int argc, char *argv[])
 {
     Utils::printTimeInfo(QStringLiteral("main"));
@@ -209,7 +219,10 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(shellscriptplugin);
     Q_INIT_RESOURCE(hostsplugin);
 #endif
-    QGuiApplication::setAttribute(Qt::AA_DisableHighDpiScaling); // because Qt only supports integer factors.
+
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    initQQC2Style();
+
     Application app(argc, argv);
     Utils::printTimeInfo(QStringLiteral("main: created QApplication"));
     app.setOrganizationName(QStringLiteral("KDAB"));

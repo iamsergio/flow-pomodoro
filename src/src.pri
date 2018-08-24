@@ -1,4 +1,4 @@
-QT += quick
+QT += quick quickcontrols2
 
 SOURCES += $$PWD/calendarcontroller.cpp \
            $$PWD/checkabletagmodel.cpp \
