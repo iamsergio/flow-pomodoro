@@ -85,7 +85,7 @@ static QString logFile()
 
 static bool acceptsWarning(const QString &warning)
 {
-    // False positive binding loop or a bug in QtQuick.Controls, ignore it.
+    // False positive binding loop
     if (warning.contains(QStringLiteral("Binding loop detected for property")) && warning.contains(QStringLiteral("FlowCheckBox.qml")))
         return false;
 
@@ -212,7 +212,6 @@ int main(int argc, char *argv[])
 #endif
 
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QQuickStyle::setStyle("Material");
 
     Application app(argc, argv);
     Utils::printTimeInfo(QStringLiteral("main: created QApplication"));

@@ -1,6 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.1
+import QtQuick.Controls 2.0
 
 Item {
     id: root
@@ -23,27 +22,18 @@ Item {
 
         TextArea {
             id: textArea
-            height: 100 * _controller.dpiFactor
-            anchors.horizontalCenter: parent.horizontalCenter
+            height: 120 * _controller.dpiFactor
+            anchors.left: parent.left
+            anchors.right: parent.right
             font.pixelSize: 12 * _controller.dpiFactor
             text: _plugin.hosts
-            frameVisible: false
-
-            style: TextAreaStyle {
-                textColor: "black"
-                scrollBarBackground: null
-                decrementControl: null
-                incrementControl: null
-                handle: null
-            }
-
             Text {
                 font.family: "FontAwesome"
                 text: "\uf0c7"
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 anchors.rightMargin: 3 * _controller.dpiFactor
-                anchors.bottomMargin: 2 * _controller.dpiFactor
+                anchors.bottomMargin: 5 * _controller.dpiFactor
                 color: enabled ? "black" : "gray"
                 font.pixelSize: 25 * _controller.dpiFactor
                 scale: iconMouseArea.pressed ? 1.3 : 1

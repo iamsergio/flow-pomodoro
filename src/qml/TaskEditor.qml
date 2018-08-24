@@ -1,5 +1,5 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.3 as QQControls
+import QtQuick.Controls 2.0
 import Controller 1.0
 import Task 1.0
 
@@ -321,7 +321,7 @@ Overlay {
                     }
                 }
 
-                QQControls.TextArea {
+                TextArea {
                     id: descriptionArea
 
                     Text {
@@ -343,7 +343,7 @@ Overlay {
                         right: parent.right
                     }
 
-                    height: Math.max(contentHeight, placeholderText.height * 1.5)
+                    height: Math.max(contentHeight, placeholderText.height * 3)
                     text: root.task.description
                 }
 

@@ -1,6 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.1
+import QtQuick.Controls 2.0
 
 import Controller 1.0
 
@@ -36,8 +35,8 @@ TextField {
         }
     }
 
+    color: "white"
     font.pixelSize: 13 * _controller.dpiFactor
-    textColor: _controller.isAndroid ? "white" : "black"
 
     function save()
     {

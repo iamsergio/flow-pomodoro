@@ -1,6 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.0
+import QtQuick.Controls 2.0
 import Controller 1.0
 import ".."
 
@@ -126,7 +125,7 @@ Item {
             }
         }
 
-        TextField { // TODO: Replace with something in QtQuick.Controls2
+        TextField {
             id: textField
             focus: true
             inputMethodHints: Qt.ImhNoPredictiveText
@@ -138,18 +137,6 @@ Item {
 
             visible: root.beingEdited
             text: root.tagName
-            style: TextFieldStyle {
-                textColor: "black"
-                font.pixelSize: 12 * _controller.dpiFactor
-                background: Rectangle {
-                    radius: 2 * _controller.dpiFactor
-                    implicitWidth: 100 * _controller.dpiFactor
-                    implicitHeight: 24 * _controller.dpiFactor
-                    border.color: "#333"
-                    border.width: 1 * _controller.dpiFactor
-                }
-            }
-
             onAccepted: {
                 root.edited(textField.text)
             }
@@ -164,7 +151,5 @@ Item {
                     _controller.editTag("")
                 }
         }
-
-
     }
 }

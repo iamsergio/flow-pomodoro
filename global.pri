@@ -1,6 +1,5 @@
-# qtHaveModule() doesn't work with qml only modules
-!exists($$[QT_INSTALL_QML]/QtQuick/Controls/TabView.qml) {
-    error("QtQuickControls module was not found")
+!qtHaveModule(quickcontrols2) {
+    error("QtQuickControls2 module was not found")
 }
 
 lessThan(QT_MAJOR_VERSION, 5) | lessThan(QT_MINOR_VERSION, 6) {
