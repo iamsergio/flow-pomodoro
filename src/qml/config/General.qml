@@ -1,6 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.1
+import QtQuick.Controls 2.0
 
 import Controller 1.0
 import ".."
@@ -55,10 +54,9 @@ Item {
             SpinBox {
                 id: spinBox
                 enabled: !_settings.pomodoroFunctionalityDisabled
-                minimumValue: 0
-                maximumValue: 59
+                from: 0
+                to: 59
                 height: _style.checkBoxIconSize
-                width: 55 * _controller.dpiFactor
                 value: _settings.defaultPomodoroDuration
                 onValueChanged: {
                     // The binding gets broken when user edits, not sure how to fix it.. so hack it:
@@ -70,39 +68,17 @@ Item {
                     }
                 }
 
-                onEditingFinished: {
+                /*onValueModified: : {
                     if (_controller.isMobile) {
                         focus = false
                         Qt.inputMethod.hide(); // hide keyboard
                     }
-                }
-
-                style: _controller.isMobile ? (_controller.isAndroid ? dummySpinBox.style
-                                                                    : mobileSpinBoxStyleComponent)
-                                            : desktopSpinBoxStyleComponent
+                }*/
             }
 
             SpinBox {
                 id: dummySpinBox
                 visible: false
-            }
-
-            Component {
-                id: desktopSpinBoxStyleComponent
-                SpinBoxStyle {
-                    // Weird text clipping on windows with native rendering
-                    renderType: Text.QtRendering
-                }
-            }
-
-            Component {
-                id: mobileSpinBoxStyleComponent
-                SpinBoxStyle {
-                    // Set it explicitely because it's gray on Blackberry
-                    textColor: "black"
-                    incrementControl: Item {}
-                    decrementControl: Item {}
-                }
             }
 
             Text {
@@ -376,11 +352,10 @@ Item {
                 font.pixelSize: 12 * _controller.dpiFactor
             }
 
-            TextInput {
+            TextField {
                 id: remoteUrlInput
                 visible: _controller.isReadOnly
                 width: windowPositionsCombo.width
-                height: 20 * _controller.dpiFactor
                 inputMethodHints: Qt.ImhNoPredictiveText
                 text: _settings.remoteUrl
                 Binding {
