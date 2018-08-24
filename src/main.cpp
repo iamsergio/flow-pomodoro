@@ -195,15 +195,6 @@ static void onFocusObjectChanged(QObject *obj)
 }
 */
 
-static void initQQC2Style()
-{
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-    QQuickStyle::setStyle("Material");
-#else
-    QQuickStyle::setStyle("Fusion");
-#endif
-}
-
 int main(int argc, char *argv[])
 {
     Utils::printTimeInfo(QStringLiteral("main"));
@@ -221,7 +212,7 @@ int main(int argc, char *argv[])
 #endif
 
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    initQQC2Style();
+    QQuickStyle::setStyle("Material");
 
     Application app(argc, argv);
     Utils::printTimeInfo(QStringLiteral("main: created QApplication"));
