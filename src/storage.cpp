@@ -28,6 +28,7 @@
 #include "runtimeconfiguration.h"
 #include "nonemptytagfilterproxy.h"
 #include "utils.h"
+#include <QFile>
 
 #if defined(UNIT_TEST_RUN)
 # include "assertingproxymodel.h"
