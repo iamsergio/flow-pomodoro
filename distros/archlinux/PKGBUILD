@@ -2,7 +2,7 @@
 # Maintainer: Sérgio Martins <iamsergio@gmail.com>
 
 pkgname=flow-pomodoro
-pkgver=1.0.2
+pkgver=1.2.0
 pkgrel=1
 pkgdesc="A sticky task manager and pomodoro that blocks distractions."
 arch=('i686' 'x86_64')
@@ -12,7 +12,7 @@ depends=('qt5-base>=5.4.0' 'qt5-declarative>=5.4.0' 'qt5-quickcontrols>=5.4.0')
 makedepends=('qt5-base>=5.4.0' 'qt5-declarative>=5.4.0' 'qt5-quickcontrols>=5.4.0')
 
 source=(https://github.com/iamsergio/flow-pomodoro/archive/v${pkgver}.zip)
-sha1sums=('7026c655c035374c29e76c619b9aaefcca6e286a')
+sha1sums=('c71b1dc4ef2defc4e6c9ae8f3da89af9f4654d3f')
 
 build() {
   mkdir -p ${pkgname}-${pkgver}/build
