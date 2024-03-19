@@ -1,3 +1,5 @@
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 ### Supported Platforms
 Linux, Windows 7, 8, 10, OSX, Android {4.4, 5.0}, iOS
 
